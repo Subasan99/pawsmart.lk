@@ -21,16 +21,25 @@ export const getDoctorData = async (params: {
   }
 };
 
-export const getDeparmentData = async () => {
-    try {
-      const response = await axiosInstance.get(`/department`);
-      console.log("rrrrrrrrrrrrrrrrrr",response.data);
-    
-      return response.data;
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
+export const getDeparmentData = async (params: {
+  pageCount: number;
+  pageSize: number;
+}) => {
+  try {
+    const response = await axiosInstance.get(`/department`, {
+      params: {
+        pageSize: params.pageSize,
+        pageCount: params.pageCount,
+      },
+
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
 
   export const getPetData = async (params: {
     pageCount: number;
