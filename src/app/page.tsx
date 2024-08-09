@@ -270,7 +270,7 @@ export default function Home() {
                   className="absolute inset-0 w-full h-full object-cover"
                   style={{ objectFit: 'cover' }}
                 >
-                  <source src="/dog.mp4" type="video/mp4" />
+                  <source src="/Logvideo.mp4" type="video/mp4" />
                 </video>
                 <div className="absolute inset-0 bg-black opacity-60"></div> {/* Black shadow overlay */}
               </div>
