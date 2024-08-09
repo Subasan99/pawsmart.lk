@@ -28,7 +28,7 @@ export default function Home() {
   const fetchData = async () => {
     try {
       const petData = await getPetData({ pageSize: 10, pageCount: 1 });
-      const departmentData = await getDeparmentData();
+      const departmentData = await getDeparmentData({ pageSize: 10, pageCount: 1 });
       const doctors = await getDoctorData({ pageSize: 10, pageCount: 1 });
       setAllDeparments(departmentData);
       setAllPets(petData.records);

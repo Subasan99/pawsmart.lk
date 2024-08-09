@@ -19,7 +19,7 @@ const Department = () => {
   const fetchData = async () => {
     try {
  
-      const departmentData = await getDeparmentData();
+      const departmentData = await getDeparmentData({ pageSize: 10, pageCount: 1 });
 
       setAllDeparments(departmentData);
   

@@ -18,6 +18,7 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
   doctors,
   handleClick,
 }) => {
+  const defaultImage = '/department.png';
   return (
     <div className="w-full container pt-5 px-7 mx-auto">
       <div className="border-l-2 border-red-500 pl-2">
@@ -45,7 +46,7 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
               <span className="text-base md:text-lg truncate">{image.textOverlay}</span>
             </div>
             <Image
-              src={image.src}
+              src={image.src || defaultImage}
               width={1000}
               height={1000}
               alt={image.alt}

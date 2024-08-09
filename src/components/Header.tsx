@@ -82,7 +82,7 @@ export default function Header() {
   const fetchData = async () => {
     try {
       const petData = await getPetData({ pageSize: 10, pageCount: 1 });
-      const departmentData = await getDeparmentData();
+      const departmentData = await getDeparmentData({ pageSize: 10, pageCount: 1 });
       const doctors = await getDoctorData({ pageSize: 10, pageCount: 1 });
       const medicinesData = await getMedicinesData();
       setAllMedicines(medicinesData);
@@ -190,7 +190,7 @@ export default function Header() {
               <Image src={Logo} className="w-[288px]" alt="Company Logo" />
               <ul className="flex flex-col space-y-4 ">
                 <li>
-                  <a href="/home" className="hover:text-red-500 ">
+                  <a href="/" className="hover:text-red-500 ">
                     Home
                   </a>
                 </li>
@@ -298,7 +298,7 @@ export default function Header() {
             <nav className="flex-grow flex justify-end">
               <ul className="flex justify-end items-center space-x-4">
                 <li>
-                  <a href="/home" className="hover:text-red-500">
+                  <a href="/" className="hover:text-red-500">
                     Home
                   </a>
                 </li>
@@ -360,18 +360,19 @@ export default function Header() {
                     >
                       <hr className="my-2" />
                       <ul className="flex flex-col space-y-2">
-                        {departmentDatas.map((department: any, index: any) => (
-                          <li key={index}>
-                            <a
-                              href={department.href}
-                              className="text-gray-600 block px-4 py-2"
-                            >
-                              {department.name}
-                              <hr className="mt-2" />
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                        {Array.isArray(departments) && departments.length > 0 ? (
+departments.map((department: any, index: any) => (
+      <li key={index}>
+        <a href={department.href} className="text-gray-600 block px-4 py-2">
+          {department.name}
+          <hr className="mt-2" />
+        </a>
+      </li>
+    ))
+  ) : (
+    <li>""</li> // Handle empty or invalid departments array
+  )}
+</ul>
                     </div>
                   )}
                 </li>
