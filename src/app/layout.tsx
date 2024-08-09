@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Website name",
+  title: "veterinary-website",
   description: "Website description",
 };
 
@@ -16,15 +16,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <div className="h-full w-full flex flex-col">
-          <div className="sticky z-30 top-0 md:static h-fit">
-            <Header />
-          </div>
-          <div className="grow-0">{children}</div>
-          <div className=""><Footer/></div>
+          <div className="grow-0">
+            {children}</div>
         </div>
       </body>
     </html>

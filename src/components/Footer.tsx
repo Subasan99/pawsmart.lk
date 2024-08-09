@@ -1,5 +1,5 @@
-import Image from "next/image";
-import Logo from "../../public/VetHouse.png";
+import Image from 'next/image';
+import Logo from '../../public/stubby.png';
 import {
   Building,
   Building2,
@@ -12,15 +12,15 @@ import {
   Twitter,
   TwitterIcon,
   Youtube,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function Footer() {
   return (
     <div className="w-full flex justify-center h-fit py-4 px-5 md:px-2">
       <div className="flex w-full max-w-[1196px] justify-between flex-col md:flex-row h-fit px-3">
-        <div className="flex flex-col py-3 md:w-1/4 px-1 w-full">
+        <div className="flex flex-col py-3 md:w-1/4  w-full">
           <div>
-            <Image src={Logo} alt="Company Logo" className="w-32" />
+            <Image src={Logo} alt="Company Logo" className="w-28" />
           </div>
           <div className="text-wrap py-2">
             Vethouse - Pet Care & Hospital Management & Veterinary Theme.

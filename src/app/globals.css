@@ -67,3 +67,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+#home-first{
+  position: relative;
+  background-size: cover;
+  color: red;
+  width: 100%;
+  font-size: 16px;
+  align-items: center;
+
+}
+#home-first .text {
+  display: table-cell;
+  vertical-align: middle;
+}
+
