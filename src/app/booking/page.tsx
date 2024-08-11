@@ -52,11 +52,10 @@ const Pets = () => {
 console.log(doctor)
   return (
     // <RootLayout pageName=" ">
-      <div className="grid  grid-cols-1 lg:grid-cols-3 h-full bg-gray-50 pb-10 mt-20 ">
-        <Calentercomponents
-        handleDateChange={function (value: string): void {
-          throw new Error('Function not implemented.');
-        } } name={docName}     />
+      <div className=" bg-gray-50 pb-10 mt-20 ">
+        <Calentercomponents handleDateChange={function (value: string): void {
+        throw new Error('Function not implemented.');
+      } } name={undefined}        />
       </div>
     // </RootLayout>
   );
