@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { Calendar } from './ui/calendar';
 import './Scheduler.css';
@@ -9,10 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRouter } from 'next/navigation';
 
+import Image from 'next/image';
 interface SchedulerProps {
-  handleDateChange: (value: string) => void;
+  handleDateChange: (value: string|any) => void;
+  handleTimeSlotChange: (slot: TimeSlot) => void; 
+  handleContinue:()=>void;
   name: any;
+  timeSlotsByDay: { [key: number]: TimeSlot[] };
 }
 
 interface TimeSlot {
@@ -20,10 +26,12 @@ interface TimeSlot {
   endTime: string;
 }
 
-const Scheduler: React.FC<SchedulerProps> = ({ handleDateChange, name }) => {
+const Scheduler: React.FC<SchedulerProps> = ({ handleDateChange, handleTimeSlotChange,handleContinue, name, timeSlotsByDay }) => { 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedTime, setSelectedTime] = useState<string>('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null);
   const [is24HourFormat, setIs24HourFormat] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const onDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -38,48 +46,14 @@ const Scheduler: React.FC<SchedulerProps> = ({ handleDateChange, name }) => {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const timeSlotsByDay: { [key: number]: TimeSlot[] } = {
-    0: [{ startTime: '10:00 AM', endTime: '11:00 AM' }],
-    1: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '10:00 AM', endTime: '11:00 AM' },
-    ],
-    2: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '11:00 AM', endTime: '12:00 PM' },
-      { startTime: '01:00 PM', endTime: '02:00 PM' },
-    ],
-    3: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '10:00 AM', endTime: '11:00 AM' },
-      { startTime: '12:00 PM', endTime: '01:00 PM' },
-      { startTime: '02:00 PM', endTime: '03:00 PM' },
-    ],
-    4: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '11:00 AM', endTime: '12:00 PM' },
-      { startTime: '03:00 PM', endTime: '04:00 PM' },
-    ],
-    5: [
-      { startTime: '10:00 AM', endTime: '11:00 AM' },
-      { startTime: '12:00 PM', endTime: '01:00 PM' },
-      { startTime: '04:00 PM', endTime: '05:00 PM' },
-    ],
-    6: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '11:00 AM', endTime: '12:00 PM' },
-      { startTime: '01:00 PM', endTime: '02:00 PM' },
-      { startTime: '03:00 PM', endTime: '04:00 PM' },
-    ],
-  };
-
   const getTimeSlots = (date: Date): TimeSlot[] => {
     const dayOfWeek = date.getDay();
     return timeSlotsByDay[dayOfWeek] || [];
   };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTime(e.target.value);
+  const handleTimeChange = (slot: TimeSlot) => {
+    setSelectedTimeSlot(slot);
+    handleTimeSlotChange(slot); 
   };
 
   const toggleTimeFormat = (format: '12h' | '24h') => {
@@ -109,86 +83,105 @@ const Scheduler: React.FC<SchedulerProps> = ({ handleDateChange, name }) => {
 
   const timeSlots = getTimeSlots(selectedDate);
 
+
+  const defaultImage = '/department.png';
+
   return (
     <div className="flex justify-center items-center container">
-    <Card className=" bg-gray-200">
-      <CardHeader>
-        <CardTitle>Select a Date & Time</CardTitle>
-        <CardDescription>When scheduling your appointment, you’ll have the flexibility to choose a date and time that fits your schedule. Our user-friendly scheduling system ensures that you can easily find available slots and secure your preferred appointment time.</CardDescription>
-      </CardHeader>
-      <CardContent className="grid grid-cols-1 lg:grid-cols-3 gap-4 ">
-        <div className="col-span-1 ">
-        <div className="flex">
-          <div
-            className="flex-3 pr-4 px-8 text-lg font-bold whitespace-nowrap"
-          >
-            Doctor
-          </div>
-          <div
-            className="flex-3 pr-4 italic text-lg text-gray-500 whitespace-nowrap"
-          >
-          fgh
-          </div>
-
-        </div>
-        </div>
-        <div className="col-span-1 flex justify-center items-center bg-white">
-          <Calendar
-            className="text-black-400 hover:text-red"
-            onDayClick={onDateChange}
-          />
-        </div>
-        <div className="col-span-1 ">
-        <div className="flex">
-          <div
-            className="flex-3 pr-4 px-8 text-lg font-bold whitespace-nowrap"
-          >
-            <div>{formatDate(selectedDate)}</div>
-          </div>
-          <div className="flex items-center bg-white p-2 border rounded-lg">
-  <div className="flex-1 pr-4 text-lg">
-    <div
-      className=" cursor-pointer rounded"
-      onClick={() => toggleTimeFormat('12h')}
-    >
-      12h
-    </div>
-  </div>
-  <div className="flex-1 text-lg">
-    <div
-      className=" cursor-pointer rounded"
-      onClick={() => toggleTimeFormat('24h')}
-    >
-      24h
-    </div>
-  </div>
-</div>
-
-        </div>
-        <div className="flex flex-col mt-4">
-          {timeSlots.map((slot, index) => (
-            <div
-              key={index}
-              className="bg-gray-200 p-2 mb-2  ml-2 rounded w-full text-lg items-center justify-center border"
-            >
-              {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
+      <Card className="bg-gray-200">
+        <CardHeader>
+          <CardTitle>Select a Date & Time</CardTitle>
+          <CardDescription>
+            When scheduling your appointment, you’ll have the flexibility to choose a date and time that fits your schedule. Our user-friendly scheduling system ensures that you can easily find available slots and secure your preferred appointment time.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="col-span-1">
+            <div className="flex">
+              <div className="flex-3 pr-4 px-8 text-lg font-bold whitespace-nowrap">
+                Doctor
+              </div>
+              <div className="flex-3 pr-4 italic text-lg text-gray-500 whitespace-nowrap">
+             zsdf
+              </div>
+            
             </div>
-          ))}
-        </div>
-        </div>
+            <div className="flex">
+              <div className="flex-3 pr-4 px-8 text-lg font-bold whitespace-nowrap">
+              Specialiction
+              </div>
+              <div className="flex-3 pr-4 italic text-lg text-gray-500 whitespace-nowrap">
+             zsdf
+              </div>
+            
+            </div>
+            <div className=" pr-4 px-8 text-lg ">
+            When scheduling your appointment, you’ll have the flexibility to choose a date and time that fits your schedule. Our user-friendly scheduling system ensures that you can easily find available slots and secure your preferred appointment time.
 
-        
-      </CardContent>
-      <CardFooter className=" justify-end items-center">
-      <button
-          type="submit"
-          className="justify-end px-4 py-2 bg-red-500 text-white font-bold rounded hover:bg-blue-700"
-        >
-         continue
-        </button>
-      </CardFooter>
-    </Card>
-  </div>
+              </div>
+              <div className="relative overflow-hidden">
+              <Image
+              src={defaultImage}
+              width={800}
+              height={800}
+              alt="ftgyuh"
+              className="container h-8 object-cover md:w-100 md:h-80  transition-transform duration-300 hover:scale-105"
+            />
+              </div>
+          </div>
+          <div className="col-span-1 flex justify-center items-center bg-white">
+            <Calendar className="text-black-400 hover:text-red" onDayClick={onDateChange} />
+          </div>
+          <div className="col-span-1">
+            <div className="flex">
+              <div className="flex-3 pr-4 px-8 text-lg font-bold whitespace-nowrap">
+                <div>{formatDate(selectedDate)}</div>
+              </div>
+              <div className="flex items-center bg-white p-2 border rounded-lg">
+                <div className="flex-1 pr-4 text-lg">
+                  <div
+                    className={`cursor-pointer rounded ${!is24HourFormat ? 'bg-gray-300 text-white' : ''}`}
+                    onClick={() => toggleTimeFormat('12h')}
+                  >
+                    12h
+                  </div>
+                </div>
+                <div className="flex-1 text-lg">
+                  <div
+                    className={`cursor-pointer rounded ${is24HourFormat ? 'bg-gray-300 text-white' : ''}`}
+                    onClick={() => toggleTimeFormat('24h')}
+                  >
+                    24h
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col mt-4">
+              {timeSlots.map((slot, index) => (
+              <div
+              key={index}
+              className={`bg-gray-200 p-2 mb-2 ml-2 rounded w-full whitespace-nowrap text-lg items-center justify-center border 
+                          ${selectedTimeSlot && selectedTimeSlot.startTime === slot.startTime && selectedTimeSlot.endTime === slot.endTime ? 'bg-red-500 text-white' : ''}`}
+              style={{ maxWidth: '200px' }}
+              onClick={() => handleTimeChange(slot)}
+            >
+                  {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
+                </div>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="justify-end items-center">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-red-500 text-white font-bold rounded hover:bg-blue-700"
+            onClick={handleContinue}
+          >
+            Continue
+          </button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 
