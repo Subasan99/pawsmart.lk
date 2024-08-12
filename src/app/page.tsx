@@ -348,7 +348,7 @@ console.log("jjjjjj",medicines);
           <PopularDoctors
             title="Departments"
             description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="your-link-here"
+            link="/departments"
             handleClick={handleClick}
             linkDescription={'Departments'}
             doctors={departmentDatas}
@@ -359,7 +359,7 @@ console.log("jjjjjj",medicines);
           <PopularDoctors
             title="Popular Doctors"
             description="Meet With Professional Doctors."
-            link="your-link-here"
+            link="/doctors"
             handleClick={handleClick}
             linkDescription="Doctors"
             doctors={doctores}
@@ -369,7 +369,7 @@ console.log("jjjjjj",medicines);
           <PopularDoctors
             title="Pets Nutritional"
             description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="your-link-here"
+            link="/pets"
             handleClick={handleClick}
             linkDescription={'Pets'}
             doctors={petdata}
