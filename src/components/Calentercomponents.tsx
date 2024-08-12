@@ -165,7 +165,8 @@ const Scheduler: React.FC<SchedulerProps> = ({ handleDateChange, handleTimeSlotC
               style={{ maxWidth: '200px' }}
               onClick={() => handleTimeChange(slot)}
             >
-                  {formatTime(slot.startTime)} - {formatTime(slot.endTime)}
+                  {formatTime(slot.startTime)} 
+                  {/* - {formatTime(slot.endTime)} */}
                 </div>
               ))}
             </div>
