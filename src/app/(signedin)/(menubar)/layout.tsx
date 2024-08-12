@@ -1,7 +1,7 @@
 // components/RootLayout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../globals.css"; 
+import "../globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,18 +13,28 @@ const inter = Inter({ subsets: ["latin"] });
 interface RootLayoutProps {
   children: React.ReactNode;
   pageName: string;
+  description: string;
 }
 
-export default function RootLayout({ children, pageName }: RootLayoutProps) {
+export default function RootLayout({
+  children,
+  pageName,
+  description,
+}: RootLayoutProps) {
   return (
     <div className={inter.className}>
-<div className="w-full bg-red-500 text-white py-6">
-  <h1 className="ml-8 md:ml-48 text-2xl font-bold mt-5">{pageName}</h1>
-</div>
+      <div className="w-full container pt-5 px-7 mx-auto">
+        <div className="border-l-2 border-red-500 pl-2">
+          <h2 className="font-bold text-2xl">{pageName}</h2>
+        </div>
+        <div className="flex flex-row justify-between items-center">
+          <p className="text-l border-l-2 border-white-500 pl-2">
+            {description}
+          </p>
+        </div>
 
-    <div className="flex-grow">
-      {children}
+        <div className="flex-grow">{children}</div>
+      </div>
     </div>
-  </div>
   );
 }

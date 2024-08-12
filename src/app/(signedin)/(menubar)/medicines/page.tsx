@@ -1,11 +1,8 @@
-'use client';
-import ImageCalender from '@/components/ImageCalender';
-import React, { useEffect } from 'react';
-import RootLayout from '../layout';
-import Dropdown from '@/components/DropDown';
-import { Link } from '@nextui-org/react';
-import { useMedicinesStore } from '@/store/medicinesStore';
-import { getMedicinesData } from '../../home/action';
+"use client";
+import React, { useEffect } from "react";
+import { useMedicinesStore } from "@/store/medicinesStore";
+import { getMedicineFilterData } from "../../home/action";
+import MultipleImagesProps from "@/components/SinglePageImage";
 
 const Medicines = () => {
   const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
@@ -15,20 +12,19 @@ const Medicines = () => {
 
   useEffect(() => {
     fetchData();
-  }, [ getMedicinesData, ]);
+  }, [getMedicineFilterData]);
   const fetchData = async () => {
     try {
- 
-      const medicinesData = await getMedicinesData();
+      const medicinesData = await getMedicineFilterData({
+        pageSize: 10,
+        pageCount: 1,
+      });
 
       setAllMedicines(medicinesData);
-  
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
-
-
 
   const medicinesDatas = Array.isArray(medicines)
     ? medicines.map((medicines: any) => ({
@@ -44,23 +40,14 @@ const Medicines = () => {
   };
 
   return (
-    <RootLayout pageName="Medicines">
-      <div className="grid  grid-cols-1 lg:grid-cols-3 h-full bg-gray-50 pb-10 ">
-        <div className="col-span-1 flex items-center justify-center bg-gray">
-          <Dropdown title={'Medicines'} subtitle={'Medicines of VetHouse'} departments={medicinesDatas}/>
-        </div>
-
-        <div className="col-span-1 lg:col-span-2 flex items-center justify-center  ">
-          <div className="pb-10 pt-6 pl-2 pr-40">
-          <Link href={'/appointmentmedicines'}>
-          <a>
-            <ImageCalender doctors={medicinesDatas} handleClick={handleClick} />
-            </a>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </RootLayout>
+    <div id="departments" className="pb-8 pt-40">
+      <MultipleImagesProps
+        title="Medicines"
+        description="Your Pets Nutritional Health is Very Important & Our Priority"
+        handleClick={handleClick}
+        doctors={medicinesDatas}
+      />
+    </div>
   );
 };
 

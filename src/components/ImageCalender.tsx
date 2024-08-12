@@ -1,6 +1,6 @@
-'use client';
-import Image from 'next/image';
-import { ReactNode } from 'react';
+"use client";
+import Image from "next/image";
+import { ReactNode } from "react";
 
 interface ImageCalenderProps {
   doctors: {
@@ -10,7 +10,7 @@ interface ImageCalenderProps {
     textOverlay: string;
     date?: string;
   }[];
-  handleClick: (imageName: string,Name: string,scrName: string) => void;
+  handleClick: (imageName: string, Name: string, scrName: string) => void;
 }
 
 const ImageCalender: React.FC<ImageCalenderProps> = ({
@@ -18,32 +18,25 @@ const ImageCalender: React.FC<ImageCalenderProps> = ({
   handleClick,
 }) => {
   return (
-    <div className="w-full max-w-[1196px] pt-5 px-7 mx-auto">
+    <div className="w-full pt-5 px-7 mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 pt-5">
         {doctors.map((image, index) => (
           <div
             key={index}
-            onClick={() =>
-              handleClick(
-                image.alt,
-                image.src,
-                image.textOverlay
-              )
-            }
+            onClick={() => handleClick(image.alt, image.src, image.textOverlay)}
             className="relative cursor-pointer"
           >
             <div className="relative overflow-hidden">
-            <Image
-  src={image.src}
-  width={400}
-  height={200}
-  alt={image.alt}
-  className="w-[400px] h-[200px] object-cover transition-transform duration-300 hover:scale-105"
-/>
-
+              <Image
+                src={image.src}
+                width={400}
+                height={200}
+                alt={image.alt}
+                className="w-[400px] h-[200px] object-cover transition-transform duration-300 hover:scale-105"
+              />
             </div>
             <div
-              style={{ height: image.imageDescription ? 115 : 'auto' }}
+              style={{ height: image.imageDescription ? 115 : "auto" }}
               className="bg-white p-2"
             >
               <div className="text-red-500  hover:text-black text-xl">
