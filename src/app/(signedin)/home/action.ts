@@ -26,7 +26,7 @@ export const getDeparmentData = async (params: {
   pageSize: number;
 }) => {
   try {
-    const response = await axiosInstance.get(`/department`, {
+    const response = await axiosInstance.get(`/department/filter`, {
       params: {
         pageSize: params.pageSize,
         pageCount: params.pageCount,

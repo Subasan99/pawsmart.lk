@@ -60,9 +60,11 @@ export default function Home() {
   const fetchData = async () => {
     try {
       const petData = await getPetData({ pageSize: 4, pageCount: 1 });
-      const departmentData = await getDeparmentData({ pageSize: 8, pageCount: 1 });
+      const departmentData = await getDeparmentData({ pageSize: 4, pageCount: 1 });
       const doctorData = await getDoctorData({ pageSize: 8, pageCount: 1 });
-
+      const medicinesData = await getMedicinesData();
+  
+      setAllMedicines(medicinesData);
 
 
       setAllDeparments(departmentData.records);
@@ -119,6 +121,8 @@ export default function Home() {
     state.medicines,
     state.setAllMedicines,
   ]);
+console.log("jjjjjj",medicines);
+
 
   const [petsHeader, setAllPetsHeader] = usePetStore((state: any) => [
     state.pets,
@@ -149,6 +153,16 @@ export default function Home() {
     }
   };
 
+
+  const medicinesDatas = Array.isArray(medicines)
+    ? medicines.map((medicines: any) => ({
+        src: medicines.preSignedUrl,
+        alt: medicines.image,
+        textOverlay: medicines.name,
+        label: medicines.name,
+      }))
+    : [];
+
   const handleMouseEnter = useCallback((view: string) => setActiveDropdown(view), []);
   const handleMouseLeave = useCallback(() => setActiveDropdown(null), []);
 
@@ -175,7 +189,7 @@ export default function Home() {
       <header className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}>
         <div className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}>
           <div className="flex justify-between items-center w-full md:hidden">
-            <Image src={logo} alt="Company Logo" className="w-36" />
+          <a href="/" > <Image src={logo} alt="Company Logo" className="w-36" /></a>
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger className="px-3">
                 <SideBarIcon />
@@ -184,13 +198,16 @@ export default function Home() {
                 <Image src={logo} className="w-[288px]" alt="Company Logo" />
                 <ul className="flex flex-col space-y-4">
                   {/* Sidebar items */}
-                  {['Home', 'About Us'].map((item, index) => (
-                    <li key={index}>
-                      <a href={`/${item.toLowerCase().replace(/\s/g, '')}`} className="hover:text-red-500">
-                        {item}
-                      </a>
-                    </li>
-                  ))}
+                  <li key={0}>
+  <a href="/" className="hover:text-red-500">
+    Home
+  </a>
+</li>
+<li key={1}>
+  <a href="/aboutus" className="hover:text-red-500">
+    About Us
+  </a>
+</li>
                   <li onClick={() => handleMouseEnter('departments')} className="hover:text-red-500 relative">
                     <a href="/departments" className="hover:text-red-500">Departments</a>
                     {activeDropdown === 'departments' && renderDropdown(departmentsHeader, '/departments')}
@@ -218,17 +235,20 @@ export default function Home() {
             </Sheet>
           </div>
           <div className="hidden md:flex md:items-center w-full">
-            <Image src={logo} alt="Company Logo" className="w-36" />
+          <a href="/" ><Image src={logo} alt="Company Logo" className="w-36" /> </a>
             <nav className="flex-1 flex justify-center">
               <ul className="flex space-x-8">
                 {/* Navbar items */}
-                {['Home', 'About Us'].map((item, index) => (
-                  <li key={index}>
-                    <a href={`/${item.toLowerCase().replace(/\s/g, '')}`} className="hover:text-red-500">
-                      {item}
-                    </a>
-                  </li>
-                ))}
+                <li key={0}>
+  <a href="/" className="hover:text-red-500">
+    Home
+  </a>
+</li>
+<li key={1}>
+  <a href="/aboutus" className="hover:text-red-500">
+    About Us
+  </a>
+</li>
                 <li onMouseEnter={() => handleMouseEnter('departments')} onMouseLeave={handleMouseLeave} className="relative">
                   <a href="/departments" className="hover:text-red-500">Departments</a>
                   {activeDropdown === 'departments' && renderDropdown(allDoctorsHeader, '/departments')}
@@ -328,7 +348,7 @@ export default function Home() {
           <PopularDoctors
             title="Departments"
             description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="your-link-here"
+            link="/departments"
             handleClick={handleClick}
             linkDescription={'Departments'}
             doctors={departmentDatas}
@@ -339,7 +359,7 @@ export default function Home() {
           <PopularDoctors
             title="Popular Doctors"
             description="Meet With Professional Doctors."
-            link="your-link-here"
+            link="/doctors"
             handleClick={handleClick}
             linkDescription="Doctors"
             doctors={doctores}
@@ -349,7 +369,7 @@ export default function Home() {
           <PopularDoctors
             title="Pets Nutritional"
             description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="your-link-here"
+            link="/pets"
             handleClick={handleClick}
             linkDescription={'Pets'}
             doctors={petdata}

@@ -82,7 +82,7 @@ export default function Header() {
   const fetchData = async () => {
     try {
       const petData = await getPetData({ pageSize: 10, pageCount: 1 });
-      const departmentData = await getDeparmentData();
+      const departmentData = await getDeparmentData({ pageSize: 10, pageCount: 1 });
       const doctors = await getDoctorData({ pageSize: 10, pageCount: 1 });
       const medicinesData = await getMedicinesData();
       setAllMedicines(medicinesData);
@@ -180,17 +180,21 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full z-10 transition-all duration-300 bg-transparent bg-white ">
       <div className="w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2">
         <div className="flex justify-between items-center w-full md:hidden">
+        <a href="/" >
         <Image src={Logo} alt="Company Logo" style={{ width: '140px', height: 'auto' }} />
-
+        </a>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger className="px-3">
               <SideBarIcon />
             </SheetTrigger>
             <SheetContent className="h-full flex flex-col items-start">
+            <a href="/" >
               <Image src={Logo} className="w-[288px]" alt="Company Logo" />
+              </a>
+
               <ul className="flex flex-col space-y-4 ">
                 <li>
-                  <a href="/home" className="hover:text-red-500 ">
+                  <a href="/" className="hover:text-red-500 ">
                     Home
                   </a>
                 </li>
@@ -290,15 +294,15 @@ export default function Header() {
         {/* Desktop View */}
         <div className="hidden md:flex w-full items-center justify-between">
           <div>
-            {/* Header Image */}
-            <Image className="w-72" src={Logo} alt="Company Logo" />
+          <a href="/" >
+            <Image className="w-72" src={Logo} alt="Company Logo" /></a>
           </div>
           {/* Navigation Menu */}
           <div className="flex justify-end">
             <nav className="flex-grow flex justify-end">
               <ul className="flex justify-end items-center space-x-4">
                 <li>
-                  <a href="/home" className="hover:text-red-500">
+                  <a href="/" className="hover:text-red-500">
                     Home
                   </a>
                 </li>
@@ -360,18 +364,19 @@ export default function Header() {
                     >
                       <hr className="my-2" />
                       <ul className="flex flex-col space-y-2">
-                        {departmentDatas.map((department: any, index: any) => (
-                          <li key={index}>
-                            <a
-                              href={department.href}
-                              className="text-gray-600 block px-4 py-2"
-                            >
-                              {department.name}
-                              <hr className="mt-2" />
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                        {Array.isArray(departments) && departments.length > 0 ? (
+departments.map((department: any, index: any) => (
+      <li key={index}>
+        <a href={department.href} className="text-gray-600 block px-4 py-2">
+          {department.name}
+          <hr className="mt-2" />
+        </a>
+      </li>
+    ))
+  ) : (
+    <li>""</li> // Handle empty or invalid departments array
+  )}
+</ul>
                     </div>
                   )}
                 </li>

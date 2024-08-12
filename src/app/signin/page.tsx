@@ -1,47 +1,62 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { loginUser } from './action';
 
 const SignUp = () => {
+  const router = useRouter(); 
   const [userInfo, setUserInfo] = useState({
-    name: '',
+    // name: '',
     email: '',
     password: '',
-    conformpassword: '',
+    // confirmPassword: '', 
   });
+
   const backgroundImageStyle = {
     backgroundImage: 'url(/SignUp.png)',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   };
-  const handleChange = (e: any) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setUserInfo((currInfo) => {
-      return {
-        ...currInfo,
-        [name]: value,
-      };
-    });
+    setUserInfo((currInfo) => ({
+      ...currInfo,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (userInfo.password !== userInfo.conformpassword) {
-      alert('Passwords do not match!');
-      return;
-    }
+    // if (userInfo.password !== userInfo.confirmPassword) {
+    //   alert('Passwords do not match!');
+    //   return;
+    // }
 
-    console.log('User Info Submitted:', userInfo);
-    // router.push('/dashboard');
+    try {
+      const response = await loginUser({
+        email: userInfo.email,
+        password: userInfo.password,
+      });
+
+      console.log('User Info Submitted:', response);
+      // Redirect to dashboard after successful registration
+      // router.push('/dashboard');
+    } catch (error) {
+      console.error('Registration failed:', error);
+      alert('Registration failed. Please try again.');
+    }
   };
+
   return (
     <main className="h-screen">
       <header className="w-full h-full">
         <section className="w-full h-full">
-          <div className="grid  grid-cols-1 lg:grid-cols-3 h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
             <div
-              className="col-span-1 lg:col-span-2  bg-blue-500 flex items-center justify-center p-10"
+              className="col-span-1 lg:col-span-2 bg-blue-500 flex items-center justify-center p-10"
               style={backgroundImageStyle}
             ></div>
             <form onSubmit={handleSubmit}>
@@ -51,11 +66,11 @@ const SignUp = () => {
                   alt="Company Logo"
                   width={217}
                   height={72}
-                  className=" mt-20 mb-5  "
+                  className="mt-20 mb-5"
                 />
 
-                <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
-                  <label className="block text-black text-xs/[17px] ">
+                {/* <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
+                  <label className="block text-black text-xs/[17px]">
                     USER NAME
                   </label>
                   <input
@@ -63,11 +78,11 @@ const SignUp = () => {
                     id="name"
                     name="name"
                     placeholder="User Name"
-                    className="text-xs w-full border-none outline-none "
+                    className="text-xs w-full border-none outline-none"
                     onChange={handleChange}
                     value={userInfo.name}
                   />
-                </div>
+                </div> */}
 
                 <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
                   <label className="block text-black text-xs/[17px]">
@@ -99,27 +114,27 @@ const SignUp = () => {
                   />
                 </div>
 
-                <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
+                {/* <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
                   <label className="block text-black text-xs/[17px]">
                     CONFIRM PASSWORD
                   </label>
                   <input
                     type="password"
-                    id="confirm-password"
-                    name="confirm-password"
+                    id="confirmPassword"
+                    name="confirmPassword"
                     placeholder="Confirm Password"
                     className="text-xs w-full border-none outline-none"
                     onChange={handleChange}
-                    value={userInfo.conformpassword}
+                    value={userInfo.confirmPassword}
                   />
-                </div>
+                </div> */}
 
                 <div>
                   <button
                     type="submit"
-                    className="py-2 px-8 bg-purple-600 text-white border-none rounded text-xm cursor-pointer  hover:scale-100  "
+                    className="py-2 px-8 bg-purple-600 text-white border-none rounded text-xm cursor-pointer hover:scale-100"
                   >
-                    Sign In
+                    Sign Up
                   </button>
                 </div>
               </div>
