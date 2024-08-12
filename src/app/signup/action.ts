@@ -25,7 +25,7 @@ export const registerUser = async (userData: {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log('error', error);
+    console.error('Login error:', error);
     throw error;
   }
 };

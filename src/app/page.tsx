@@ -60,7 +60,7 @@ export default function Home() {
   const fetchData = async () => {
     try {
       const petData = await getPetData({ pageSize: 4, pageCount: 1 });
-      const departmentData = await getDeparmentData({ pageSize: 8, pageCount: 1 });
+      const departmentData = await getDeparmentData({ pageSize: 4, pageCount: 1 });
       const doctorData = await getDoctorData({ pageSize: 8, pageCount: 1 });
       const medicinesData = await getMedicinesData();
   
