@@ -1,6 +1,7 @@
 'use client';
 import React, {useState } from 'react';
 import Calentercomponents from '@/components/Calentercomponents';
+
 import { useSearchParams } from 'next/navigation';
 import { useDoctorStore } from '@/store/doctorStore';
 import router, { useRouter } from 'next/router';
@@ -73,7 +74,6 @@ console.log('docIddocIddocId',docId)
   const formatTime = (time: string) => {
     return time;
   };
-
   const handleContinue = () => {
     if (selectedDate && selectedTimeSlot) {
       const formattedDate = formatDate(selectedDate);
