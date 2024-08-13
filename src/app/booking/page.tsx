@@ -1,25 +1,28 @@
 'use client';
-import React, { useState } from 'react';
+import React, {useState } from 'react';
 import Calentercomponents from '@/components/Calentercomponents';
-
 import { useSearchParams } from 'next/navigation';
 import { useDoctorStore } from '@/store/doctorStore';
+import router, { useRouter } from 'next/router';
 
 const Pets = () => {
-  const [doctor, setAllDoctor] = useDoctorStore((state: any) => [
-    state.doctor,
-    state.setDoctors,
-  ]);
+
   type TimeSlot = any;
-  const [doccId, setDocId] = useState<any | undefined>(undefined);
+  const [bookDetails, setBookDetails] = useState<any | undefined>(undefined);
   const SearchParams = useSearchParams();
   const doctors = SearchParams.get('imageQuery');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(null);
-  
+  // const [selectedTimeSlot, setSelectedTimeSlot] = useState<any | null>(null);
+
   let docName = '';
   let imageName = '';
   let docId = '';
+  let desrip = '';
+  let specializationName = '';
+  let dayTimeSlotResponses: any[] = [];
+
+  // const router = useRouter();
 
   if (doctors) {
     try {
@@ -27,21 +30,42 @@ const Pets = () => {
       docName = queryData.imageName || '';
       imageName = queryData.image || '';
       docId = queryData.id || '';
-      setDocId(queryData.id);
+      desrip = queryData.description || '';
+      specializationName = queryData?.specializationName || '';
+      dayTimeSlotResponses = queryData?.dayTimeSlotResponses || [];
     } catch (error) {
       console.error('Error parsing imageQuery:', error);
     }
   }
+console.log('docIddocIddocId',docId)
+  const dayMapping: { [key: string]: number } = {
+    SUNDAY: 0,
+    MONDAY: 1,
+    TUESDAY: 2,
+    WEDNESDAY: 3,
+    THURSDAY: 4,
+    FRIDAY: 5,
+    SATURDAY: 6,
+  };
+
+  const timeSlotsByDay = dayTimeSlotResponses.reduce((acc, response) => {
+    const dayNumber = dayMapping[response.day] || 0;
+    const appointmentTimes = response.appointmentTimes.map((time: string) => ({
+      startTime: time,
+      endTime: '', 
+    }));
+    acc[dayNumber] = appointmentTimes;
+    return acc;
+  }, {});
 
   const handleDateChange = (value: Date) => {
-    console.log('Selected date:', value);
     setSelectedDate(value);
   };
 
   const handleTimeSlotChange = (slot: { startTime: string; endTime: string }) => {
-    console.log(`Selected time slot: ${slot.startTime} - ${slot.endTime}`);
-       setSelectedTimeSlot(slot);
+    setSelectedTimeSlot(slot);
   };
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString();
   };
@@ -49,68 +73,49 @@ const Pets = () => {
   const formatTime = (time: string) => {
     return time;
   };
+
   const handleContinue = () => {
     if (selectedDate && selectedTimeSlot) {
       const formattedDate = formatDate(selectedDate);
       const formattedStartTime = formatTime(selectedTimeSlot.startTime);
       const formattedEndTime = formatTime(selectedTimeSlot.endTime);
-      console.log(`Selected time: ${formattedStartTime} - ${formattedEndTime}`);
-      // Redirect or navigate to another page with selected date and time
-      // router.push({
-      //   pathname: '/appointment',
-      //   query: { date: formattedDate, time: `${formattedStartTime} - ${formattedEndTime}` }
-      // });
+     
+      console.log("`Selected date:',",formattedDate);
+      console.log("`Selected time:',",formattedStartTime);
+      if (formattedStartTime && formattedDate) {
+      router.push({pathname: '/appointmentdoctor', })
+      }
+      
     } else {
       alert('Please select both date and time.');
     }
   };
 
-  const timeSlotsByDay = {
-    0: [{ startTime: '10:00 AM', endTime: '11:00 AM' }],
-    1: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '10:00 AM', endTime: '11:00 AM' },
-    ],
-    2: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '11:00 AM', endTime: '12:00 PM' },
-      { startTime: '01:00 PM', endTime: '02:00 PM' },
-    ],
-    3: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '10:00 AM', endTime: '11:00 AM' },
-      { startTime: '12:00 PM', endTime: '01:00 PM' },
-      { startTime: '02:00 PM', endTime: '03:00 PM' },
-    ],
-    4: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '11:00 AM', endTime: '12:00 PM' },
-      { startTime: '03:00 PM', endTime: '04:00 PM' },
-    ],
-    5: [
-      { startTime: '10:00 AM', endTime: '11:00 AM' },
-      { startTime: '12:00 PM', endTime: '01:00 PM' },
-      { startTime: '04:00 PM', endTime: '05:00 PM' },
-    ],
-    6: [
-      { startTime: '09:00 AM', endTime: '10:00 AM' },
-      { startTime: '11:00 AM', endTime: '12:00 PM' },
-      { startTime: '01:00 PM', endTime: '02:00 PM' },
-      { startTime: '03:00 PM', endTime: '04:00 PM' },
-    ],
-  };
-
   return (
-    <div className="bg-gray-50 pb-10 mt-20">
+    <div className="flex justify-center items-center min-h-screen bg-gray">
+  <div style={{ width: '800px', height: '800px' }}>
       <Calentercomponents
-   handleDateChange={handleDateChange}
+        handleDateChange={handleDateChange}
         handleTimeSlotChange={handleTimeSlotChange}
-        handleContinue={handleContinue} // Pass the callback here
+        handleContinue={handleContinue}
         name={docName}
         timeSlotsByDay={timeSlotsByDay}
+        description={desrip}
+        Specialiction={specializationName}
+        imageSrc={imageName}
       />
+      {/* <Calentercomponentscopy
+        handleDateChange={handleDateChange}
+        handleTimeSlotChange={handleTimeSlotChange}
+        handleContinue={handleContinue}
+        name={docName}
+        timeSlotsByDay={timeSlotsByDay}
+        description={desrip}
+        Specialiction={specializationName}
+        imageSrc={imageName}/> */}
     </div>
+    </div>
+
   );
 };
-
 export default Pets;

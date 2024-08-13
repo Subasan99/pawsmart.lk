@@ -1,13 +1,17 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
+
 
 interface PopularDoctorsProps {
   title: string;
   description: string;
   link: string;
   linkDescription: string;
-  doctors: { src: string; alt: string; textOverlay: string }[];
-  handleClick: (imageName: string) => void;
+  doctors: { id?: string; src: string; alt: string; textOverlay: string; description?:string; specializationName?:string; dayTimeSlotResponses?:[]}[];
+  handleClick: (imageName: any, image: any, id: any) => void;
+  pathname: string;
+  query: [] | any;
 }
 
 const PopularDoctors: React.FC<PopularDoctorsProps> = ({
@@ -17,6 +21,8 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
   linkDescription,
   doctors,
   handleClick,
+  pathname,
+  query = [],
 }) => {
   const defaultImage = '/department.png';
   return (
@@ -32,9 +38,24 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-5">
         {doctors.map((image, index) => (
-          <div
-            key={index}
-            onClick={() => handleClick(image.alt)}
+          image&&(
+           <Link
+           key={index}
+           href={{
+             pathname: pathname,
+             query: {
+               imageQuery: JSON.stringify({
+                 imageName: image?.textOverlay,
+                 image: image?.src,
+                 id: image?.id,
+                 description:image?.description,
+                 specializationName:image?.specializationName,
+                 dayTimeSlotResponses:image?.dayTimeSlotResponses
+
+               }),
+             },
+           }}
+           onClick={() => handleClick(image.textOverlay, image.src, image.id)}
             className="cursor-pointer relative overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105"
           >
             <div
@@ -52,7 +73,7 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
               alt={image.alt}
               className="w-full h-auto object-cover md:w-100 md:h-80 transition-transform duration-300 ease-in-out hover:scale-105"
             />
-          </div>
+        </Link>)
         ))}
       </div>
     </div>
