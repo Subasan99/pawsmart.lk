@@ -107,7 +107,8 @@ const Scheduler: React.FC<SchedulerProps> = ({
   const handleContinueClickContinue = async () => {
     try {
       setView('next');
-      await router.push('/appointmentdoctor');
+   //   await router.push('/appointmentdoctor');
+      
     } catch (error) {
       console.error('Failed to navigate:', error);
     }
@@ -143,7 +144,7 @@ const Scheduler: React.FC<SchedulerProps> = ({
                   Doctor
                 </div>
                 <div className="flex-3 pl-4 italic text-lg text-gray-500 whitespace-nowrap">
-                  fcvgbhnm
+                { name}
                 </div>
               </div>
               <div className="flex mt-4">
@@ -151,16 +152,12 @@ const Scheduler: React.FC<SchedulerProps> = ({
                   Specialiction
                 </div>
                 <div className="flex-3 italic text-lg text-gray-500 whitespace-nowrap">
-            dfgh
+        {Specialiction}
                 </div>
               </div>
               <div className="pr-4 text-lg">
-                When scheduling your appointment, you’ll have the flexibility to choose a date and time that fits your schedule. Our user-friendly scheduling system ensures that you can easily find available slots and secure your preferred appointment time.
-              </div>
-              <div className="pr-4 mt-4 text-lg">
-        fghj
-
-              </div>
+             {description}</div>
+           
             </div>
           </CardContent>
           <CardFooter className="justify-end items-center">
@@ -216,11 +213,11 @@ const Scheduler: React.FC<SchedulerProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col mt-4">
+              <div className="flex flex-col mt-4 ">
                 {timeSlots.map((slot, index) => (
                   <div
                     key={index}
-                    className={`bg-gray-200 p-2 mb-2 ml-2 rounded w-full whitespace-nowrap text-lg items-center justify-center border 
+                    className={` bg-red-200 p-2 mb-2 ml-10 rounded w-full whitespace-nowrap text-lg items-center justify-center border 
                           ${
                             selectedTimeSlot &&
                             selectedTimeSlot.startTime === slot.startTime &&
@@ -228,7 +225,7 @@ const Scheduler: React.FC<SchedulerProps> = ({
                               ? 'bg-red-500 text-white'
                               : ''
                           }`}
-                    style={{ maxWidth: '200px' }}
+                    // style={{ maxWidth: '200px' }}
                     onClick={() => handleTimeChange(slot)}
                   >
                     {formatTime(slot.startTime)}
@@ -242,7 +239,7 @@ const Scheduler: React.FC<SchedulerProps> = ({
             <button
               type="submit"
               className="px-4 py-2 bg-red-500 text-white font-bold rounded hover:bg-blue-700"
-              onClick={handleContinue}
+              // onClick={handleContinue}
             >
               Continue
             </button>
