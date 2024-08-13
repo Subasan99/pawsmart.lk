@@ -83,7 +83,7 @@ console.log('docIddocIddocId',docId)
       console.log("`Selected date:',",formattedDate);
       console.log("`Selected time:',",formattedStartTime);
       if (formattedStartTime && formattedDate) {
-      router.push({pathname: '/appointmentdoctor', })
+      // router.push({pathname: '/appointmentdoctor', })
       }
       
     } else {

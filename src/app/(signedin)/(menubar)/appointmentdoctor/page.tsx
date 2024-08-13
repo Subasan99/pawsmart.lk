@@ -62,7 +62,7 @@ const AppointmentDoctor = () => {
   const handleReviewChange = (value: string) => setReviewmessage(value);
 
   return (
-    <RootLayout pageName="Anatolian Shepherd">
+    // <RootLayout pageName="Anatolian Shepherd">
       <div className="grid grid-cols-1 lg:grid-cols-3 min-h-screen bg-gray-150 pb-10 my-450 overflow-y-auto bg-gray-50">
         {/* Main Content */}
         <div className="col-span-1 lg:col-span-2 flex flex-col lg:flex-row items-start lg:items-center justify-center bg-gray-150 min-h-full">
@@ -135,7 +135,7 @@ const AppointmentDoctor = () => {
           </div>
         </div>
       </div>
-    </RootLayout>
+    // </RootLayout>
   );
 };
 
