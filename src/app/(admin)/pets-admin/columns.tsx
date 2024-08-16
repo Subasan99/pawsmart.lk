@@ -8,7 +8,7 @@ export type Columns = {
   id: string;
   name: string;
   description: string;
-  isActive: boolean;
+  active: boolean;
   image: string;
   preSignedUrl: string | undefined;
   doctorResponses: {
@@ -80,10 +80,10 @@ export const columns: ColumnDef<Columns>[] = [
       <div className="text-center">
         <span
           className={`px-2 py-1 rounded-full text-white ${
-            row.original.isActive ? "bg-green-500" : "bg-red-500"
+            row.original.active ? "bg-green-500" : "bg-red-500"
           }`}
         >
-          {row.original.isActive ? "Active" : "Inactive"}
+          {row.original.active ? "Active" : "Inactive"}
         </span>
       </div>
     ),

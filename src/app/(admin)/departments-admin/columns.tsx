@@ -11,6 +11,8 @@ export type Columns = {
   active: boolean;
   image: string;
   preSignedUrl: string | undefined;
+  createdDate:string;
+  updatedDate:string;
 };
 
 export const columns: ColumnDef<Columns>[] = [
@@ -45,10 +47,17 @@ export const columns: ColumnDef<Columns>[] = [
     ),
   },
   {
-    accessorKey: "Description",
-    header: () => <div className="font-bold text-center">Description</div>,
+    accessorKey: "CreatedAt",
+    header: () => <div className="font-bold text-center">Created At</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.description}</div>
+      <div className="text-center">{row.original.createdDate}</div>
+    ),
+  },
+  {
+    accessorKey: "UpdatedAt",
+    header: () => <div className="font-bold text-center">Updated At</div>,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.updatedDate}</div>
     ),
   },
   {
