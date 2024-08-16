@@ -1,30 +1,37 @@
 "use client";
 import React, { useEffect } from "react";
 import { usePetStore } from "@/store/petStore";
-import { getPetData, getPetFilterData } from "../../home/action";
+import { getPetFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
+
+interface Pet {
+  preSignedUrl: string;
+  image: string;
+  name: string;
+}
 
 const Pets = () => {
   const [pets, setAllPets] = usePetStore((state: any) => [
     state.pets,
     state.setAllPets,
   ]);
+
   useEffect(() => {
     fetchData();
-  }, [getPetData]);
+  }, []); // Only fetch data on component mount
 
   const fetchData = async () => {
     try {
       const petData = await getPetFilterData({ pageSize: 10, pageCount: 1 });
-
       setAllPets(petData.records);
     } catch (error) {
       console.error("Error fetching data:", error);
+      // Optionally, set some state to display an error message to the user
     }
   };
 
   const petdata = Array.isArray(pets)
-    ? pets.map((pet: any) => ({
+    ? pets.map((pet: Pet) => ({
         src: pet.preSignedUrl,
         alt: pet.image,
         textOverlay: pet.name,
@@ -40,7 +47,7 @@ const Pets = () => {
     <div id="pets" className="pb-8 pt-20">
       <MultipleImagesProps
         title="Pets Nutritional"
-        description="Your Pets Nutritional Health is Very Important & Our Priority"
+        description="Your Pets' Nutritional Health is Very Important & Our Priority"
         handleClick={handleClick}
         doctors={petdata}
       />

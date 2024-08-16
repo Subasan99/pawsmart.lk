@@ -74,9 +74,6 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const handleButtonClick = () => {
     console.log("Search button clicked");
@@ -90,11 +87,12 @@ export default function Home() {
     console.log(`${imageName} clicked!`);
   };
 
-  const doctores = doctors.map((doctor: any) => ({
+  const doctores = Array.isArray(doctors)
+  ? doctors.map((doctor: any) => ({
     src: doctor.preSignedUrl,
     alt: doctor.image,
     textOverlay: doctor.name,
-  }));
+  })): [];
 
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
@@ -136,17 +134,22 @@ export default function Home() {
     <div className="absolute bg-white shadow-md mt-2 w-48">
       <hr className="my-2" />
       <ul className="flex flex-col space-y-2">
-        {items.map((item, index) => (
-          <li key={index}>
-            <a
-              href={`${hrefBase}/${item.name}`}
-              className="text-gray-600 block px-4 py-2"
-            >
-              {item.name}
-              <hr className="mt-2" />
-            </a>
-          </li>
-        ))}
+        {items &&
+          Array.isArray(items) &&
+          items.map(
+            (item, index) =>
+              item && (
+                <li key={index}>
+                  <a
+                    href={`${hrefBase}/${item.name}`}
+                    className="text-gray-600 block px-4 py-2"
+                  >
+                    {item.name}
+                    <hr className="mt-2" />
+                  </a>
+                </li>
+              )
+          )}
       </ul>
     </div>
   );

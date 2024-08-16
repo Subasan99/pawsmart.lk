@@ -4,6 +4,12 @@ import { useMedicinesStore } from "@/store/medicinesStore";
 import { getMedicineFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
 
+interface Medicine {
+  preSignedUrl: string;
+  image: string;
+  name: string;
+}
+
 const Medicines = () => {
   const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
     state.medicines,
@@ -12,26 +18,26 @@ const Medicines = () => {
 
   useEffect(() => {
     fetchData();
-  }, [getMedicineFilterData]);
+  }, []); // Only fetch data on component mount
+
   const fetchData = async () => {
     try {
       const medicinesData = await getMedicineFilterData({
         pageSize: 10,
         pageCount: 1,
       });
-
-      setAllMedicines(medicinesData);
+      setAllMedicines(medicinesData.records); // Ensure correct structure if `medicinesData` contains `records`
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  const medicinesDatas = Array.isArray(medicines)
-    ? medicines.map((medicines: any) => ({
-        src: medicines.preSignedUrl,
-        alt: medicines.image,
-        textOverlay: medicines.name,
-        label: medicines.name,
+  const medicinesData = Array.isArray(medicines)
+    ? medicines.map((medicine: Medicine) => ({
+        src: medicine.preSignedUrl,
+        alt: medicine.image,
+        textOverlay: medicine.name,
+        label: medicine.name,
       }))
     : [];
 
@@ -40,12 +46,12 @@ const Medicines = () => {
   };
 
   return (
-    <div id="departments" className="pb-8 pt-40">
+    <div id="medicines" className="pb-8 pt-40">
       <MultipleImagesProps
         title="Medicines"
-        description="Your Pets Nutritional Health is Very Important & Our Priority"
+        description="Discover our range of medicines for your health needs."
         handleClick={handleClick}
-        doctors={medicinesDatas}
+        doctors={medicinesData} // Consider renaming `doctors` to something more appropriate like `items` or `images`
       />
     </div>
   );

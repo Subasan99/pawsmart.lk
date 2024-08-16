@@ -1,10 +1,9 @@
 "use client";
 import { useEffect } from "react";
-import { Columns, columns } from "./columns";
-import { DataTable } from "./data-table";
+import { columns } from "./columns";
+import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDoctorData } from "./action";
 import { useAdminStore } from "@/store/adminStore";
-import Filteration from "@/components/AdminPanelComponents/Filteration";
 
 export default function DemoPage() {
   const [doctors, setAllDoctors] = useAdminStore((state: any) => [

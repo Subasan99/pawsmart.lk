@@ -4,6 +4,13 @@ import { useDoctorStore } from "@/store/doctorStore";
 import { getDoctorFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
 
+interface Doctor {
+  preSignedUrl: string;
+  image: string;
+  name: string;
+  description: string;
+}
+
 const Doctors = () => {
   const [allDoctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
@@ -17,8 +24,8 @@ const Doctors = () => {
 
   const fetchData = async () => {
     try {
-      const doctors = await getDoctorFilterData({ pageSize: 10, pageCount: 1 });
-      setAllDoctors(doctors.records);
+      const doctorsData = await getDoctorFilterData({ pageSize: 10, pageCount: 1 });
+      setAllDoctors(doctorsData.records);
       setError(null); // Clear error if data fetch is successful
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -26,13 +33,15 @@ const Doctors = () => {
     }
   };
 
-  const doctores = allDoctors.map((doctor: any) => ({
-    src: doctor.preSignedUrl,
-    alt: doctor.image,
-    textOverlay: doctor.name,
-    imageDescription: doctor.description,
-    label: doctor.name,
-  }));
+  const doctores = Array.isArray(allDoctors)
+    ? allDoctors.map((doctor: Doctor) => ({
+        src: doctor.preSignedUrl,
+        alt: doctor.image,
+        textOverlay: doctor.name,
+        imageDescription: doctor.description,
+        label: doctor.name,
+      }))
+    : [];
 
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
@@ -40,6 +49,7 @@ const Doctors = () => {
 
   return (
     <div id="doctors" className="pb-8 pt-20">
+      {error && <div className="error-message">{error}</div>}
       <MultipleImagesProps
         title="Popular Doctors"
         description="Meet With Professional Doctors."
