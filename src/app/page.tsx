@@ -21,7 +21,7 @@ import Footer from "@/components/Footer";
 import FilterDropdown from "@/components/FilterDropdown";
 
 export default function Home() {
-  const [doctorName, setDoctorName] = useState("");
+  const [doctorName, setDoctorName] = useState<string>("");
   const [departmentName, setDepartmentName] = useState("");
   const [appointmentDate, setAppointmentDate] = useState("");
 
@@ -53,15 +53,15 @@ export default function Home() {
 
   const doctorOptions = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
-        label: doctor.name,
-        value: doctor.id, // Use a unique identifier for the value
+      label: doctor.name,
+        value: doctor.id, 
       }))
     : [];
 
   const departmentOptions = Array.isArray(departments)
     ? departments.map((department: any) => ({
         label: department.name,
-        value: department.id, // Use a unique identifier for the value
+        value: department.id, 
       }))
     : [];
 
@@ -192,6 +192,17 @@ export default function Home() {
       </ul>
     </div>
   );
+
+  const formatDate = (date:any) => {
+    const [month, day, year] = date.split("/");
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleDateChange = (e:any) => {
+    const inputDate = e.target.value;
+    const formattedDate = formatDate(inputDate);
+    setAppointmentDate(formattedDate);
+  };
 
   return (
     <>
@@ -393,18 +404,21 @@ export default function Home() {
                       options={doctorOptions}
                       placeholder="Select Doctor"
                       onChange={setDoctorName}
+                      value={doctorName}
+                      
                     />
 
                     <FilterDropdown
                       options={departmentOptions}
                       placeholder="Select Department"
-                      onChange={setDepartmentName}
+                      onChange={setDepartmentName} value={departmentName}
                     />
 
                     <input
                       type="date"
                       value={appointmentDate}
-                      onChange={(e) => setAppointmentDate(e.target.value)}
+                      // onChange={(e) => setAppointmentDate(e.target.value)}
+                      onChange={handleDateChange}
                       className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
 

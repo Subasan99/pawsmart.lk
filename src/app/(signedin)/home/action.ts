@@ -5,17 +5,23 @@ import { axiosInstance } from '@/utils/client';
 export const getDoctorData = async () => {
   try {
     const response = await axiosInstance.get(`/doctors`);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
   }
 };
-
+export const getDoctorByIdData = async (doctorid:any) => {
+  try {
+    const response = await axiosInstance.get(`/doctor/${doctorid}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching doctor data:', error);
+    return null; 
+  }
+};
 export const getDeparmentData = async () => {
   try {
     const response = await axiosInstance.get(`/departments`);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -53,7 +59,6 @@ export const getDeparmentData = async () => {
         },
   
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log('error', error);
@@ -72,7 +77,6 @@ export const getDeparmentData = async () => {
         },
   
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log('error', error);
@@ -91,7 +95,6 @@ export const getDeparmentData = async () => {
         },
   
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.log('error', error);
@@ -110,7 +113,25 @@ export const getDeparmentData = async () => {
         },
   
       });
-      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+  export const getBookingFilterData = async (params: {
+    doctorId:any,
+    pageCount: number;
+    pageSize: number;
+  }) => {
+    try {
+      const response = await axiosInstance.get(`/booking/filter`, {
+        params: {
+          doctorId:params.doctorId,
+          pageSize: params.pageSize,
+          pageCount: params.pageCount,
+        },
+  
+      });
       return response.data;
     } catch (error) {
       console.log('error', error);

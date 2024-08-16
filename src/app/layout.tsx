@@ -11,18 +11,17 @@ export const metadata: Metadata = {
   description: "Website description",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <body className={inter.className}>
         <div className="h-full w-full flex flex-col">
-          <div className="grow-0">
-            {children}</div>
+          <div className="grow-0">{children}</div>
         </div>
       </body>
     </html>

@@ -3,14 +3,15 @@ import { useState } from "react";
 interface FilterDropdownProps {
   options: Array<{ label: string; value: string }>;
   placeholder: string;
-  onChange: (value: string) => void;
-
+  onChange: (lable: string) => void;
+  value: string; // Add this line
 }
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
   options,
   placeholder,
   onChange,
+  value, // Add this line
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredOptions, setFilteredOptions] = useState(options);
@@ -26,8 +27,8 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     );
   };
 
-  const handleSelect = (value: string) => {
-    onChange(value);
+  const handleSelect = (lable: string) => {
+    onChange(lable);
     setSearchTerm(""); // Reset search term
     setFilteredOptions(options); // Reset options
     setDropdownVisible(false); // Hide the dropdown
@@ -48,7 +49,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
       <input
         type="text"
         placeholder={placeholder}
-        value={searchTerm}
+        value={value}
         onChange={handleSearch}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -61,7 +62,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               <li
                 key={index}
                 className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-                onClick={() => handleSelect(option.value)}
+                onClick={() => handleSelect(option.label)}
               >
                 {option.label}
               </li>
