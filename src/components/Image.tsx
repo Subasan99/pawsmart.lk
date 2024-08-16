@@ -10,8 +10,8 @@ interface PopularDoctorsProps {
   linkDescription: string;
   doctors: { id?: string; src: string; alt: string; textOverlay: string; description?:string; specializationName?:string; dayTimeSlotResponses?:[]}[];
   handleClick: (imageName: any, image: any, id: any) => void;
-  pathname: string;
-  query: [] | any;
+  pathname?: string;
+  query?: [] | any;
 }
 
 const PopularDoctors: React.FC<PopularDoctorsProps> = ({

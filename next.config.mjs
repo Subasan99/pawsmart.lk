@@ -7,7 +7,16 @@ const nextConfig = {
                 hostname: 'doctor-booking.s3.ap-south-1.amazonaws.com'
             }
         ]
-    }
+    },
+    async redirects() {
+        return [
+          {
+            source: '/',
+            destination: '/home',
+            permanent: true,
+          },
+        ]
+      },
 };
 
 export default nextConfig;

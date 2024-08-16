@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import DoctorHeader from "@/components/DoctorHeader";
+import DoctorFooter from "@/components/DoctorFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Stubby",
-  description: "Stubby ",
+  title: "Stubby Doctor",
+  description: "Doctor Portal",
 };
 
 export default function RootLayout({
@@ -16,17 +15,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="h-full w-full flex flex-col">
+        <div className="h-full w-full flex flex-col relative bg-gray-100">
           <div className="sticky z-30 top-0 md:static h-fit">
-            <Header />
+            <DoctorHeader />
           </div>
-          <div className="grow">{children}</div>
-          <div className="mt-auto">
-            <Footer/>
+          <div className="grow-0 mt-16 w-full max-w-[1024px] self-center overflow-y-auto">
+            {children}
+          </div>
+          <div className="mt-auto w-full">
+            <DoctorFooter />
           </div>
         </div>
       </body>
