@@ -1,3 +1,4 @@
+"use router"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +8,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import EllipsisIcon from "../svg/ellipsis-icon";
-import {  EditIcon, EyeIcon, TrashIcon } from "lucide-react";
+import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-const ActionMenu = () => {
+interface Props {
+  pathName: string;
+}
+
+const ActionMenu = (props: Props) => {
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -18,9 +25,18 @@ const ActionMenu = () => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem className="font-semibold flex gap-2"><EyeIcon/>View</DropdownMenuItem>
-        <DropdownMenuItem className="font-semibold flex gap-2"><EditIcon/>Edit</DropdownMenuItem>
-        <DropdownMenuItem className="font-semibold flex gap-2"><TrashIcon/>Delete</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => router.push(props.pathName)} className="font-semibold flex gap-2">
+          <EyeIcon />
+          View
+        </DropdownMenuItem>
+        <DropdownMenuItem className="font-semibold flex gap-2">
+          <EditIcon />
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem className="font-semibold flex gap-2">
+          <TrashIcon />
+          Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
