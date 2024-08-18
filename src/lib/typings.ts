@@ -51,3 +51,16 @@ export type Doctor = {
     appointmentTimes: string[];
   }[];
 };
+
+export type DoctorCreate = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNo: string;
+  dateOfBirth: Date;
+  gender: string;
+  specializationId: string;
+  description: string;
+  duration: number;
+  petIds: string[];
+};

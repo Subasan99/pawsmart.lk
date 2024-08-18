@@ -1,5 +1,6 @@
 "use server";
 
+import { DoctorCreate } from "@/lib/typings";
 import { axiosInstance } from "@/utils/client";
 
 export async function getDoctorData(
@@ -24,5 +25,14 @@ export async function getDoctorData(
     return response?.data;
   } catch (error) {
     console.log("Error fetching doctor data:", error);
+  }
+}
+
+export async function createDoctor(doctor: DoctorCreate) {
+  try {
+    const response = await axiosInstance.post("/doctor", doctor);
+    console.log('doctor create',response);
+  } catch (error) {
+    console.log("Error creating doctor:", error);
   }
 }
