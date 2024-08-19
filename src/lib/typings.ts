@@ -64,3 +64,13 @@ export type DoctorCreate = {
   duration: number;
   petIds: string[];
 };
+
+export type Department = {
+  name: string;
+  description: string;
+};
+
+export type Pet = {
+  name: string;
+  description: string;
+};

@@ -19,7 +19,7 @@ export const getDoctorByIdData = async (doctorid:any) => {
     return null; 
   }
 };
-export const getDeparmentData = async () => {
+export const getDepartmentData = async () => {
   try {
     const response = await axiosInstance.get(`/departments`);
     return response.data;
@@ -47,7 +47,7 @@ export const getDeparmentData = async () => {
     }
   };
 
-  export const getDeparmentFilterData = async (params: {
+  export const getDepartmentFilterData = async (params: {
     pageCount: number;
     pageSize: number;
   }) => {

@@ -8,7 +8,7 @@ import ReviewSection from '@/components/Review';
 import InfoSection from '@/components/DepInfo';
 import { useSearchParams } from 'next/navigation';
 
-const AppointmentDeparment = () => {
+const AppointmentDepartment = () => {
   const searchParams = useSearchParams();
   const textOverlay = searchParams.get('textOverlay');
   const date = searchParams.get('date');
@@ -122,4 +122,4 @@ const AppointmentDeparment = () => {
   );
 };
 
-export default AppointmentDeparment;
+export default AppointmentDepartment;

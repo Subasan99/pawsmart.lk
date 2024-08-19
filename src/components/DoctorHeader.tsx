@@ -6,12 +6,12 @@ import Logoeffect from "../../public/stubby.png";
 import { useRouter } from "next/navigation";
 import { useDoctorStore } from "@/store/doctorStore";
 import {
-  getDeparmentData,
+  getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
 } from "@/app/(signedin)/home/action";
-import { useDeparmentStore } from "@/store/deparmentStore";
+import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
 import { useMedicinesStore } from "@/store/medicinesStore";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -29,9 +29,9 @@ export default function DoctorHeader() {
     state.doctors,
     state.setAllDoctors,
   ]);
-  const [departments, setAllDeparments] = useDeparmentStore((state: any) => [
+  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
     state.departments,
-    state.setAllDeparments,
+    state.setAllDepartments,
   ]);
 
   const [pets, setAllPets] = usePetStore((state: any) => [
@@ -58,10 +58,10 @@ export default function DoctorHeader() {
   const fetchData = async () => {
     try {
       const petData = await getPetData();
-      const departmentData = await getDeparmentData();
+      const departmentData = await getDepartmentData();
       const doctorData = await getDoctorData();
       const medicinesData = await getMedicinesData();
-      setAllDeparments(departmentData);
+      setAllDepartments(departmentData);
       setAllMedicines(medicinesData);
       setAllPets(petData);
       setAllDoctors(doctorData);

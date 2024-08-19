@@ -10,7 +10,7 @@ import GenderIcon from "@/components/svg/gender-icon";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DoctorAppointments from "@/components/AdminPanelComponents/DoctorComponents/DoctorAppointments";
-import DoctorTimeSlots from "@/components/AdminPanelComponents/DoctorComponents/DOctorTimeSlots";
+import DoctorTimeSlots from "@/components/AdminPanelComponents/DoctorComponents/DoctorTimeSlots";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [
