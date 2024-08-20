@@ -40,8 +40,8 @@ export const columns: ColumnDef<Columns>[] = [
                 alt="doctor image"
                 src={row?.original?.preSignedUrl}
                 className="w-10 h-10 object-cover rounded-full border-2"
-                height={10}
-                width={10}
+                height={200}
+                width={200}
               />
             ) : (
               <Image
@@ -88,7 +88,7 @@ export const columns: ColumnDef<Columns>[] = [
     id: "actions",
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
-        <ActionMenu pathName={`/departments-admin/${row.original.id}`} />
+        <ActionMenu pathName={`/doctors-admin/${row.original.id}`} />
       </div>
     ),
     header: () => <div className="text-center font-bold">Actions</div>,

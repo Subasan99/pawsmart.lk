@@ -27,7 +27,31 @@ export async function getDepartmentData(
 export async function createDepartment(department: Department) {
   try {
     const response = await axiosInstance.post("/department", department);
-    console.log('department create',response);
+    console.log("department create", response);
+  } catch (error) {
+    console.log("Error creating department:", error);
+  }
+}
+
+export async function getDepartmentById(id: string) {
+  try {
+    const response = await axiosInstance.get(`/department/${id}`);
+    console.log("response", response);
+    return response?.data;
+  } catch (error) {
+    console.log("Error fetching Department by Id: ", error);
+  }
+}
+
+export async function archiveDepartment(id: string) {
+  try {
+    const response = await axiosInstance.put("/department", {
+      params: {
+        id: id ,
+      },
+    });
+    console.log("department create", response);
+    return response.data
   } catch (error) {
     console.log("Error creating department:", error);
   }

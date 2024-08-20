@@ -13,7 +13,7 @@ import {
 } from "@/app/(signedin)/home/action";
 import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
-import { useMedicinesStore } from "@/store/medicinesStore";
+import { useMedicineStore } from "@/store/medicinesStore";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
 import {
@@ -41,7 +41,7 @@ export default function AdminHeader() {
     state.setAllPets,
   ]);
 
-  const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
+  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
   ]);

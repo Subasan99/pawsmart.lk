@@ -34,3 +34,13 @@ export async function createPet(pet: Pet) {
     console.log("Error creating pet:", error);
   }
 }
+
+export async function getPetById(id: string) {
+  try {
+    const response = await axiosInstance.get(`/pet/${id}`);
+    console.log("response", response);
+    return response?.data;
+  } catch (error) {
+    console.log("Error fetching Pet by Id: ", error);
+  }
+}

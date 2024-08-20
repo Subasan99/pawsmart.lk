@@ -1,40 +1,39 @@
 "use client";
 
 import { useEffect } from "react";
-import { getAppointmentsByDoctorId, getDoctorById } from "./action";
-import { useDoctorStore } from "@/store/doctorStore";
 import Image from "next/image";
 import DefaultImage from "../../../../../public/default_user.png";
 import EditIcon from "@/components/svg/edit_icon";
-import GenderIcon from "@/components/svg/gender-icon";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DoctorAppointments from "@/components/AdminPanelComponents/DoctorComponents/DoctorAppointments";
-import DoctorTimeSlots from "@/components/AdminPanelComponents/DoctorComponents/DoctorTimeSlots";
+import MedicineAppointments from "../MedicineAppointments";
+import MedicineTimeSlots from "../MedicineTimeSlots";
+import { useMedicineStore } from "@/store/medicinesStore";
+import { getMedicineById, getAppointmentsByMedicineId } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [
-    selectedDoctor,
-    setSelectedDoctor,
+    selectedMedicine,
+    setSelectedMedicine,
     loading,
-    doctorAppointments,
-    setDoctorAppointments,
-  ] = useDoctorStore((state: any) => [
-    state.selectedDoctor,
-    state.setSelectedDoctor,
+    medicineAppointments,
+    setMedicineAppointments,
+  ] = useMedicineStore((state: any) => [
+    state.selectedMedicine,
+    state.setSelectedMedicine,
     state.loading,
-    state.doctorAppointments,
-    state.setDoctorAppointments,
+    state.medicineAppointments,
+    state.setMedicineAppointments,
   ]);
 
-  async function handleSelectDoctor() {
-    const data = await getDoctorById(params.id);
-    const appointments = await getAppointmentsByDoctorId(params.id, 1, 10);
-    setSelectedDoctor(data);
+  async function handleSelectMedicine() {
+    const data = await getMedicineById(params.id);
+    const appointments = await getAppointmentsByMedicineId(params.id, 1, 10);
+    setSelectedMedicine(data);
   }
 
   useEffect(() => {
-    handleSelectDoctor();
+    handleSelectMedicine();
   }, [params.id]);
 
   if (loading) {
@@ -47,10 +46,10 @@ const Index = ({ params }: { params: { id: string } }) => {
         <EditIcon className="absolute top-0 right-0 cursor-pointer" />
         <div className="relative">
           <EditIcon className="absolute top-5 right-5 z-10 cursor-pointer" />
-          {selectedDoctor?.preSignedUrl ? (
+          {selectedMedicine?.preSignedUrl ? (
             <Image
-              src={selectedDoctor?.preSignedUrl}
-              alt="Doctor Image"
+              src={selectedMedicine?.preSignedUrl}
+              alt="Medicine Image"
               width={200}
               height={200}
               className="rounded-full border-4 object-cover h-[200px] w-[200px]"
@@ -67,22 +66,10 @@ const Index = ({ params }: { params: { id: string } }) => {
         </div>
         <div className="grow flex flex-col gap-2 px-3 py-2">
           <div className="font-bold text-2xl flex gap-2 items-center">
-            {selectedDoctor?.firstName} {selectedDoctor?.lastName}{" "}
-            <GenderIcon gender={selectedDoctor?.gender} className="w-6 h-6" />
+            {selectedMedicine?.name}
           </div>
-          <div>
-            <div className="font-semibold mb-1">
-              {selectedDoctor?.specializationName}
-            </div>
-            <div className="font-semibold mb-2">
-              {selectedDoctor?.departmentName}
-            </div>
-          </div>
-
-          <div className="font-semibold text-xl">{selectedDoctor?.email}</div>
-          <div className="font-semibold text-xl">{selectedDoctor?.phoneNo}</div>
           <div className="font-semibold text-xl">
-          &quot;{selectedDoctor?.description}&quot;
+          &quot;{selectedMedicine?.description}&quot;
           </div>
         </div>
       </div>
@@ -91,18 +78,18 @@ const Index = ({ params }: { params: { id: string } }) => {
         <TabsList>
           <TabsTrigger value="appointments">Appointments</TabsTrigger>
           <TabsTrigger value="timeslot">Time Slots & Duration</TabsTrigger>
-          <TabsTrigger value="pets">Pets</TabsTrigger>
         </TabsList>
         <TabsContent value="appointments">
-          <DoctorAppointments appointments={doctorAppointments} />
+          <MedicineAppointments appointments={medicineAppointments} />
         </TabsContent>
         <TabsContent value="timeslot">
-          <DoctorTimeSlots/>
+          <MedicineTimeSlots/>
         </TabsContent>
-        <TabsContent value="pets">Change your password here.</TabsContent>
       </Tabs>
     </div>
   );
 };
 
 export default Index;
+
+
