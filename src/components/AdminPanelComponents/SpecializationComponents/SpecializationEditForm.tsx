@@ -1,0 +1,143 @@
+"use client";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { createSpecialization, editSpecializationById } from "@/app/(admin)/specializations-admin/action";
+import { Specialization } from "@/lib/typings";
+import { Textarea } from "@/components/ui/textarea";
+
+const formSchema = z.object({
+  specializationName: z.string({ required_error: "Specialization name is required!" }),
+  description: z.string(),
+  departmentId: z.string({ required_error: "Department is required!" }),
+});
+
+type Props = {
+  setOpen: (open: boolean) => void;
+  reloadTable?: () => void; // Assuming you pass a function to reload the table
+  specialization?: Specialization;
+  id?: string;
+  department?: any;
+
+};
+
+const SpecializationEditForm = ({ setOpen, reloadTable,specialization, id,department }: Props) => {
+  const [loading, setLoading] = useState(false);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      specializationName: specialization?.specializationName,
+      description: specialization?.description,
+      departmentId: specialization?.departmentId, 
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    try {
+      await editSpecializationById(id!, values);
+      setOpen(false); // Close the form
+      if (reloadTable) reloadTable(); // Reload the table
+    } catch (error) {
+      console.error("Failed to create specialization:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 w-full px-2"
+      >
+        <div className="w-full gap-2">
+          <FormField
+            control={form.control}
+            name="specializationName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Specialization name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Specialization name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="departmentId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel>Department</FormLabel>
+                <Select onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Department" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {department.length > 0 ? (
+                      department.map((department: any) => {
+                        return (
+                          <SelectItem
+                            key={department.id}
+                            value={department.id}
+                          >
+                            {department.departmentName}
+                          </SelectItem>
+                        );
+                      })
+                    ) : (
+                      <div className="px-3 font-semibold text-gray-400 text-center">
+                        No options
+                      </div>
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Type your description here." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button className="bg-red-500" type="submit">
+          Submit
+        </Button>
+      </form>
+    </Form>
+  );
+};
+
+export default SpecializationEditForm;

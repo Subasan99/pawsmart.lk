@@ -94,3 +94,10 @@ export type MedicineCreate = {
   description: string;
   duration: number;
 };
+
+
+export type Specialization = {
+  specializationName: string;
+  description?: string;
+  departmentId: string;
+};

@@ -116,7 +116,7 @@ const ActionMenu = (props: Props) => {
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Pet information</DialogTitle>
+            <DialogTitle>Edit information</DialogTitle>
           </DialogHeader>
           <div className="w-full flex">
             {props.component === "pet" ? (
