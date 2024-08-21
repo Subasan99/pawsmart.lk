@@ -1,7 +1,7 @@
 "use client";
 
 import { Appointment } from "@/lib/typings";
-import { columns } from "../appointments-admin/columns";
+import { columns } from "../../../app/(admin)/appointments-admin/columns";
 import { DataTable } from "@/components/AdminPanelComponents/data-table";
 
 interface Props {

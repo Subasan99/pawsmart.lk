@@ -1,14 +1,14 @@
 "use client";
 import { useEffect } from "react";
 import { columns } from "./columns";
-import { DataTable } from "../../../components/AdminPanelComponents/data-table";
+import { DataTable } from "@/components/AdminPanelComponents/data-table";
 import { getMedicineData } from "./action";
 import { useSpecializationStore } from "@/store/specializationStore";
 import { getAllSpecializations } from "@/api/route";
-import MedicineCreate from "./MedicineCreate";
+import MedicineCreate from "@/components/AdminPanelComponents/MedicineComponents/MedicineCreate";
 import { useMedicineStore } from "@/store/medicinesStore";
 
-export default function DemoPage() {
+export default function Index() {
   const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,

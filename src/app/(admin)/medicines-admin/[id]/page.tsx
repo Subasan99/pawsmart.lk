@@ -6,8 +6,8 @@ import DefaultImage from "../../../../../public/default_user.png";
 import EditIcon from "@/components/svg/edit_icon";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MedicineAppointments from "../MedicineAppointments";
-import MedicineTimeSlots from "../MedicineTimeSlots";
+import MedicineAppointments from "@/components/AdminPanelComponents/MedicineComponents/MedicineAppointments";
+import MedicineTimeSlots from "@/components/AdminPanelComponents/MedicineComponents/MedicineTimeSlots";
 import { useMedicineStore } from "@/store/medicinesStore";
 import { getMedicineById, getAppointmentsByMedicineId } from "../action";
 
