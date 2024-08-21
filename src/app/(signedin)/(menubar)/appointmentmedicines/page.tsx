@@ -3,12 +3,15 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import RootLayout from '../layout';
 import AppointmentBook from '@/components/AppointmentBook';
+import { useSearchParams } from 'next/navigation';
 
 const AppointmentDoctor = () => {
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
   };
-
+  
+  
+    
   const doctorOptions = [
     { label: 'Select doctor', value: '' },
     { label: 'Doctor 1', value: 'doctor1' },

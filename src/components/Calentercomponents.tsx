@@ -1,7 +1,9 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar } from './ui/calendar';
 import './Scheduler.css';
+import moment from 'moment';
+
 import {
   Card,
   CardContent,
@@ -41,16 +43,19 @@ const Scheduler: React.FC<SchedulerProps> = ({
   timeSlotsByDay,
 }) => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
-    null
-  );
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot>({
+    startTime: '',
+    endTime: '',
+  });
   const [is24HourFormat, setIs24HourFormat] = useState<boolean>(false);
 
+ 
   const router = useRouter();
 
   const onDateChange = (date: Date) => {
     setSelectedDate(date);
-    handleDateChange(date.toString());
+    console.log(date, 'THANUJAN')
+    handleDateChange(date);
   };
 
   const formatDate = (date: Date) => {
@@ -104,6 +109,20 @@ const Scheduler: React.FC<SchedulerProps> = ({
   const defaultImage = '/department.png';
   const [view, setView] = useState('initial');
 
+  
+  // const handleContinue = () => {
+    
+  //   // if (!selectedDate || !selectedTimeSlot) {
+  //   //   // Handle case where date or time slot is not selected
+  //   //   console.error("Please select a date and time slot.");
+  //   //   return;
+  //   // }
+  
+  //   const formattedDate = selectedDate.toISOString();
+  //   const formattedTime = `${selectedTimeSlot.startTime}-${selectedTimeSlot.endTime}`;
+  
+  //   router.push(`/appointmentdoctor?date=${formattedDate}&time=${formattedTime}`);
+  // };
   const handleContinueClickContinue = async () => {
     try {
       setView('next');
@@ -187,10 +206,10 @@ const Scheduler: React.FC<SchedulerProps> = ({
             </div>
             <div className="col-span container mx-20">
               <div className="flex">
-                <div className="flex-3 pr-4 px-8 text-lg font-bold whitespace-nowrap">
-                  <div>{formatDate(selectedDate)}</div>
+                <div className="flex-3 pr-4 px-8 mx-4 text-lg font-Medium whitespace-nowrap">
+                  <div>Avalaible Times</div>
                 </div>
-                <div className="flex items-center bg-white p-2 border rounded-lg ">
+                {/* <div className="flex items-center bg-white p-2 border rounded-lg ">
                   <div className="flex-1 pr-4 text-lg">
                     <div
                       className={`cursor-pointer rounded ${
@@ -211,24 +230,25 @@ const Scheduler: React.FC<SchedulerProps> = ({
                       24h
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
-              <div className="flex flex-col mt-4 ">
+              <div className="flex flex-col mt-4 mx-10 ">
                 {timeSlots.map((slot, index) => (
                   <div
                     key={index}
-                    className={` bg-red-200 p-2 mb-2 ml-10 rounded w-full whitespace-nowrap text-lg items-center justify-center border 
+                    className={`bg-green-400  p-2 mb-2 ml-2 rounded w-auto whitespace-nowrap text-lg items-center justify-center border cursor-pointer
                           ${
                             selectedTimeSlot &&
                             selectedTimeSlot.startTime === slot.startTime &&
                             selectedTimeSlot.endTime === slot.endTime
-                              ? 'bg-red-500 text-white'
+                              ? 'bg-red-800 text-white'
                               : ''
                           }`}
                     // style={{ maxWidth: '200px' }}
                     onClick={() => handleTimeChange(slot)}
                   >
-                    {formatTime(slot.startTime)}
+                    {moment(slot.startTime, 'HH:mm').format('h:mm A')}
+                    {/* {slot.startTime} */}
                     {/* - {formatTime(slot.endTime)} */}
                   </div>
                 ))}

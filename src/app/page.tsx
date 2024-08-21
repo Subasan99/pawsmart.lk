@@ -131,6 +131,8 @@ export default function Home() {
         dayTimeSlotResponses: doctor.dayTimeSlotResponses,
       }))
     : [];
+
+    
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
         src: department.preSignedUrl,
@@ -214,7 +216,6 @@ export default function Home() {
         >
           <div className="flex justify-between items-center w-full md:hidden">
             <a href="/">
-              {" "}
               <Image src={logo} alt="Company Logo" className="w-36" />
             </a>
             <Sheet open={open} onOpenChange={setOpen}>
@@ -237,6 +238,10 @@ export default function Home() {
                       About Us
                     </a>
                   </li>
+                  <li key={2}>
+                  <a href="/Appointments" className="hover:text-red-500">
+                  Appointments                  </a>
+                </li>
                   <li
                     onClick={() => handleMouseEnter("departments")}
                     className="hover:text-red-500 relative"
@@ -305,6 +310,11 @@ export default function Home() {
                 <li key={1}>
                   <a href="/aboutus" className="hover:text-red-500">
                     About Us
+                  </a>
+                </li>
+                <li key={2}>
+                  <a href="/Appointments" className="hover:text-red-500">
+                  Appointments
                   </a>
                 </li>
                 <li
@@ -456,7 +466,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription="Doctors"
             doctors={doctores.slice(0, 8)}
-            pathname={"/booking"}
+            pathname={'/appointmentdoctor'}
             query={doctores}
           />
         </div>

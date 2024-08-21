@@ -185,6 +185,10 @@ export default function Home() {
                     About Us
                   </a>
                 </li>
+                <li key={2}>
+                  <a href="/Appointments" className="hover:text-red-500">
+                  Appointments                  </a>
+                </li>
                 <li
                   onClick={() => handleMouseEnter("departments")}
                   className="hover:text-red-500 relative"
@@ -255,6 +259,10 @@ export default function Home() {
                   About Us
                 </a>
               </li>
+              <li key={2}>
+                  <a href="/Appointments" className="hover:text-red-500">
+                  Appointments                  </a>
+                </li>
               <li
                 onMouseEnter={() => handleMouseEnter("departments")}
                 onMouseLeave={handleMouseLeave}
