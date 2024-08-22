@@ -4,28 +4,28 @@ import { useEffect } from "react";
 import Image from "next/image";
 import DefaultImage from "../../../../../public/default_user.png";
 import EditIcon from "@/components/svg/edit_icon";
-import { usePetStore } from "@/store/petStore";
-import { getPetById } from "../action";
+import { useSpecializationStore } from "@/store/specializationStore";
+import { getSpecializationById } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [
-    selectedPet,
-    setSelectedPet,
+    selectedSpecialization,
+    setSelectedSpecialization,
     loading,
-  ] = usePetStore((state: any) => [
-    state.selectedPet,
-    state.setSelectedPet,
+  ] = useSpecializationStore((state: any) => [
+    state.selectedSpecialization,
+    state.setSelectedSpecialization,
     state.loading,
   
   ]);
 
-  async function handleSelectPet() {
-    const data = await getPetById(params.id);
-    setSelectedPet(data);
+  async function handleSelectSpecialization() {
+    const data = await getSpecializationById(params.id);
+    setSelectedSpecialization(data);
   }
 
   useEffect(() => {
-    handleSelectPet();
+    handleSelectSpecialization();
   }, [params.id]);
 
   if (loading) {
@@ -38,10 +38,10 @@ const Index = ({ params }: { params: { id: string } }) => {
         <EditIcon className="absolute top-0 right-0 cursor-pointer" />
         <div className="relative">
           <EditIcon className="absolute top-5 right-5 z-10 cursor-pointer" />
-          {selectedPet?.preSignedUrl ? (
+          {selectedSpecialization?.preSignedUrl ? (
             <Image
-              src={selectedPet?.preSignedUrl}
-              alt="Pet Image"
+              src={selectedSpecialization?.preSignedUrl}
+              alt="Specialization Image"
               width={200}
               height={200}
               className="rounded-full border-4 object-cover h-[200px] w-[200px]"
@@ -58,10 +58,10 @@ const Index = ({ params }: { params: { id: string } }) => {
         </div>
         <div className="grow flex flex-col gap-2 px-3 py-2">
           <div className="font-bold text-2xl flex gap-2 items-center">
-            {selectedPet?.name} {" "}
+            {selectedSpecialization?.specializationName} {" "}
           </div>
           <div className="font-semibold text-xl">
-          &quot;{selectedPet?.description}&quot;
+          &quot;{selectedSpecialization?.description}&quot;
           </div>
         </div>
       </div>

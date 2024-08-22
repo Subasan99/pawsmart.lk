@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { getDepartmentById } from "./action";
 import Image from "next/image";
 import DefaultImage from "../../../../../public/default_user.png";
 import EditIcon from "@/components/svg/edit_icon";
 import { useDepartmentStore } from "@/store/departmentStore";
+import { getDepartmentById } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [
@@ -44,7 +44,7 @@ const Index = ({ params }: { params: { id: string } }) => {
               alt="Department Image"
               width={200}
               height={200}
-              className="rounded-full border-4"
+              className="rounded-full border-4 object-cover h-[200px] w-[200px]"
             />
           ) : (
             <Image
