@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/form";
 import TimePicker from "../../shared/time-picker";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface Props {
   setModal: any;
@@ -221,10 +222,17 @@ const DoctorDayTimeAllocation = (props: Props) => {
       <Button
         disabled={dayTimeSlots === props.dayTimeSlotReponse}
         onClick={() =>
-          props.allocateTimeSlot(
-            props.id,
-            dayTimeSlots,
-          )
+          props
+            .allocateTimeSlot(props.id, dayTimeSlots)
+            .then((response: any) => {
+              if (response.success) {
+                toast.success(response.message, {className: 'bg-green-200'});
+                props.setModal(false);
+              } else {
+                toast.error("Oops! Something went wrong. Try again.");
+                props.setModal(false);
+              }
+            })
         }
         className="self-end"
       >
