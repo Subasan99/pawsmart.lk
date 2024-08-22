@@ -6,25 +6,25 @@ import Logoeffect from "../../public/stubby.png";
 import { useRouter } from "next/navigation";
 import { useDoctorStore } from "@/store/doctorStore";
 import {
-  getDeparmentData,
+  getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
 } from "@/app/(signedin)/home/action";
-import { useDeparmentStore } from "@/store/deparmentStore";
+import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
-import { useMedicinesStore } from "@/store/medicinesStore";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
+import { useMedicinesStore } from "@/store/medicinesStore";
 
 export default function Home() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
     state.setAllDoctors,
   ]);
-  const [departments, setAllDeparments] = useDeparmentStore((state: any) => [
+  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
     state.departments,
-    state.setAllDeparments,
+    state.setAllDepartments,
   ]);
 
   const [pets, setAllPets] = usePetStore((state: any) => [
@@ -62,10 +62,10 @@ export default function Home() {
   const fetchData = async () => {
     try {
       const petData = await getPetData();
-      const departmentData = await getDeparmentData();
+      const departmentData = await getDepartmentData();
       const doctorData = await getDoctorData();
       const medicinesData = await getMedicinesData();
-      setAllDeparments(departmentData);
+      setAllDepartments(departmentData);
       setAllMedicines(medicinesData);
       setAllPets(petData);
       setAllDoctors(doctorData);
@@ -73,7 +73,6 @@ export default function Home() {
       console.error("Error fetching data:", error);
     }
   };
-
 
   const handleButtonClick = () => {
     console.log("Search button clicked");
@@ -88,11 +87,12 @@ export default function Home() {
   };
 
   const doctores = Array.isArray(doctors)
-  ? doctors.map((doctor: any) => ({
-    src: doctor.preSignedUrl,
-    alt: doctor.image,
-    textOverlay: doctor.name,
-  })): [];
+    ? doctors.map((doctor: any) => ({
+        src: doctor.preSignedUrl,
+        alt: doctor.image,
+        textOverlay: doctor.name,
+      }))
+    : [];
 
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
@@ -102,11 +102,13 @@ export default function Home() {
       }))
     : [];
 
-  const petdata = pets.map((pet: any) => ({
-    src: pet.preSignedUrl,
-    alt: pet.image,
-    textOverlay: pet.name,
-  }));
+  const petdata = Array.isArray(pets)
+    ? pets.map((pet: any) => ({
+        src: pet.preSignedUrl,
+        alt: pet.image,
+        textOverlay: pet.name,
+      }))
+    : [];
 
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

@@ -11,28 +11,9 @@ export type Columns = {
   active: boolean;
   image: string;
   preSignedUrl: string | undefined;
-  doctorResponses: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNo: string;
-    dateOfBirth: string;
-    gender: string;
-    specializationId: string;
-    specializationName: string;
-    description: string;
-    departmentId: string;
-    departmentName: string;
-    image: string;
-    preSignedUrl: string | undefined;
-    duration: number;
-    dayTimeSlotResponses: {
-      day: string;
-      timeSlots: { startTime: string; endTime: string }[];
-      appointmentTimes: string[];
-    }[];
-  }[];
+  createdDate:string;
+  updatedDate:string;
+
 };
 
 export const columns: ColumnDef<Columns>[] = [
@@ -67,10 +48,17 @@ export const columns: ColumnDef<Columns>[] = [
     ),
   },
   {
-    accessorKey: "Description",
-    header: () => <div className="font-bold text-center">Description</div>,
+    accessorKey: "CreatedAt",
+    header: () => <div className="font-bold text-center">Created At</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.description}</div>
+      <div className="text-center">{row.original.createdDate}</div>
+    ),
+  },
+  {
+    accessorKey: "UpdatedAt",
+    header: () => <div className="font-bold text-center">Updated At</div>,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.updatedDate}</div>
     ),
   },
   {
@@ -92,8 +80,8 @@ export const columns: ColumnDef<Columns>[] = [
     id: "actions",
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
-        <ActionMenu />
-      </div>
+        <ActionMenu pathName={`/pets-admin/${row.original.id}`}/>
+        </div>
     ),
     header: () => <div className="text-center font-bold">Actions</div>,
   },

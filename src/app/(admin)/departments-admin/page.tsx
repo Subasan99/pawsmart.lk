@@ -3,10 +3,11 @@ import { useEffect } from "react";
 import { columns } from "./columns";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDepartmentData } from "./action";
-import { useDeparmentStore } from "@/store/deparmentStore";
+import DepartmentCreate from "./DepartmentCreate";
+import { useDepartmentStore } from "@/store/departmentStore";
 
 export default function DemoPage() {
-  const [departments, setAllDepartments] = useDeparmentStore((state: any) => [
+  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
     state.departments,
     state.setAllDepartments,
   ]);
@@ -20,8 +21,10 @@ export default function DemoPage() {
     fetchData();
   }, []);
   return (
-    <div className="container mx-auto py-5 relative">
-      {/* <Filteration getApi={fetchData} /> */}
+    <div className="container flex flex-col gap-4 mx-auto py-5 relative">
+      <div className="self-end">
+        <DepartmentCreate />
+      </div>
       <DataTable columns={columns} data={departments} />
     </div>
   );

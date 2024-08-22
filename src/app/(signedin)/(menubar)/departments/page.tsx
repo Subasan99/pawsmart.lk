@@ -1,26 +1,26 @@
 "use client";
 import React, { useEffect } from "react";
-import { useDeparmentStore } from "@/store/deparmentStore";
-import { getDeparmentData, getDeparmentFilterData } from "../../home/action";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { getDepartmentData, getDepartmentFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
 
 const Department = () => {
-  const [departments, setAllDeparments] = useDeparmentStore((state: any) => [
+  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
     state.departments,
-    state.setAllDeparments,
+    state.setAllDepartments,
   ]);
 
   useEffect(() => {
     fetchData();
-  }, [getDeparmentData]);
+  }, [getDepartmentData]);
   const fetchData = async () => {
     try {
-      const departmentData = await getDeparmentFilterData({
+      const departmentData = await getDepartmentFilterData({
         pageSize: 10,
         pageCount: 1,
       });
 
-      setAllDeparments(departmentData);
+      setAllDepartments(departmentData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

@@ -81,3 +81,12 @@ export type PetResponse = {
   updatedDate: string;
   active: boolean;
 };
+export type Department = {
+  name: string;
+  description: string;
+};
+
+export type Pet = {
+  name: string;
+  description: string;
+};

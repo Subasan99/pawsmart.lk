@@ -88,7 +88,7 @@ export const columns: ColumnDef<Columns>[] = [
     id: "actions",
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
-        <ActionMenu pathName={`/doctors-admin/${row.original.id}`} />
+        <ActionMenu pathName={`/departments-admin/${row.original.id}`} />
       </div>
     ),
     header: () => <div className="text-center font-bold">Actions</div>,

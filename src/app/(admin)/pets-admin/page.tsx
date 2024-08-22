@@ -4,6 +4,7 @@ import { columns } from "./columns";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getPetData } from "./action";
 import { usePetStore } from "@/store/petStore";
+import PetCreate from "./PetCreate";
 
 export default function DemoPage() {
   const [pets, setAllPets] = usePetStore((state: any) => [
@@ -20,8 +21,10 @@ export default function DemoPage() {
     fetchData();
   }, []);
   return (
-    <div className="container mx-auto py-5 relative">
-      {/* <Filteration getApi={fetchData} /> */}
+    <div className="container flex flex-col gap-4 mx-auto py-5 relative">
+    <div className="self-end">
+      <PetCreate />
+    </div>      {/* <Filteration getApi={fetchData} /> */}
       <DataTable columns={columns} data={pets} />
     </div>
   );

@@ -1,5 +1,6 @@
 "use server";
 
+import { Department } from "@/lib/typings";
 import { axiosInstance } from "@/utils/client";
 
 export async function getDepartmentData(
@@ -20,5 +21,14 @@ export async function getDepartmentData(
     return response?.data;
   } catch (error) {
     console.log("Error fetching department data:", error);
+  }
+}
+
+export async function createDepartment(department: Department) {
+  try {
+    const response = await axiosInstance.post("/department", department);
+    console.log('department create',response);
+  } catch (error) {
+    console.log("Error creating department:", error);
   }
 }
