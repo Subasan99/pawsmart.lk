@@ -9,14 +9,21 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 
+interface Props {
+  options: any[];
+  selectedValues: any[];
+  onChange: (values: any[]) => void;
+  placeholder?: string;
+}
+
 export function MultiSelect({
   options,
   selectedValues,
   onChange,
   placeholder,
-}) {
+}: Props) {
   const handleSelect = (value: string) => {
-    const numericValue =value;
+    const numericValue = value;
 
     if (selectedValues.includes(numericValue)) {
       onChange(selectedValues.filter((v: string) => v !== numericValue));

@@ -39,6 +39,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { MultiSelect } from "@/components/shared/multi-select";
 import { createDoctor } from "@/app/(admin)/doctors-admin/action";
+import { Doctor } from "@/lib/typings";
 
 const formSchema = z.object({
   firstName: z.string({ required_error: "First name is required!" }),
@@ -75,6 +76,7 @@ const formSchema = z.object({
 type Props = {
   specialization: any;
   setOpen: any;
+  doctor?: Doctor;
 };
 
 const DoctorCreateForm = (props: Props) => {

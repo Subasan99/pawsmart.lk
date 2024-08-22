@@ -4,6 +4,7 @@ import DoctorFooter from "@/components/DoctorFooter";
 import AdminHeader from "@/components/AdminPanelComponents/AdminHeader";
 import SideBar from "@/components/AdminPanelComponents/SideBar";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
