@@ -9,6 +9,8 @@ export type Columns = {
   id: string;
   specializationName: string;
   description: string;
+  departmentId: string;
+  departmentName: string;
   active: boolean;
   image: string;
   preSignedUrl: string | undefined;
@@ -45,6 +47,13 @@ export const columns: ColumnDef<Columns>[] = [
           </div>
         </div>
       </div>
+    ),
+  },
+  {
+    accessorKey: "DepartmentName",
+    header: () => <div className="font-bold text-center">Department Name</div>,
+    cell: ({ row }) => (
+      <div className="text-center">{row.original.departmentName}</div>
     ),
   },
   {

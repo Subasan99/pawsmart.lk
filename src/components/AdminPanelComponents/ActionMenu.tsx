@@ -15,26 +15,53 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { faLessThanEqual } from "@fortawesome/free-solid-svg-icons";
 import PetEditForm from "./PetComponents/PetEditForm";
+import DepartmentEditForm from "./DepartmentComponents/DepartmentEditForm";
+import MedicineEditForm from "./MedicineComponents/MedicineEditForm";
+import SpecializationEditForm from "./SpecializationComponents/SpecializationEditForm";
 
 interface Props {
   pathName: string;
-  delete?: any;
-  view?: any;
-  edit?: any;
+  delete?: () => Promise<any>;
+  view?: boolean;
+  edit?: boolean;
   data?: any;
-  component?: any;
+  component?: "pet" | "department" | "medicine"|"specialization";
 }
 
 const ActionMenu = (props: Props) => {
   const router = useRouter();
-  const [open, setOpen] = useState<boolean>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
+
+  const handleDelete = async () => {
+    if (props.delete) {
+      const response = await props.delete();
+      if (response.success) {
+        setDeleteOpen(false);
+        console.log("Deleted");
+        // Additional logic like redirecting can be added here
+      }
+    }
+  };
+
+  const renderEditForm = () => {
+    switch (props.component) {
+      case "pet":
+        return <PetEditForm pet={props.data} setOpen={setEditOpen} id={props.data?.id} />;
+      case "department":
+        return <DepartmentEditForm department={props.data} setOpen={setEditOpen} id={props.data?.id} />;
+      case "medicine":
+        return <MedicineEditForm medicine={props.data} setOpen={setEditOpen} id={props.data?.id} />;
+        case "specialization":
+          return <SpecializationEditForm specialization={props.data} setOpen={setEditOpen} id={props.data?.id} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -45,18 +72,16 @@ const ActionMenu = (props: Props) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {props?.view && (
+          {props.view && (
             <DropdownMenuItem
-              onClick={() => {
-                router.push(props.pathName);
-              }}
+              onClick={() => router.push(props.pathName)}
               className="font-semibold flex gap-2"
             >
               <EyeIcon />
               View
             </DropdownMenuItem>
           )}
-          {props?.edit && (
+          {props.edit && (
             <DropdownMenuItem
               onClick={() => setEditOpen(true)}
               className="font-semibold flex gap-2"
@@ -66,44 +91,32 @@ const ActionMenu = (props: Props) => {
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
-            onClick={() => setOpen(true)}
+            onClick={() => setDeleteOpen(true)}
             className="font-semibold flex gap-2"
           >
-            <div className="flex gap-2">
-              <TrashIcon />
-              Archive
-            </div>
+            <TrashIcon />
+            Archive
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Delete dialog */}
-      <Dialog open={open} onOpenChange={setOpen}>
+      {/* Delete Dialog */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>
             <DialogDescription>
-              Do you really want to archive this department?
+              Do you really want to archive this item?
             </DialogDescription>
           </DialogHeader>
           <div className="w-full flex justify-end">
             <div className="flex gap-2">
-              <Button className="px-3 py-1" onClick={() => setOpen(true)}>
+              <Button className="px-3 py-1" onClick={() => setDeleteOpen(false)}>
                 No
               </Button>
               <Button
                 className="px-3 py-1 bg-red-500"
-                onClick={async () => {
-                  if (props.delete) {
-                    await props.delete().then((response: any) => {
-                      if (response.success) {
-                        setOpen(false);
-                      }
-                    });
-                    console.log("Deleted");
-                    // You can add additional logic here, like closing the dialog
-                  }
-                }}
+                onClick={handleDelete}
               >
                 Yes
               </Button>
@@ -112,22 +125,20 @@ const ActionMenu = (props: Props) => {
         </DialogContent>
       </Dialog>
 
-      {/* Edit dialog */}
+      {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit information</DialogTitle>
+            <DialogTitle>
+              {props.component === "pet" && "Edit Pet Information"}
+              {props.component === "department" && "Edit Department Information"}
+              {props.component === "medicine" && "Edit Medicine Information"}
+              {props.component === "specialization" && "Edit specialization Information"}
+
+            </DialogTitle>
           </DialogHeader>
           <div className="w-full flex">
-            {props.component === "pet" ? (
-              <PetEditForm
-                pet={props.data}
-                setOpen={setEditOpen}
-                id={props.data?.id}
-              />
-            ) : (
-              <></>
-            )}
+            {renderEditForm()}
           </div>
         </DialogContent>
       </Dialog>

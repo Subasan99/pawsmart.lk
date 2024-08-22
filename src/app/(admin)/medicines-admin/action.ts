@@ -64,9 +64,22 @@ export async function getAppointmentsByMedicineId(
 export async function archiveMedicine(id: string) {
   try {
     const response = await axiosInstance.put(`/medicine/active?id=${id}`);
-    console.log("department create", response);
+    console.log("medicine create", response);
     return response.data
   } catch (error) {
-    console.log("Error creating department:", error);
+    console.log("Error medicine department:", error);
+  }
+}
+
+export async function editMedicineById(
+  id: string,
+  values: { name: string; description: string }
+) {
+  try {
+    const response = await axiosInstance.put(`/medicine/${id}/update`, values);
+    console.log("response", response);
+    return response?.data;
+  } catch (error) {
+    console.log("Error fetching Medicine by Id: ", error);
   }
 }

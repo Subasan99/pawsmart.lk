@@ -81,7 +81,14 @@ export const columns: ColumnDef<Columns>[] = [
     id: "actions",
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
-        <ActionMenu delete={() => archiveDepartment(row.original.id)} pathName={`/departments-admin/${row.original.id}`} />
+        <ActionMenu
+          delete={() => archiveDepartment(row.original.id)}
+          pathName={`/departments-admin/${row.original.id}`}
+          view={false}
+          edit={true}
+          data={row.original}
+          component={"department"}
+        />
       </div>
     ),
     header: () => <div className="text-center font-bold">Actions</div>,
