@@ -28,15 +28,10 @@ const formSchema = z.object({
   description: z.string().optional(),
 });
 
-type Department = {
-  id: string;
-  departmentName: string;
-};
-
 type Props = {
   setOpen: (open: boolean) => void;
   reloadTable: () => void;
-  department?: Department[]; // Make this optional
+  department: any;
 };
 
 const SpecializationCreateForm = (props: Props) => {
@@ -44,9 +39,9 @@ const SpecializationCreateForm = (props: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      specializationName: "",
-      departmentId: "",
-      description: "",
+      specializationName: undefined,
+      departmentId: undefined,
+      description: undefined,
     },
   });
 
@@ -102,27 +97,26 @@ const SpecializationCreateForm = (props: Props) => {
             control={form.control}
             name="departmentId"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex flex-col w-full">
                 <FormLabel>Department</FormLabel>
-                <Select
-                  value={field.value} // Manage the value directly
-                  onValueChange={(value) => field.onChange(value)}
-                >
+                <Select onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Department" />
+                      <SelectValue placeholder="Select department" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {departments.length > 0 ? (
-                      departments.map((department) => (
-                        <SelectItem
-                          key={department.id}
-                          value={department.id}
-                        >
-                          {department.departmentName}
-                        </SelectItem>
-                      ))
+                    {props.department.length > 0 ? (
+                      props.department.map((department: any) => {
+                        return (
+                          <SelectItem
+                            key={department.id}
+                            value={department.id}
+                          >
+                            {department.name}
+                          </SelectItem>
+                        );
+                      })
                     ) : (
                       <div className="px-3 font-semibold text-gray-400 text-center">
                         No options

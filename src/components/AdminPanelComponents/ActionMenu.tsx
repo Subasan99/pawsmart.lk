@@ -22,6 +22,8 @@ import PetEditForm from "./PetComponents/PetEditForm";
 import DepartmentEditForm from "./DepartmentComponents/DepartmentEditForm";
 import MedicineEditForm from "./MedicineComponents/MedicineEditForm";
 import SpecializationEditForm from "./SpecializationComponents/SpecializationEditForm";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { getDepartmentData } from "@/app/(signedin)/home/action";
 
 interface Props {
   pathName: string;
@@ -29,14 +31,22 @@ interface Props {
   view?: boolean;
   edit?: boolean;
   data?: any;
-  component?: "pet" | "department" | "medicine"|"specialization";
+  component?: "pet" | "department" | "medicine" | "specialization";
 }
 
 const ActionMenu = (props: Props) => {
   const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [department, setAllDepartment] = useDepartmentStore((state: any) => [
+    state.department,
+    state.setAllDepartment,
+  ]);
 
+  async function fetchData() {
+    const departments = await getDepartmentData();
+    setAllDepartment(departments);
+  }
   const handleDelete = async () => {
     if (props.delete) {
       const response = await props.delete();
@@ -51,13 +61,38 @@ const ActionMenu = (props: Props) => {
   const renderEditForm = () => {
     switch (props.component) {
       case "pet":
-        return <PetEditForm pet={props.data} setOpen={setEditOpen} id={props.data?.id} />;
+        return (
+          <PetEditForm
+            pet={props.data}
+            setOpen={setEditOpen}
+            id={props.data?.id}
+          />
+        );
       case "department":
-        return <DepartmentEditForm department={props.data} setOpen={setEditOpen} id={props.data?.id} />;
+        return (
+          <DepartmentEditForm
+            department={props.data}
+            setOpen={setEditOpen}
+            id={props.data?.id}
+          />
+        );
       case "medicine":
-        return <MedicineEditForm medicine={props.data} setOpen={setEditOpen} id={props.data?.id} />;
-        case "specialization":
-          return <SpecializationEditForm specialization={props.data} setOpen={setEditOpen} id={props.data?.id} />;
+        return (
+          <MedicineEditForm
+            medicine={props.data}
+            setOpen={setEditOpen}
+            id={props.data?.id}
+          />
+        );
+      case "specialization":
+        return (
+          <SpecializationEditForm
+            department={department}
+            specialization={props.data}
+            setOpen={setEditOpen}
+            id={props.data?.id}
+          />
+        );
       default:
         return null;
     }
@@ -111,13 +146,13 @@ const ActionMenu = (props: Props) => {
           </DialogHeader>
           <div className="w-full flex justify-end">
             <div className="flex gap-2">
-              <Button className="px-3 py-1" onClick={() => setDeleteOpen(false)}>
+              <Button
+                className="px-3 py-1"
+                onClick={() => setDeleteOpen(false)}
+              >
                 No
               </Button>
-              <Button
-                className="px-3 py-1 bg-red-500"
-                onClick={handleDelete}
-              >
+              <Button className="px-3 py-1 bg-red-500" onClick={handleDelete}>
                 Yes
               </Button>
             </div>
@@ -131,15 +166,14 @@ const ActionMenu = (props: Props) => {
           <DialogHeader>
             <DialogTitle>
               {props.component === "pet" && "Edit Pet Information"}
-              {props.component === "department" && "Edit Department Information"}
+              {props.component === "department" &&
+                "Edit Department Information"}
               {props.component === "medicine" && "Edit Medicine Information"}
-              {props.component === "specialization" && "Edit specialization Information"}
-
+              {props.component === "specialization" &&
+                "Edit specialization Information"}
             </DialogTitle>
           </DialogHeader>
-          <div className="w-full flex">
-            {renderEditForm()}
-          </div>
+          <div className="w-full flex">{renderEditForm()}</div>
         </DialogContent>
       </Dialog>
     </>

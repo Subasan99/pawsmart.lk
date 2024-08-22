@@ -39,23 +39,23 @@ type Props = {
 
 };
 
-const SpecializationEditForm = ({ setOpen, reloadTable,specialization, id,department }: Props) => {
+const SpecializationEditForm = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      specializationName: specialization?.specializationName,
-      description: specialization?.description,
-      departmentId: specialization?.departmentId, 
+      specializationName: props.specialization?.specializationName,
+      description: props.specialization?.description,
+      departmentId: props.specialization?.departmentId, 
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      await editSpecializationById(id!, values);
-      setOpen(false); // Close the form
-      if (reloadTable) reloadTable(); // Reload the table
+      await editSpecializationById(props.id!, values);
+      props.setOpen(false); // Close the form
+      if (props.reloadTable) props.reloadTable(); // Reload the table
     } catch (error) {
       console.error("Failed to create specialization:", error);
     } finally {
@@ -92,18 +92,18 @@ const SpecializationEditForm = ({ setOpen, reloadTable,specialization, id,depart
                 <Select onValueChange={field.onChange}>
                   <FormControl>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Department" />
+                      <SelectValue placeholder="Select department" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {department.length > 0 ? (
-                      department.map((department: any) => {
+                    {props.department.length > 0 ? (
+                      props.department.map((department: any) => {
                         return (
                           <SelectItem
                             key={department.id}
                             value={department.id}
                           >
-                            {department.departmentName}
+                            {department.name}
                           </SelectItem>
                         );
                       })

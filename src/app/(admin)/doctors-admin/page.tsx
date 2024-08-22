@@ -17,7 +17,7 @@ export default function DemoPage() {
     (state: any) => [state.specialization, state.setAllSpecialization]
   );
   async function fetchData() {
-    const data = await getDoctorData(2, 10);
+    const data = await getDoctorData(1, 10);
     const specializations = await getAllSpecializations();
     console.log(data);
     setAllDoctors(data?.records);

@@ -47,7 +47,7 @@ export async function getSpecializationById(id: string) {
 
 export async function editSpecializationById(
   id: string,
-  values: { specializationName: string; description: string }
+  values: { specializationName: string; description: string|undefined; departmentId: string  }
 ) {
   try {
     const response = await axiosInstance.put(`/specialization/${id}/update`, values);
