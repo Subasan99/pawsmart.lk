@@ -31,8 +31,20 @@ export async function getDoctorData(
 export async function createDoctor(doctor: DoctorCreate) {
   try {
     const response = await axiosInstance.post("/doctor", doctor);
-    console.log('doctor create',response);
+    console.log("doctor create", response);
   } catch (error) {
     console.log("Error creating doctor:", error);
+  }
+}
+
+export async function allocateTimeSlot(
+  id: string,
+  dayAllocationRequestList: any
+) {
+  try {
+    const response = await axiosInstance.put(`/doctor/${id}/dayAllocation`);
+    console.log("time slot allocate", response);
+  } catch (error) {
+    console.log("Error allocating time slot:", error);
   }
 }

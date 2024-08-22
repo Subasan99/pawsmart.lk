@@ -41,6 +41,7 @@
     "react-hook-form": "^7.52.2",
     "react-redux": "^9.1.2",
     "react-sticky-nav": "^4.0.6",
+    "react-time-picker": "^7.0.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8",

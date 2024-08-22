@@ -64,3 +64,20 @@ export type DoctorCreate = {
   duration: number;
   petIds: string[];
 };
+
+export type DayTimeSlotResponses = {
+  day: string;
+  timeSlots: { startTime: string; endTime: string }[] | [];
+  appointmentTimes: string[];
+};
+
+export type PetResponse = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  preSignedUrl: string;
+  createdDate: string;
+  updatedDate: string;
+  active: boolean;
+};
