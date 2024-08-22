@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAppointmentsByDoctorId, getDoctorById } from "./action";
 import { useDoctorStore } from "@/store/doctorStore";
 import Image from "next/image";
@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DoctorAppointments from "@/components/AdminPanelComponents/DoctorComponents/DoctorAppointments";
 import DoctorTimeSlots from "@/components/AdminPanelComponents/DoctorComponents/DoctorTimeSlots";
+import { updateTimeSlot } from "./action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [
@@ -27,11 +28,15 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.setDoctorAppointments,
   ]);
 
+  const [dayTimeSlotModal, setDayTimeSlotModal] = useState<boolean>(false);
+
   async function handleSelectDoctor() {
     const data = await getDoctorById(params.id);
     const appointments = await getAppointmentsByDoctorId(params.id, 1, 10);
     setSelectedDoctor(data);
   }
+
+  console.log(selectedDoctor);
 
   useEffect(() => {
     handleSelectDoctor();
@@ -82,7 +87,7 @@ const Index = ({ params }: { params: { id: string } }) => {
           <div className="font-semibold text-xl">{selectedDoctor?.email}</div>
           <div className="font-semibold text-xl">{selectedDoctor?.phoneNo}</div>
           <div className="font-semibold text-xl">
-          &quot;{selectedDoctor?.description}&quot;
+            &quot;{selectedDoctor?.description}&quot;
           </div>
         </div>
       </div>
@@ -97,7 +102,14 @@ const Index = ({ params }: { params: { id: string } }) => {
           <DoctorAppointments appointments={doctorAppointments} />
         </TabsContent>
         <TabsContent value="timeslot">
-          <DoctorTimeSlots/>
+          <DoctorTimeSlots
+            modal={dayTimeSlotModal}
+            setModal={setDayTimeSlotModal}
+            doctorId={params.id}
+            duration={selectedDoctor?.duration}
+            dayTimeSlotReponse={selectedDoctor?.dayTimeSlotResponses}
+            allocateTimeSlot={updateTimeSlot}
+          />
         </TabsContent>
         <TabsContent value="pets">Change your password here.</TabsContent>
       </Tabs>
