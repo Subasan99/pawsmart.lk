@@ -1,11 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
 import RootLayout from '../layout';
+import Header from '@/components/Header';
 
 const AboutUs = () => {
   return (
     // <RootLayout pageName="About Us">
       <div className="bg-gray-100">
+        <div className="sticky z-30 top-0 md:static h-fit">
+        <Header />
+      </div>
         <div className="w-full max-w-[1196px] pt-5 px-7  mx-auto">
           <div className="pl-2">
             <h2 className="font-bold text-3xl pt-16">About Us</h2>

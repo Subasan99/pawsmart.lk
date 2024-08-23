@@ -75,7 +75,7 @@ const formSchema = z.object({
 
 type Props = {
   specialization: any;
-  setOpen: any;
+  setOpen: (open: boolean) => void;
   doctor?: Doctor;
 };
 
@@ -97,9 +97,18 @@ const DoctorCreateForm = (props: Props) => {
       // dayAllocationRequestList: undefined,
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    createDoctor(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    try {
+      await createDoctor(values);
+      props.setOpen(false); // Close the form
+    } catch (error) {
+      console.error("Failed to create department:", error);
+    } finally {
+      setLoading(false);
+    }
   }
+ 
 
   console.log(form.getValues());
 
@@ -287,7 +296,7 @@ const DoctorCreateForm = (props: Props) => {
               <FormItem className="flex flex-col w-full">
                 <FormLabel>Pets</FormLabel>
                 <MultiSelect
-                  options={[1, 2, 3, 4]}
+                  options={[, 2, 3, 4]}
                   onChange={field.onChange}
                   selectedValues={field.value}
                   placeholder={"Choose"}
@@ -347,7 +356,7 @@ const DoctorCreateForm = (props: Props) => {
             )}
           />
         </div>
-        <Button type="submit">Submit</Button>
+        <Button className="bg-red-500" type="submit">Submit</Button>
       </form>
     </Form>
   );

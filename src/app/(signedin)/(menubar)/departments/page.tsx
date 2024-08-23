@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useDepartmentStore } from "@/store/departmentStore";
-import { getDepartmentData, getDepartmentFilterData } from "../../home/action";
+import { getDepartmentData, getDeparmentFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
 import Header from "@/components/Header";
 
@@ -16,7 +16,7 @@ const Department = () => {
   }, [getDepartmentData]);
   const fetchData = async () => {
     try {
-      const departmentData = await getDepartmentFilterData({
+      const departmentData = await getDeparmentFilterData({
         pageSize: 10,
         pageCount: 1,
       });

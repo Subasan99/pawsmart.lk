@@ -111,7 +111,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             allocateTimeSlot={updateTimeSlot}
           />
         </TabsContent>
-        <TabsContent value="pets">Change your password here.</TabsContent>
+        <TabsContent value="pets">No pets added yet.</TabsContent>
       </Tabs>
     </div>
   );

@@ -16,6 +16,8 @@ import { usePetStore } from "@/store/petStore";
 import { useMedicineStore } from "@/store/medicinesStore";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
+import { useAuthStore } from "@/store/authStore";
+import { signOut } from "@/api/route";
 
 export default function Home() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -37,6 +39,8 @@ export default function Home() {
     state.setAllMedicines,
   ]);
 
+
+
   const handleScroll = () => {
     const scrollY = window.scrollY;
     if (scrollY > 0) {
@@ -54,7 +58,10 @@ export default function Home() {
   const [headerBg, setHeaderBg] = useState("bg-white bg-opacity-90");
   const [textColor, setTextColor] = useState("text-black"); // Default text color
   const [logo, setLogo] = useState(Logoeffect); // Default logo
-
+  const [login, setLogin] = useAuthStore((state) => [
+    state.login,
+    state.setLogin,
+  ]);
   useEffect(() => {
     // window.addEventListener("scroll", handleScroll);
   }, []);
@@ -112,6 +119,7 @@ export default function Home() {
 
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -129,6 +137,13 @@ export default function Home() {
     []
   );
   const handleMouseLeave = useCallback(() => setActiveDropdown(null), []);
+
+  const handleSignout = async () => {
+    setLoading(true);
+    await signOut();
+    setLogin(undefined);
+    setLoading(false);
+  };
 
   const navigate = (link: string) => router.push(link);
 
@@ -311,21 +326,32 @@ export default function Home() {
             </ul>
           </nav>
           <div className="flex space-x-4">
-            <button
-              onClick={handleButtonClick}
-              className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-            >
-              <a href="/signin">Sign In</a>
-            </button>
-            <button
-              onClick={handleButtonClick}
-              className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-            >
-              <a href="/signup">Sign Up</a>
-            </button>
+              {login ? (
+                <button
+                  onClick={handleSignout}
+                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                >
+                  Signout
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={handleButtonClick}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                  >
+                    <a href="/signin">Sign In</a>
+                  </button>
+                  <button
+                    onClick={handleButtonClick}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                  >
+                    <a href="/signup">Sign Up</a>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
     </header>
   );
 }

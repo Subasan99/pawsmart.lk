@@ -8,6 +8,7 @@ import ReviewSection from "@/components/Review";
 import InfoSection from "@/components/DepInfo";
 import petImage from "../../../../components/png/dogBooking.png";
 import { getLoginUserDetails } from "@/api/route";
+import Header from "@/components/Header";
 
 const AppointmentDoctor = () => {
   const handleClick = (imageName: string) => {
@@ -70,6 +71,9 @@ const AppointmentDoctor = () => {
 
   return (
     <div className="flex flex-row w-full items-start justify-center content-center">
+      <div className="sticky z-30 top-0 md:static h-fit">
+        <Header />
+      </div>
       {/* Your content here */}
       <div className="hidden md:flex p-10">
         <Image src={petImage} alt="Company Logo" width={600} height={400} />
