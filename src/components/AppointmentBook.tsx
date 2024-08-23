@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import moment from "moment";
 import {
-  appointmentbooking,
   getDoctorData,
   getSpecializationData,
 } from "@/app/(signedin)/home/action";
@@ -55,6 +54,8 @@ import {
 import { Doctor } from "@/lib/typings";
 import { Textarea } from "./ui/textarea";
 import { getLoginUserDetails } from "@/api/route";
+import { useAuthStore } from "@/store/authStore";
+import { createAppointment } from "@/app/(signedin)/(menubar)/appointmentdoctor/action";
 
 interface AppointmentProps {
   userId: string | undefined;
@@ -88,13 +89,14 @@ const formSchema = z.object({
   bookingType: z.string({
     required_error: "Appointment Type is not selected!",
   }),
-  userId: z.string(),
+  userId: z.number(),
   petName: z.string({ required_error: "Please Enter your pet's name!" }),
   petAge: z.number({ required_error: "Please select your pet's Age!" }),
   petType: z.string({ required_error: "Please select the pet type!" }),
 });
 
-const Appointment: React.FC<AppointmentProps> = ({ login }) => {
+const Appointment: React.FC<AppointmentProps> = () => {
+  const [login] = useAuthStore((state) => [state.login]);
   // const [login, setLogin] = useState<any | undefined>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -104,12 +106,13 @@ const Appointment: React.FC<AppointmentProps> = ({ login }) => {
       time: undefined,
       description: undefined,
       bookingType: "DOCTOR",
-      userId: login.userId,
+      userId: login?.userId,
       petName: undefined,
       petAge: 1,
       petType: undefined,
     },
   });
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const SearchParams = useSearchParams();
@@ -156,10 +159,14 @@ const Appointment: React.FC<AppointmentProps> = ({ login }) => {
       ...values,
       bookingDate: moment(values.bookingDate).format("YYYY-MM-DD"),
     });
+    createAppointment({
+      ...values,
+      bookingDate: moment(values.bookingDate).format("YYYY-MM-DD"),
+      userId: values.userId.toString(),
+    }).then((res: any) => console.log(res));
   }
 
   console.log(form.getValues());
-  console.log(login)
 
   return (
     <div className="w-full">
@@ -412,9 +419,12 @@ const Appointment: React.FC<AppointmentProps> = ({ login }) => {
                 Submit
               </Button>
             ) : (
-              <Button className="px-3 md:w-fit self-center">
+              <a
+                href={"/signin"}
+                className="px-3 cursor-pointer py-3 md:w-fit self-center bg-primary text-white rounded-lg"
+              >
                 Login to continue
-              </Button>
+              </a>
             )}
           </form>
         </Form>

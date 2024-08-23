@@ -19,3 +19,7 @@ export async function getLoginUserDetails() {
   console.log(JSON.parse(userDetails?.value!));
   return JSON.parse(userDetails?.value!);
 }
+
+export async function signOut() {
+  await cookieStore.delete("token");
+}

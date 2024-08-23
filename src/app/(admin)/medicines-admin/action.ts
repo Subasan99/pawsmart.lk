@@ -1,6 +1,6 @@
 "use server";
 
-import { MedicineCreate } from "@/lib/typings";
+import { DayTimeSlotResponses, MedicineCreate, MedicineDayTimeSlotResponses } from "@/lib/typings";
 import { axiosInstance } from "@/utils/client";
 
 export async function getMedicineData(
@@ -81,5 +81,25 @@ export async function editMedicineById(
     return response?.data;
   } catch (error) {
     console.log("Error fetching Medicine by Id: ", error);
+  }
+}
+
+export async function updateMedicineTimeSlot(
+  medicineId: string,
+  medicineDayAllocationRequests: MedicineDayTimeSlotResponses
+) {
+  console.log("medicineDayAllocationRequests", medicineDayAllocationRequests, medicineId);
+  try {
+    const response = await axiosInstance.put(
+      `/medicine/${medicineId}/dayAllocation`,
+      {
+        medicineId: medicineId,
+        medicineDayAllocationRequests: medicineDayAllocationRequests,
+      }
+    );
+    console.log("day allocation response", response);
+    return response.data;
+  } catch (error) {
+    console.log("Error updating time slot: ", error);
   }
 }

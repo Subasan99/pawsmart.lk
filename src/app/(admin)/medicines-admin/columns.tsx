@@ -89,7 +89,7 @@ export const columns: ColumnDef<Columns>[] = [
         <ActionMenu
           delete={() => archiveMedicine(row.original.id)}
           pathName={`/medicines-admin/${row.original.id}`}
-          view={false}
+          view={true}
           edit={true}
           data={row.original}
           component={"medicine"}

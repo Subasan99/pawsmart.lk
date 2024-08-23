@@ -64,9 +64,9 @@ const AppointmentDoctor = () => {
   const handleRatingChange = (value: string) => setRating(value);
   const handleReviewChange = (value: string) => setReviewmessage(value);
 
-  useEffect(() => {
-    getLoginUserDetails().then((response) => setLogin(response));
-  }, []);
+  // useEffect(() => {
+  //   getLoginUserDetails().then((response) => setLogin(response));
+  // }, []);
 
   return (
     <div className="flex flex-row w-full items-start justify-center content-center">

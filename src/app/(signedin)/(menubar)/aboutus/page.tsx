@@ -1,10 +1,10 @@
 import React from 'react';
-import RootLayout from '../layout';
 import Image from 'next/image';
+import RootLayout from '../layout';
 
 const AboutUs = () => {
   return (
-    <RootLayout pageName="About Us">
+    // <RootLayout pageName="About Us">
       <div className="bg-gray-100">
         <div className="w-full max-w-[1196px] pt-5 px-7  mx-auto">
           <div className="pl-2">
@@ -67,7 +67,7 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-    </RootLayout>
+    // </RootLayout>
   );
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import DefaultImage from "../../../../../public/default_user.png";
 import EditIcon from "@/components/svg/edit_icon";
@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MedicineAppointments from "@/components/AdminPanelComponents/MedicineComponents/MedicineAppointments";
 import MedicineTimeSlots from "@/components/AdminPanelComponents/MedicineComponents/MedicineTimeSlots";
 import { useMedicineStore } from "@/store/medicinesStore";
-import { getMedicineById, getAppointmentsByMedicineId } from "../action";
+import { getMedicineById, getAppointmentsByMedicineId, updateMedicineTimeSlot } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [
@@ -25,6 +25,9 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.medicineAppointments,
     state.setMedicineAppointments,
   ]);
+
+  const [medicineDayTimeSlotModal, setMedicineDayTimeSlotModal] = useState<boolean>(false);
+
 
   async function handleSelectMedicine() {
     const data = await getMedicineById(params.id);
@@ -83,7 +86,14 @@ const Index = ({ params }: { params: { id: string } }) => {
           <MedicineAppointments appointments={medicineAppointments} />
         </TabsContent>
         <TabsContent value="timeslot">
-          <MedicineTimeSlots/>
+          <MedicineTimeSlots
+            modal={medicineDayTimeSlotModal}
+            setModal={setMedicineDayTimeSlotModal}
+            medicineId={params.id}
+            duration={selectedMedicine?.duration}
+            medicineDayTimeSlotReponse={selectedMedicine?.medicineDayTimeSlotResponses}
+            medicineAllocateTimeSlot={updateMedicineTimeSlot}
+          />
         </TabsContent>
       </Tabs>
     </div>

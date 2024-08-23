@@ -189,7 +189,7 @@ export default function Home() {
                 </li>
                 <li key={2}>
                   <a href="/Appointments" className="hover:text-red-500">
-                  Appointments                  </a>
+                  Appointments</a>
                 </li>
                 <li
                   onClick={() => handleMouseEnter("departments")}

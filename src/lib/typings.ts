@@ -128,3 +128,8 @@ export type AppointmentCreate = {
   description: string;
   petAge: number;
 };
+export type MedicineDayTimeSlotResponses = {
+  day: string;
+  timeSlots: { startTime: string; endTime: string }[] | [];
+  appointmentTimes: string[];
+};

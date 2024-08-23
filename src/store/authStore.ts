@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type Store = {
@@ -8,9 +8,10 @@ type Store = {
 
 export const useAuthStore = create<Store>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       login: undefined,
       setLogin: (login: any) => {
+        console.log('login response',login);
         set({ login: login });
       },
     }),

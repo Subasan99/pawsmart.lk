@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { usePetStore } from "@/store/petStore";
 import { getPetFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
+import Header from "@/components/Header";
 
 interface Pet {
   preSignedUrl: string;
@@ -45,6 +46,9 @@ const Pets = () => {
 
   return (
     <div id="pets" className="pb-8 pt-20">
+      <div className="sticky z-30 top-0 md:static h-fit">
+        <Header />
+      </div>
       <MultipleImagesProps
         title="Pets Nutritional"
         description="Your Pets' Nutritional Health is Very Important & Our Priority"
