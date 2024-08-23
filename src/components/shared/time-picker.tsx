@@ -2,12 +2,16 @@
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import moment from "moment";
+import { formatTime24to12 } from "@/lib/utils";
 
 type TimePickerProps = {
   value: string;
   onChange: (time: string) => void;
   values: any;
   startTime?: boolean;
+  appointmentTimes?: any;
+  disabled?: boolean;
 };
 
 const TimePicker = ({
@@ -15,10 +19,18 @@ const TimePicker = ({
   onChange,
   values,
   startTime,
+  disabled,
+  appointmentTimes,
 }: TimePickerProps) => {
+  const times = appointmentTimes?.map((i: any) => {
+      return {
+        label: formatTime24to12(i),
+        value: i,
+      };
+    });
   const [open, setOpen] = useState<boolean>(false);
 
-  const times = [
+  const timess = [
     { label: "09:00 AM", value: "09:00:00" },
     { label: "10:00 AM", value: "10:00:00" },
     { label: "11:00 AM", value: "11:00:00" },
@@ -36,10 +48,10 @@ const TimePicker = ({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger disabled={disabled} asChild>
         <Button variant="outline">{value || "Select Time"}</Button>
       </PopoverTrigger>
-      <PopoverContent className="max-h-[200px] w-fit overflow-y-auto">
+      <PopoverContent className="max-h-[200px] overflow-y-auto">
         {/* {!startTime && values?.startTime? (
           <>
             {times
@@ -86,22 +98,37 @@ const TimePicker = ({
               ))}
           </>
         ) : ( */}
-          <>
-            {times.map((time: any) => (
-              <div
-                key={time.value}
-                onClick={() => {
-                  onChange(time.value);
-                  setOpen(false);
-                }}
-                className={`cursor-pointer p-2 hover:bg-gray-200 ${
-                  time === value ? "bg-black text-white" : ""
-                }`}
-              >
-                {time.label}
-              </div>
-            ))}
-          </>
+        <>
+          {times?.length! > 0
+            ? times?.map((time: any) => (
+                <div
+                  key={time.value}
+                  onClick={() => {
+                    onChange(time.value);
+                    setOpen(false);
+                  }}
+                  className={`cursor-pointer p-2 hover:bg-gray-200 ${
+                    time === value ? "bg-black text-white" : ""
+                  }`}
+                >
+                  {time.label}
+                </div>
+              ))
+            : timess.map((time: any) => (
+                <div
+                  key={time.value}
+                  onClick={() => {
+                    onChange(time.value);
+                    setOpen(false);
+                  }}
+                  className={`cursor-pointer p-2 hover:bg-gray-200 ${
+                    time === value ? "bg-black text-white" : ""
+                  }`}
+                >
+                  {time.label}
+                </div>
+              ))}
+        </>
         {/* // )} */}
       </PopoverContent>
     </Popover>

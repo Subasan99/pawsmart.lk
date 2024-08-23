@@ -111,9 +111,20 @@ export type MedicineCreate = {
   duration: number;
 };
 
-
 export type Specialization = {
   specializationName: string;
   description?: string;
   departmentId: string;
+};
+
+export type AppointmentCreate = {
+  id: string;
+  bookingDate: string;
+  bookingType: string;
+  userId: string;
+  time: string;
+  petName: string;
+  petType: string;
+  description: string;
+  petAge: number;
 };

@@ -280,7 +280,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription={"Departments"}
             doctors={departmentDatas.slice(0, 4)}
-            pathname={""}
+            pathname={"/appoinment"}
             query={departmentDatas}
           />
         </div>

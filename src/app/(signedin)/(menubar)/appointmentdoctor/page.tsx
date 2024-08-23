@@ -1,17 +1,19 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RootLayout from "../layout";
 import Dropdown from "@/components/DropDown";
 import AppointmentBook from "@/components/AppointmentBook";
 import ReviewSection from "@/components/Review";
 import InfoSection from "@/components/DepInfo";
 import petImage from "../../../../components/png/dogBooking.png";
+import { getLoginUserDetails } from "@/api/route";
 
 const AppointmentDoctor = () => {
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
   };
+  const [login, setLogin] = useState<any | undefined>();
 
   const doctorOptions = [
     { label: "Select doctor", value: "" },
@@ -62,39 +64,41 @@ const AppointmentDoctor = () => {
   const handleRatingChange = (value: string) => setRating(value);
   const handleReviewChange = (value: string) => setReviewmessage(value);
 
-  return (
-    <RootLayout pageName="Appoinment Booking">
-      <div className="flex  flex-row  w-full   items-start flex-1 justify-center content-center">
-        {/* Your content here */}
-        <div className="flex p-10">
-          <Image src={petImage} alt="Company Logo" width={730} height={480} />
-        </div>
+  useEffect(() => {
+    getLoginUserDetails().then((response) => setLogin(response));
+  }, []);
 
-        <div className="flex">
-          <AppointmentBook
-            message={appointmentInfo.message}
-            startDate={appointmentInfo.startDate}
-            serialNumber={appointmentInfo.serialNumber}
-            selectedDoctor={appointmentInfo.selectedDoctor}
-            handleDateChange={(newDate) => handleChange("startDate", newDate)}
-            handleSerialNumberChange={(newSerialNumber) =>
-              handleChange("serialNumber", newSerialNumber)
-            }
-            handleDoctorChange={(value) =>
-              handleChange("selectedDoctor", value)
-            }
-            handleMessageChange={(newMessage) =>
-              handleChange("message", newMessage)
-            }
-            options={doctorOptions}
-            selectedValue={appointmentInfo.selectedValue}
-            onChange={(value) => handleChange("selectedValue", value)}
-            doctors={doctor}
-            handleCalendarChange={function (value: string): void {}}
-          />
-        </div>
+  return (
+    <div className="flex flex-row w-full items-start justify-center content-center">
+      {/* Your content here */}
+      <div className="hidden md:flex p-10">
+        <Image src={petImage} alt="Company Logo" width={600} height={400} />
       </div>
-    </RootLayout>
+
+      <div className="flex w-full md:w-fit md:grow">
+        <AppointmentBook
+          userId="1"
+          message={appointmentInfo.message}
+          startDate={appointmentInfo.startDate}
+          serialNumber={appointmentInfo.serialNumber}
+          selectedDoctor={appointmentInfo.selectedDoctor}
+          handleDateChange={(newDate) => handleChange("startDate", newDate)}
+          handleSerialNumberChange={(newSerialNumber) =>
+            handleChange("serialNumber", newSerialNumber)
+          }
+          handleDoctorChange={(value) => handleChange("selectedDoctor", value)}
+          handleMessageChange={(newMessage) =>
+            handleChange("message", newMessage)
+          }
+          options={doctorOptions}
+          selectedValue={appointmentInfo.selectedValue}
+          onChange={(value) => handleChange("selectedValue", value)}
+          doctors={doctor}
+          handleCalendarChange={function (value: string): void {}}
+          login={login}
+        />
+      </div>
+    </div>
   );
 };
 

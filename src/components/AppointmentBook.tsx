@@ -1,8 +1,8 @@
 // components/Dropdown.tsx
 import React, { useEffect, useState } from "react";
-import { DateValue  } from "@nextui-org/react";
+import { DateValue } from "@nextui-org/react";
 import { Calendar } from "./ui/calendar";
-import {DatePicker} from "@nextui-org/react";
+import { DatePicker } from "@nextui-org/react";
 // import { css } from '@nextui-org/react';
 
 import {
@@ -24,7 +24,7 @@ import {
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatTime24to12 } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -32,82 +32,110 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useDoctorStore } from "@/store/doctorStore";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { Input } from "./ui/input";
+import TimePicker from "./shared/time-picker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Doctor } from "@/lib/typings";
+import { Textarea } from "./ui/textarea";
+import { getLoginUserDetails } from "@/api/route";
 
 interface AppointmentProps {
+  userId: string | undefined;
   message: string;
   startDate: string;
   serialNumber: string;
   options: { label: string; value: string }[];
   doctors: { label: string; value: string }[];
   selectedValue: string;
+  selectedDoctor: any;
   onChange: (value: string) => void;
   handleDateChange: (value: string) => void;
   handleSerialNumberChange: (value: string) => void;
   handleDoctorChange: (value: string) => void;
   handleMessageChange: (value: string) => void;
   handleCalendarChange: (value: string) => void;
+  login?: any;
 }
 
-const Appointment: React.FC<AppointmentProps> = ({
-  message,
-  startDate,
-  serialNumber,
-  options,
-  doctors,
-  selectedValue,
-  onChange,
-  handleSerialNumberChange,
-  handleDoctorChange,
-  handleMessageChange,
-  handleCalendarChange,
-}) => {
+const formSchema = z.object({
+  id: z.string({ required_error: "Please select an option!" }),
+  bookingDate: z.date({
+    required_error: "Please select a date for the appointment!",
+  }),
+  time: z.string({
+    required_error: "Please select a time for the appointment!",
+  }),
+  description: z.string({
+    required_error: "Please Enter your reason for the appointment!",
+  }),
+  bookingType: z.string({
+    required_error: "Appointment Type is not selected!",
+  }),
+  userId: z.string(),
+  petName: z.string({ required_error: "Please Enter your pet's name!" }),
+  petAge: z.number({ required_error: "Please select your pet's Age!" }),
+  petType: z.string({ required_error: "Please select the pet type!" }),
+});
+
+const Appointment: React.FC<AppointmentProps> = ({ login }) => {
+  // const [login, setLogin] = useState<any | undefined>();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      id: undefined,
+      bookingDate: undefined,
+      time: undefined,
+      description: undefined,
+      bookingType: "DOCTOR",
+      userId: login.userId,
+      petName: undefined,
+      petAge: 1,
+      petType: undefined,
+    },
+  });
   const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [specializationId, setSpecializationId] = useState("");
 
   const SearchParams = useSearchParams();
 
   const doctorss: any = SearchParams.get("imageQuery");
-  console.log(doctorss, "hdshfsdjfhsd");
-
-  const queryData = JSON.parse(doctorss);
 
   // docName = queryData.imageName || "";
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const datesearch = searchParams.get("date");
-  const dateOnly = moment(datesearch).format("YYYY-MM-DD");
-  const specializationName = searchParams.get("specializationName");
-  const doctorName = searchParams.get("doctorName");
 
   const [date, setDate] = React.useState<Date | undefined>(new Date());
 
-  const [doctor, setAllDoctors] = useState([]); // Initialize an empty array
+  const [doctor, setAllDoctors] = useState<Doctor[]>([]); // Initialize an empty array
   const [specialization, setSpecialization] = useState([]); // Initialize an empty array
-  const [selectedSpecialization, setSelectedSpecialization] = useState(null);
 
-  const timeparams = searchParams.get("time");
-  const timeonly = moment(timeparams, "HH:mm:ss").format("hh:mm A");
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState<string | null>(null);
+  const [selecteddDoctor, setSelecteddDoctor] = useState<string | null>(null);
 
-  const handleDateClick = () => {
-    setShowCalendar(!showCalendar);
-  };
-  console.log(timeparams, "dsnskdjnfsjkd");
+  // async function getLoginDetailss() {
+  //   const details = await getLoginUserDetails();
+  //   setLogin(details);
+  // }
 
   useEffect(() => {
     fetchData();
   }, []);
-  const onDateChange = (date: Date) => {
-    // setSelectedDate(date);
-    console.log(date, "THANUJAN");
-    setShowCalendar(!showCalendar);
-    // handleDateChange(date);
-  };
 
   const fetchData = async () => {
     try {
@@ -123,82 +151,275 @@ const Appointment: React.FC<AppointmentProps> = ({
     }
   };
 
-  const doctores = Array.isArray(doctor)
-    ? doctor.map((doctor: any) => ({
-        id: doctor.id,
-        name: doctor.firstName,
-        specializationId: doctor.specializationId,
-      }))
-    : [];
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log({
+      ...values,
+      bookingDate: moment(values.bookingDate).format("YYYY-MM-DD"),
+    });
+  }
 
-  const filteredDoctors = Array.isArray(doctor)
-    ? doctor
-        .filter((doc: any) => doc.specializationId === specializationId) // Filter doctors by selected specialization ID
-        .map((doctor: any) => ({
-          id: doctor.id,
-          name: doctor.firstName,
-        }))
-    : [];
+  console.log(form.getValues());
+  console.log(login)
 
-  console.log("Filtered Doctors:", filteredDoctors);
-
-  const specializationData = Array.isArray(specialization)
-    ? specialization.map((specialization: any) => ({
-        id: specialization.id,
-        name: specialization.specializationName,
-      }))
-    : [];
-
-  const handleSelect = (id: any, specialization: any) => {
-    setSpecializationId(id);
-    setSelectedSpecialization(specialization);
-    setSelectedDoctor(null); // Reset selected doctor when specialization changes
-
-    console.log("Selected specialization ID:", id);
-    // You can perform additional actions here, like making an API call or updating another part of your UI.
-  };
-
-  const handleDoctorSelect = (id: string, name: string) => {
-    setSelectedDoctor(name);
-    handleDoctorChange(id); // Update the selected doctor ID in parent component or state
-  };
-
-
-  
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
-    setIsLoading(true);
-
-    setSuccessMessage("");
-    setErrorMessage("");
-    try {
-      const response = await appointmentbooking(
-        2,
-        dateOnly,
-        timeonly,
-        message,
-        "DOCTOR",
-        4
-      );
-      await setSuccessMessage("Booking successful!");
-      await router.push("/Appointments");
-
-      console.log("Booking successful:", response);
-      // Clear form or perform other actions after successful booking
-    } catch (error) {
-      setErrorMessage("Booking failed. Please try again.");
-      console.error("Booking error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   return (
-    <div>
-      <div className="max-w-md  mx-auto   p-10 border rounded shadow-md my-8 bg-white">
-        <h2 className="text-xl flex w-full mb-2">Appointment Booking</h2>
-        <hr className="mb-4 " />
+    <div className="w-full">
+      <div className="md:max-w-md gap-3 w-full flex flex-col items-center px-2 py-10 border rounded shadow-md my-8 bg-white">
+        <h2 className="text-xl flex w-full justify-center text-center mb-2">
+          Appointment Booking
+        </h2>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-3 flex flex-col px-2 w-full"
+          >
+            <div className="flex flex-col w-full md:w-fit md:flex-row gap-2">
+              <FormField
+                control={form.control}
+                name="petName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-xs md:text-md">
+                      Your Pet&apos;s Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Pet's name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="petAge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-xs md:text-md">
+                      Your Pet&apos;s age
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Select.." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col w-full md:w-fit md:flex-row gap-2">
+              <FormField
+                control={form.control}
+                name="petType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-xs md:text-md">
+                      Your Pet&apos;s type
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your Pet's type.." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col w-full md:w-full md:flex-row gap-2 ">
+              <FormField
+                control={form.control}
+                name="id"
+                render={({ field }) => (
+                  <FormItem className="md:w-1/2 w-full">
+                    <FormLabel className="text-xs md:text-md">
+                      Select a doctor
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          setSelecteddDoctor(value);
+                        }}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a doctor">
+                              {field.value
+                                ? doctor.find(
+                                    (doc: Doctor) => doc.id === field.value
+                                  )?.firstName
+                                : "Select a doctor"}
+                            </SelectValue>
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {doctor.length > 0 ? (
+                            <>
+                              {doctor.map((doctor: Doctor) => {
+                                return (
+                                  <SelectItem
+                                    onSelect={(value: any) =>
+                                      console.log(value)
+                                    }
+                                    key={doctor.id}
+                                    value={doctor.id}
+                                  >
+                                    {doctor.firstName}
+                                  </SelectItem>
+                                );
+                              })}
+                            </>
+                          ) : (
+                            <>No options</>
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col w-full md:w-full md:flex-row gap-2 ">
+              <FormField
+                control={form.control}
+                name="bookingDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1 grow">
+                    <FormLabel className="text-xs md:text-md">
+                      Appointment Date
+                    </FormLabel>
+                    <Popover>
+                      <PopoverTrigger
+                        disabled={selecteddDoctor ? false : true}
+                        asChild
+                      >
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span className="">Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        {doctor
+                          .find(
+                            (doctor: Doctor) => doctor.id === selecteddDoctor
+                          )
+                          ?.dayTimeSlotResponses.some(
+                            (day: any) =>
+                              day.day ===
+                              moment(date).format("dddd").toUpperCase()
+                          )}
+                        <Calendar
+                          mode="single"
+                          selected={new Date(field.value)}
+                          onSelect={(date) => field.onChange(date)}
+                          disabled={(date) => {
+                            const doctorAvailability = doctor.find(
+                              (doc: Doctor) =>
+                                doc.id == selecteddDoctor?.toString()
+                            )?.dayTimeSlotResponses;
+
+                            if (!doctorAvailability) return true; // If no availability, disable all dates
+
+                            const isDateAvailable = doctorAvailability.some(
+                              (day: any) => {
+                                return (
+                                  day.day ===
+                                  moment(date).format("dddd").toUpperCase()
+                                );
+                              }
+                            );
+
+                            return (
+                              date < new Date() ||
+                              date < new Date("1900-01-01") ||
+                              !isDateAvailable
+                            );
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="time"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-1 grow">
+                    <FormLabel className="text-xs md:text-md">
+                      Select a time
+                    </FormLabel>
+                    <FormControl>
+                      <TimePicker
+                        disabled={form.getValues("bookingDate") ? false : true}
+                        values={form.getValues()}
+                        appointmentTimes={
+                          doctor
+                            .find(
+                              (doc: Doctor) =>
+                                doc.id == selecteddDoctor?.toString()
+                            )
+                            ?.dayTimeSlotResponses?.find(
+                              (day: any) =>
+                                day.day ===
+                                moment(form.getValues("bookingDate"))
+                                  .format("dddd")
+                                  .toUpperCase()
+                            )?.appointmentTimes
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col w-full md:flex-row gap-2">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="w-full ">
+                    <FormLabel className="text-xs md:text-md">
+                      Your Reason for the appointment
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Enter your reason here..."
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            {login ? (
+              <Button className="px-3 md:w-fit self-center" type="submit">
+                Submit
+              </Button>
+            ) : (
+              <Button className="px-3 md:w-fit self-center">
+                Login to continue
+              </Button>
+            )}
+          </form>
+        </Form>
         {/* <form onSubmit={handleSubmit}> */}
-        <div className="mb-4 relative">
+        {/* <div className="mb-4 relative w-full">
           <div className="flex items-center self-center content-center border border-gray-400 rounded px-3 py-2">
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -207,7 +428,6 @@ const Appointment: React.FC<AppointmentProps> = ({
                   : "Select Specialization"}
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                {/* <DropdownMenuLabel>Wellness</DropdownMenuLabel> */}
                 <DropdownMenuSeparator />
                 {specializationData.map((specialization) => (
                   <DropdownMenuItem
@@ -225,23 +445,7 @@ const Appointment: React.FC<AppointmentProps> = ({
 
           <div className="mt-4 mb-4 relative">
             <div className="flex items-center self-center content-center border border-gray-400 rounded px-3 py-2">
-              {/* <input
-            type="date"
-            className="block w-full text-gray-700 bg-transparent focus:outline-none"
-            placeholder="mm/dd/yyyy"
-            onChange={(e: any) => handleCalendarChange(e.target.value)}
-          /> */}
-              {/* <DropdownMenu>
-                <DropdownMenuTrigger>Select Doctor</DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuSeparator />
-                  {doctores.map((doctor) => (
-                    <DropdownMenuItem key={doctor.id}>
-                      {doctor.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu> */}
+             
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   {selectedDoctor ? selectedDoctor : "Select Doctor"}
@@ -263,75 +467,22 @@ const Appointment: React.FC<AppointmentProps> = ({
             </div>
           </div>
 
-          {/* {isCalendarOpen && (
-          <div className="absolute mt-2 bg-white border border-gray-300 shadow-lg z-10">
-            <Calendar
-              aria-label="Date (controlled)"
-              onChange={(e: any) => handleSerialNumberChange(e.target.value)}
-            />
-          </div>
-        )} */}
+          
         </div>
-
-        {/* <div className="mb-4  text-gray-700">
-        <input
-          type="text"
-          value={serialNumber}
-          onChange={(e) => handleSerialNumberChange(e.target.value)}
-          className="w-full px-3 py-2 border rounded"
-          placeholder="Serial Number"
-        />
-      </div> */}
         <div className="mb-4  text-gray-700">
-          {/* <select
-          value={selectedDoctor}
-          onChange={(e) => handleDoctorChange(e.target.value)}
-          className="w-full px-3 py-2 border rounded"
-        >
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select> */}
           <div className=" w-full flex-wrap md:flex-nowrap gap-4 flex items-center self-center content-center border border-gray-400 rounded px-3 py-2">
-            {/* <input
-            type="date"
-            className="block w-full text-gray-700 bg-transparent focus:outline-none"
-            placeholder="mm/dd/yyyy"
-            onChange={(e: any) => handleCalendarChange(e.target.value)}
-          /> */}
-             <DatePicker 
-          className="max-w-[284px]"
-          // isRequired
-          //   css={calendarBackgroundStyle}
-
-        />
+            <DatePicker
+              className="max-w-[284px]"
+              // isRequired
+              //   css={calendarBackgroundStyle}
+            />
           </div>
         </div>
         <div className="mb-4">
-          {/* <select
-          value={selectedValue}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full px-3 py-2 border rounded"
-        >
-          {doctors.map((doctor) => (
-            <option key={doctor.value} value={doctor.value}>
-              {doctor.label}
-            </option>
-          ))}
-        </select> */}
           <div className="flex items-center border border-gray-400 rounded px-3 py-2">
-            {/* <input
-            type="date"
-            className="block w-full text-gray-700 bg-transparent focus:outline-none"
-            placeholder="mm/dd/yyyy"
-            onChange={(e: any) => handleCalendarChange(e.target.value)}
-          /> */}
             <DropdownMenu>
               <DropdownMenuTrigger>Avalible times</DropdownMenuTrigger>
               <DropdownMenuContent>
-                {/* <DropdownMenuLabel>Doctors</DropdownMenuLabel> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>9.30pm</DropdownMenuItem>
                 <DropdownMenuItem>10.3pm</DropdownMenuItem>
@@ -349,7 +500,6 @@ const Appointment: React.FC<AppointmentProps> = ({
             placeholder="Create Message"
           />
         </div>
-        <div>{/* Your form elements */}</div>
         <div className="mb-4">
           <button
             type="submit"
@@ -365,8 +515,7 @@ const Appointment: React.FC<AppointmentProps> = ({
             </div>
           )}
           {errorMessage && <div className="error">{errorMessage}</div>}
-        </div>
-        {/* </form> */}
+        </div> */}
       </div>
       <div className="text-xs mt-5 mb-2  align-center justify-center ">
         No money charged in this step
