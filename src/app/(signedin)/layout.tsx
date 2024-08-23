@@ -21,9 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="h-full w-full flex flex-col">
-          <div className="sticky z-30 top-0 md:static h-fit">
-            <Header />
-          </div>
+         
           <div className="grow">{children}</div>
           <div className="mt-auto">
             <Footer/>

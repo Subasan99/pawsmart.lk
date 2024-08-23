@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDoctorStore } from "@/store/doctorStore";
 import { getDoctorFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
+import Header from "@/components/Header";
 
 interface Doctor {
   preSignedUrl: string;
@@ -24,7 +25,10 @@ const Doctors = () => {
 
   const fetchData = async () => {
     try {
-      const doctorsData = await getDoctorFilterData({ pageSize: 10, pageCount: 1 });
+      const doctorsData = await getDoctorFilterData({
+        pageSize: 10,
+        pageCount: 1,
+      });
       setAllDoctors(doctorsData.records);
       setError(null); // Clear error if data fetch is successful
     } catch (error) {
@@ -49,7 +53,9 @@ const Doctors = () => {
 
   return (
     <div id="doctors" className="pb-8 pt-20">
-      {error && <div className="error-message">{error}</div>}
+      <div className="sticky z-30 top-0 md:static h-fit">
+        <Header />
+      </div>
       <MultipleImagesProps
         title="Popular Doctors"
         description="Meet With Professional Doctors."

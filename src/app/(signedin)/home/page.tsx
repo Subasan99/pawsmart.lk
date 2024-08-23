@@ -53,15 +53,15 @@ export default function Home() {
 
   const doctorOptions = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
-        label: doctor.name,
-        value: doctor.id,
+      label: doctor.name,
+        value: doctor.id, 
       }))
     : [];
 
   const departmentOptions = Array.isArray(departments)
     ? departments.map((department: any) => ({
         label: department.name,
-        value: department.id,
+        value: department.id, 
       }))
     : [];
 
@@ -193,12 +193,12 @@ export default function Home() {
     </div>
   );
 
-  const formatDate = (date: any) => {
+  const formatDate = (date:any) => {
     const [month, day, year] = date.split("/");
     return `${year}-${month}-${day}`;
   };
 
-  const handleDateChange = (e: any) => {
+  const handleDateChange = (e:any) => {
     const inputDate = e.target.value;
     const formattedDate = formatDate(inputDate);
     setAppointmentDate(formattedDate);
@@ -206,6 +206,169 @@ export default function Home() {
 
   return (
     <>
+      <header
+        className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
+      >
+        <div
+          className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}
+        >
+          <div className="flex justify-between items-center w-full md:hidden">
+            <a href="/">
+              {" "}
+              <Image src={logo} alt="Company Logo" className="w-36" />
+            </a>
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger className="px-3">
+                <SideBarIcon />
+              </SheetTrigger>
+              <SheetContent
+                className={`h-full flex flex-col items-start ${textColor}`}
+              >
+                <Image src={logo} className="w-[288px]" alt="Company Logo" />
+                <ul className="flex flex-col space-y-4">
+                  {/* Sidebar items */}
+                  <li key={0}>
+                    <a href="/" className="hover:text-red-500">
+                      Home
+                    </a>
+                  </li>
+                  <li key={1}>
+                    <a href="/aboutus" className="hover:text-red-500">
+                      About Us
+                    </a>
+                  </li>
+                  <li
+                    onClick={() => handleMouseEnter("departments")}
+                    className="hover:text-red-500 relative"
+                  >
+                    <a href="/departments" className="hover:text-red-500">
+                      Departments
+                    </a>
+                    {activeDropdown === "departments" &&
+                      renderDropdown(departments, "/departments")}
+                  </li>
+                  <li
+                    onClick={() => handleMouseEnter("doctors")}
+                    className="hover:text-red-500 relative"
+                  >
+                    <a href="/doctors" className="hover:text-red-500">
+                      Doctors
+                    </a>
+                    {activeDropdown === "doctors" &&
+                      renderDropdown(doctors, "/doctors")}
+                  </li>
+                  <li
+                    onClick={() => handleMouseEnter("medicines")}
+                    className="hover:text-red-500 relative"
+                  >
+                    <a href="/medicines" className="hover:text-red-500">
+                      Medicines
+                    </a>
+                    {activeDropdown === "medicines" &&
+                      renderDropdown(medicines, "/medicines")}
+                  </li>
+                  <li
+                    onClick={() => handleMouseEnter("pets")}
+                    className="hover:text-red-500 relative"
+                  >
+                    <a href="/pets" className="hover:text-red-500">
+                      Pets
+                    </a>
+                    {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
+                  </li>
+                  <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
+                    <a href="/signin" className="hover:text-black">
+                      Sign In
+                    </a>
+                  </li>
+                  <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
+                    <a href="/signup" className="hover:text-black">
+                      Sign Up
+                    </a>
+                  </li>
+                </ul>
+              </SheetContent>
+            </Sheet>
+          </div>
+          <div className="hidden md:flex md:items-center w-full">
+            <a href="/">
+              <Image src={logo} alt="Company Logo" className="w-36" />{" "}
+            </a>
+            <nav className="flex-1 flex justify-center">
+              <ul className="flex space-x-8">
+                {/* Navbar items */}
+                <li key={0}>
+                  <a href="/" className="hover:text-red-500">
+                    Home
+                  </a>
+                </li>
+                <li key={1}>
+                  <a href="/aboutus" className="hover:text-red-500">
+                    About Us
+                  </a>
+                </li>
+                <li
+                  onMouseEnter={() => handleMouseEnter("departments")}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative"
+                >
+                  <a href="/departments" className="hover:text-red-500">
+                    Departments
+                  </a>
+                  {activeDropdown === "departments" &&
+                    renderDropdown(departments, "/departments")}
+                </li>
+                <li
+                  onMouseEnter={() => handleMouseEnter("doctors")}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative"
+                >
+                  <a href="/doctors" className="hover:text-red-500">
+                    Doctors
+                  </a>
+                  {activeDropdown === "doctors" &&
+                    renderDropdown(doctors, "/doctors")}
+                </li>
+                <li
+                  onMouseEnter={() => handleMouseEnter("medicines")}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative"
+                >
+                  <a href="/medicines" className="hover:text-red-500">
+                    Medicines
+                  </a>
+                  {activeDropdown === "medicines" &&
+                    renderDropdown(medicines, "/medicines")}
+                </li>
+                <li
+                  onMouseEnter={() => handleMouseEnter("pets")}
+                  onMouseLeave={handleMouseLeave}
+                  className="relative"
+                >
+                  <a href="/pets" className="hover:text-red-500">
+                    Pets
+                  </a>
+                  {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
+                </li>
+              </ul>
+            </nav>
+            <div className="flex space-x-4">
+              <button
+                onClick={handleButtonClick}
+                className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+              >
+                <a href="/signin">Sign In</a>
+              </button>
+              <button
+                onClick={handleButtonClick}
+                className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+              >
+                <a href="/signup">Sign Up</a>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
       <main className="bg-gray-50">
         <div className="flex flex-col items-center justify-between">
           <section className="relative h-[100dvh] w-full flex items-center justify-center p-4">
@@ -242,13 +405,13 @@ export default function Home() {
                       placeholder="Select Doctor"
                       onChange={setDoctorName}
                       value={doctorName}
+                      
                     />
 
                     <FilterDropdown
                       options={departmentOptions}
                       placeholder="Select Department"
-                      onChange={setDepartmentName}
-                      value={departmentName}
+                      onChange={setDepartmentName} value={departmentName}
                     />
 
                     <input

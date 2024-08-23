@@ -117,3 +117,9 @@ export type Specialization = {
   description?: string;
   departmentId: string;
 };
+
+export type MedicineDayTimeSlotResponses = {
+  day: string;
+  timeSlots: { startTime: string; endTime: string }[] | [];
+  appointmentTimes: string[];
+};
