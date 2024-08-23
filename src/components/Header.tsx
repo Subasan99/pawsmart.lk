@@ -16,6 +16,8 @@ import { usePetStore } from "@/store/petStore";
 import { useMedicineStore } from "@/store/medicinesStore";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
+import { useAuthStore } from "@/store/authStore";
+import { signOut } from "@/api/route";
 
 export default function Home() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -37,6 +39,11 @@ export default function Home() {
     state.setAllMedicines,
   ]);
 
+  const [login, setLogin] = useAuthStore((state) => [
+    state.login,
+    state.setLogin,
+  ]);
+
   const handleScroll = () => {
     const scrollY = window.scrollY;
     if (scrollY > 0) {
@@ -54,6 +61,7 @@ export default function Home() {
   const [headerBg, setHeaderBg] = useState("bg-white bg-opacity-90");
   const [textColor, setTextColor] = useState("text-black"); // Default text color
   const [logo, setLogo] = useState(Logoeffect); // Default logo
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // window.addEventListener("scroll", handleScroll);
@@ -156,6 +164,13 @@ export default function Home() {
     </div>
   );
 
+  const handleSignout = async () => {
+    setLoading(true);
+    await signOut();
+    setLogin(undefined);
+    setLoading(false);
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
@@ -189,7 +204,8 @@ export default function Home() {
                 </li>
                 <li key={2}>
                   <a href="/Appointments" className="hover:text-red-500">
-                  Appointments</a>
+                    Appointments
+                  </a>
                 </li>
                 <li
                   onClick={() => handleMouseEnter("departments")}
@@ -230,16 +246,28 @@ export default function Home() {
                   </a>
                   {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
                 </li>
-                <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                  <a href="/signin" className="hover:text-black">
-                    Sign In
-                  </a>
-                </li>
-                <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                  <a href="/signup" className="hover:text-black">
-                    Sign Up
-                  </a>
-                </li>
+                {login ? (
+                  <div
+                    onClick={handleSignout}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                  >
+                    <p className="hover:text-black">SignOut</p>
+                  </div>
+                ) : (
+                  <>
+                    {" "}
+                    <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
+                      <a href="/signin" className="hover:text-black">
+                        Sign In
+                      </a>
+                    </li>
+                    <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
+                      <a href="/signup" className="hover:text-black">
+                        Sign Up
+                      </a>
+                    </li>
+                  </>
+                )}
               </ul>
             </SheetContent>
           </Sheet>
@@ -262,9 +290,10 @@ export default function Home() {
                 </a>
               </li>
               <li key={2}>
-                  <a href="/Appointments" className="hover:text-red-500">
-                  Appointments                  </a>
-                </li>
+                <a href="/Appointments" className="hover:text-red-500">
+                  Appointments{" "}
+                </a>
+              </li>
               <li
                 onMouseEnter={() => handleMouseEnter("departments")}
                 onMouseLeave={handleMouseLeave}
@@ -311,18 +340,29 @@ export default function Home() {
             </ul>
           </nav>
           <div className="flex space-x-4">
-            <button
-              onClick={handleButtonClick}
-              className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-            >
-              <a href="/signin">Sign In</a>
-            </button>
-            <button
-              onClick={handleButtonClick}
-              className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-            >
-              <a href="/signup">Sign Up</a>
-            </button>
+            {login ? (
+              <button
+                onClick={handleSignout}
+                className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+              >
+                Signout
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={handleButtonClick}
+                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                >
+                  <a href="/signin">Sign In</a>
+                </button>
+                <button
+                  onClick={handleButtonClick}
+                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                >
+                  <a href="/signup">Sign Up</a>
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
