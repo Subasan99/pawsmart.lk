@@ -3,6 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import DefaultImage from "../../../../public/default_user.png";
 import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
+import { archivePetById } from "./action";
 
 export type Columns = {
   id: string;
@@ -11,9 +12,8 @@ export type Columns = {
   active: boolean;
   image: string;
   preSignedUrl: string | undefined;
-  createdDate:string;
-  updatedDate:string;
-
+  createdDate: string;
+  updatedDate: string;
 };
 
 export const columns: ColumnDef<Columns>[] = [
@@ -29,8 +29,8 @@ export const columns: ColumnDef<Columns>[] = [
                 alt="pet image"
                 src={row?.original?.preSignedUrl}
                 className="w-10 h-10 object-cover rounded-full border-2"
-                height={10}
-                width={10}
+                height={200}
+                width={200}
               />
             ) : (
               <Image
@@ -80,8 +80,15 @@ export const columns: ColumnDef<Columns>[] = [
     id: "actions",
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
-        <ActionMenu pathName={`/pets-admin/${row.original.id}`}/>
-        </div>
+        <ActionMenu
+          delete={() => archivePetById(row.original.id)}
+          pathName={`/pets-admin/${row.original.id}`}
+          view={false}
+          edit={true}
+          data={row.original}
+          component={"pet"}
+        />
+      </div>
     ),
     header: () => <div className="text-center font-bold">Actions</div>,
   },

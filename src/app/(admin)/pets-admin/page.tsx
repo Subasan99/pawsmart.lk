@@ -1,12 +1,12 @@
 "use client";
 import { useEffect } from "react";
 import { columns } from "./columns";
-import { DataTable } from "../../../components/AdminPanelComponents/data-table";
+import { DataTable } from "@/components/AdminPanelComponents/data-table";
 import { getPetData } from "./action";
 import { usePetStore } from "@/store/petStore";
-import PetCreate from "./PetCreate";
+import PetCreate from "@/components/AdminPanelComponents/PetComponents/PetCreate";
 
-export default function DemoPage() {
+export default function Index() {
   const [pets, setAllPets] = usePetStore((state: any) => [
     state.pets,
     state.setAllPets,

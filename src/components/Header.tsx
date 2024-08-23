@@ -13,7 +13,7 @@ import {
 } from "@/app/(signedin)/home/action";
 import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
-import { useMedicinesStore } from "@/store/medicinesStore";
+import { useMedicineStore } from "@/store/medicinesStore";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
 
@@ -32,7 +32,7 @@ export default function Home() {
     state.setAllPets,
   ]);
 
-  const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
+  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
   ]);
@@ -74,7 +74,6 @@ export default function Home() {
     }
   };
 
-
   const handleButtonClick = () => {
     console.log("Search button clicked");
   };
@@ -88,11 +87,12 @@ export default function Home() {
   };
 
   const doctores = Array.isArray(doctors)
-  ? doctors.map((doctor: any) => ({
-    src: doctor.preSignedUrl,
-    alt: doctor.image,
-    textOverlay: doctor.name,
-  })): [];
+    ? doctors.map((doctor: any) => ({
+        src: doctor.preSignedUrl,
+        alt: doctor.image,
+        textOverlay: doctor.name,
+      }))
+    : [];
 
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
@@ -102,11 +102,13 @@ export default function Home() {
       }))
     : [];
 
-  const petdata = pets.map((pet: any) => ({
-    src: pet.preSignedUrl,
-    alt: pet.image,
-    textOverlay: pet.name,
-  }));
+  const petdata = Array.isArray(pets)
+    ? pets.map((pet: any) => ({
+        src: pet.preSignedUrl,
+        alt: pet.image,
+        textOverlay: pet.name,
+      }))
+    : [];
 
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

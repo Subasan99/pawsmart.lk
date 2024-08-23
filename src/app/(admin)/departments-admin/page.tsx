@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { columns } from "./columns";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDepartmentData } from "./action";
-import DepartmentCreate from "./DepartmentCreate";
 import { useDepartmentStore } from "@/store/departmentStore";
+import DepartmentCreate from "@/components/AdminPanelComponents/DepartmentComponents/DepartmentCreate";
 
 export default function DemoPage() {
   const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
