@@ -40,7 +40,6 @@ export default function Home() {
   ]);
 
 
-
   const handleScroll = () => {
     const scrollY = window.scrollY;
     if (scrollY > 0) {
@@ -171,6 +170,7 @@ export default function Home() {
     </div>
   );
 
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
@@ -204,7 +204,8 @@ export default function Home() {
                 </li>
                 <li key={2}>
                   <a href="/Appointments" className="hover:text-red-500">
-                  Appointments</a>
+                    Appointments
+                  </a>
                 </li>
                 <li
                   onClick={() => handleMouseEnter("departments")}
@@ -245,16 +246,28 @@ export default function Home() {
                   </a>
                   {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
                 </li>
-                <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                  <a href="/signin" className="hover:text-black">
-                    Sign In
-                  </a>
-                </li>
-                <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                  <a href="/signup" className="hover:text-black">
-                    Sign Up
-                  </a>
-                </li>
+                {login ? (
+                  <div
+                    onClick={handleSignout}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                  >
+                    <p className="hover:text-black">SignOut</p>
+                  </div>
+                ) : (
+                  <>
+                    {" "}
+                    <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
+                      <a href="/signin" className="hover:text-black">
+                        Sign In
+                      </a>
+                    </li>
+                    <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
+                      <a href="/signup" className="hover:text-black">
+                        Sign Up
+                      </a>
+                    </li>
+                  </>
+                )}
               </ul>
             </SheetContent>
           </Sheet>
@@ -277,9 +290,10 @@ export default function Home() {
                 </a>
               </li>
               <li key={2}>
-                  <a href="/Appointments" className="hover:text-red-500">
-                  Appointments                  </a>
-                </li>
+                <a href="/Appointments" className="hover:text-red-500">
+                  Appointments{" "}
+                </a>
+              </li>
               <li
                 onMouseEnter={() => handleMouseEnter("departments")}
                 onMouseLeave={handleMouseLeave}
