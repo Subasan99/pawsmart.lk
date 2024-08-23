@@ -1,26 +1,26 @@
 "use client";
 import { useEffect } from "react";
 import { columns } from "./columns";
-import { DataTable } from "../../../components/AdminPanelComponents/data-table";
-import { getDoctorData } from "./action";
-import { useAdminStore } from "@/store/adminStore";
-import DoctorCreate from "@/components/AdminPanelComponents/DoctorComponents/DoctorCreate";
+import { DataTable } from "@/components/AdminPanelComponents/data-table";
+import { getMedicineData } from "./action";
 import { useSpecializationStore } from "@/store/specializationStore";
 import { getAllSpecializations } from "@/api/route";
+import MedicineCreate from "@/components/AdminPanelComponents/MedicineComponents/MedicineCreate";
+import { useMedicineStore } from "@/store/medicinesStore";
 
-export default function DemoPage() {
-  const [doctors, setAllDoctors] = useAdminStore((state: any) => [
-    state.doctors,
-    state.setAllDoctors,
+export default function Index() {
+  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
+    state.medicines,
+    state.setAllMedicines,
   ]);
   const [specialization, setAllSpecialization] = useSpecializationStore(
     (state: any) => [state.specialization, state.setAllSpecialization]
   );
   async function fetchData() {
-    const data = await getDoctorData(1, 10);
+    const data = await getMedicineData(1, 10);
     const specializations = await getAllSpecializations();
     console.log(data);
-    setAllDoctors(data?.records);
+    setAllMedicines(data?.records);
     setAllSpecialization(specializations);
   }
   useEffect(() => {
@@ -30,9 +30,9 @@ export default function DemoPage() {
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
       {/* <Filteration getApi={fetchData} /> */}
       <div className="self-end">
-        <DoctorCreate specialization={specialization} />
+        <MedicineCreate />
       </div>
-      <DataTable columns={columns} data={doctors} />
+      <DataTable columns={columns} data={medicines} />
     </div>
   );
 }

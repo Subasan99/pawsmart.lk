@@ -58,7 +58,7 @@ const Index = ({ params }: { params: { id: string } }) => {
               alt="Doctor Image"
               width={200}
               height={200}
-              className="rounded-full border-4"
+              className="rounded-full border-4 object-cover h-[200px] w-[200px]"
             />
           ) : (
             <Image

@@ -13,7 +13,7 @@ import {
 } from "@/app/(signedin)/home/action";
 import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
-import { useMedicinesStore } from "@/store/medicinesStore";
+import { useMedicineStore } from "@/store/medicinesStore";
 import PopularDoctors from "@/components/Image";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
@@ -46,7 +46,7 @@ export default function Home() {
     state.setAllPets,
   ]);
 
-  const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
+  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
   ]);

@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
-import { useMedicinesStore } from "@/store/medicinesStore";
+import { useMedicineStore } from "@/store/medicinesStore";
 import { getMedicineFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
+import Header from "@/components/Header";
 
 interface Medicine {
   preSignedUrl: string;
@@ -11,7 +12,7 @@ interface Medicine {
 }
 
 const Medicines = () => {
-  const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
+  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
   ]);
@@ -47,6 +48,9 @@ const Medicines = () => {
 
   return (
     <div id="medicines" className="pb-8 pt-40">
+      <div className="sticky z-30 top-0 md:static h-fit">
+        <Header />
+      </div>
       <MultipleImagesProps
         title="Medicines"
         description="Discover our range of medicines for your health needs."

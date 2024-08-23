@@ -90,3 +90,36 @@ export type Pet = {
   name: string;
   description: string;
 };
+
+export type Medicine = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  preSignedUrl: string;
+  duration: number;
+  medicineDayTimeSlotResponses: {
+    day: string;
+    medicineTimeSlotResponses: { startTime: string; endTime: string }[];
+    appointmentTimes: string[];
+  }[];
+};
+
+export type MedicineCreate = {
+  name: string;
+  description: string;
+  duration: number;
+};
+
+
+export type Specialization = {
+  specializationName: string;
+  description?: string;
+  departmentId: string;
+};
+
+export type MedicineDayTimeSlotResponses = {
+  day: string;
+  timeSlots: { startTime: string; endTime: string }[] | [];
+  appointmentTimes: string[];
+};

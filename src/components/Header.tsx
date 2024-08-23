@@ -13,9 +13,9 @@ import {
 } from "@/app/(signedin)/home/action";
 import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
+import { useMedicineStore } from "@/store/medicinesStore";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
-import { useMedicinesStore } from "@/store/medicinesStore";
 
 export default function Home() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -32,7 +32,7 @@ export default function Home() {
     state.setAllPets,
   ]);
 
-  const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
+  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
   ]);
