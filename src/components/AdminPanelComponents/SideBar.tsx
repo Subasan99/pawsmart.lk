@@ -70,6 +70,15 @@ const SideBar = () => {
             Specializations
           </a>
         </li>
+        <li
+          className={`text-black ${
+            pathname.includes("/admin/users") && "bg-red-500 text-white"
+          } px-4 py-1 rounded`}
+        >
+          <a href="/admin/users" className="hover:text-black">
+            Users
+          </a>
+        </li>
       </ul>
   );
 };
