@@ -39,10 +39,6 @@ export default function Home() {
     state.setAllMedicines,
   ]);
 
-  const [login, setLogin] = useAuthStore((state) => [
-    state.login,
-    state.setLogin,
-  ]);
 
   const handleScroll = () => {
     const scrollY = window.scrollY;
@@ -61,8 +57,10 @@ export default function Home() {
   const [headerBg, setHeaderBg] = useState("bg-white bg-opacity-90");
   const [textColor, setTextColor] = useState("text-black"); // Default text color
   const [logo, setLogo] = useState(Logoeffect); // Default logo
-  const [loading, setLoading] = useState<boolean>(false);
-
+  const [login, setLogin] = useAuthStore((state) => [
+    state.login,
+    state.setLogin,
+  ]);
   useEffect(() => {
     // window.addEventListener("scroll", handleScroll);
   }, []);
@@ -120,6 +118,7 @@ export default function Home() {
 
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -137,6 +136,13 @@ export default function Home() {
     []
   );
   const handleMouseLeave = useCallback(() => setActiveDropdown(null), []);
+
+  const handleSignout = async () => {
+    setLoading(true);
+    await signOut();
+    setLogin(undefined);
+    setLoading(false);
+  };
 
   const navigate = (link: string) => router.push(link);
 
@@ -164,12 +170,6 @@ export default function Home() {
     </div>
   );
 
-  const handleSignout = async () => {
-    setLoading(true);
-    await signOut();
-    setLogin(undefined);
-    setLoading(false);
-  };
 
   return (
     <header
@@ -340,32 +340,32 @@ export default function Home() {
             </ul>
           </nav>
           <div className="flex space-x-4">
-            {login ? (
-              <button
-                onClick={handleSignout}
-                className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-              >
-                Signout
-              </button>
-            ) : (
-              <>
+              {login ? (
                 <button
-                  onClick={handleButtonClick}
+                  onClick={handleSignout}
                   className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
                 >
-                  <a href="/signin">Sign In</a>
+                  Signout
                 </button>
-                <button
-                  onClick={handleButtonClick}
-                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                >
-                  <a href="/signup">Sign Up</a>
-                </button>
-              </>
-            )}
+              ) : (
+                <>
+                  <button
+                    onClick={handleButtonClick}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                  >
+                    <a href="/signin">Sign In</a>
+                  </button>
+                  <button
+                    onClick={handleButtonClick}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                  >
+                    <a href="/signup">Sign Up</a>
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
     </header>
   );
 }

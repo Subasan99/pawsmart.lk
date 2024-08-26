@@ -20,13 +20,13 @@ export default function RootLayout({
 }>) {
   const cookieStore = cookies();
   const token = cookieStore.get("token");
-  if (token) {
-    const tokenObject = JSON.parse(token.value)
+  // if (token) {
+  //   const tokenObject = JSON.parse(token.value)
     
-    // if(tokenObject?.role === 'USER'){
-    //   navigat
-    // }
-  }
+  //   // if(tokenObject?.role === 'USER'){
+  //   //   navigat
+  //   // }
+  // }
 
   return (
     <html lang="en">

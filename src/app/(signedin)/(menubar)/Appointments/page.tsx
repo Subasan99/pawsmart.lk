@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import CircledArrowIcon from "@/components/svg/circled-arrow-icon";
 import { getAppointmentBooking } from "../../home/action";
+import Header from "@/components/Header";
 
 const Appointments = (premiumBookings: any, normalBookings: any) => {
   const [activeTab, setActiveTab] = useState("all");
@@ -46,7 +47,9 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
     switch (activeTab) {
       case "premium":
         return (
+          
           <div className="flex flex-row gap-3  items-center justify-start w-full flex-1 p-8">
+            
             <div className="bg-blue-500 p-4 rounded-lg w-40 h-fit self-center items-center text-center">
               <div className="text-sm text-white">Doctor Name</div>
               <div className="text-sm font-medium">{DoctorName}</div>
@@ -96,8 +99,11 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
     }
   };
   return (
-    <RootLayout pageName="Appointments">
+    // <RootLayout pageName="Appointments">
       <div className="container mx-auto mt-16 bg-[#F7F8F9] rounded-xl">
+        <div className="sticky z-30 top-0 md:static h-fit">
+        <Header />
+      </div>
         <div className="flex border-b">
           <button
             className={`px-4 py-2 ${
@@ -119,7 +125,7 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
         </div>
         <div className="mt-4">{renderTabContent()}</div>
       </div>
-    </RootLayout>
+    // </RootLayout>
   );
 };
 

@@ -34,7 +34,7 @@ const SideBar = () => {
             Medicines
           </a>
         </li>
-        <li
+        {/* <li
           className={`text-black ${
             pathname.includes("/appointments") && "bg-red-500 text-white"
           } px-4 py-1 rounded`}
@@ -42,7 +42,7 @@ const SideBar = () => {
           <a href="/appointments" className="hover:text-black">
             Appointments
           </a>
-        </li>
+        </li> */}
         <li
           className={`text-black ${
             pathname.includes("/departments") && "bg-red-500 text-white"
