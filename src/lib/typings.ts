@@ -43,6 +43,7 @@ export type Doctor = {
   image: string;
   preSignedUrl: string;
   duration: number;
+  active: boolean;
   dayTimeSlotResponses: {
     day: string;
     timeSlots: { startTime: string; endTime: string }[];
@@ -173,4 +174,18 @@ export type Booking = {
   doctorResponse: DoctorBooking;
   medicineResponse: MedicineBooking;
   userResponse: UserBooking;
+};
+
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  phoneNo: string;
+  dateOfBirth: string;
+  gender: string;
+  image: string;
+  preSignedUrl: string;
+  role: string;
+  active: boolean;
 };
