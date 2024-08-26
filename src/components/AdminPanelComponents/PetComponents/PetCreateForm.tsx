@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { createPet } from "@/app/(admin)/pets-admin/action";
+import { createPet } from "@/app/admin/pets/action";
 
 const formSchema = z.object({
   name: z.string({ required_error: "Pet name is required!" }),
@@ -47,7 +47,6 @@ const PetCreateForm = ({ setOpen, reloadTable }: Props) => {
       setLoading(false);
     }
   }
- 
 
   return (
     <Form {...form}>
@@ -80,7 +79,9 @@ const PetCreateForm = ({ setOpen, reloadTable }: Props) => {
             )}
           />
         </div>
-        <Button className="bg-red-500" type="submit">Submit</Button>
+        <Button className="bg-red-500" type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

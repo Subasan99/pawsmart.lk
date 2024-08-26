@@ -3,14 +3,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import DefaultImage from "../../../../public/default_user.png";
 import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
-import { archiveSpecializationById } from "./action";
+import { archivePetById } from "./action";
 
 export type Columns = {
   id: string;
-  specializationName: string;
+  name: string;
   description: string;
-  departmentId: string;
-  departmentName: string;
   active: boolean;
   image: string;
   preSignedUrl: string | undefined;
@@ -20,15 +18,15 @@ export type Columns = {
 
 export const columns: ColumnDef<Columns>[] = [
   {
-    accessorKey: "SpecializationName",
-    header: () => <div className="font-bold text-center">Specialization Name</div>,
+    accessorKey: "PetName",
+    header: () => <div className="font-bold text-center">Pet Name</div>,
     cell: ({ row }) => (
       <div className="justify-center py-0">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 object-contain">
             {row?.original?.preSignedUrl ? (
               <Image
-                alt="specialization image"
+                alt="pet image"
                 src={row?.original?.preSignedUrl}
                 className="w-10 h-10 object-cover rounded-full border-2"
                 height={200}
@@ -43,17 +41,10 @@ export const columns: ColumnDef<Columns>[] = [
             )}
           </div>
           <div className="flex flex-col">
-            <div className="font-semibold text-sm">{row.original.specializationName}</div>
+            <div className="font-semibold text-sm">{row.original.name}</div>
           </div>
         </div>
       </div>
-    ),
-  },
-  {
-    accessorKey: "DepartmentName",
-    header: () => <div className="font-bold text-center">Department Name</div>,
-    cell: ({ row }) => (
-      <div className="text-center">{row.original.departmentName}</div>
     ),
   },
   {
@@ -90,12 +81,12 @@ export const columns: ColumnDef<Columns>[] = [
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
         <ActionMenu
-          delete={() => archiveSpecializationById(row.original.id)}
-          pathName={`/specializations-admin/${row.original.id}`}
+          delete={() => archivePetById(row.original.id)}
+          pathName={`/pets/${row.original.id}`}
           view={false}
           edit={true}
           data={row.original}
-          component={"specialization"}
+          component={"pet"}
         />
       </div>
     ),

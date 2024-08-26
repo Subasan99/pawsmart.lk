@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { createPet, editPetById } from "@/app/(admin)/pets-admin/action";
+import { createPet, editPetById } from "@/app/admin/pets/action";
 import { Pet } from "@/lib/typings";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -79,7 +79,10 @@ const PetEditForm = ({ setOpen, reloadTable, pet, id }: Props) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Type your description here." {...field} />
+                  <Textarea
+                    placeholder="Type your description here."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

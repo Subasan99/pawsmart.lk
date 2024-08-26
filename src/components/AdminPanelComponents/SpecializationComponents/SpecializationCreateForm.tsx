@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { createSpecialization } from "@/app/(admin)/specializations-admin/action";
+import { createSpecialization } from "@/app/admin/specializations/action";
 
 const formSchema = z.object({
   specializationName: z.string().nonempty("Specialization name is required!"),
@@ -79,7 +79,7 @@ const SpecializationCreateForm = (props: Props) => {
               </FormItem>
             )}
           />
-         
+
           <FormField
             control={form.control}
             name="description"
@@ -93,7 +93,7 @@ const SpecializationCreateForm = (props: Props) => {
               </FormItem>
             )}
           />
-           <FormField
+          <FormField
             control={form.control}
             name="departmentId"
             render={({ field }) => (
@@ -109,10 +109,7 @@ const SpecializationCreateForm = (props: Props) => {
                     {props.department.length > 0 ? (
                       props.department.map((department: any) => {
                         return (
-                          <SelectItem
-                            key={department.id}
-                            value={department.id}
-                          >
+                          <SelectItem key={department.id} value={department.id}>
                             {department.name}
                           </SelectItem>
                         );

@@ -3,30 +3,36 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import DefaultImage from "../../../../public/default_user.png";
 import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
-import { archiveDepartment } from "./action";
+import { archiveMedicine } from "./action";
 
 export type Columns = {
   id: string;
   name: string;
   description: string;
-  active: boolean;
   image: string;
   preSignedUrl: string | undefined;
+  duration: number;
   createdDate: string;
+  active: boolean;
   updatedDate: string;
+  medicineDayTimeSlotResponses: {
+    day: string;
+    medicineTimeSlotResponses: { startTime: string; endTime: string }[];
+    appointmentTimes: string[];
+  }[];
 };
 
 export const columns: ColumnDef<Columns>[] = [
   {
-    accessorKey: "DepartmentName",
-    header: () => <div className="font-bold text-center">Department Name</div>,
+    accessorKey: "fullName",
+    header: () => <div className="font-bold text-center">Full Name</div>,
     cell: ({ row }) => (
       <div className="justify-center py-0">
-        <div className="flex items-center gap-3 ">
+        <div className="flex items-center gap-3 justify-start">
           <div className="w-10 h-10 object-contain">
             {row?.original?.preSignedUrl ? (
               <Image
-                alt="pet image"
+                alt="medicine image"
                 src={row?.original?.preSignedUrl}
                 className="w-10 h-10 object-cover rounded-full border-2"
                 height={200}
@@ -76,18 +82,17 @@ export const columns: ColumnDef<Columns>[] = [
       </div>
     ),
   },
-
   {
     id: "actions",
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
         <ActionMenu
-          delete={() => archiveDepartment(row.original.id)}
-          pathName={`/departments-admin/${row.original.id}`}
-          view={false}
+          delete={() => archiveMedicine(row.original.id)}
+          pathName={`/medicines/${row.original.id}`}
+          view={true}
           edit={true}
           data={row.original}
-          component={"department"}
+          component={"medicine"}
         />
       </div>
     ),

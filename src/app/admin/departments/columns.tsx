@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import DefaultImage from "../../../../public/default_user.png";
 import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
-import { archivePetById } from "./action";
+import { archiveDepartment } from "./action";
 
 export type Columns = {
   id: string;
@@ -18,11 +18,11 @@ export type Columns = {
 
 export const columns: ColumnDef<Columns>[] = [
   {
-    accessorKey: "PetName",
-    header: () => <div className="font-bold text-center">Pet Name</div>,
+    accessorKey: "DepartmentName",
+    header: () => <div className="font-bold text-center">Department Name</div>,
     cell: ({ row }) => (
       <div className="justify-center py-0">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ">
           <div className="w-10 h-10 object-contain">
             {row?.original?.preSignedUrl ? (
               <Image
@@ -76,17 +76,18 @@ export const columns: ColumnDef<Columns>[] = [
       </div>
     ),
   },
+
   {
     id: "actions",
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
         <ActionMenu
-          delete={() => archivePetById(row.original.id)}
-          pathName={`/pets-admin/${row.original.id}`}
+          delete={() => archiveDepartment(row.original.id)}
+          pathName={`/departments/${row.original.id}`}
           view={false}
           edit={true}
           data={row.original}
-          component={"pet"}
+          component={"department"}
         />
       </div>
     ),

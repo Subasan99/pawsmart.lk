@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { createMedicine, editMedicineById } from "@/app/(admin)/medicines-admin/action";
+import { createMedicine, editMedicineById } from "@/app/admin/medicines/action";
 import { Medicine } from "@/lib/typings";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
@@ -31,7 +31,7 @@ type Props = {
   id?: string;
 };
 
-const MedicineEditForm = ({ setOpen, reloadTable, medicine, id}: Props) => {
+const MedicineEditForm = ({ setOpen, reloadTable, medicine, id }: Props) => {
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,7 +82,10 @@ const MedicineEditForm = ({ setOpen, reloadTable, medicine, id}: Props) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Type your description here." {...field} />
+                  <Textarea
+                    placeholder="Type your description here."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

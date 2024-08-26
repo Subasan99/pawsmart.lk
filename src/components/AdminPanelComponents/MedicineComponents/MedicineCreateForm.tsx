@@ -16,13 +16,13 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
-import { createMedicine } from "@/app/(admin)/medicines-admin/action";
-
+import { createMedicine } from "@/app/admin/medicines/action";
 
 const formSchema = z.object({
   name: z.string({ required_error: "Medicine name is required!" }),
   description: z.string({ required_error: "Description is required!" }),
-  duration: z.number({ required_error: "Duration is required!" }),});
+  duration: z.number({ required_error: "Duration is required!" }),
+});
 
 type Props = {
   setOpen: (open: boolean) => void;
@@ -52,7 +52,6 @@ const MedicineCreateForm = ({ setOpen, reloadTable }: Props) => {
       setLoading(false);
     }
   }
-
 
   return (
     <Form {...form}>
@@ -122,7 +121,9 @@ const MedicineCreateForm = ({ setOpen, reloadTable }: Props) => {
             )}
           />
         </div>
-        <Button className="bg-red-500" type="submit">Submit</Button>
+        <Button className="bg-red-500" type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

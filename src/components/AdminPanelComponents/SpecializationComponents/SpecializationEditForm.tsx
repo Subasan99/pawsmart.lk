@@ -20,12 +20,17 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { createSpecialization, editSpecializationById } from "@/app/(admin)/specializations-admin/action";
+import {
+  createSpecialization,
+  editSpecializationById,
+} from "@/app/admin/specializations/action";
 import { Specialization } from "@/lib/typings";
 import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
-  specializationName: z.string({ required_error: "Specialization name is required!" }),
+  specializationName: z.string({
+    required_error: "Specialization name is required!",
+  }),
   description: z.string(),
   departmentId: z.string({ required_error: "Department is required!" }),
 });
@@ -36,7 +41,6 @@ type Props = {
   specialization?: Specialization;
   id?: string;
   department?: any;
-
 };
 
 const SpecializationEditForm = (props: Props) => {
@@ -46,7 +50,7 @@ const SpecializationEditForm = (props: Props) => {
     defaultValues: {
       specializationName: props.specialization?.specializationName,
       description: props.specialization?.description,
-      departmentId: props.specialization?.departmentId, 
+      departmentId: props.specialization?.departmentId,
     },
   });
 
@@ -99,10 +103,7 @@ const SpecializationEditForm = (props: Props) => {
                     {props.department.length > 0 ? (
                       props.department.map((department: any) => {
                         return (
-                          <SelectItem
-                            key={department.id}
-                            value={department.id}
-                          >
+                          <SelectItem key={department.id} value={department.id}>
                             {department.name}
                           </SelectItem>
                         );
@@ -125,7 +126,10 @@ const SpecializationEditForm = (props: Props) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Type your description here." {...field} />
+                  <Textarea
+                    placeholder="Type your description here."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

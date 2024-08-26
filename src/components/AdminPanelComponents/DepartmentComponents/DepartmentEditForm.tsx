@@ -13,7 +13,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { createDepartment, editDepartmentById } from "@/app/(admin)/departments-admin/action";
+import {
+  createDepartment,
+  editDepartmentById,
+} from "@/app/admin/departments/action";
 import { Department } from "@/lib/typings";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -29,7 +32,12 @@ type Props = {
   id?: string;
 };
 
-const DepartmentEditForm = ({ setOpen, reloadTable, department, id }: Props) => {
+const DepartmentEditForm = ({
+  setOpen,
+  reloadTable,
+  department,
+  id,
+}: Props) => {
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,7 +87,10 @@ const DepartmentEditForm = ({ setOpen, reloadTable, department, id }: Props) => 
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Type your description here." {...field} />
+                  <Textarea
+                    placeholder="Type your description here."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

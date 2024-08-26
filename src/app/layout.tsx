@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="h-full w-full flex flex-col">
-          <div className="grow-0">{children}</div>
+          <div className="grow">{children}</div>
           <Toaster richColors />
         </div>
       </body>

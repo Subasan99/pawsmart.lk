@@ -38,7 +38,7 @@ import { getAllSpecializations } from "@/api/route";
 import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { MultiSelect } from "@/components/shared/multi-select";
-import { createDoctor } from "@/app/(admin)/doctors-admin/action";
+import { createDoctor } from "@/app/admin/doctors/action";
 import { Doctor } from "@/lib/typings";
 
 const formSchema = z.object({
