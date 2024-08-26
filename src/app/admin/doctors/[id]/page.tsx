@@ -72,7 +72,7 @@ const Index = ({ params }: { params: { id: string } }) => {
         </div>
         <div className="grow flex flex-col gap-2 px-3 py-2">
           <div className="font-bold text-2xl flex gap-2 items-center">
-            {selectedDoctor?.firstName} {selectedDoctor?.lastName}{" "}
+            {selectedDoctor?.name}
             <GenderIcon gender={selectedDoctor?.gender} className="w-6 h-6" />
           </div>
           <div>

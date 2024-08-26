@@ -31,7 +31,7 @@ interface Props {
   view?: boolean;
   edit?: boolean;
   data?: any;
-  component?: "pet" | "department" | "medicine" | "specialization";
+  component?: "pet" | "department" | "medicine" | "specialization"|"";
 }
 
 const ActionMenu = (props: Props) => {
