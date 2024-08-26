@@ -79,7 +79,7 @@ export const doctorColumns: ColumnDef<Columns>[] = [
           badgeStyle = "bg-red-400 text-white";
           break;
         case "CONFIRMED":
-          badgeStyle = "bg-yellow-400 text-black";
+          badgeStyle = "bg-blue-400 text-black";
           break;
         default:
           badgeStyle = "bg-gray-400 text-white"; // default case
@@ -167,7 +167,7 @@ export const medicinesColumns: ColumnDef<Columns>[] = [
           badgeStyle = "bg-red-400 text-white";
           break;
         case "CONFIRMED":
-          badgeStyle = "bg-yellow-400 text-black";
+          badgeStyle = "bg-blue-400 text-black";
           break;
         default:
           badgeStyle = "bg-gray-400 text-white"; // default case

@@ -11,7 +11,7 @@ export default function Index() {
     state.setAllUsers,
   ]);
   async function fetchData() {
-    const data = await getUserData(1, 10);
+    const data = await getUserData(3, 10);
     console.log(data);
     setAllUsers(data?.records);
   }
