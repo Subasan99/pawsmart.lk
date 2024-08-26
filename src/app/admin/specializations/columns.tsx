@@ -91,7 +91,7 @@ export const columns: ColumnDef<Columns>[] = [
       <div className="text-center flex justify-center">
         <ActionMenu
           delete={() => archiveSpecializationById(row.original.id)}
-          pathName={`/specializations/${row.original.id}`}
+          pathName={`/admin/specializations/${row.original.id}`}
           view={false}
           edit={true}
           data={row.original}

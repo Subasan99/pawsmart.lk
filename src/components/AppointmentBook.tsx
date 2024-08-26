@@ -251,7 +251,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                               {field.value
                                 ? doctor.find(
                                     (doc: Doctor) => doc.id === field.value
-                                  )?.firstName
+                                  )?.name
                                 : "Select a doctor"}
                             </SelectValue>
                           </SelectTrigger>
@@ -268,7 +268,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                                     key={doctor.id}
                                     value={doctor.id}
                                   >
-                                    {doctor.firstName}
+                                    {doctor.name}
                                   </SelectItem>
                                 );
                               })}

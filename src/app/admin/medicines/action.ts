@@ -86,15 +86,15 @@ export async function editMedicineById(
 
 export async function updateMedicineTimeSlot(
   medicineId: string,
-  medicineDayAllocationRequests: MedicineDayTimeSlotResponses
+  medicineDayAllocationList: MedicineDayTimeSlotResponses
 ) {
-  console.log("medicineDayAllocationRequests", medicineDayAllocationRequests, medicineId);
+  console.log("medicineDayAllocationList", medicineDayAllocationList, medicineId);
   try {
     const response = await axiosInstance.put(
       `/medicine/${medicineId}/dayAllocation`,
       {
         medicineId: medicineId,
-        medicineDayAllocationRequests: medicineDayAllocationRequests,
+        medicineDayAllocationList: medicineDayAllocationList,
       }
     );
     console.log("day allocation response", response);
