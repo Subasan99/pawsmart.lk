@@ -12,15 +12,13 @@ import { useMedicineStore } from "@/store/medicinesStore";
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [dloading, setdLoading] = useState<boolean>(true);
-  const [
-    selectedMedicine,
-    setSelectedMedicine,
-    loading,
-  ] = useMedicineStore((state: any) => [
-    state.selectedMedicine,
-    state.setSelectedMedicine,
-    state.loading,
-  ]);
+  const [selectedMedicine, setSelectedMedicine, loading] = useMedicineStore(
+    (state: any) => [
+      state.selectedMedicine,
+      state.setSelectedMedicine,
+      state.loading,
+    ]
+  );
 
   async function fetchData() {
     const response = await getMedicinceById(params.id);
@@ -67,6 +65,9 @@ const Index = ({ params }: { params: { id: string } }) => {
               )}
             </div>
             <div className="grow w-1/2 min-w-fit items-center md:items-start flex flex-col gap-2 px-3 py-2">
+              <div className="font-bold text-2xl flex gap-2 items-center ">
+                {selectedMedicine?.name}
+              </div>
               <div>
                 <div className="font-semibold mb-1">
                   {selectedMedicine?.specializationName}
@@ -89,7 +90,9 @@ const Index = ({ params }: { params: { id: string } }) => {
         <div className="w-full relative flex md:justify-end">
           <Button
             onClick={() => {
-              router.push(`/appointmentdoctor?doctorId=${selectedMedicine?.id}`);
+              router.push(
+                `/appointmentdoctor?medicineId=${selectedMedicine?.id}`
+              );
             }}
             className="w-full md:w-fit md:px-3"
           >

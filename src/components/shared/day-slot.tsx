@@ -8,6 +8,8 @@ interface Props {
 }
 
 const DaySlot = ({ daySlots }: Props) => {
+  console.log(daySlots);
+  
   const [selected, setSelected] = useState<any>();
   console.log(selected);
   const days = [
@@ -66,8 +68,8 @@ const DaySlot = ({ daySlots }: Props) => {
               <div className="w-full grid gap-3 grid-cols-1 md:grid-cols-3 py-3 px-3">
                 {daySlots
                   .find((day: any) => day.day === selected)
-                  ?.timeSlots?.map((i: any) => (
-                    <div className="bg-gray-200 shadow-md rounded-lg px-3 py-2 font-semibold text-center">
+                  ?.timeSlots?.map((i: any, index:any) => (
+                    <div key={index} className="bg-gray-200 shadow-md rounded-lg px-3 py-2 font-semibold text-center">
                       {formatTime24to12(i?.startTime)} -{" "}
                       {formatTime24to12(i?.endTime)}
                     </div>
@@ -94,8 +96,8 @@ const DaySlot = ({ daySlots }: Props) => {
               <div className="w-full grid gap-3 grid-cols-1 md:grid-cols-3 py-3 px-3">
                 {daySlots
                   .find((day: any) => day.day === selected)
-                  ?.timeSlots?.map((i: any) => (
-                    <div className="bg-gray-200 shadow-md rounded-lg px-3 py-2 font-semibold text-center">
+                  ?.timeSlots?.map((i: any, index:any) => (
+                    <div key={index} className="bg-gray-200 shadow-md rounded-lg px-3 py-2 font-semibold text-center">
                       {formatTime24to12(i?.startTime)} -{" "}
                       {formatTime24to12(i?.endTime)}
                     </div>

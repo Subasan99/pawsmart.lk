@@ -74,12 +74,19 @@ export const getDeparmentFilterData = async (params: {
 export const getDoctorFilterData = async (params: {
   pageCount: number;
   pageSize: number;
+  departmentId?: number;
+  specializationId?: number;
+  petId?: number;
 }) => {
   try {
     const response = await axiosInstance.get(`/doctor/filter`, {
       params: {
         pageSize: params.pageSize,
         pageCount: params.pageCount,
+        departmentId: params.departmentId,
+        specializationId: params.specializationId,
+        petId: params.petId,
+        
       },
     });
     console.log(response.data);

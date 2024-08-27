@@ -1,6 +1,6 @@
 "use server";
 
-import { DayTimeSlotResponses, MedicineCreate, MedicineDayTimeSlotResponses } from "@/lib/typings";
+import { DayTimeSlotResponses, MedicineCreate, dayTimeSlotResponses } from "@/lib/typings";
 import { axiosInstance } from "@/utils/client";
 
 export async function getMedicineData(
@@ -18,7 +18,7 @@ export async function getMedicineData(
       },
     });
     console.log("dffdfscs", response);
-    return response?.data;
+    return response?.data?.records;
   } catch (error) {
     console.log("Error fetching medicine data:", error);
   }
@@ -86,7 +86,7 @@ export async function editMedicineById(
 
 export async function updateMedicineTimeSlot(
   medicineId: string,
-  medicineDayAllocationList: MedicineDayTimeSlotResponses
+  medicineDayAllocationList: dayTimeSlotResponses
 ) {
   console.log("medicineDayAllocationList", medicineDayAllocationList, medicineId);
   try {

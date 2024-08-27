@@ -15,9 +15,9 @@ export type Columns = {
   createdDate: string;
   active: boolean;
   updatedDate: string;
-  medicineDayTimeSlotResponses: {
+  dayTimeSlotResponses: {
     day: string;
-    medicineTimeSlotResponses: { startTime: string; endTime: string }[];
+    timeSlots: { startTime: string; endTime: string }[];
     appointmentTimes: string[];
   }[];
 };

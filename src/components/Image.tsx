@@ -5,7 +5,7 @@ import Link from "next/link";
 interface PopularDoctorsProps {
   title: string;
   description: string;
-  link: string;
+  link?: string;
   linkDescription: string;
   doctors: {
     id?: string;
@@ -31,7 +31,9 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
   pathname,
   query = [],
 }) => {
+
   const defaultImage = "/department.png";
+  
   return (
     <div className="w-full container pt-5 px-7 mx-auto">
       <div className="border-l-2 border-red-500 pl-2">
@@ -39,14 +41,16 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
       </div>
       <div className="flex flex-row justify-between items-center">
         <p className="text-l border-l-2 border-white-500 pl-2">{description}</p>
-        <a href={link}>
-          <h2 className="text-red-500 hover:text-black">{linkDescription}</h2>
-        </a>
+        {link && (
+          <a href={link}>
+            <h2 className="text-red-500 hover:text-black">{linkDescription}</h2>
+          </a>
+        )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-5">
-        {doctors.map((image, index) => {
-          console.log("image", image);
-          return (
+      
+      {doctors.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-5">
+          {doctors.map((image, index) => (
             <Link
               key={index}
               href={{
@@ -71,9 +75,11 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
                 className="w-full h-auto object-cover md:w-100 md:h-80 transition-transform duration-300 ease-in-out hover:scale-105"
               />
             </Link>
-          );
-        })}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <h1 className="text-center font-bold text-2xl text-gray-500 pt-5">No data available</h1>
+      )}
     </div>
   );
 };

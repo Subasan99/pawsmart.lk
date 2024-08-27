@@ -150,6 +150,7 @@ export default function Home() {
         src: department.preSignedUrl,
         alt: department.image,
         textOverlay: department.name,
+        id: department.id,
       }))
     : [];
 
@@ -158,6 +159,7 @@ export default function Home() {
         src: pet.preSignedUrl,
         alt: pet.image,
         textOverlay: pet.name,
+        id: pet.id,
       }))
     : [];
 
@@ -303,7 +305,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription={"Departments"}
             doctors={departmentDatas.slice(0, 4)}
-            pathname={"/appoinment"}
+            pathname={"/departments"}
             query={departmentDatas}
           />
         </div>
@@ -328,7 +330,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription={"Pets"}
             doctors={petdata.slice(0, 4)}
-            pathname={"/booking"}
+            pathname={"/pets"}
             query={petdata}
           />
         </div>
