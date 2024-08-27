@@ -124,6 +124,7 @@ const SignUp = () => {
       phoneNo: userInfo.phoneNo,
       dateOfBirth: userInfo.dateOfBirth,
       gender: userInfo.gender,
+      role: "USER",
     });
     console.log(response, "12121212121");
     alert(response?.message);

@@ -22,7 +22,7 @@ export default function RootLayout({
         <div className="h-full w-full flex flex-col">
           <Header />
           <div className="grow bg-gray-100">{children}</div>
-          <div className="mt-auto">
+          <div className="mt-auto" max-h="100vh">
             <Footer />
           </div>
         </div>

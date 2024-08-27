@@ -9,6 +9,7 @@ export const registerUser = async (userData: {
   phoneNo: string;
   dateOfBirth: string;
   gender: string;
+  role: string;
 }) => {
   try {
     const response = await axiosInstance.post(`/user`, {
@@ -19,7 +20,7 @@ export const registerUser = async (userData: {
       phoneNo: userData.phoneNo,
       dateOfBirth: userData.dateOfBirth,
       gender: userData.gender,
-      
+      role: userData.role,
     });
 
     console.log(response.data);
