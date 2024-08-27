@@ -6,8 +6,9 @@ import { axiosInstance } from "@/utils/client";
 export async function getDoctorData(
   pageCount?: number,
   pageSize?: number,
-  specializationId?: number,
-  departmentId?: number,
+  specializationId?: string,
+  departmentId?: string,
+  petId?: string,
   name?: string
 ) {
   console.log("dfsdfdf", pageCount, pageSize);

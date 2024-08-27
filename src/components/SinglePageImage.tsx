@@ -1,11 +1,23 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
 interface MultipleImagesProps {
   title: string;
   description: string;
-  doctors: { src: string; alt: string; textOverlay: string }[];
-  handleClick: (imageName: string) => void;
+  handleClick: (imageName: any, image: any, id: any) => void;
+  pathname?: string;
+  doctors: {
+    id?: string;
+    src: string;
+    alt: string;
+    textOverlay: string;
+    description?: string;
+    specializationName?: string;
+    dayTimeSlotResponses?: [];
+  }[];
+  query?: [] | any;
+
 }
 
 const MultipleImagesProps: React.FC<MultipleImagesProps> = ({
@@ -13,6 +25,7 @@ const MultipleImagesProps: React.FC<MultipleImagesProps> = ({
   description,
   doctors,
   handleClick,
+  pathname
 }) => {
   const defaultImage = "/department.png";
   return (
@@ -25,11 +38,16 @@ const MultipleImagesProps: React.FC<MultipleImagesProps> = ({
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-5">
         {doctors.map((image, index) => (
-          <div
-            key={index}
-            onClick={() => handleClick(image.alt)}
-            className="cursor-pointer relative overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105"
-          >
+          <Link
+          key={index}
+          href={{
+            pathname: `${pathname}${image.id ? `/${image.id}` : ""}`,
+          }}
+          onClick={() =>
+            handleClick(image.textOverlay, image.src, image.id)
+          }
+          className="cursor-pointer relative overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105"
+        >
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
             <div className="absolute bottom-0 left-0 w-full bg-gray-800 bg-opacity-60 text-white text-center p-2 shadow-md md:bg-opacity-10 md:text-left">
               <span className="text-base md:text-lg truncate">
@@ -43,8 +61,7 @@ const MultipleImagesProps: React.FC<MultipleImagesProps> = ({
               alt={image.alt}
               className="w-full h-auto object-cover md:w-100 md:h-80 transition-transform duration-300 ease-in-out hover:scale-105"
             />
-          </div>
-        ))}
+          </Link>))}
       </div>
     </div>
   );

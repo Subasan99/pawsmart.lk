@@ -91,7 +91,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             setModal={setMedicineDayTimeSlotModal}
             medicineId={params.id}
             duration={selectedMedicine?.duration}
-            medicineDayTimeSlotReponse={selectedMedicine?.medicineDayTimeSlotResponses}
+            medicineDayTimeSlotReponse={selectedMedicine?.dayTimeSlotResponses}
             medicineAllocateTimeSlot={updateMedicineTimeSlot}
           />
         </TabsContent>

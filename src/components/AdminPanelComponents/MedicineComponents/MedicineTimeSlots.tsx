@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator";
-import { MedicineDayTimeSlotResponses } from "@/lib/typings";
+import { dayTimeSlotResponses } from "@/lib/typings";
 import { formatTime24to12 } from "@/lib/utils";
 import MedicineDayTimeSlotModal from "./MedicineDayTimeSlotModal";
 
 interface Props {
-  medicineDayTimeSlotReponse: MedicineDayTimeSlotResponses[];
+  medicineDayTimeSlotReponse: dayTimeSlotResponses[];
   duration: number;
   medicineId: string;
   setModal: any;
@@ -35,7 +35,7 @@ const MedicineTimeSlots = (props: Props) => {
         <div className="flex flex-col w-full min-w-fit gap-2 items-center">
           {props?.medicineDayTimeSlotReponse.length > 0 ? (
             props?.medicineDayTimeSlotReponse.map(
-              (medicineDayTimeSlotReponse: MedicineDayTimeSlotResponses) => {
+              (medicineDayTimeSlotReponse: dayTimeSlotResponses) => {
                 return (
                   <div
                     key={medicineDayTimeSlotReponse.day}

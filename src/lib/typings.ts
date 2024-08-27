@@ -97,9 +97,9 @@ export type Medicine = {
   image: string;
   preSignedUrl: string;
   duration: number;
-  medicineDayTimeSlotResponses: {
+  dayTimeSlotResponses: {
     day: string;
-    medicineTimeSlotResponses: { startTime: string; endTime: string }[];
+    timeSlots: { startTime: string; endTime: string }[];
     appointmentTimes: string[];
   }[];
 };
@@ -127,7 +127,7 @@ export type AppointmentCreate = {
   description: string;
   petAge: number;
 };
-export type MedicineDayTimeSlotResponses = {
+export type dayTimeSlotResponses = {
   day: string;
   medicineTimeSlots: { startTime: string; endTime: string }[] | [];
   appointmentTimes: string[];

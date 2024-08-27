@@ -1,6 +1,6 @@
 "use client";
 import { Switch } from "@/components/ui/switch";
-import { MedicineDayTimeSlotResponses } from "@/lib/typings";
+import { dayTimeSlotResponses } from "@/lib/typings";
 import PlusIcon from "@/components/svg/plus_icon";
 import { formatTime24to12 } from "@/lib/utils";
 import { useState } from "react";
@@ -26,7 +26,7 @@ import { toast } from "sonner";
 
 interface Props {
   setModal: any;
-  medicineDayTimeSlotReponse: MedicineDayTimeSlotResponses[];
+  medicineDayTimeSlotReponse: dayTimeSlotResponses[];
   medicineAllocateTimeSlot?: any;
   id?: string;
 }

@@ -182,7 +182,7 @@ export default function Home() {
               item && (
                 <li key={index}>
                   <a
-                    href={`${hrefBase}/${item.name}`}
+                    href={`${hrefBase}/${item.id}`}
                     className="text-gray-600 block px-4 py-2"
                   >
                     {item.name}
@@ -249,7 +249,7 @@ export default function Home() {
                     Doctors
                   </a>
                   {activeDropdown === "doctors" &&
-                    renderDropdown(doctors, "/doctors")}
+                    renderDropdown(doctors, "/doctor-details")}
                 </li>
                 <li
                   onClick={() => handleMouseEnter("medicines")}
@@ -338,7 +338,7 @@ export default function Home() {
                   Doctors
                 </a>
                 {activeDropdown === "doctors" &&
-                  renderDropdown(doctors, "/doctors")}
+                  renderDropdown(doctors, "/doctor-details")}
               </li>
               <li
                 onMouseEnter={() => handleMouseEnter("medicines")}

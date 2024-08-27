@@ -27,6 +27,8 @@ export const useMedicineStore = create<Store>()(
         set({ medicine: medicine, loading: false });
       },
       setSelectedMedicine: (medicine: Medicine | null | undefined) => {
+        console.log("setSelectedMedicine", medicine);
+        
         set({ selectedMedicine: medicine, loading: false });
       },
       setMedicineAppointments: (appointments: Appointment[]) => {
