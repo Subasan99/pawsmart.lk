@@ -12,8 +12,7 @@ const Index = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",
@@ -42,8 +41,7 @@ const Index = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",
@@ -72,8 +70,7 @@ const Index = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",
@@ -102,8 +99,7 @@ const Index = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",

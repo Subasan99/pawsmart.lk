@@ -46,9 +46,9 @@ const MedicineTimeSlots = (props: Props) => {
                     </div>
                     <Separator />
                     <div className="flex flex-col gap-1">
-                      {medicineDayTimeSlotReponse?.timeSlots.length > 0 ? (
+                      {medicineDayTimeSlotReponse?.medicineTimeSlots.length > 0 ? (
                         <>
-                          {medicineDayTimeSlotReponse?.timeSlots.map(
+                          {medicineDayTimeSlotReponse?.medicineTimeSlots.map(
                             (timeslot: any, index: any) => (
                               <div
                                 key={index}

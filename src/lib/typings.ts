@@ -4,8 +4,7 @@ export type Appointment = {
   time: string;
   doctorResponse?: {
     id: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     phoneNo: string;
     dateOfBirth: string;
@@ -31,8 +30,7 @@ export type Appointment = {
 
 export type Doctor = {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   phoneNo: string;
   dateOfBirth: string;
@@ -45,7 +43,7 @@ export type Doctor = {
   image: string;
   preSignedUrl: string;
   duration: number;
-  name: string;
+  active: boolean;
   dayTimeSlotResponses: {
     day: string;
     timeSlots: { startTime: string; endTime: string }[];
@@ -131,6 +129,63 @@ export type AppointmentCreate = {
 };
 export type MedicineDayTimeSlotResponses = {
   day: string;
-  timeSlots: { startTime: string; endTime: string }[] | [];
+  medicineTimeSlots: { startTime: string; endTime: string }[] | [];
   appointmentTimes: string[];
+};
+
+export type DoctorBooking = {
+  id: string;
+  name: string;
+  email: string;
+  phoneNo: string;
+  dateOfBirth: string;
+  gender: string;
+  specialization: string;
+  description: string;
+  department: string;
+};
+
+export type UserBooking = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNo: string;
+  dateOfBirth: string;
+  gender: string;
+};
+export type MedicineBooking = {
+  name: string;
+  description: string;
+};
+
+export type Booking = {
+  id: string;
+  bookingDate: string;
+  time: string;
+  description: string;
+  status: string;
+  bookingType: string;
+  petName: string;
+  petAge: string;
+  petType: string;
+  createdDate: string;
+  updatedDate: string;
+  doctorResponse: DoctorBooking;
+  medicineResponse: MedicineBooking;
+  userResponse: UserBooking;
+};
+
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  phoneNo: string;
+  dateOfBirth: string;
+  gender: string;
+  image: string;
+  preSignedUrl: string;
+  role: string;
+  active: boolean;
 };

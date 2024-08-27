@@ -9,8 +9,7 @@ const UpcomingAppointments = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",
@@ -39,8 +38,7 @@ const UpcomingAppointments = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",
@@ -69,8 +67,7 @@ const UpcomingAppointments = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",
@@ -99,8 +96,7 @@ const UpcomingAppointments = () => {
       time: "string",
       doctorResponse: {
         id: "string",
-        firstName: "string",
-        lastName: "string",
+        name: "string",
         email: "string",
         phoneNo: "string",
         dateOfBirth: "string",

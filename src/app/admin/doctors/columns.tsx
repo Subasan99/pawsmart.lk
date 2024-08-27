@@ -6,8 +6,7 @@ import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
 
 export type Columns = {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   phoneNo: string;
   dateOfBirth: string;
@@ -53,7 +52,7 @@ export const columns: ColumnDef<Columns>[] = [
           </div>
           <div className="flex flex-col">
             <div className="font-semibold text-sm">
-              {row.original.firstName} {row.original.lastName}
+              {row.original.name}
             </div>
             <div className="font-semibold text-[12px]">
               {row?.original?.email}
@@ -89,7 +88,7 @@ export const columns: ColumnDef<Columns>[] = [
     cell: ({ row }) => (
       <div className="text-center flex justify-center">
         <ActionMenu 
-        pathName={`/doctors/${row.original.id}`}
+        pathName={`/admin/doctors/${row.original.id}`}
         view={true} />
       </div>
     ),

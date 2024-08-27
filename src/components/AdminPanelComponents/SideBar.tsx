@@ -18,56 +18,65 @@ const SideBar = () => {
         </li>
         <li
           className={`text-black ${
-            pathname.includes("/doctors") && "bg-red-500 text-white"
+            pathname.includes("/admin/doctors") && "bg-red-500 text-white"
           } px-4 py-1 rounded`}
         >
-          <a href="/doctors" className="hover:text-black">
+          <a href="/admin/doctors" className="hover:text-black">
             Doctors
           </a>
         </li>
         <li
           className={`text-black ${
-            pathname.includes("/medicines") && "bg-red-500 text-white"
+            pathname.includes("/admin/medicines") && "bg-red-500 text-white"
           } px-4 py-1 rounded`}
         >
-          <a href="/medicines" className="hover:text-black">
+          <a href="/admin/medicines" className="hover:text-black">
             Medicines
           </a>
         </li>
-        {/* <li
-          className={`text-black ${
-            pathname.includes("/appointments") && "bg-red-500 text-white"
-          } px-4 py-1 rounded`}
-        >
-          <a href="/appointments" className="hover:text-black">
-            Appointments
-          </a>
-        </li> */}
         <li
           className={`text-black ${
-            pathname.includes("/departments") && "bg-red-500 text-white"
+            pathname.includes("/admin/appointments") && "bg-red-500 text-white"
           } px-4 py-1 rounded`}
         >
-          <a href="/departments" className="hover:text-black">
+          <a href="/admin/appointments" className="hover:text-black">
+            Appointments
+          </a>
+        </li>
+        <li
+          className={`text-black ${
+            pathname.includes("/admin/departments") && "bg-red-500 text-white"
+          } px-4 py-1 rounded`}
+        >
+          <a href="/admin/departments" className="hover:text-black">
             Departments
           </a>
         </li>
         <li
           className={`text-black ${
-            pathname.includes("/pets") && "bg-red-500 text-white"
+            pathname.includes("/admin/pets") && "bg-red-500 text-white"
           } px-4 py-1 rounded`}
         >
-          <a href="/pets" className="hover:text-black">
+          <a href="/admin/pets" className="hover:text-black">
             Pets
           </a>
         </li>
         <li
           className={`text-black ${
-            pathname.includes("/specializations") && "bg-red-500 text-white"
+            pathname.includes("/admin/specializations") && "bg-red-500 text-white"
           } px-4 py-1 rounded`}
         >
-          <a href="/specializations" className="hover:text-black">
+          <a href="/admin/specializations" className="hover:text-black">
             Specializations
+          </a>
+        </li>
+        <li
+          className={`text-black ${
+            pathname.includes("/admin/users") && "bg-red-500 text-white"
+          } px-4 py-1 rounded`}
+        >
+          <a href="/admin/users" className="hover:text-black">
+            Users
           </a>
         </li>
       </ul>

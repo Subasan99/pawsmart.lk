@@ -25,7 +25,7 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
     const fetchBookings = async () => {
       try {
         const response = await getAppointmentBooking();
-        const DoctorName = response?.records?.[0]?.doctorResponse?.firstName;
+        const DoctorName = response?.records?.[0]?.doctorResponse?.name;
         setdoctorName(DoctorName)
         const bookingDate = response?.records?.[0]?.bookingDate;
         setbookingdate(bookingDate)
