@@ -46,10 +46,22 @@ const SignUp = () => {
     });
     console.log(response);
     if (response.success) {
-      setLogin(response)
+      setLogin(response);
       toast.success(response.message, {
-        onDismiss: () => router.push("/home"),
-        onAutoClose: () => router.push("/home"),
+        onDismiss: () => {
+          if (response.role === "ADMIN") {
+            router.push("/admin/dashboard");
+            return;
+          }
+          router.push("/home");
+        },
+        onAutoClose: () => {
+          if (response.role === "ADMIN") {
+            router.push("/admin/dashboard");
+            return;
+          }
+          router.push("/home");
+        },
       });
       setLoading(false);
     } else {
@@ -98,7 +110,13 @@ const SignUp = () => {
       if (response.success) {
         setLogin(response);
         toast.success(response.message, {
-          onDismiss: () => router.push("/home"),
+          onDismiss: () => {
+            if (response.role === "ADMIN") {
+              router.push("/admin/dashboard");
+              return;
+            }
+            router.push("/home");
+          },
         });
       } else {
         toast.error(response.message);
