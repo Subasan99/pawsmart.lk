@@ -39,6 +39,7 @@ import { Textarea } from "./ui/textarea";
 import { useAuthStore } from "@/store/authStore";
 import { createAppointment } from "@/app/(signedin)/(menubar)/appointmentdoctor/action";
 import { getMedicineData } from "@/app/admin/medicines/action";
+import { toast } from "sonner";
 
 interface AppointmentProps {
   userId: string | undefined;
@@ -161,7 +162,16 @@ const Appointment: React.FC<AppointmentProps> = () => {
       ...values,
       bookingDate: moment(values.bookingDate).format("YYYY-MM-DD"),
       userId: values.userId.toString(),
-    }).then((res: any) => console.log(res));
+    }).then((res: any) => {
+      if (res.success) {
+        toast.success(res.message);
+        router.push("/home");
+      } else if (res.success === false) {
+        toast.error(res.message);
+      } else {
+        toast.error("Oops! Something went wrong. Please try again!");
+      }
+    });
   }
 
   console.log(form.getValues());
@@ -257,7 +267,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                           defaultValue={field.value}
                         >
                           <SelectTrigger className="w-full">
-                            <SelectValue >
+                            <SelectValue>
                               {field.value
                                 ? doctor.find((doc) => doc.id === field.value)
                                     ?.name

@@ -20,7 +20,7 @@ export default function Index() {
     const data = await getMedicineData(1, 10);
     const specializations = await getAllSpecializations();
     console.log(data);
-    setAllMedicines(data?.records);
+    setAllMedicines(data);
     setAllSpecialization(specializations);
   }
   useEffect(() => {
