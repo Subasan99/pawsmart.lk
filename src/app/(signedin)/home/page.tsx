@@ -136,6 +136,7 @@ export default function Home() {
 
   const doctores = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
+        id: doctor.id,
         src: doctor.preSignedUrl,
         alt: doctor.image,
         textOverlay: doctor.name,
@@ -169,6 +170,7 @@ export default function Home() {
 
   const medicinesDatas = Array.isArray(medicines)
     ? medicines.map((medicines: any) => ({
+        id: medicines.id,
         src: medicines.preSignedUrl,
         alt: medicines.image,
         textOverlay: medicines.name,
@@ -221,198 +223,12 @@ export default function Home() {
 
   console.log(login);
 
-  if(loading){
-    return <div>Loading ....!</div>
+  if (loading) {
+    return <div>Loading ....!</div>;
   }
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
-      >
-        <div
-          className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}
-        >
-          <div className="flex justify-between items-center w-full md:hidden">
-            <a href="/">
-              {" "}
-              <Image src={logo} alt="Company Logo" className="w-36" />
-            </a>
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger className="px-3">
-                <SideBarIcon />
-              </SheetTrigger>
-              <SheetContent
-                className={`h-full flex flex-col items-start ${textColor}`}
-              >
-                <Image src={logo} className="w-[288px]" alt="Company Logo" />
-                <ul className="flex flex-col space-y-4 text-black">
-                  {/* Sidebar items */}
-                  <li key={0}>
-                    <a href="/" className="hover:text-red-500">
-                      Home
-                    </a>
-                  </li>
-                  <li key={1}>
-                    <a href="/aboutus" className="hover:text-red-500">
-                      About Us
-                    </a>
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter("departments")}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/departments" className="hover:text-red-500">
-                      Departments
-                    </a>
-                    {activeDropdown === "departments" &&
-                      renderDropdown(departments, "/departments")}
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter("doctors")}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/doctors" className="hover:text-red-500">
-                      Doctors
-                    </a>
-                    {activeDropdown === "doctors" &&
-                      renderDropdown(doctors, "/doctors")}
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter("medicines")}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/medicines" className="hover:text-red-500">
-                      Medicines
-                    </a>
-                    {activeDropdown === "medicines" &&
-                      renderDropdown(medicines, "/medicines")}
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter("pets")}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/pets" className="hover:text-red-500">
-                      Pets
-                    </a>
-                    {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
-                  </li>
-                  {login ? (
-                    <div
-                      onClick={handleSignout}
-                      className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                    >
-                      <p className="hover:text-black">SignOut</p>
-                    </div>
-                  ) : (
-                    <>
-                      {" "}
-                      <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                        <a href="/signin" className="hover:text-black">
-                          Sign In
-                        </a>
-                      </li>
-                      <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                        <a href="/signup" className="hover:text-black">
-                          Sign Up
-                        </a>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </SheetContent>
-            </Sheet>
-          </div>
-          <div className="hidden md:flex md:items-center w-full">
-            <a href="/">
-              <Image src={logo} alt="Company Logo" className="w-36" />{" "}
-            </a>
-            <nav className="flex-1 flex justify-center">
-              <ul className="flex space-x-8">
-                {/* Navbar items */}
-                <li key={0}>
-                  <a href="/" className="hover:text-red-500">
-                    Home
-                  </a>
-                </li>
-                <li key={1}>
-                  <a href="/aboutus" className="hover:text-red-500">
-                    About Us
-                  </a>
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter("departments")}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/departments" className="hover:text-red-500">
-                    Departments
-                  </a>
-                  {activeDropdown === "departments" &&
-                    renderDropdown(departments, "/departments")}
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter("doctors")}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/doctors" className="hover:text-red-500">
-                    Doctors
-                  </a>
-                  {activeDropdown === "doctors" &&
-                    renderDropdown(doctors, "/doctors")}
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter("medicines")}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/medicines" className="hover:text-red-500">
-                    Medicines
-                  </a>
-                  {activeDropdown === "medicines" &&
-                    renderDropdown(medicines, "/medicines")}
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter("pets")}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/pets" className="hover:text-red-500">
-                    Pets
-                  </a>
-                  {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
-                </li>
-              </ul>
-            </nav>
-            <div className="flex space-x-4">
-              {login ? (
-                <button
-                  onClick={handleSignout}
-                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                >
-                  Signout
-                </button>
-              ) : (
-                <>
-                  <button
-                    onClick={handleButtonClick}
-                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                  >
-                    <a href="/signin">Sign In</a>
-                  </button>
-                  <button
-                    onClick={handleButtonClick}
-                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                  >
-                    <a href="/signup">Sign Up</a>
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
       <main className="bg-gray-50">
         <div className="flex flex-col items-center justify-between">
           <section className="relative h-[100dvh] w-full flex items-center justify-center p-4">
@@ -500,7 +316,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription="Doctors"
             doctors={doctores.slice(0, 8)}
-            pathname={"/booking"}
+            pathname={"/doctor-details"}
             query={doctores}
           />
         </div>
@@ -525,7 +341,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription={"Medicines"}
             doctors={medicinesDatas.slice(0, 4)}
-            pathname={"/booking"}
+            pathname={"/medicine-details"}
             query={medicinesDatas}
           />
         </div>

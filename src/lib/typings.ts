@@ -45,6 +45,7 @@ export type Doctor = {
   image: string;
   preSignedUrl: string;
   duration: number;
+  name: string;
   dayTimeSlotResponses: {
     day: string;
     timeSlots: { startTime: string; endTime: string }[];

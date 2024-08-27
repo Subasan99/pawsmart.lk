@@ -16,15 +16,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <body className={inter.className}>
         <div className="h-full w-full flex flex-col">
-         
-          <div className="grow">{children}</div>
+          <Header />
+          <div className="grow bg-gray-100">{children}</div>
           <div className="mt-auto">
-            <Footer/>
+            <Footer />
           </div>
         </div>
       </body>

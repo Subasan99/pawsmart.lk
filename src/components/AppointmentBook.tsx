@@ -97,11 +97,16 @@ const formSchema = z.object({
 
 const Appointment: React.FC<AppointmentProps> = () => {
   const [login] = useAuthStore((state) => [state.login]);
+  const searchParams = useSearchParams();
   // const [login, setLogin] = useState<any | undefined>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: undefined,
+      id: searchParams.get("doctorId")
+        ? searchParams.get("doctorId")!
+        : searchParams.get("medicineId")
+        ? searchParams.get("medicineId")!
+        : undefined,
       bookingDate: undefined,
       time: undefined,
       description: undefined,
@@ -115,14 +120,9 @@ const Appointment: React.FC<AppointmentProps> = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const SearchParams = useSearchParams();
-
-  const doctorss: any = SearchParams.get("imageQuery");
-
   // docName = queryData.imageName || "";
-  const searchParams = useSearchParams();
 
-  const datesearch = searchParams.get("date");
+  // const datesearch = searchParams.get("date");
 
   const [date, setDate] = React.useState<Date | undefined>(new Date());
 
@@ -147,6 +147,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
 
       setAllDoctors(doctorData);
       setSpecialization(specializationData);
+      setIsLoading(false);
 
       console.log(doctorData, "dsfsdfsdfsdf");
     } catch (error) {
@@ -167,6 +168,10 @@ const Appointment: React.FC<AppointmentProps> = () => {
   }
 
   console.log(form.getValues());
+
+  if (!doctor.length) {
+    return <div>Loading ... !</div>;
+  }
 
   return (
     <div className="w-full">
@@ -247,11 +252,11 @@ const Appointment: React.FC<AppointmentProps> = () => {
                       >
                         <FormControl>
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a doctor">
+                            <SelectValue placeholder="Select an doctor">
                               {field.value
                                 ? doctor.find(
                                     (doc: Doctor) => doc.id === field.value
-                                  )?.firstName
+                                  )?.name
                                 : "Select a doctor"}
                             </SelectValue>
                           </SelectTrigger>
@@ -268,7 +273,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                                     key={doctor.id}
                                     value={doctor.id}
                                   >
-                                    {doctor.firstName}
+                                    {doctor.name}
                                   </SelectItem>
                                 );
                               })}

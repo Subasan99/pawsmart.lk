@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Logo from "../../public/logowhite.png";
 import Logoeffect from "../../public/stubby.png";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDoctorStore } from "@/store/doctorStore";
 import {
   getDepartmentData,
@@ -20,6 +20,7 @@ import { useAuthStore } from "@/store/authStore";
 import { signOut } from "@/api/route";
 
 export default function Home() {
+  const pathName = usePathname();
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
     state.setAllDoctors,
@@ -38,7 +39,6 @@ export default function Home() {
     state.medicines,
     state.setAllMedicines,
   ]);
-
 
   const handleScroll = () => {
     const scrollY = window.scrollY;
@@ -62,7 +62,32 @@ export default function Home() {
     state.setLogin,
   ]);
   useEffect(() => {
-    // window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (!pathName.startsWith("/home")) {
+        setHeaderBg("bg-white bg-opacity-90");
+        setTextColor("text-black");
+        setLogo(Logoeffect);
+        return;
+      }
+      if (scrollY > 0) {
+        setHeaderBg("bg-white bg-opacity-90");
+        setTextColor("text-black");
+        setLogo(Logoeffect);
+      } else {
+        setHeaderBg("bg-transparent");
+        setTextColor("text-white");
+        setLogo(Logo);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    fetchData();
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const fetchData = async () => {
@@ -169,7 +194,6 @@ export default function Home() {
       </ul>
     </div>
   );
-
 
   return (
     <header
@@ -340,32 +364,32 @@ export default function Home() {
             </ul>
           </nav>
           <div className="flex space-x-4">
-              {login ? (
+            {login ? (
+              <button
+                onClick={handleSignout}
+                className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+              >
+                Signout
+              </button>
+            ) : (
+              <>
                 <button
-                  onClick={handleSignout}
+                  onClick={handleButtonClick}
                   className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
                 >
-                  Signout
+                  <a href="/signin">Sign In</a>
                 </button>
-              ) : (
-                <>
-                  <button
-                    onClick={handleButtonClick}
-                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                  >
-                    <a href="/signin">Sign In</a>
-                  </button>
-                  <button
-                    onClick={handleButtonClick}
-                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                  >
-                    <a href="/signup">Sign Up</a>
-                  </button>
-                </>
-              )}
-            </div>
+                <button
+                  onClick={handleButtonClick}
+                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
+                >
+                  <a href="/signup">Sign Up</a>
+                </button>
+              </>
+            )}
           </div>
         </div>
+      </div>
     </header>
   );
 }
