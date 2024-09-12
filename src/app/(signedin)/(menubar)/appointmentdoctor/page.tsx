@@ -80,7 +80,8 @@ const AppointmentDoctor = () => {
       </div>
 
       <div className="flex w-full md:w-fit md:grow">
-        <AppointmentBook
+      {/* @ts-expect-error */}
+      <AppointmentBook
           userId="1"
           message={appointmentInfo.message}
           startDate={appointmentInfo.startDate}

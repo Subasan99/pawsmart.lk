@@ -24,6 +24,7 @@ import {
 import UserIcon from "../svg/user_icon";
 import AdminPopover from "./AdminPopover";
 import { usePathname } from "next/navigation";
+import { signOut } from "@/api/route";
 
 export default function AdminHeader() {
   const pathname = usePathname();
@@ -105,7 +106,10 @@ export default function AdminHeader() {
                 <ul className="flex flex-col space-y-4 gap-2">
                   {/* Sidebar items */}
 
-                  <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8">
+                  <li
+                    onClick={() => signOut()}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8"
+                  >
                     <a href="/signin" className="hover:text-black">
                       Sign Out
                     </a>

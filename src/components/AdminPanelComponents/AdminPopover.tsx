@@ -1,5 +1,6 @@
 import Image from "next/image";
 import DoctorImage from "../../../public/doctor.png";
+import { signOut } from "@/api/route";
 
 const AdminPopover = () => {
   return (
@@ -14,7 +15,7 @@ const AdminPopover = () => {
         </div>
         <div className="font-semibold">My Profile</div>
       </div>
-      <div className="bg-red-500 hover:bg-yellow-500 hover:text-black text-white px-4 py-1 rounded w-full text-center cursor-pointer">
+      <div onClick={() => signOut()} className="bg-red-500 hover:bg-yellow-500 hover:text-black text-white px-4 py-1 rounded w-full text-center cursor-pointer">
         <a href="/signin" className="">
           Sign Out
         </a>
