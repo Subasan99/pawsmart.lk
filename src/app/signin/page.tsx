@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useAuthStore } from "@/store/authStore";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z
@@ -212,6 +213,19 @@ const SignUp = () => {
                   />
                 </div> */}
 
+<div className="flex justify-end mb-4">
+                    <Link
+                      href="/forgotpassword"
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "#000",
+                        textDecoration: "underline",
+                        fontFamily: "Inter-Bold",
+                      }}
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                   <div>
                     <button
                       disabled={loading}

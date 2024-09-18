@@ -13,7 +13,9 @@ import {
 } from "@/app/(signedin)/home/action";
 import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
-import { useMedicinesStore } from "@/store/medicinesStore";
+// import { useMedicinesStore } from "@/store/medicinesStore";
+import changePasswordImage from "../../../public/changePassword.jpg"
+
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import SideBarIcon from "@/components/svg/side_bar_icon";
 import {
@@ -115,6 +117,22 @@ export default function DoctorHeader() {
                       About Us
                     </a>
                   </li>
+
+                  <li>
+                  <div className="w-full h-fit flex gap-3 items-center">
+  <a href="/changepassword" className="flex items-center gap-3">
+    <div className="w-15 h-15">
+      <Image
+        src={changePasswordImage}
+        alt="Doctor"
+        className="w-10 h-15 rounded-full object-cover"
+      />
+    </div>
+    <div className="font-semibold">Change Password</div>
+  </a>
+</div>
+                  </li>
+
                   <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8">
                     <a href="/signin" className="hover:text-black">
                       Sign Out
@@ -164,3 +182,7 @@ export default function DoctorHeader() {
     </>
   );
 }
+function useMedicinesStore(arg0: (state: any) => any[]): [any, any] {
+  throw new Error("Function not implemented.");
+}
+
