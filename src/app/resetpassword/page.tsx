@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
 import Link from 'next/link';
 import { resetPassword } from './action';
+import { Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
   otp: z.string({ required_error: 'Please enter your otp!' }),
@@ -66,6 +67,12 @@ const ResetPassword = () => {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   };
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
 
   return (
     <main className="h-screen">
@@ -100,7 +107,7 @@ const ResetPassword = () => {
                       </FormItem>
                     )}
                   />
-
+{/* 
                   <FormField
                     control={form.control}
                     name="password"
@@ -117,7 +124,36 @@ const ResetPassword = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
+
+
+
+      <FormField
+        control={form.control}
+        name="password"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Password</FormLabel>
+            <FormControl>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="password.."
+                  {...field}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                >
+                  {showPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
+                </button>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
                   <div>
                     <button

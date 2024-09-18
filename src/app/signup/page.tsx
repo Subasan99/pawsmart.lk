@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Eye, EyeOff } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -130,6 +130,12 @@ const SignUp = () => {
     alert(response?.message);
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <main className="h-screen">
       <header className="w-full h-full">
@@ -197,6 +203,7 @@ const SignUp = () => {
                       )}
                     />
                   </div>
+{/*                   
                   <div className=" rounded inline-block ">
                     <FormField
                       control={form.control}
@@ -215,8 +222,38 @@ const SignUp = () => {
                         </FormItem>
                       )}
                     />
-                  </div>
+                  </div> */}
 
+                 
+                 
+<div className="rounded inline-block">
+      <FormField
+        control={form.control}
+        name="password"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Password</FormLabel>
+            <FormControl>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="password.."
+                  {...field}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                >
+                  {showPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
+                </button>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
                   <div className=" rounded inline-block ">
                     <FormField
                       control={form.control}

@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { useAuthStore } from "@/store/authStore";
 import Link from "next/link";
 import { signOut } from "@/api/route";
+import { Eye, EyeOff } from "lucide-react";
 
 const formSchema = z.object({
   oldPassword: z.string({ required_error: "Please enter your password!" }),
@@ -72,6 +73,15 @@ const ChangePassword = () => {
     backgroundSize: "cover",
     backgroundPosition: "center",
   };
+  const [showPassword, setShowPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+  const toggleOldPasswordVisibility = () => {
+    setShowOldPassword((prev) => !prev);
+  };
 
  
   return (
@@ -92,8 +102,38 @@ const ChangePassword = () => {
                     width={217}
                     height={72}
                     className="mt-20 mb-5"
-                  />
+                  /> 
+                  
+                  
+                  <FormField
+                  control={form.control}
+                name="oldPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                       <FormLabel>Old Password</FormLabel>
+                      <FormControl>
+                        <div className="relative">
+                          <Input
+                            type={showOldPassword ? "text" : "password"}
+                            placeholder="password.."
+                            {...field}
+                          />
+                          <button
+                            type="button"
+                            onClick={toggleOldPasswordVisibility}
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                          >
+                            {showOldPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
+                          </button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
+
+{/* 
                   <FormField
                     control={form.control}
                     name="oldPassword"
@@ -106,8 +146,8 @@ const ChangePassword = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
-
+                  /> */}
+{/* 
 <FormField
                     control={form.control}
                     name="newPassword"
@@ -121,7 +161,35 @@ const ChangePassword = () => {
                       </FormItem>
                     )}
                   />
+ */}
 
+
+ <FormField
+        control={form.control}
+      name="newPassword"
+        render={({ field }) => (
+          <FormItem>
+           <FormLabel>New Password</FormLabel>
+            <FormControl>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="password.."
+                  {...field}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                >
+                  {showPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
+                </button>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
                   <div>
                     <button
