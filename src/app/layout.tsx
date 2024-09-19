@@ -31,10 +31,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="h-full w-full flex flex-col">
-          <div className="grow">{children}</div>
+        {/* <div className="h-full w-full flex flex-col"> */}
+          <>{children}</>
           <Toaster richColors />
-        </div>
+        {/* </div> */}
       </body>
     </html>
   );
