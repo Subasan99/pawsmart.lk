@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Logo from "../../../../public/logowhite.png";
 import Logoeffect from "../../../../public/stubby.png";
+import booking from "../../../../public/booking.png";
 import { useRouter } from "next/navigation";
 import { useDoctorStore } from "@/store/doctorStore";
 import {
@@ -15,9 +16,6 @@ import { useDepartmentStore } from "@/store/departmentStore";
 import { usePetStore } from "@/store/petStore";
 import { useMedicineStore } from "@/store/medicinesStore";
 import PopularDoctors from "@/components/Image";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import SideBarIcon from "@/components/svg/side_bar_icon";
-import Footer from "@/components/Footer";
 import FilterDropdown from "@/components/FilterDropdown";
 import { useAuthStore } from "@/store/authStore";
 import { signOut } from "@/api/route";
@@ -249,52 +247,92 @@ export default function Home() {
                 {/* Black shadow overlay */}
               </div>
             </div>
-            <div className="flex items-center justify-center min-h-screen w-full">
-              <div className="relative z-2 home-first w-full max-w-4xl">
-                <div className="text mb-5 text-center">
-                  <h3 className="text-3xl font-bold mb-2 text-white">
-                    THE BEST VETERINARY SERVICE FOR YOUR PET
-                  </h3>
-                  <p className="text-lg text-white">
-                    Discover Best Service to Breeds Your Loved Dog Explore
-                    around the world
-                  </p>
-                </div>
-                <section className="mb-8">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <FilterDropdown
-                      options={doctorOptions}
-                      placeholder="Select Doctor"
-                      onChange={setDoctorName}
-                      value={doctorName}
-                    />
-
-                    <FilterDropdown
-                      options={departmentOptions}
-                      placeholder="Select Department"
-                      onChange={setDepartmentName}
-                      value={departmentName}
-                    />
-
-                    <input
-                      type="date"
-                      value={appointmentDate}
-                      // onChange={(e) => setAppointmentDate(e.target.value)}
-                      onChange={handleDateChange}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-
-                    <button
-                      onClick={handleFilter}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Search
-                    </button>
+            <div className="relative z-3 flex flex-col items-center text-center py-16">
+              <div className="relative py-16">
+                <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
+                  {/* Left side content */}
+                  <div className="text-center md:text-left">
+                    <h3 className="text-3xl md:text-5xl font-bold text-red-500 mb-4">
+                      Emergency?
+                    </h3>
+                    <h1 className="text-4xl md:text-6xl font-bold text-blue-100 mb-4">
+                      Find Nearest Medical Facility
+                    </h1>
+                    <div className="flex gap-4 justify-center md:justify-start mt-6">
+                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
+                        View Hospitals
+                      </button>
+                      <button className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200">
+                        View Doctors
+                      </button>
+                    </div>
                   </div>
-                </section>
+                </div>
               </div>
             </div>
           </section>
+          <div className="relative z-5 w-full px-4 pb-8 -mt-20 max-w-6xl mx-auto">
+            <div className="flex flex-row justify-between space-x-4">
+              {/* Search Component */}
+              <div className="bg-white rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-2/3">
+                <div className="bg-white">
+                  <div className="container mx-auto">
+                    <h3 className=" text-2xl font-bold mb-4">
+                      Start Your Search
+                    </h3>
+                    <hr className="my-4 border-t-2 border-gray-300" />
+
+                    <div className="relative z-2 home-first w-full pt-4">
+                      <section className="mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                          <input
+                            type="text"
+                            placeholder="Search doctors, clinics, hospitals, etc."
+                            value={appointmentDate}
+                            onChange={handleDateChange}
+                            className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          />
+
+                          <FilterDropdown
+                            options={departmentOptions}
+                            placeholder="Select Location"
+                            onChange={setDepartmentName}
+                            value={departmentName}
+                          />
+
+                          <button
+                            onClick={handleFilter}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Join As Doctor Component */}
+              <div className="bg-gray-200  rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-1/3">
+                <div className="flex items-center">
+                  <Image
+                    src={booking}
+                    alt="Your Image"
+                    className="w-1/2 h-auto object-cover rounded-lg -mt-10"
+                  />
+                  <div className="flex-grow pl-4">
+                    <h3 className="text-lg font-bold">
+                      Are You Make an Appointment
+                    </h3>
+                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4">
+                      Appointment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="departments" className="pb-8 pt-20">
@@ -317,7 +355,7 @@ export default function Home() {
             link="/doctors"
             handleClick={handleClick}
             linkDescription="Doctors"
-            doctors={doctores.slice(0, 8)}
+            doctors={doctores.slice(0, 4)}
             pathname={"/doctor-details"}
             query={doctores}
           />
@@ -332,19 +370,6 @@ export default function Home() {
             doctors={petdata.slice(0, 4)}
             pathname={"/pets"}
             query={petdata}
-          />
-        </div>
-
-        <div id="medicines" className="pb-8 pt-20">
-          <PopularDoctors
-            title="Medicines"
-            description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="/medicines"
-            handleClick={handleClick}
-            linkDescription={"Medicines"}
-            doctors={medicinesDatas.slice(0, 4)}
-            pathname={"/medicine-details"}
-            query={medicinesDatas}
           />
         </div>
       </main>
