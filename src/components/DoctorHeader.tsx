@@ -1,30 +1,30 @@
-"use client";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import Logo from "../../public/logowhite.png";
-import Logoeffect from "../../public/stubby.png";
-import { useRouter } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
+'use client';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import Logo from '../../public/logowhite.png';
+import Logoeffect from '../../public/stubby.png';
+import { useRouter } from 'next/navigation';
+import { useDoctorStore } from '@/store/doctorStore';
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from "@/app/(signedin)/home/action";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { usePetStore } from "@/store/petStore";
+} from '@/app/(signedin)/home/action';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { usePetStore } from '@/store/petStore';
 // import { useMedicinesStore } from "@/store/medicinesStore";
-import changePasswordImage from "../../../public/changePassword.jpg"
+import changePasswordImage from '../../../public/changePassword.jpg';
 
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import SideBarIcon from "@/components/svg/side_bar_icon";
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import SideBarIcon from '@/components/svg/side_bar_icon';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import UserIcon from "./svg/user_icon";
-import DoctorPopover from "./DoctorPopover";
+} from '@/components/ui/popover';
+import UserIcon from './svg/user_icon';
+import DoctorPopover from './DoctorPopover';
 
 export default function DoctorHeader() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -47,13 +47,13 @@ export default function DoctorHeader() {
   ]);
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-transparent");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
+  const [headerBg, setHeaderBg] = useState('bg-transparent');
+  const [textColor, setTextColor] = useState('text-white'); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
 
   useEffect(() => {
-    setHeaderBg("bg-white bg-opacity-90");
-    setTextColor("text-black");
+    setHeaderBg('bg-white bg-opacity-90');
+    setTextColor('text-black');
     setLogo(Logoeffect);
   }, []);
 
@@ -68,7 +68,7 @@ export default function DoctorHeader() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -119,22 +119,25 @@ export default function DoctorHeader() {
                   </li>
 
                   <li>
-                  <div className="w-full h-fit flex gap-3 items-center">
-  <a href="/changepassword" className="flex items-center gap-3">
-    <div className="w-15 h-15">
-      <Image
-        src={changePasswordImage}
-        alt="Doctor"
-        className="w-10 h-15 rounded-full object-cover"
-      />
-    </div>
-    <div className="font-semibold">Change Password</div>
-  </a>
-</div>
+                    <div className="w-full h-fit flex gap-3 items-center">
+                      <a
+                        href="/changepassword"
+                        className="flex items-center gap-3"
+                      >
+                        <div className="w-15 h-15">
+                          <Image
+                            src={changePasswordImage}
+                            alt="Doctor"
+                            className="w-10 h-15 rounded-full object-cover"
+                          />
+                        </div>
+                        <div className="font-semibold">Change Password</div>
+                      </a>
+                    </div>
                   </li>
 
                   <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8">
-                    <a href="/signin" className="hover:text-black">
+                    <a href="/auth" className="hover:text-black">
                       Sign Out
                     </a>
                   </li>
@@ -173,7 +176,7 @@ export default function DoctorHeader() {
                 </div>
               </PopoverTrigger>
               <PopoverContent>
-                <DoctorPopover/>
+                <DoctorPopover />
               </PopoverContent>
             </Popover>
           </div>
@@ -183,6 +186,5 @@ export default function DoctorHeader() {
   );
 }
 function useMedicinesStore(arg0: (state: any) => any[]): [any, any] {
-  throw new Error("Function not implemented.");
+  throw new Error('Function not implemented.');
 }
-

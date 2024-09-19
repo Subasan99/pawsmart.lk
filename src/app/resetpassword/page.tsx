@@ -37,7 +37,7 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("objectthussivalues",values)
+    console.log('objectthussivalues', values);
     setLoading(true);
     const response = await resetPassword({
       otp: values.otp,
@@ -47,7 +47,7 @@ const ResetPassword = () => {
     if (response?.success) {
       console.log('object');
       toast.success(response.message);
-      await router.push('/signin');
+      await router.push('/auth?mode=signin');
       setLoading(false);
     } else {
       toast.error(response.message);
@@ -63,7 +63,7 @@ const ResetPassword = () => {
   });
 
   const backgroundImageStyle = {
-    backgroundImage: 'url(/SignUp.png)',
+    backgroundImage: 'url(/auth.png)',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   };
@@ -73,14 +73,13 @@ const ResetPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
-
   return (
     <main className="h-screen">
       <header className="w-full h-full">
         <section className="w-full h-full">
           <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
             <div
-              className="col-span-1 lg:col-span-2 bg-blue-500 flex items-center justify-center p-10"
+              className="col-span-1 lg:col-span-2 bg-blue-500  text-white flex items-center justify-center p-10"
               style={backgroundImageStyle}
             ></div>
             <Form {...form}>
@@ -107,7 +106,7 @@ const ResetPassword = () => {
                       </FormItem>
                     )}
                   />
-{/* 
+                  {/* 
                   <FormField
                     control={form.control}
                     name="password"
@@ -126,40 +125,42 @@ const ResetPassword = () => {
                     )}
                   /> */}
 
-
-
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Password</FormLabel>
-            <FormControl>
-              <div className="relative">
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="password.."
-                  {...field}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
-                >
-                  {showPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
-                </button>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="password.."
+                              {...field}
+                            />
+                            <button
+                              type="button"
+                              onClick={togglePasswordVisibility}
+                              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                            >
+                              {showPassword ? (
+                                <Eye className="ml-auto h-6 w-6 opacity-50" />
+                              ) : (
+                                <EyeOff className="ml-auto h-6 w-6 opacity-50" />
+                              )}
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <div>
                     <button
                       disabled={loading}
                       type="submit"
-                      className="py-2 px-8 bg-purple-600 text-white border-none rounded text-xm cursor-pointer hover:scale-100"
+                      className="py-2 px-8 bg-black-600 text-white border-none rounded text-xm cursor-pointer hover:scale-100"
                     >
                       Reset Password
                     </button>

@@ -1,11 +1,11 @@
-"use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import { registerUser } from "./action";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import moment from "moment";
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { registerUser } from './action';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import moment from 'moment';
 import {
   Form,
   FormControl,
@@ -13,44 +13,44 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { CalendarIcon, Eye, EyeOff } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+} from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { CalendarIcon, Eye, EyeOff } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/select';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
-  firstName: z.string({ required_error: "Please enter your first name!" }),
-  password: z.string({ required_error: "Please enter your password!" }),
-  lastName: z.string({ required_error: "Please enter your last name!" }),
+  firstName: z.string({ required_error: 'Please enter your first name!' }),
+  password: z.string({ required_error: 'Please enter your password!' }),
+  lastName: z.string({ required_error: 'Please enter your last name!' }),
   email: z
-    .string({ required_error: "Please enter your email!" })
-    .email("Please enter a valid email!"),
+    .string({ required_error: 'Please enter your email!' })
+    .email('Please enter a valid email!'),
   phoneNo: z
-    .string({ required_error: "Phone number is required!" })
+    .string({ required_error: 'Phone number is required!' })
     .regex(
       /^[0]{1}[7]{1}[01245678]{1}[0-9]{7}$/,
-      "Please enter a valid phone number"
+      'Please enter a valid phone number'
     ),
-  dateOfBirth: z.date({ required_error: "Please Select the date of birth!" }),
-  gender: z.string({ required_error: "Gender is required!" }),
-  role: z.string({ required_error: "" }),
+  dateOfBirth: z.date({ required_error: 'Please Select the date of birth!' }),
+  gender: z.string({ required_error: 'Gender is required!' }),
+  role: z.string({ required_error: '' }),
 });
 
 const SignUp = () => {
@@ -65,19 +65,19 @@ const SignUp = () => {
       phoneNo: undefined,
       dateOfBirth: undefined,
       gender: undefined,
-      role: "USER",
+      role: 'USER',
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
     registerUser({
       ...values,
       dateOfBirth: moment(values.dateOfBirth)
-        .format("YYYY-MM-DD")
-        .replace("-", "."),
+        .format('YYYY-MM-DD')
+        .replace('-', '.'),
     }).then((res: any) => {
       if (res.success) {
         toast.success(res.message, {
-          onDismiss: () => router.push("/signin"),
+          onDismiss: () => router.push('/auth'),
         });
       } else {
         toast.error(res.message);
@@ -86,19 +86,19 @@ const SignUp = () => {
     });
   }
   const [userInfo, setUserInfo] = useState({
-    password: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNo: "",
-    dateOfBirth: "",
-    gender: "",
+    password: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNo: '',
+    dateOfBirth: '',
+    gender: '',
   });
 
   const backgroundImageStyle = {
-    backgroundImage: "url(/SignUp.png)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundImage: 'url(/auth.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   };
 
   const handleChange = (e: any) => {
@@ -124,9 +124,9 @@ const SignUp = () => {
       phoneNo: userInfo.phoneNo,
       dateOfBirth: userInfo.dateOfBirth,
       gender: userInfo.gender,
-      role: "USER",
+      role: 'USER',
     });
-    console.log(response, "12121212121");
+    console.log(response, '12121212121');
     alert(response?.message);
   };
 
@@ -203,7 +203,7 @@ const SignUp = () => {
                       )}
                     />
                   </div>
-{/*                   
+                  {/*                   
                   <div className=" rounded inline-block ">
                     <FormField
                       control={form.control}
@@ -224,36 +224,38 @@ const SignUp = () => {
                     />
                   </div> */}
 
-                 
-                 
-<div className="rounded inline-block">
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Password</FormLabel>
-            <FormControl>
-              <div className="relative">
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="password.."
-                  {...field}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
-                >
-                  {showPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
-                </button>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>
+                  <div className="rounded inline-block">
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="password.."
+                                {...field}
+                              />
+                              <button
+                                type="button"
+                                onClick={togglePasswordVisibility}
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                              >
+                                {showPassword ? (
+                                  <Eye className="ml-auto h-6 w-6 opacity-50" />
+                                ) : (
+                                  <EyeOff className="ml-auto h-6 w-6 opacity-50" />
+                                )}
+                              </button>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   <div className=" rounded inline-block ">
                     <FormField
                       control={form.control}
@@ -267,7 +269,7 @@ const SignUp = () => {
                                 if (e.target instanceof HTMLInputElement) {
                                   e.target.value = e.target.value.replace(
                                     /[^0-9+]/g,
-                                    ""
+                                    ''
                                   );
                                 }
                               }}
@@ -291,14 +293,14 @@ const SignUp = () => {
                             <PopoverTrigger className="w-full" asChild>
                               <FormControl>
                                 <Button
-                                  variant={"outline"}
+                                  variant={'outline'}
                                   className={cn(
-                                    "w-full pl-3 text-left font-normal",
-                                    !field.value && "text-muted-foreground"
+                                    'w-full pl-3 text-left font-normal',
+                                    !field.value && 'text-muted-foreground'
                                   )}
                                 >
                                   {field.value ? (
-                                    format(field.value, "PPP")
+                                    format(field.value, 'PPP')
                                   ) : (
                                     <span>Pick a date</span>
                                   )}
@@ -316,7 +318,7 @@ const SignUp = () => {
                                 onSelect={field.onChange}
                                 disabled={(date) =>
                                   date > new Date() ||
-                                  date < new Date("1900-01-01")
+                                  date < new Date('1900-01-01')
                                 }
                                 initialFocus
                               />

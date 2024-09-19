@@ -1,11 +1,11 @@
-"use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { changePassword } from "./action";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { changePassword } from './action';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -13,19 +13,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useAuthStore } from "@/store/authStore";
-import Link from "next/link";
-import { signOut } from "@/api/route";
-import { Eye, EyeOff } from "lucide-react";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { useAuthStore } from '@/store/authStore';
+import Link from 'next/link';
+import { signOut } from '@/api/route';
+import { Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
-  oldPassword: z.string({ required_error: "Please enter your password!" }),
-  newPassword: z.string({ required_error: "Please enter your password!" }),
-
-
+  oldPassword: z.string({ required_error: 'Please enter your password!' }),
+  newPassword: z.string({ required_error: 'Please enter your password!' }),
 });
 
 const ChangePassword = () => {
@@ -34,11 +32,8 @@ const ChangePassword = () => {
     defaultValues: {
       oldPassword: undefined,
       newPassword: undefined,
-
     },
   });
-
-
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -50,10 +45,9 @@ const ChangePassword = () => {
     });
     console.log(response);
     if (response.success) {
-   
       toast.success(response?.message);
       await signOut();
-      await router.push('/signin');
+      await router.push('/auth?mode=signin');
       setLoading(false);
     } else {
       toast.error(response.message);
@@ -63,15 +57,15 @@ const ChangePassword = () => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState({
     // name: '',
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     // confirmPassword: '',
   });
 
   const backgroundImageStyle = {
-    backgroundImage: "url(/SignUp.png)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundImage: 'url(/auth.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   };
   const [showPassword, setShowPassword] = useState(false);
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -83,57 +77,50 @@ const ChangePassword = () => {
     setShowOldPassword((prev) => !prev);
   };
 
- 
   return (
-    <main className="h-screen">
-      <header className="w-full h-full">
-        <section className="w-full h-full">
-          <div className="grid grid-cols-1 lg:grid-cols-3 h-full">
-            <div
-              className="col-span-1 lg:col-span-2 bg-blue-500 flex items-center justify-center p-10"
-              style={backgroundImageStyle}
-            ></div>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="bg-white flex flex-col pl-20 pr-20 gap-2">
-                  <Image
-                    src="/stubby.png"
-                    alt="Company Logo"
-                    width={217}
-                    height={72}
-                    className="mt-20 mb-5"
-                  /> 
-                  
-                  
-                  <FormField
-                  control={form.control}
-                name="oldPassword"
-                  render={({ field }) => (
-                    <FormItem>
-                       <FormLabel>Old Password</FormLabel>
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            type={showOldPassword ? "text" : "password"}
-                            placeholder="password.."
-                            {...field}
-                          />
-                          <button
-                            type="button"
-                            onClick={toggleOldPasswordVisibility}
-                            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
-                          >
-                            {showOldPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
-                          </button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4 text-center">
+          Reset Your Password' : 'Forgot Password?
+        </h2>
+        <p className="text-center mb-6">
+          Please enter the OTP and your new password to reset your password.
+        </p>
 
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FormField
+              control={form.control}
+              name="oldPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Old Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showOldPassword ? 'text' : 'password'}
+                        placeholder="password.."
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        onClick={toggleOldPasswordVisibility}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                      >
+                        {showOldPassword ? (
+                          <Eye className="ml-auto h-6 w-6 opacity-50" />
+                        ) : (
+                          <EyeOff className="ml-auto h-6 w-6 opacity-50" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-{/* 
+            {/* 
                   <FormField
                     control={form.control}
                     name="oldPassword"
@@ -147,7 +134,7 @@ const ChangePassword = () => {
                       </FormItem>
                     )}
                   /> */}
-{/* 
+            {/* 
 <FormField
                     control={form.control}
                     name="newPassword"
@@ -163,50 +150,49 @@ const ChangePassword = () => {
                   />
  */}
 
-
- <FormField
-        control={form.control}
-      name="newPassword"
-        render={({ field }) => (
-          <FormItem>
-           <FormLabel>New Password</FormLabel>
-            <FormControl>
-              <div className="relative">
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="password.."
-                  {...field}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
-                >
-                  {showPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
-                </button>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-                  <div>
-                    <button
-                      disabled={loading}
-                      type="submit"
-                      className="py-2 px-8 bg-purple-600 text-white border-none rounded text-xm cursor-pointer hover:scale-100"
-                    >
-                    Change Password
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </Form>
-          </div>
-        </section>
-      </header>
-    </main>
+            <FormField
+              control={form.control}
+              name="newPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>New Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="password.."
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                      >
+                        {showPassword ? (
+                          <Eye className="ml-auto h-6 w-6 opacity-50" />
+                        ) : (
+                          <EyeOff className="ml-auto h-6 w-6 opacity-50" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="mt-5 ">
+              <button
+                disabled={loading}
+                type="submit"
+                className="py-2 px-8 bg-black text-white rounded cursor-pointer hover:scale-105"
+              >
+                Change Password
+              </button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 };
 
