@@ -60,6 +60,7 @@ const formSchema = z.object({
   description: z.string({ required_error: "Description is required!" }),
   duration: z.number({ required_error: "Duration is required!" }),
   petIds: z.array(z.string()),
+  qualification: z.string({ required_error: "Qualification is required" }),
   // dayAllocationRequestList: z.array(
   //   z.object({
   //     day: z.string({ required_error: "Day is required!" }),
@@ -75,6 +76,7 @@ const formSchema = z.object({
 
 type Props = {
   specialization: any;
+  pet: any;
   setOpen: (open: boolean) => void;
   doctor?: Doctor;
 };
@@ -93,6 +95,7 @@ const DoctorCreateForm = (props: Props) => {
       specializationId: undefined,
       description: undefined,
       duration: 15,
+      qualification: undefined,
       petIds: [],
       // dayAllocationRequestList: undefined,
     },
@@ -108,7 +111,6 @@ const DoctorCreateForm = (props: Props) => {
       setLoading(false);
     }
   }
- 
 
   console.log(form.getValues());
 
@@ -146,22 +148,20 @@ const DoctorCreateForm = (props: Props) => {
             )}
           />
         </div>
-        <div className="w-full">
+        <div className="w-full flex gap-2">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input className="w-4/5" placeholder="Email" {...field} />
+                  <Input className="w-full" placeholder="Email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-        </div>
-        <div className="w-full">
           <FormField
             control={form.control}
             name="phoneNo"
@@ -175,7 +175,7 @@ const DoctorCreateForm = (props: Props) => {
                         e.target.value = e.target.value.replace(/[^0-9+]/g, "");
                       }
                     }}
-                    className="w-4/5"
+                    className="w-full"
                     placeholder="Phone number"
                     {...field}
                   />
@@ -190,7 +190,9 @@ const DoctorCreateForm = (props: Props) => {
             control={form.control}
             name="dateOfBirth"
             render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
+              <FormItem className="flex flex-col w-1/2">
+                {" "}
+                {/* Set width to 1/2 */}
                 <FormLabel>Date of birth</FormLabel>
                 <Popover>
                   <PopoverTrigger className="w-full" asChild>
@@ -231,7 +233,7 @@ const DoctorCreateForm = (props: Props) => {
             control={form.control}
             name="gender"
             render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
+              <FormItem className="flex flex-col w-1/2">
                 <FormLabel>Gender</FormLabel>
                 <Select
                   onValueChange={field.onChange}
@@ -253,12 +255,14 @@ const DoctorCreateForm = (props: Props) => {
             )}
           />
         </div>
+
         <div className="flex gap-3">
+          {/* Specialization Field */}
           <FormField
             control={form.control}
             name="specializationId"
             render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
+              <FormItem className="flex-1">
                 <FormLabel>Specialization</FormLabel>
                 <Select onValueChange={field.onChange}>
                   <FormControl>
@@ -268,16 +272,14 @@ const DoctorCreateForm = (props: Props) => {
                   </FormControl>
                   <SelectContent>
                     {props.specialization.length > 0 ? (
-                      props.specialization.map((specialization: any) => {
-                        return (
-                          <SelectItem
-                            key={specialization.id}
-                            value={specialization.id}
-                          >
-                            {specialization.specializationName}
-                          </SelectItem>
-                        );
-                      })
+                      props.specialization.map((specialization: any) => (
+                        <SelectItem
+                          key={specialization.id}
+                          value={String(specialization.id)}
+                        >
+                          {specialization.specializationName}
+                        </SelectItem>
+                      ))
                     ) : (
                       <div className="px-3 font-semibold text-gray-400 text-center">
                         No options
@@ -291,21 +293,35 @@ const DoctorCreateForm = (props: Props) => {
           />
           <FormField
             control={form.control}
-            name="petIds"
+            name="qualification"
             render={({ field }) => (
-              <FormItem className="flex flex-col w-full">
-                <FormLabel>Pets</FormLabel>
-                <MultiSelect
-                  options={[, 2, 3, 4]}
-                  onChange={field.onChange}
-                  selectedValues={field.value}
-                  placeholder={"Choose"}
-                />
+              <FormItem>
+                <FormLabel>Qualification</FormLabel>
+                <FormControl>
+                  <Input placeholder="Qualification" {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
+        <div className="w-full">
+      <FormField
+        control={form.control}
+        name="petIds"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Pets</FormLabel>
+            <MultiSelect
+              options={props.pet}
+              selectedValues={field.value || []}
+              onChange={(selected) => field.onChange(selected)}
+            />
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
 
         <div className="w-full">
           <FormField
@@ -356,7 +372,9 @@ const DoctorCreateForm = (props: Props) => {
             )}
           />
         </div>
-        <Button className="bg-red-500" type="submit">Submit</Button>
+        <Button className="bg-red-500" type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );

@@ -15,6 +15,7 @@ import DoctorDayTimeAllocation from "./DoctorDayTimeAllocation";
 
 type Props = {
   specialization: any;
+  pet:any;
 };
 
 const DoctorCreate = (props: Props) => {
@@ -34,6 +35,7 @@ const DoctorCreate = (props: Props) => {
         </DialogHeader>
         <DoctorCreateForm
           specialization={props.specialization}
+          pet={props.pet}
           setOpen={setOpen}
         />
       </DialogContent>

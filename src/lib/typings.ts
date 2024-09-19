@@ -40,6 +40,7 @@ export type Doctor = {
   description: string;
   departmentId: string;
   departmentName: string;
+  qualification:string;
   image: string;
   preSignedUrl: string;
   duration: number;
