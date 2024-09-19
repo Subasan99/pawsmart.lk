@@ -1,31 +1,31 @@
-"use client";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import Logo from "../../../public/stubby.png";
-import Logoeffect from "../../../public/stubby.png";
-import { useRouter } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
+'use client';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import Logo from '../../../public/stubby.png';
+import Logoeffect from '../../../public/stubby.png';
+import { useRouter } from 'next/navigation';
+import { useDoctorStore } from '@/store/doctorStore';
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from "@/app/(signedin)/home/action";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { usePetStore } from "@/store/petStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import SideBarIcon from "@/components/svg/side_bar_icon";
+} from '@/app/(signedin)/home/action';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { usePetStore } from '@/store/petStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import SideBarIcon from '@/components/svg/side_bar_icon';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import UserIcon from "../svg/user_icon";
-import AdminPopover from "./AdminPopover";
-import { usePathname } from "next/navigation";
-import { signOut } from "@/api/route";
-import changePasswordImage from "../../../public/changePassword.jpg"
+} from '@/components/ui/popover';
+import UserIcon from '../svg/user_icon';
+import AdminPopover from './AdminPopover';
+import { usePathname } from 'next/navigation';
+import { signOut } from '@/api/route';
+import changePasswordImage from '../../../public/changePassword.jpg';
 
 export default function AdminHeader() {
   const pathname = usePathname();
@@ -49,13 +49,13 @@ export default function AdminHeader() {
   ]);
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-transparent");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
+  const [headerBg, setHeaderBg] = useState('bg-transparent');
+  const [textColor, setTextColor] = useState('text-white'); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
 
   useEffect(() => {
-    setHeaderBg("bg-white bg-opacity-90");
-    setTextColor("text-black");
+    setHeaderBg('bg-white bg-opacity-90');
+    setTextColor('text-black');
     setLogo(Logoeffect);
   }, []);
 
@@ -70,7 +70,7 @@ export default function AdminHeader() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -107,25 +107,28 @@ export default function AdminHeader() {
                 <ul className="flex flex-col space-y-4 gap-2">
                   {/* Sidebar items */}
                   <li>
-                  <div className="w-full h-fit flex gap-3 items-center">
-  <a href="/changepassword" className="flex items-center gap-3">
-    <div className="w-15 h-15">
-      <Image
-        src={changePasswordImage}
-        alt="Doctor"
-        className="w-10 h-15 rounded-full object-cover"
-      />
-    </div>
-    <div className="font-semibold">Change Password</div>
-  </a>
-</div>
+                    <div className="w-full h-fit flex gap-3 items-center">
+                      <a
+                        href="/changepassword"
+                        className="flex items-center gap-3"
+                      >
+                        <div className="w-15 h-15">
+                          <Image
+                            src={changePasswordImage}
+                            alt="Doctor"
+                            className="w-10 h-15 rounded-full object-cover"
+                          />
+                        </div>
+                        <div className="font-semibold">Change Password</div>
+                      </a>
+                    </div>
                   </li>
 
                   <li
                     onClick={() => signOut()}
                     className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8"
                   >
-                    <a href="/signin" className="hover:text-black">
+                    <a href="/auth" className="hover:text-black">
                       Sign Out
                     </a>
                   </li>

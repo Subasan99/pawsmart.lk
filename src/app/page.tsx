@@ -1,35 +1,35 @@
-"use client";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import Logo from "../../public/logowhite.png";
-import Logoeffect from "../../public/stubby.png";
-import { useRouter } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
+'use client';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import Logo from '../../public/logowhite.png';
+import Logoeffect from '../../public/stubby.png';
+import { useRouter } from 'next/navigation';
+import { useDoctorStore } from '@/store/doctorStore';
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from "@/app/(signedin)/home/action";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { usePetStore } from "@/store/petStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import PopularDoctors from "@/components/Image";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import SideBarIcon from "@/components/svg/side_bar_icon";
-import Footer from "@/components/Footer";
-import FilterDropdown from "@/components/FilterDropdown";
+} from '@/app/(signedin)/home/action';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { usePetStore } from '@/store/petStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import PopularDoctors from '@/components/Image';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import SideBarIcon from '@/components/svg/side_bar_icon';
+import Footer from '@/components/Footer';
+import FilterDropdown from '@/components/FilterDropdown';
 
 export default function Home() {
-  const [doctorName, setDoctorName] = useState<string>("");
-  const [departmentName, setDepartmentName] = useState("");
-  const [appointmentDate, setAppointmentDate] = useState("");
+  const [doctorName, setDoctorName] = useState<string>('');
+  const [departmentName, setDepartmentName] = useState('');
+  const [appointmentDate, setAppointmentDate] = useState('');
 
   const handleFilter = () => {
     // Perform the filtering logic
-    console.log("Doctor Name:", doctorName);
-    console.log("Department Name:", departmentName);
-    console.log("Appointment Date:", appointmentDate);
+    console.log('Doctor Name:', doctorName);
+    console.log('Department Name:', departmentName);
+    console.log('Appointment Date:', appointmentDate);
   };
 
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -53,43 +53,43 @@ export default function Home() {
 
   const doctorOptions = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
-      label: doctor.name,
-        value: doctor.id, 
+        label: doctor.name,
+        value: doctor.id,
       }))
     : [];
 
   const departmentOptions = Array.isArray(departments)
     ? departments.map((department: any) => ({
         label: department.name,
-        value: department.id, 
+        value: department.id,
       }))
     : [];
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-transparent");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
+  const [headerBg, setHeaderBg] = useState('bg-transparent');
+  const [textColor, setTextColor] = useState('text-white'); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       if (scrollY > 0) {
-        setHeaderBg("bg-white bg-opacity-90");
-        setTextColor("text-black");
+        setHeaderBg('bg-white bg-opacity-90');
+        setTextColor('text-black');
         setLogo(Logoeffect);
       } else {
-        setHeaderBg("bg-transparent");
-        setTextColor("text-white");
+        setHeaderBg('bg-transparent');
+        setTextColor('text-white');
         setLogo(Logo);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     fetchData();
 
     // Clean up the event listener
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -105,16 +105,16 @@ export default function Home() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
   const handleButtonClick = () => {
-    console.log("Search button clicked");
+    console.log('Search button clicked');
   };
 
   const handleSearch = () => {
-    console.log("Search initiated");
+    console.log('Search initiated');
   };
 
   const handleClick = (imageName: any) => {
@@ -132,7 +132,6 @@ export default function Home() {
       }))
     : [];
 
-    
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
         src: department.preSignedUrl,
@@ -195,12 +194,12 @@ export default function Home() {
     </div>
   );
 
-  const formatDate = (date:any) => {
-    const [month, day, year] = date.split("/");
+  const formatDate = (date: any) => {
+    const [month, day, year] = date.split('/');
     return `${year}-${month}-${day}`;
   };
 
-  const handleDateChange = (e:any) => {
+  const handleDateChange = (e: any) => {
     const inputDate = e.target.value;
     const formattedDate = formatDate(inputDate);
     setAppointmentDate(formattedDate);
@@ -239,55 +238,56 @@ export default function Home() {
                     </a>
                   </li>
                   <li key={2}>
-                  <a href="/Appointments" className="hover:text-red-500">
-                  Appointments                  </a>
-                </li>
+                    <a href="/Appointments" className="hover:text-red-500">
+                      Appointments{' '}
+                    </a>
+                  </li>
                   <li
-                    onClick={() => handleMouseEnter("departments")}
+                    onClick={() => handleMouseEnter('departments')}
                     className="hover:text-red-500 relative"
                   >
                     <a href="/departments" className="hover:text-red-500">
                       Departments
                     </a>
-                    {activeDropdown === "departments" &&
-                      renderDropdown(departments, "/departments")}
+                    {activeDropdown === 'departments' &&
+                      renderDropdown(departments, '/departments')}
                   </li>
                   <li
-                    onClick={() => handleMouseEnter("doctors")}
+                    onClick={() => handleMouseEnter('doctors')}
                     className="hover:text-red-500 relative"
                   >
                     <a href="/doctors" className="hover:text-red-500">
                       Doctors
                     </a>
-                    {activeDropdown === "doctors" &&
-                      renderDropdown(doctors, "/doctors")}
+                    {activeDropdown === 'doctors' &&
+                      renderDropdown(doctors, '/doctors')}
                   </li>
                   <li
-                    onClick={() => handleMouseEnter("medicines")}
+                    onClick={() => handleMouseEnter('medicines')}
                     className="hover:text-red-500 relative"
                   >
                     <a href="/medicines" className="hover:text-red-500">
                       Medicines
                     </a>
-                    {activeDropdown === "medicines" &&
-                      renderDropdown(medicines, "/medicines")}
+                    {activeDropdown === 'medicines' &&
+                      renderDropdown(medicines, '/medicines')}
                   </li>
                   <li
-                    onClick={() => handleMouseEnter("pets")}
+                    onClick={() => handleMouseEnter('pets')}
                     className="hover:text-red-500 relative"
                   >
                     <a href="/pets" className="hover:text-red-500">
                       Pets
                     </a>
-                    {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
+                    {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
                   </li>
                   <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                    <a href="/signin" className="hover:text-black">
+                    <a href="/auth" className="hover:text-black">
                       Sign In
                     </a>
                   </li>
                   <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                    <a href="/signup" className="hover:text-black">
+                    <a href="/auth?mode=signup" className="hover:text-black">
                       Sign Up
                     </a>
                   </li>
@@ -297,7 +297,7 @@ export default function Home() {
           </div>
           <div className="hidden md:flex md:items-center w-full">
             <a href="/">
-              <Image src={logo} alt="Company Logo" className="w-36" />{" "}
+              <Image src={logo} alt="Company Logo" className="w-36" />{' '}
             </a>
             <nav className="flex-1 flex justify-center">
               <ul className="flex space-x-8">
@@ -314,51 +314,51 @@ export default function Home() {
                 </li>
                 <li key={2}>
                   <a href="/Appointments" className="hover:text-red-500">
-                  Appointments
+                    Appointments
                   </a>
                 </li>
                 <li
-                  onMouseEnter={() => handleMouseEnter("departments")}
+                  onMouseEnter={() => handleMouseEnter('departments')}
                   onMouseLeave={handleMouseLeave}
                   className="relative"
                 >
                   <a href="/departments" className="hover:text-red-500">
                     Departments
                   </a>
-                  {activeDropdown === "departments" &&
-                    renderDropdown(departments, "/departments")}
+                  {activeDropdown === 'departments' &&
+                    renderDropdown(departments, '/departments')}
                 </li>
                 <li
-                  onMouseEnter={() => handleMouseEnter("doctors")}
+                  onMouseEnter={() => handleMouseEnter('doctors')}
                   onMouseLeave={handleMouseLeave}
                   className="relative"
                 >
                   <a href="/doctors" className="hover:text-red-500">
                     Doctors
                   </a>
-                  {activeDropdown === "doctors" &&
-                    renderDropdown(doctors, "/doctors")}
+                  {activeDropdown === 'doctors' &&
+                    renderDropdown(doctors, '/doctors')}
                 </li>
                 <li
-                  onMouseEnter={() => handleMouseEnter("medicines")}
+                  onMouseEnter={() => handleMouseEnter('medicines')}
                   onMouseLeave={handleMouseLeave}
                   className="relative"
                 >
                   <a href="/medicines" className="hover:text-red-500">
                     Medicines
                   </a>
-                  {activeDropdown === "medicines" &&
-                    renderDropdown(medicines, "/medicines")}
+                  {activeDropdown === 'medicines' &&
+                    renderDropdown(medicines, '/medicines')}
                 </li>
                 <li
-                  onMouseEnter={() => handleMouseEnter("pets")}
+                  onMouseEnter={() => handleMouseEnter('pets')}
                   onMouseLeave={handleMouseLeave}
                   className="relative"
                 >
                   <a href="/pets" className="hover:text-red-500">
                     Pets
                   </a>
-                  {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
+                  {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
                 </li>
               </ul>
             </nav>
@@ -367,13 +367,13 @@ export default function Home() {
                 onClick={handleButtonClick}
                 className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
               >
-                <a href="/signin">Sign In</a>
+                <a href="/auth?mode=signin">Sign In</a>
               </button>
               <button
                 onClick={handleButtonClick}
                 className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
               >
-                <a href="/signup">Sign Up</a>
+                <a href="/auth?mode=signup">Sign Up</a>
               </button>
             </div>
           </div>
@@ -389,11 +389,11 @@ export default function Home() {
                   loop
                   muted
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: 'cover' }}
                 >
                   <source src="/Logvideo.mp4" type="video/mp4" />
                 </video>
-                <div className="absolute inset-0 bg-black opacity-60"></div>{" "}
+                <div className="absolute inset-0 bg-black opacity-60"></div>{' '}
                 {/* Black shadow overlay */}
               </div>
             </div>
@@ -415,13 +415,13 @@ export default function Home() {
                       placeholder="Select Doctor"
                       onChange={setDoctorName}
                       value={doctorName}
-                      
                     />
 
                     <FilterDropdown
                       options={departmentOptions}
                       placeholder="Select Department"
-                      onChange={setDepartmentName} value={departmentName}
+                      onChange={setDepartmentName}
+                      value={departmentName}
                     />
 
                     <input
@@ -451,9 +451,9 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/departments"
             handleClick={handleClick}
-            linkDescription={"Departments"}
+            linkDescription={'Departments'}
             doctors={departmentDatas.slice(0, 4)}
-            pathname={""}
+            pathname={''}
             query={departmentDatas}
           />
         </div>
@@ -476,9 +476,9 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/pets"
             handleClick={handleClick}
-            linkDescription={"Pets"}
+            linkDescription={'Pets'}
             doctors={petdata.slice(0, 4)}
-            pathname={"/booking"}
+            pathname={'/booking'}
             query={petdata}
           />
         </div>
@@ -489,9 +489,9 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/medicines"
             handleClick={handleClick}
-            linkDescription={"Medicines"}
+            linkDescription={'Medicines'}
             doctors={medicinesDatas.slice(0, 4)}
-            pathname={"/booking"}
+            pathname={'/booking'}
             query={medicinesDatas}
           />
         </div>

@@ -1,22 +1,22 @@
 // components/Dropdown.tsx
-import React, { useEffect, useState } from "react";
-import { Calendar } from "./ui/calendar";
-import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
-import moment from "moment";
-import { getDoctorData } from "@/app/(signedin)/home/action";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from 'react';
+import { Calendar } from './ui/calendar';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import moment from 'moment';
+import { getDoctorData } from '@/app/(signedin)/home/action';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from '@/components/ui/popover';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -24,22 +24,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import TimePicker from "./shared/time-picker";
+} from './ui/form';
+import { Input } from './ui/input';
+import TimePicker from './shared/time-picker';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Doctor, Medicine } from "@/lib/typings";
-import { Textarea } from "./ui/textarea";
-import { useAuthStore } from "@/store/authStore";
-import { createAppointment } from "@/app/(signedin)/(menubar)/appointmentdoctor/action";
-import { getMedicineData } from "@/app/admin/medicines/action";
-import { toast } from "sonner";
+} from './ui/select';
+import { Doctor, Medicine } from '@/lib/typings';
+import { Textarea } from './ui/textarea';
+import { useAuthStore } from '@/store/authStore';
+import { createAppointment } from '@/app/(signedin)/(menubar)/appointmentdoctor/action';
+import { getMedicineData } from '@/app/admin/medicines/action';
+import { toast } from 'sonner';
 
 interface AppointmentProps {
   userId: string | undefined;
@@ -62,23 +62,23 @@ interface AppointmentProps {
 }
 
 const formSchema = z.object({
-  id: z.string({ required_error: "Please select an option!" }),
+  id: z.string({ required_error: 'Please select an option!' }),
   bookingDate: z.date({
-    required_error: "Please select a date for the appointment!",
+    required_error: 'Please select a date for the appointment!',
   }),
   time: z.string({
-    required_error: "Please select a time for the appointment!",
+    required_error: 'Please select a time for the appointment!',
   }),
   description: z.string({
-    required_error: "Please Enter your reason for the appointment!",
+    required_error: 'Please Enter your reason for the appointment!',
   }),
   bookingType: z.string({
-    required_error: "Appointment Type is not selected!",
+    required_error: 'Appointment Type is not selected!',
   }),
   userId: z.number(),
   petName: z.string({ required_error: "Please Enter your pet's name!" }),
   petAge: z.number({ required_error: "Please select your pet's Age!" }),
-  petType: z.string({ required_error: "Please select the pet type!" }),
+  petType: z.string({ required_error: 'Please select the pet type!' }),
 });
 
 const Appointment: React.FC<AppointmentProps> = () => {
@@ -88,15 +88,15 @@ const Appointment: React.FC<AppointmentProps> = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: searchParams.get("doctorId")
-        ? searchParams.get("doctorId")!
-        : searchParams.get("medicineId")
-        ? searchParams.get("medicineId")!
+      id: searchParams.get('doctorId')
+        ? searchParams.get('doctorId')!
+        : searchParams.get('medicineId')
+        ? searchParams.get('medicineId')!
         : undefined,
       bookingDate: undefined,
       time: undefined,
       description: undefined,
-      bookingType: searchParams.get("doctorId") ? "DOCTOR" : "MEDICINE",
+      bookingType: searchParams.get('doctorId') ? 'DOCTOR' : 'MEDICINE',
       userId: login?.userId,
       petName: undefined,
       petAge: 1,
@@ -135,17 +135,17 @@ const Appointment: React.FC<AppointmentProps> = () => {
       ]);
       console.log(doctorData, medicineData);
 
-      if (searchParams.get("doctorId")) {
-        setSelecteddDoctor(searchParams.get("doctorId")!);
-      } else if (searchParams.get("medicineId")) {
-        setSelectedMedicine(searchParams.get("medicineId")!);
+      if (searchParams.get('doctorId')) {
+        setSelecteddDoctor(searchParams.get('doctorId')!);
+      } else if (searchParams.get('medicineId')) {
+        setSelectedMedicine(searchParams.get('medicineId')!);
       }
 
       setAllDoctors(doctorData);
       setAllMedicines(medicineData);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -156,20 +156,20 @@ const Appointment: React.FC<AppointmentProps> = () => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log({
       ...values,
-      bookingDate: moment(values.bookingDate).format("YYYY-MM-DD"),
+      bookingDate: moment(values.bookingDate).format('YYYY-MM-DD'),
     });
     createAppointment({
       ...values,
-      bookingDate: moment(values.bookingDate).format("YYYY-MM-DD"),
+      bookingDate: moment(values.bookingDate).format('YYYY-MM-DD'),
       userId: values.userId.toString(),
     }).then((res: any) => {
       if (res.success) {
         toast.success(res.message);
-        router.push("/home");
+        router.push('/home');
       } else if (res.success === false) {
         toast.error(res.message);
       } else {
-        toast.error("Oops! Something went wrong. Please try again!");
+        toast.error('Oops! Something went wrong. Please try again!');
       }
     });
   }
@@ -180,10 +180,10 @@ const Appointment: React.FC<AppointmentProps> = () => {
   //   return <div>Loading ... !</div>;
   // }
 
-  if (medicine.length === 0 && searchParams.get("medicineId")) {
+  if (medicine.length === 0 && searchParams.get('medicineId')) {
     return <div>Loading ... !</div>;
   }
-  if (medicine.length === 0 && searchParams.get("doctorId")) {
+  if (medicine.length === 0 && searchParams.get('doctorId')) {
     return <div>Loading ... !</div>;
   }
 
@@ -249,7 +249,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
             </div>
 
             <div className="flex flex-col w-full md:w-full md:flex-row gap-2">
-              {searchParams.get("doctorId") && (
+              {searchParams.get('doctorId') && (
                 <FormField
                   control={form.control}
                   name="id"
@@ -271,7 +271,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                               {field.value
                                 ? doctor.find((doc) => doc.id === field.value)
                                     ?.name
-                                : "Select an option"}
+                                : 'Select an option'}
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
@@ -282,7 +282,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                                 </SelectItem>
                               ))
                             ) : (
-                              <SelectItem disabled value={""}>
+                              <SelectItem disabled value={''}>
                                 No options
                               </SelectItem>
                             )}
@@ -294,7 +294,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                   )}
                 />
               )}
-              {searchParams.get("medicineId") && (
+              {searchParams.get('medicineId') && (
                 <FormField
                   control={form.control}
                   name="id"
@@ -316,7 +316,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                               {field.value
                                 ? medicine.find((med) => med.id === field.value)
                                     ?.name
-                                : "Select an option"}
+                                : 'Select an option'}
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
@@ -327,7 +327,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                                 </SelectItem>
                               ))
                             ) : (
-                              <SelectItem disabled value={""}>
+                              <SelectItem disabled value={''}>
                                 No options
                               </SelectItem>
                             )}
@@ -341,7 +341,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
               )}
             </div>
             <div className="flex flex-col w-full md:w-full md:flex-row gap-2 ">
-              {searchParams.get("doctorId") && (
+              {searchParams.get('doctorId') && (
                 <FormField
                   control={form.control}
                   name="bookingDate"
@@ -358,14 +358,14 @@ const Appointment: React.FC<AppointmentProps> = () => {
                         >
                           <FormControl>
                             <Button
-                              variant={"outline"}
+                              variant={'outline'}
                               className={cn(
-                                "pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
+                                'pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
                               )}
                             >
                               {field.value ? (
-                                format(field.value, "PPP")
+                                format(field.value, 'PPP')
                               ) : (
                                 <span className="">Pick a date</span>
                               )}
@@ -381,7 +381,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                             ?.dayTimeSlotResponses.some(
                               (day: any) =>
                                 day.day ===
-                                moment(date).format("dddd").toUpperCase()
+                                moment(date).format('dddd').toUpperCase()
                             )}
                           <Calendar
                             mode="single"
@@ -399,14 +399,14 @@ const Appointment: React.FC<AppointmentProps> = () => {
                                 (day: any) => {
                                   return (
                                     day.day ===
-                                    moment(date).format("dddd").toUpperCase()
+                                    moment(date).format('dddd').toUpperCase()
                                   );
                                 }
                               );
 
                               return (
                                 date < new Date() ||
-                                date < new Date("1900-01-01") ||
+                                date < new Date('1900-01-01') ||
                                 !isDateAvailable
                               );
                             }}
@@ -419,7 +419,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                   )}
                 />
               )}
-              {searchParams.get("medicineId") && (
+              {searchParams.get('medicineId') && (
                 <FormField
                   control={form.control}
                   name="bookingDate"
@@ -436,14 +436,14 @@ const Appointment: React.FC<AppointmentProps> = () => {
                         >
                           <FormControl>
                             <Button
-                              variant={"outline"}
+                              variant={'outline'}
                               className={cn(
-                                "pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
+                                'pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
                               )}
                             >
                               {field.value ? (
-                                format(field.value, "PPP")
+                                format(field.value, 'PPP')
                               ) : (
                                 <span className="">Pick a date</span>
                               )}
@@ -460,7 +460,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                             ?.dayTimeSlotResponses.some(
                               (day: any) =>
                                 day.day ===
-                                moment(date).format("dddd").toUpperCase()
+                                moment(date).format('dddd').toUpperCase()
                             )}
                           <Calendar
                             mode="single"
@@ -478,14 +478,14 @@ const Appointment: React.FC<AppointmentProps> = () => {
                                 (day: any) => {
                                   return (
                                     day.day ===
-                                    moment(date).format("dddd").toUpperCase()
+                                    moment(date).format('dddd').toUpperCase()
                                   );
                                 }
                               );
 
                               return (
                                 date < new Date() ||
-                                date < new Date("1900-01-01") ||
+                                date < new Date('1900-01-01') ||
                                 !isDateAvailable
                               );
                             }}
@@ -498,7 +498,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                   )}
                 />
               )}
-              {searchParams.get("doctorId") ? (
+              {searchParams.get('doctorId') ? (
                 <FormField
                   control={form.control}
                   name="time"
@@ -510,7 +510,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                       <FormControl>
                         <TimePicker
                           disabled={
-                            form.getValues("bookingDate") ? false : true
+                            form.getValues('bookingDate') ? false : true
                           }
                           values={form.getValues()}
                           appointmentTimes={
@@ -522,8 +522,8 @@ const Appointment: React.FC<AppointmentProps> = () => {
                               ?.dayTimeSlotResponses?.find(
                                 (day: any) =>
                                   day.day ===
-                                  moment(form.getValues("bookingDate"))
-                                    .format("dddd")
+                                  moment(form.getValues('bookingDate'))
+                                    .format('dddd')
                                     .toUpperCase()
                               )?.appointmentTimes
                           }
@@ -546,7 +546,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
                       <FormControl>
                         <TimePicker
                           disabled={
-                            form.getValues("bookingDate") ? false : true
+                            form.getValues('bookingDate') ? false : true
                           }
                           values={form.getValues()}
                           appointmentTimes={
@@ -558,8 +558,8 @@ const Appointment: React.FC<AppointmentProps> = () => {
                               ?.dayTimeSlotResponses?.find(
                                 (day: any) =>
                                   day.day ===
-                                  moment(form.getValues("bookingDate"))
-                                    .format("dddd")
+                                  moment(form.getValues('bookingDate'))
+                                    .format('dddd')
                                     .toUpperCase()
                               )?.appointmentTimes
                           }
@@ -598,7 +598,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
               </Button>
             ) : (
               <a
-                href={"/signin"}
+                href={'/auth'}
                 className="px-3 cursor-pointer py-3 md:w-fit self-center bg-primary text-white rounded-lg"
               >
                 Login to continue

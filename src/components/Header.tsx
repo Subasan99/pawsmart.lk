@@ -1,23 +1,23 @@
-"use client";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import Logo from "../../public/logowhite.png";
-import Logoeffect from "../../public/stubby.png";
-import { usePathname, useRouter } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
+'use client';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import Logo from '../../public/logowhite.png';
+import Logoeffect from '../../public/stubby.png';
+import { usePathname, useRouter } from 'next/navigation';
+import { useDoctorStore } from '@/store/doctorStore';
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from "@/app/(signedin)/home/action";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { usePetStore } from "@/store/petStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import SideBarIcon from "@/components/svg/side_bar_icon";
-import { useAuthStore } from "@/store/authStore";
-import { signOut } from "@/api/route";
+} from '@/app/(signedin)/home/action';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { usePetStore } from '@/store/petStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
+import SideBarIcon from '@/components/svg/side_bar_icon';
+import { useAuthStore } from '@/store/authStore';
+import { signOut } from '@/api/route';
 
 export default function Home() {
   const pathName = usePathname();
@@ -43,19 +43,19 @@ export default function Home() {
   const handleScroll = () => {
     const scrollY = window.scrollY;
     if (scrollY > 0) {
-      setHeaderBg("bg-white bg-opacity-90");
-      setTextColor("text-black");
+      setHeaderBg('bg-white bg-opacity-90');
+      setTextColor('text-black');
       setLogo(Logoeffect);
     } else {
-      setHeaderBg("bg-transparent");
-      setTextColor("text-white");
+      setHeaderBg('bg-transparent');
+      setTextColor('text-white');
       setLogo(Logo);
     }
   };
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-white bg-opacity-90");
-  const [textColor, setTextColor] = useState("text-black"); // Default text color
+  const [headerBg, setHeaderBg] = useState('bg-white bg-opacity-90');
+  const [textColor, setTextColor] = useState('text-black'); // Default text color
   const [logo, setLogo] = useState(Logoeffect); // Default logo
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
@@ -64,29 +64,29 @@ export default function Home() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      if (!pathName.startsWith("/home")) {
-        setHeaderBg("bg-white bg-opacity-90");
-        setTextColor("text-black");
+      if (!pathName.startsWith('/home')) {
+        setHeaderBg('bg-white bg-opacity-90');
+        setTextColor('text-black');
         setLogo(Logoeffect);
         return;
       }
       if (scrollY > 0) {
-        setHeaderBg("bg-white bg-opacity-90");
-        setTextColor("text-black");
+        setHeaderBg('bg-white bg-opacity-90');
+        setTextColor('text-black');
         setLogo(Logoeffect);
       } else {
-        setHeaderBg("bg-transparent");
-        setTextColor("text-white");
+        setHeaderBg('bg-transparent');
+        setTextColor('text-white');
         setLogo(Logo);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     fetchData();
 
     // Clean up the event listener
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -101,16 +101,16 @@ export default function Home() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
   const handleButtonClick = () => {
-    console.log("Search button clicked");
+    console.log('Search button clicked');
   };
 
   const handleSearch = () => {
-    console.log("Search initiated");
+    console.log('Search initiated');
   };
 
   const handleClick = (imageName: any) => {
@@ -232,43 +232,43 @@ export default function Home() {
                   </a>
                 </li>
                 <li
-                  onClick={() => handleMouseEnter("departments")}
+                  onClick={() => handleMouseEnter('departments')}
                   className="hover:text-red-500 relative"
                 >
                   <a href="/departments" className="hover:text-red-500">
                     Departments
                   </a>
-                  {activeDropdown === "departments" &&
-                    renderDropdown(departments, "/departments")}
+                  {activeDropdown === 'departments' &&
+                    renderDropdown(departments, '/departments')}
                 </li>
                 <li
-                  onClick={() => handleMouseEnter("doctors")}
+                  onClick={() => handleMouseEnter('doctors')}
                   className="hover:text-red-500 relative"
                 >
                   <a href="/doctors" className="hover:text-red-500">
                     Doctors
                   </a>
-                  {activeDropdown === "doctors" &&
-                    renderDropdown(doctors, "/doctor-details")}
+                  {activeDropdown === 'doctors' &&
+                    renderDropdown(doctors, '/doctor-details')}
                 </li>
                 <li
-                  onClick={() => handleMouseEnter("medicines")}
+                  onClick={() => handleMouseEnter('medicines')}
                   className="hover:text-red-500 relative"
                 >
                   <a href="/medicines" className="hover:text-red-500">
                     Medicines
                   </a>
-                  {activeDropdown === "medicines" &&
-                    renderDropdown(medicines, "/medicines")}
+                  {activeDropdown === 'medicines' &&
+                    renderDropdown(medicines, '/medicines')}
                 </li>
                 <li
-                  onClick={() => handleMouseEnter("pets")}
+                  onClick={() => handleMouseEnter('pets')}
                   className="hover:text-red-500 relative"
                 >
                   <a href="/pets" className="hover:text-red-500">
                     Pets
                   </a>
-                  {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
+                  {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
                 </li>
                 {login ? (
                   <div
@@ -279,14 +279,14 @@ export default function Home() {
                   </div>
                 ) : (
                   <>
-                    {" "}
+                    {' '}
                     <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                      <a href="/signin" className="hover:text-black">
+                      <a href="/auth" className="hover:text-black">
                         Sign In
                       </a>
                     </li>
                     <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                      <a href="/signup" className="hover:text-black">
+                      <a href="/auth?mode=signup" className="hover:text-black">
                         Sign Up
                       </a>
                     </li>
@@ -315,51 +315,51 @@ export default function Home() {
               </li>
               <li key={2}>
                 <a href="/Appointments" className="hover:text-red-500">
-                  Appointments{" "}
+                  Appointments{' '}
                 </a>
               </li>
               <li
-                onMouseEnter={() => handleMouseEnter("departments")}
+                onMouseEnter={() => handleMouseEnter('departments')}
                 onMouseLeave={handleMouseLeave}
                 className="relative"
               >
                 <a href="/departments" className="hover:text-red-500">
                   Departments
                 </a>
-                {activeDropdown === "departments" &&
-                  renderDropdown(departments, "/departments")}
+                {activeDropdown === 'departments' &&
+                  renderDropdown(departments, '/departments')}
               </li>
               <li
-                onMouseEnter={() => handleMouseEnter("doctors")}
+                onMouseEnter={() => handleMouseEnter('doctors')}
                 onMouseLeave={handleMouseLeave}
                 className="relative"
               >
                 <a href="/doctors" className="hover:text-red-500">
                   Doctors
                 </a>
-                {activeDropdown === "doctors" &&
-                  renderDropdown(doctors, "/doctor-details")}
+                {activeDropdown === 'doctors' &&
+                  renderDropdown(doctors, '/doctor-details')}
               </li>
               <li
-                onMouseEnter={() => handleMouseEnter("medicines")}
+                onMouseEnter={() => handleMouseEnter('medicines')}
                 onMouseLeave={handleMouseLeave}
                 className="relative"
               >
                 <a href="/medicines" className="hover:text-red-500">
                   Medicines
                 </a>
-                {activeDropdown === "medicines" &&
-                  renderDropdown(medicines, "/medicines")}
+                {activeDropdown === 'medicines' &&
+                  renderDropdown(medicines, '/medicines')}
               </li>
               <li
-                onMouseEnter={() => handleMouseEnter("pets")}
+                onMouseEnter={() => handleMouseEnter('pets')}
                 onMouseLeave={handleMouseLeave}
                 className="relative"
               >
                 <a href="/pets" className="hover:text-red-500">
                   Pets
                 </a>
-                {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
+                {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
               </li>
             </ul>
           </nav>
@@ -377,13 +377,17 @@ export default function Home() {
                   onClick={handleButtonClick}
                   className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
                 >
-                  <a href="/signin">Sign In</a>
+                  <a href="/auth?mode=signin">Sign In</a>
                 </button>
                 <button
                   onClick={handleButtonClick}
                   className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
                 >
-                  <a href="/signup">Sign Up</a>
+                  {/* <a href="/auth">Sign Up</a>
+                   */}
+
+                <a href="/auth?mode=signup">Sign Up</a>
+
                 </button>
               </>
             )}

@@ -1,11 +1,11 @@
-"use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { loginUser } from "./action";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { loginUser } from './action';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -13,18 +13,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { useAuthStore } from "@/store/authStore";
-import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { useAuthStore } from '@/store/authStore';
+import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
   email: z
-    .string({ required_error: "Please enter your email!" })
-    .email("Please enter a valid email!"),
-  password: z.string({ required_error: "Please enter your password!" }),
+    .string({ required_error: 'Please enter your email!' })
+    .email('Please enter a valid email!'),
+  password: z.string({ required_error: 'Please enter your password!' }),
 });
 
 const SignUp = () => {
@@ -51,18 +51,18 @@ const SignUp = () => {
       setLogin(response);
       toast.success(response.message, {
         onDismiss: () => {
-          if (response.role === "ADMIN") {
-            router.push("/admin/dashboard");
+          if (response.role === 'ADMIN') {
+            router.push('/admin/dashboard');
             return;
           }
-          router.push("/home");
+          router.push('/home');
         },
         onAutoClose: () => {
-          if (response.role === "ADMIN") {
-            router.push("/admin/dashboard");
+          if (response.role === 'ADMIN') {
+            router.push('/admin/dashboard');
             return;
           }
-          router.push("/home");
+          router.push('/home');
         },
       });
       setLoading(false);
@@ -74,15 +74,15 @@ const SignUp = () => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useState({
     // name: '',
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     // confirmPassword: '',
   });
 
   const backgroundImageStyle = {
-    backgroundImage: "url(/SignUp.png)",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundImage: 'url(/auth.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,17 +107,17 @@ const SignUp = () => {
         password: userInfo.password,
       });
 
-      console.log("User Info Submitted:", response);
+      console.log('User Info Submitted:', response);
 
       if (response.success) {
         setLogin(response);
         toast.success(response.message, {
           onDismiss: () => {
-            if (response.role === "ADMIN") {
-              router.push("/admin/dashboard");
+            if (response.role === 'ADMIN') {
+              router.push('/admin/dashboard');
               return;
             }
-            router.push("/home");
+            router.push('/home');
           },
         });
       } else {
@@ -126,9 +126,9 @@ const SignUp = () => {
       // Redirect to dashboard after successful registration
       // router.push('/dashboard');
     } catch (error) {
-      toast.error("Oops! Something went wrong. Try again.");
-      console.error("Registration failed:", error);
-      alert("Registration failed. Please try again.");
+      toast.error('Oops! Something went wrong. Try again.');
+      console.error('Registration failed:', error);
+      alert('Registration failed. Please try again.');
     }
   };
 
@@ -205,34 +205,36 @@ const SignUp = () => {
                     )}
                   /> */}
 
-
-      <FormField
-        control={form.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Password</FormLabel>
-            <FormControl>
-              <div className="relative">
-                <Input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="password.."
-                  {...field}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
-                >
-                  {showPassword ?    <Eye className="ml-auto h-6 w-6 opacity-50" /> :   <EyeOff className="ml-auto h-6 w-6 opacity-50" />}
-                </button>
-              </div>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="password.."
+                              {...field}
+                            />
+                            <button
+                              type="button"
+                              onClick={togglePasswordVisibility}
+                              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                            >
+                              {showPassword ? (
+                                <Eye className="ml-auto h-6 w-6 opacity-50" />
+                              ) : (
+                                <EyeOff className="ml-auto h-6 w-6 opacity-50" />
+                              )}
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   {/* <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
                   <label className="block text-black text-xs/[17px]">
@@ -249,14 +251,14 @@ const SignUp = () => {
                   />
                 </div> */}
 
-<div className="flex justify-end mb-4">
+                  <div className="flex justify-end mb-4">
                     <Link
                       href="/forgotpassword"
                       style={{
-                        fontSize: "0.875rem",
-                        color: "#000",
-                        textDecoration: "underline",
-                        fontFamily: "Inter-Bold",
+                        fontSize: '0.875rem',
+                        color: '#000',
+                        textDecoration: 'underline',
+                        fontFamily: 'Inter-Bold',
                       }}
                     >
                       Forgot password?
