@@ -14,8 +14,6 @@ export type Columns = {
   specializationId: string;
   specializationName: string;
   description: string;
-  departmentId: string;
-  departmentName: string;
   image: string;
   preSignedUrl: string | undefined;
   duration: number;
@@ -67,13 +65,6 @@ export const columns: ColumnDef<Columns>[] = [
     header: () => <div className="font-bold text-center">Phone Number</div>,
     cell: ({ row }) => (
       <div className="text-center">{row.original.phoneNo}</div>
-    ),
-  },
-  {
-    accessorKey: "departmentName",
-    header: () => <div className="font-bold text-center">Department</div>,
-    cell: ({ row }) => (
-      <div className="text-center">{row.original.departmentName}</div>
     ),
   },
   {

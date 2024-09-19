@@ -13,7 +13,14 @@ export async function getAllSpecializations() {
     console.log("Error fetching specialization:", error);
   }
 }
-
+export async function getAllPets() {
+  try {
+    const response = await axiosInstance.get("/pets");
+    return response.data;
+  } catch (error) {
+    console.log("Error fetching pets:", error);
+  }
+}
 export async function getLoginUserDetails() {
   const userDetails = await cookieStore.get("token");
   console.log(JSON.parse(userDetails?.value!));
