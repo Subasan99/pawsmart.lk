@@ -1,35 +1,36 @@
-'use client';
+"use client";
+import { signOut } from "@/api/route";
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from '@/app/(signedin)/home/action';
-import FilterDropdown from '@/components/FilterDropdown';
-import Footer from '@/components/Footer';
-import PopularDoctors from '@/components/Image';
-import SideBarIcon from '@/components/svg/side_bar_icon';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useDepartmentStore } from '@/store/departmentStore';
-import { useDoctorStore } from '@/store/doctorStore';
-import { useMedicineStore } from '@/store/medicinesStore';
-import { usePetStore } from '@/store/petStore';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import Logo from '../../public/logowhite.png';
-import Logoeffect from '../../public/stubby.png';
+} from "@/app/(signedin)/home/action";
+import FilterDropdown from "@/components/FilterDropdown";
+import PopularDoctors from "@/components/Image";
+import { useAuthStore } from "@/store/authStore";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { useDoctorStore } from "@/store/doctorStore";
+import { useMedicineStore } from "@/store/medicinesStore";
+import { usePetStore } from "@/store/petStore";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import booking from "../../public/booking.png";
+import Logo from "../../public/logowhite.png";
+import Logoeffect from "../../public/stubby.png";
+import doc from "../../public/doc.png";
 
 export default function Home() {
-  const [doctorName, setDoctorName] = useState<string>('');
-  const [departmentName, setDepartmentName] = useState('');
-  const [appointmentDate, setAppointmentDate] = useState('');
+  const [doctorName, setDoctorName] = useState<string>("");
+  const [departmentName, setDepartmentName] = useState("");
+  const [appointmentDate, setAppointmentDate] = useState("");
 
   const handleFilter = () => {
     // Perform the filtering logic
-    console.log('Doctor Name:', doctorName);
-    console.log('Department Name:', departmentName);
-    console.log('Appointment Date:', appointmentDate);
+    console.log("Doctor Name:", doctorName);
+    console.log("Department Name:", departmentName);
+    console.log("Appointment Date:", appointmentDate);
   };
 
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -66,30 +67,34 @@ export default function Home() {
     : [];
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState('bg-transparent');
-  const [textColor, setTextColor] = useState('text-white'); // Default text color
+  const [headerBg, setHeaderBg] = useState("bg-transparent");
+  const [textColor, setTextColor] = useState("text-white"); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
+  const [login, setLogin] = useAuthStore((state) => [
+    state.login,
+    state.setLogin,
+  ]);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       if (scrollY > 0) {
-        setHeaderBg('bg-white bg-opacity-90');
-        setTextColor('text-black');
+        setHeaderBg("bg-white bg-opacity-90");
+        setTextColor("text-black");
         setLogo(Logoeffect);
       } else {
-        setHeaderBg('bg-transparent');
-        setTextColor('text-white');
+        setHeaderBg("bg-transparent");
+        setTextColor("text-white");
         setLogo(Logo);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     fetchData();
 
     // Clean up the event listener
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -105,16 +110,23 @@ export default function Home() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 
   const handleButtonClick = () => {
-    console.log('Search button clicked');
+    console.log("Search button clicked");
+  };
+
+  const handleSignout = async () => {
+    setLoading(true);
+    await signOut();
+    setLogin(undefined);
+    setLoading(false);
   };
 
   const handleSearch = () => {
-    console.log('Search initiated');
+    console.log("Search initiated");
   };
 
   const handleClick = (imageName: any) => {
@@ -123,6 +135,7 @@ export default function Home() {
 
   const doctores = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
+        id: doctor.id,
         src: doctor.preSignedUrl,
         alt: doctor.image,
         textOverlay: doctor.name,
@@ -131,12 +144,12 @@ export default function Home() {
         dayTimeSlotResponses: doctor.dayTimeSlotResponses,
       }))
     : [];
-
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
         src: department.preSignedUrl,
         alt: department.image,
         textOverlay: department.name,
+        id: department.id,
       }))
     : [];
 
@@ -145,16 +158,20 @@ export default function Home() {
         src: pet.preSignedUrl,
         alt: pet.image,
         textOverlay: pet.name,
+        id: pet.id,
       }))
     : [];
 
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const router = useRouter();
 
   const medicinesDatas = Array.isArray(medicines)
     ? medicines.map((medicines: any) => ({
+        id: medicines.id,
         src: medicines.preSignedUrl,
         alt: medicines.image,
         textOverlay: medicines.name,
@@ -195,7 +212,7 @@ export default function Home() {
   );
 
   const formatDate = (date: any) => {
-    const [month, day, year] = date.split('/');
+    const [month, day, year] = date.split("/");
     return `${year}-${month}-${day}`;
   };
 
@@ -205,180 +222,14 @@ export default function Home() {
     setAppointmentDate(formattedDate);
   };
 
+  console.log(login);
+
+  if (loading) {
+    return <div>Loading ....!</div>;
+  }
+
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
-      >
-        <div
-          className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}
-        >
-          <div className="flex justify-between items-center w-full md:hidden">
-            <a href="/">
-              <Image src={logo} alt="Company Logo" className="w-36" />
-            </a>
-            <Sheet open={open} onOpenChange={setOpen}>
-              <SheetTrigger className="px-3">
-                <SideBarIcon />
-              </SheetTrigger>
-              <SheetContent
-                className={`h-full flex flex-col items-start ${textColor}`}
-              >
-                <Image src={logo} className="w-[288px]" alt="Company Logo" />
-                <ul className="flex flex-col space-y-4">
-                  {/* Sidebar items */}
-                  <li key={0}>
-                    <a href="/" className="hover:text-red-500">
-                      Home
-                    </a>
-                  </li>
-                  <li key={1}>
-                    <a href="/aboutus" className="hover:text-red-500">
-                      About Us
-                    </a>
-                  </li>
-                  <li key={2}>
-                    <a href="/Appointments" className="hover:text-red-500">
-                      Appointments{' '}
-                    </a>
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter('departments')}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/departments" className="hover:text-red-500">
-                      Departments
-                    </a>
-                    {activeDropdown === 'departments' &&
-                      renderDropdown(departments, '/departments')}
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter('doctors')}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/doctors" className="hover:text-red-500">
-                      Doctors
-                    </a>
-                    {activeDropdown === 'doctors' &&
-                      renderDropdown(doctors, '/doctors')}
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter('medicines')}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/medicines" className="hover:text-red-500">
-                      Medicines
-                    </a>
-                    {activeDropdown === 'medicines' &&
-                      renderDropdown(medicines, '/medicines')}
-                  </li>
-                  <li
-                    onClick={() => handleMouseEnter('pets')}
-                    className="hover:text-red-500 relative"
-                  >
-                    <a href="/pets" className="hover:text-red-500">
-                      Pets
-                    </a>
-                    {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
-                  </li>
-                  <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                    <a href="/auth" className="hover:text-black">
-                      Sign In
-                    </a>
-                  </li>
-                  <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                    <a href="/auth?mode=signup" className="hover:text-black">
-                      Sign Up
-                    </a>
-                  </li>
-                </ul>
-              </SheetContent>
-            </Sheet>
-          </div>
-          <div className="hidden md:flex md:items-center w-full">
-            <a href="/">
-              <Image src={logo} alt="Company Logo" className="w-36" />{' '}
-            </a>
-            <nav className="flex-1 flex justify-center">
-              <ul className="flex space-x-8">
-                {/* Navbar items */}
-                <li key={0}>
-                  <a href="/" className="hover:text-red-500">
-                    Home
-                  </a>
-                </li>
-                <li key={1}>
-                  <a href="/aboutus" className="hover:text-red-500">
-                    About Us
-                  </a>
-                </li>
-                <li key={2}>
-                  <a href="/Appointments" className="hover:text-red-500">
-                    Appointments
-                  </a>
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter('departments')}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/departments" className="hover:text-red-500">
-                    Departments
-                  </a>
-                  {activeDropdown === 'departments' &&
-                    renderDropdown(departments, '/departments')}
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter('doctors')}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/doctors" className="hover:text-red-500">
-                    Doctors
-                  </a>
-                  {activeDropdown === 'doctors' &&
-                    renderDropdown(doctors, '/doctors')}
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter('medicines')}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/medicines" className="hover:text-red-500">
-                    Medicines
-                  </a>
-                  {activeDropdown === 'medicines' &&
-                    renderDropdown(medicines, '/medicines')}
-                </li>
-                <li
-                  onMouseEnter={() => handleMouseEnter('pets')}
-                  onMouseLeave={handleMouseLeave}
-                  className="relative"
-                >
-                  <a href="/pets" className="hover:text-red-500">
-                    Pets
-                  </a>
-                  {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
-                </li>
-              </ul>
-            </nav>
-            <div className="flex space-x-4">
-              <button
-                onClick={handleButtonClick}
-                className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-              >
-                <a href="/auth?mode=signin">Sign In</a>
-              </button>
-              <button
-                onClick={handleButtonClick}
-                className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-              >
-                <a href="/auth?mode=signup">Sign Up</a>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
       <main className="bg-gray-50">
         <div className="flex flex-col items-center justify-between">
           <section className="relative h-[100dvh] w-full flex items-center justify-center p-4">
@@ -389,60 +240,100 @@ export default function Home() {
                   loop
                   muted
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectFit: 'cover' }}
+                  style={{ objectFit: "cover" }}
                 >
                   <source src="/Logvideo.mp4" type="video/mp4" />
                 </video>
-                <div className="absolute inset-0 bg-black opacity-60"></div>{' '}
+                <div className="absolute inset-0 bg-black opacity-60"></div>{" "}
                 {/* Black shadow overlay */}
               </div>
             </div>
-            <div className="flex items-center justify-center min-h-screen w-full">
-              <div className="relative z-2 home-first w-full max-w-4xl">
-                <div className="text mb-5 text-center">
-                  <h3 className="text-3xl font-bold mb-2 text-white">
-                    THE BEST VETERINARY SERVICE FOR YOUR PET
-                  </h3>
-                  <p className="text-lg text-white">
-                    Discover Best Service to Breeds Your Loved Dog Explore
-                    around the world
-                  </p>
-                </div>
-                <section className="mb-8">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    <FilterDropdown
-                      options={doctorOptions}
-                      placeholder="Select Doctor"
-                      onChange={setDoctorName}
-                      value={doctorName}
-                    />
-
-                    <FilterDropdown
-                      options={departmentOptions}
-                      placeholder="Select Department"
-                      onChange={setDepartmentName}
-                      value={departmentName}
-                    />
-
-                    <input
-                      type="date"
-                      value={appointmentDate}
-                      // onChange={(e) => setAppointmentDate(e.target.value)}
-                      onChange={handleDateChange}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-
-                    <button
-                      onClick={handleFilter}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Search
-                    </button>
+            <div className="relative z-3 flex flex-col items-center text-center py-16">
+              <div className="relative py-16">
+                <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
+                  {/* Left side content */}
+                  <div className="text-center md:text-left">
+                    <h3 className="text-3xl md:text-5xl font-bold text-red-500 mb-4">
+                      Emergency?
+                    </h3>
+                    <h1 className="text-4xl md:text-6xl font-bold text-blue-100 mb-4">
+                      Find Nearest Medical Facility
+                    </h1>
+                    <div className="flex gap-4 justify-center md:justify-start mt-6">
+                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
+                        View Hospitals
+                      </button>
+                      <button className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200">
+                        View Doctors
+                      </button>
+                    </div>
                   </div>
-                </section>
+                </div>
               </div>
             </div>
           </section>
+          <div className="relative z-5 w-full px-4 pb-8 -mt-20 max-w-6xl mx-auto">
+            <div className="flex flex-row justify-between space-x-4">
+              {/* Search Component */}
+              <div className="bg-white rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-2/3">
+                <div className="bg-white">
+                  <div className="container mx-auto">
+                    <h3 className=" text-2xl font-bold mb-4">
+                      Start Your Search
+                    </h3>
+                    <hr className="my-4 border-t-2 border-gray-300" />
+
+                    <div className="relative z-2 home-first w-full pt-4">
+                      <section className="mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                          <input
+                            type="text"
+                            placeholder="Search doctors, clinics, hospitals, etc."
+                            value={appointmentDate}
+                            onChange={handleDateChange}
+                            className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          />
+
+                          <FilterDropdown
+                            options={departmentOptions}
+                            placeholder="Select Location"
+                            onChange={setDepartmentName}
+                            value={departmentName}
+                          />
+
+                          <button
+                            onClick={handleFilter}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Join As Doctor Component */}
+              <div className="bg-gray-200  rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-1/3">
+                <div className="flex items-center">
+                  <Image
+                    src={booking}
+                    alt="Your Image"
+                    className="w-1/2 h-auto object-cover rounded-lg -mt-10"
+                  />
+                  <div className="flex-grow pl-4">
+                    <h3 className="text-lg font-bold">
+                      Are You Make an Appointment
+                    </h3>
+                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4">
+                      Appointment
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="departments" className="pb-8 pt-20">
@@ -451,11 +342,50 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/departments"
             handleClick={handleClick}
-            linkDescription={'Departments'}
+            linkDescription={"Departments"}
             doctors={departmentDatas.slice(0, 4)}
-            pathname={''}
+            pathname={"/departments"}
             query={departmentDatas}
           />
+        </div>
+        <div>
+          {/* Main Section */}
+          <section className="flex flex-col items-center py-12 z-5 w-full px-4 pb-8 max-w-6xl mx-auto">
+            <div className="flex flex-row justify-between items-center w-full">
+              <div className=" m1 flex-1 text-center">
+                <h1 className="text-4xl font-bold leading-snug">
+                  Find Pet Healthcare Near You with
+                  <span className="text-red-500"> One Click</span>
+                </h1>
+                <p className="mt-4 text-gray-600">
+                  Find the nearest hospital with ease.
+                  <br />
+                  Get instant access to healthcare services in your area,
+                  <br />
+                  right from the comfort of your home.
+                </p>
+                <div className="mt-6 space-x-4">
+                  <button className="bg-white border border-blue-500 text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition">
+                    Nearest Hospital
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative m2 flex-1 flex items-center justify-center">
+                <Image
+                  src={doc}
+                  alt="Dr. Tyrone Grindle"
+                  width={300}
+                  height={400}
+                  className="rounded-lg "
+                />
+                <div className="absolute bottom-0 bg-blue-900 text-white p-3 rounded-md shadow-lg ml-80 transform -translate-x-1/2 border-r-2 border-red-500">
+                  <p className="text-sm">Greetings & Welcome to</p>
+                  <p className="text-lg font-bold text-center">STUBBY</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
 
         <div id="doctors" className="pb-8 pt-20">
@@ -465,8 +395,8 @@ export default function Home() {
             link="/doctors"
             handleClick={handleClick}
             linkDescription="Doctors"
-            doctors={doctores.slice(0, 8)}
-            pathname={'/appointmentdoctor'}
+            doctors={doctores.slice(0, 4)}
+            pathname={"/doctor-details"}
             query={doctores}
           />
         </div>
@@ -476,27 +406,13 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/pets"
             handleClick={handleClick}
-            linkDescription={'Pets'}
+            linkDescription={"Pets"}
             doctors={petdata.slice(0, 4)}
-            pathname={'/booking'}
+            pathname={"/pets"}
             query={petdata}
           />
         </div>
-
-        <div id="medicines" className="pb-8 pt-20">
-          <PopularDoctors
-            title="Medicines"
-            description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="/medicines"
-            handleClick={handleClick}
-            linkDescription={'Medicines'}
-            doctors={medicinesDatas.slice(0, 4)}
-            pathname={'/booking'}
-            query={medicinesDatas}
-          />
-        </div>
       </main>
-      <Footer />
     </>
   );
 }
