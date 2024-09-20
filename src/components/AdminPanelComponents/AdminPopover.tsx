@@ -34,7 +34,7 @@ const AdminPopover = () => {
         onClick={() => signOut()}
         className="bg-red-500 hover:bg-yellow-500 hover:text-black text-white px-2 py-1 rounded w-full text-center cursor-pointer"
       >
-        <a href="/auth" className="">
+        <a href="/auth?mode=signin" className="">
           Sign Out
         </a>
       </div>

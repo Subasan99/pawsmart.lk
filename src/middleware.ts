@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 const protectedRoutes = ['/admin', '/doctor'];
 
 const authRoutes = ['/auth', '/auth'];
+// const authRoutes = ['/auth?mode=signin', '/auth?mode=signup'];
+
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

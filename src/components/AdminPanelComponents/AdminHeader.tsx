@@ -126,7 +126,7 @@ export default function AdminHeader() {
                     onClick={() => signOut()}
                     className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8"
                   >
-                    <a href="/auth" className="hover:text-black">
+                    <a href="/auth?mode=signin" className="hover:text-black">
                       Sign Out
                     </a>
                   </li>

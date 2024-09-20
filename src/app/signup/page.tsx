@@ -77,7 +77,7 @@ const SignUp = () => {
     }).then((res: any) => {
       if (res.success) {
         toast.success(res.message, {
-          onDismiss: () => router.push('/auth'),
+          onDismiss: () => router.push('/auth?mode=signin'),
         });
       } else {
         toast.error(res.message);

@@ -190,3 +190,62 @@ export type User = {
   role: string;
   active: boolean;
 };
+export type Hospital = {
+  id: number;
+  name: string;
+  description: string;
+  city: string;
+  district: string;
+  province: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  website: string;
+  latitude: number;
+  longitude: number;
+  openTime: string;
+  closeTime: string;
+  image: string | null;
+  preSignedUrl: string | null;
+  createdDate: string;
+  updatedDate: string;
+  doctorDepartmentResponses: {
+    departmentResponse: {
+      id: number;
+      name: string;
+      description: string;
+      image: string;
+      preSignedUrl: string | null;
+      createdDate: string;
+      updatedDate: string;
+      active: boolean;
+    };
+    doctorResponses: {
+      id: number;
+      name: string;
+      email: string;
+      phoneNo: string;
+      dateOfBirth: string;
+      gender: string;
+      specializationId: number;
+      specializationName: string;
+      description: string;
+      departmentId: number | null;
+      departmentName: string | null;
+      qualification: string | null;
+      image: string | null;
+      preSignedUrl: string | null;
+      duration: number;
+      dayTimeSlotResponses: {
+        day: string;
+        timeSlots: { startTime: string; endTime: string }[];
+        appointmentTimes: string[];
+      }[] | null;
+      createdDate: string;
+      updatedDate: string;
+      active: boolean;
+    }[];
+  }[];
+  medicineResponses: any[]; 
+  active: boolean;
+};

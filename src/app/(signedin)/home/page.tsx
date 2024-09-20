@@ -1,36 +1,42 @@
-"use client";
-import { signOut } from "@/api/route";
+'use client';
+import { signOut } from '@/api/route';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import Logo from '../../../../public/logowhite.png';
+import Logoeffect from '../../../../public/stubby.png';
+import booking from '../../../../public/booking.png';
+import { useRouter } from 'next/navigation';
+import { useDoctorStore } from '@/store/doctorStore';
 import {
+  getCities,
   getDepartmentData,
   getDoctorData,
+  getHospitalFilterData,
   getMedicinesData,
   getPetData,
-} from "@/app/(signedin)/home/action";
-import FilterDropdown from "@/components/FilterDropdown";
-import PopularDoctors from "@/components/Image";
-import { useAuthStore } from "@/store/authStore";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { useDoctorStore } from "@/store/doctorStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import { usePetStore } from "@/store/petStore";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import booking from "../../../../public/booking.png";
-import Logo from "../../../../public/logowhite.png";
-import Logoeffect from "../../../../public/stubby.png";
-import doc from "../../../../public/doc.png";
+} from '@/app/(signedin)/home/action';
+import FilterDropdown from '@/components/FilterDropdown';
+import PopularDoctors from '@/components/Image';
+import { useAuthStore } from '@/store/authStore';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import { usePetStore } from '@/store/petStore';
+import doc from '../../../../public/doc.png';
 
 export default function Home() {
-  const [doctorName, setDoctorName] = useState<string>("");
-  const [departmentName, setDepartmentName] = useState("");
-  const [appointmentDate, setAppointmentDate] = useState("");
+  const [doctorName, setDoctorName] = useState<string>('');
+  const [cityName, setCityName] = useState<any>('');
+  const [searchData, setsearchData] = useState('');
+  const [cityData, setCitiesData] = useState('');
+  const handleFilter = async () => {
+    const searchTextData = await getHospitalFilterData(searchData, {
+      pageSize: 10,
+      pageCount: 1,
+    });
 
-  const handleFilter = () => {
-    // Perform the filtering logic
-    console.log("Doctor Name:", doctorName);
-    console.log("Department Name:", departmentName);
-    console.log("Appointment Date:", appointmentDate);
+    if (searchTextData) {
+      router.push('/hospitals');
+    }
   };
 
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -66,9 +72,20 @@ export default function Home() {
       }))
     : [];
 
-  // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-transparent");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
+  const citiesOptions = Array.isArray(cityData)
+    ? cityData.map((city: any) => {
+        // console.log(city)
+        return {
+          label: city.name,
+          value: city.id,
+        };
+      })
+    : [];
+
+  console.log(citiesOptions);
+
+  const [headerBg, setHeaderBg] = useState('bg-transparent');
+  const [textColor, setTextColor] = useState('text-white'); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
@@ -79,22 +96,22 @@ export default function Home() {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       if (scrollY > 0) {
-        setHeaderBg("bg-white bg-opacity-90");
-        setTextColor("text-black");
+        setHeaderBg('bg-white bg-opacity-90');
+        setTextColor('text-black');
         setLogo(Logoeffect);
       } else {
-        setHeaderBg("bg-transparent");
-        setTextColor("text-white");
+        setHeaderBg('bg-transparent');
+        setTextColor('text-white');
         setLogo(Logo);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     fetchData();
 
     // Clean up the event listener
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -104,18 +121,20 @@ export default function Home() {
       const departmentData = await getDepartmentData();
       const doctorData = await getDoctorData();
       const medicinesData = await getMedicinesData();
+      const citiesData = await getCities();
 
       setAllMedicines(medicinesData);
       setAllDepartments(departmentData);
       setAllPets(petData);
       setAllDoctors(doctorData);
+      setCitiesData(citiesData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
   const handleButtonClick = () => {
-    console.log("Search button clicked");
+    console.log('Search button clicked');
   };
 
   const handleSignout = async () => {
@@ -126,7 +145,7 @@ export default function Home() {
   };
 
   const handleSearch = () => {
-    console.log("Search initiated");
+    console.log('Search initiated');
   };
 
   const handleClick = (imageName: any) => {
@@ -212,17 +231,15 @@ export default function Home() {
   );
 
   const formatDate = (date: any) => {
-    const [month, day, year] = date.split("/");
+    const [month, day, year] = date.split('/');
     return `${year}-${month}-${day}`;
   };
 
   const handleDateChange = (e: any) => {
     const inputDate = e.target.value;
-    const formattedDate = formatDate(inputDate);
-    setAppointmentDate(formattedDate);
+    setsearchData(inputDate);
+    console.log('inputDateinputDate', inputDate);
   };
-
-  console.log(login);
 
   if (loading) {
     return <div>Loading ....!</div>;
@@ -240,11 +257,11 @@ export default function Home() {
                   loop
                   muted
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: 'cover' }}
                 >
                   <source src="/Logvideo.mp4" type="video/mp4" />
                 </video>
-                <div className="absolute inset-0 bg-black opacity-60"></div>{" "}
+                <div className="absolute inset-0 bg-black opacity-60"></div>{' '}
                 {/* Black shadow overlay */}
               </div>
             </div>
@@ -289,16 +306,17 @@ export default function Home() {
                           <input
                             type="text"
                             placeholder="Search doctors, clinics, hospitals, etc."
-                            value={appointmentDate}
+                            value={searchData}
                             onChange={handleDateChange}
                             className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           />
-
                           <FilterDropdown
-                            options={departmentOptions}
+                            options={citiesOptions}
                             placeholder="Select Location"
-                            onChange={setDepartmentName}
-                            value={departmentName}
+                            onChange={(selectedOption: any) => {
+                              setCityName(selectedOption);
+                            }}
+                            value={cityName}
                           />
 
                           <button
@@ -342,9 +360,9 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/departments"
             handleClick={handleClick}
-            linkDescription={"Departments"}
+            linkDescription={'Departments'}
             doctors={departmentDatas.slice(0, 4)}
-            pathname={"/departments"}
+            pathname={'/departments'}
             query={departmentDatas}
           />
         </div>
@@ -396,7 +414,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription="Doctors"
             doctors={doctores.slice(0, 4)}
-            pathname={"/doctor-details"}
+            pathname={'/doctor-details'}
             query={doctores}
           />
         </div>
@@ -406,9 +424,9 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/pets"
             handleClick={handleClick}
-            linkDescription={"Pets"}
+            linkDescription={'Pets'}
             doctors={petdata.slice(0, 4)}
-            pathname={"/pets"}
+            pathname={'/pets'}
             query={petdata}
           />
         </div>
