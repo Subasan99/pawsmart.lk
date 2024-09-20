@@ -1,9 +1,6 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
-import DefaultImage from "../../../../public/default_user.png";
 import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
-import { cancelBooking } from "./action";
+import { ColumnDef } from "@tanstack/react-table";
 
 export type Columns = {
   id: string;

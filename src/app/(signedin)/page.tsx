@@ -1,6 +1,5 @@
 'use client';
 import PopularDoctors from '@/components/Image';
-import Image from 'next/image';
 
 export default function Home() {
   const handleButtonClick = () => {

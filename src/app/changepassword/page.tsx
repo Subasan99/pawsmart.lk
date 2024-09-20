@@ -1,11 +1,5 @@
 'use client';
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { changePassword } from './action';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { signOut } from '@/api/route';
 import {
   Form,
   FormControl,
@@ -15,11 +9,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
-import { useAuthStore } from '@/store/authStore';
-import Link from 'next/link';
-import { signOut } from '@/api/route';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { changePassword } from './action';
 
 const formSchema = z.object({
   oldPassword: z.string({ required_error: 'Please enter your password!' }),
@@ -81,7 +78,7 @@ const ChangePassword = () => {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-xl font-bold mb-4 text-center">
-          Reset Your Password' : 'Forgot Password?
+          Reset Your Password : Forgot Password?
         </h2>
         <p className="text-center mb-6">
           Please enter the OTP and your new password to reset your password.

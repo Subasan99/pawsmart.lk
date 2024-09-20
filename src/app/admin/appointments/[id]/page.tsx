@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import Image from "next/image";
-import DefaultImage from "../../../../../public/default_user.png";
-import EditIcon from "@/components/svg/edit_icon";
 import { useBookingStore } from "@/store/bookingStore";
+import { useEffect } from "react";
 import { getBookingById } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {

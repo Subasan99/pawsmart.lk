@@ -1,6 +1,5 @@
 "use server";
 
-import { User } from "@/lib/typings";
 import { axiosInstance } from "@/utils/client";
 
 export async function getUserData(

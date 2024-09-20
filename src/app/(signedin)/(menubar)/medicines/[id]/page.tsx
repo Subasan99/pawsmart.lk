@@ -1,8 +1,7 @@
 "use client";
 
-import { getDoctorFilterData } from "@/app/(signedin)/home/action";
-import { getMedicineById } from "@/app/admin/medicines/action";
 import { getDoctorData } from "@/app/admin/doctors/action";
+import { getMedicineById } from "@/app/admin/medicines/action";
 import PopularDoctors from "@/components/Image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,7 +14,7 @@ const Index = ({ params }: { params: { id: string } }) => {
   async function fetchData() {
     const response = await getDoctorData(1, 10, undefined, params.id);
     const dep = await getMedicineById(params.id);
-    // setSelectedMedicine(response);
+ 
     console.log(dep);
     setMedicine(dep);
     setDoctors(response?.records);

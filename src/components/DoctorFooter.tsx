@@ -1,5 +1,3 @@
-import Image from "next/image";
-import Logo from "../../public/stubby.png";
 import {
   Facebook,
   Hospital,
@@ -9,6 +7,8 @@ import {
   Twitter,
   Youtube,
 } from "lucide-react";
+import Image from "next/image";
+import Logo from "../../public/stubby.png";
 
 export default function DoctorFooter() {
   return (

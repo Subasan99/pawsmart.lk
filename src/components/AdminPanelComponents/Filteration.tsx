@@ -1,14 +1,6 @@
 "use client";
 
 import FilterIcon from "../svg/filter-icon";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from "@/components/ui/dialog"
 
 interface Props {
   getApi: any;

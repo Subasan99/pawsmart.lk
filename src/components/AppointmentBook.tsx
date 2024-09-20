@@ -1,22 +1,27 @@
 // components/Dropdown.tsx
-import React, { useEffect, useState } from 'react';
-import { Calendar } from './ui/calendar';
-import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
-import moment from 'moment';
+import { createAppointment } from '@/app/(signedin)/(menubar)/appointmentdoctor/action';
 import { getDoctorData } from '@/app/(signedin)/home/action';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { getMedicineData } from '@/app/admin/medicines/action';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { Doctor, Medicine } from '@/lib/typings';
+import { cn } from '@/lib/utils';
+import { useAuthStore } from '@/store/authStore';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import moment from 'moment';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import TimePicker from './shared/time-picker';
+import { Calendar } from './ui/calendar';
 import {
   Form,
   FormControl,
@@ -26,7 +31,6 @@ import {
   FormMessage,
 } from './ui/form';
 import { Input } from './ui/input';
-import TimePicker from './shared/time-picker';
 import {
   Select,
   SelectContent,
@@ -34,12 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select';
-import { Doctor, Medicine } from '@/lib/typings';
 import { Textarea } from './ui/textarea';
-import { useAuthStore } from '@/store/authStore';
-import { createAppointment } from '@/app/(signedin)/(menubar)/appointmentdoctor/action';
-import { getMedicineData } from '@/app/admin/medicines/action';
-import { toast } from 'sonner';
 
 interface AppointmentProps {
   userId: string | undefined;

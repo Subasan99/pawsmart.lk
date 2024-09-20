@@ -1,12 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import RootLayout from "../layout";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import CircledArrowIcon from "@/components/svg/circled-arrow-icon";
-import { getAppointmentBooking } from "../../home/action";
 import Header from "@/components/Header";
+import CircledArrowIcon from "@/components/svg/circled-arrow-icon";
+import { useEffect, useState } from "react";
+import { getAppointmentBooking } from "../../home/action";
 
 const Appointments = (premiumBookings: any, normalBookings: any) => {
   const [activeTab, setActiveTab] = useState("all");

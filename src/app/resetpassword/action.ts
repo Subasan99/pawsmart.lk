@@ -1,6 +1,5 @@
 "use server";
 import { axiosInstance } from "@/utils/client";
-import { cookies } from "next/headers";
 
 export const resetPassword =  async (userData: {
   otp: string;

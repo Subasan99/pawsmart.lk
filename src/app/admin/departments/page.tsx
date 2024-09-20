@@ -1,10 +1,10 @@
 "use client";
+import DepartmentCreate from "@/components/AdminPanelComponents/DepartmentComponents/DepartmentCreate";
+import { useDepartmentStore } from "@/store/departmentStore";
 import { useEffect } from "react";
-import { columns } from "./columns";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDepartmentData } from "./action";
-import { useDepartmentStore } from "@/store/departmentStore";
-import DepartmentCreate from "@/components/AdminPanelComponents/DepartmentComponents/DepartmentCreate";
+import { columns } from "./columns";
 
 export default function DemoPage() {
   const [departments, setAllDepartments] = useDepartmentStore((state: any) => [

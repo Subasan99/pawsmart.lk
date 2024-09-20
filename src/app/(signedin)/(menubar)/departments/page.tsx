@@ -1,9 +1,8 @@
 "use client";
-import React, { useEffect } from "react";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { getDepartmentData, getDeparmentFilterData } from "../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
-import Header from "@/components/Header";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { useEffect } from "react";
+import { getDeparmentFilterData, getDepartmentData } from "../../home/action";
 
 const Department = () => {
   const [departments, setAllDepartments] = useDepartmentStore((state: any) => [

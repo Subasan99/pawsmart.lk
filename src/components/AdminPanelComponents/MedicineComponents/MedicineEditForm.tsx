@@ -1,7 +1,5 @@
 "use client";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { editMedicineById } from "@/app/admin/medicines/action";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,11 +10,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { createMedicine, editMedicineById } from "@/app/admin/medicines/action";
-import { Medicine } from "@/lib/typings";
-import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { Medicine } from "@/lib/typings";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string({ required_error: "Medicine name is required!" }),

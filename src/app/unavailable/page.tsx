@@ -1,8 +1,8 @@
 'use client'
-import Image from "next/image";
-import UnavailablePic from "../../../public/unavailable_pic.png";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import UnavailablePic from "../../../public/unavailable_pic.png";
 
 const Index = () => {
   const router = useRouter();

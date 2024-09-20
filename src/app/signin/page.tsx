@@ -1,11 +1,4 @@
 'use client';
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { loginUser } from './action';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
   FormControl,
@@ -15,10 +8,17 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
 import { useAuthStore } from '@/store/authStore';
-import Link from 'next/link';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { loginUser } from './action';
 
 const formSchema = z.object({
   email: z
@@ -158,21 +158,6 @@ const SignUp = () => {
                     className="mt-20 mb-5"
                   />
 
-                  {/* <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
-                  <label className="block text-black text-xs/[17px]">
-                    USER NAME
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="User Name"
-                    className="text-xs w-full border-none outline-none"
-                    onChange={handleChange}
-                    value={userInfo.name}
-                  />
-                </div> */}
-
                   <FormField
                     control={form.control}
                     name="email"
@@ -186,24 +171,6 @@ const SignUp = () => {
                       </FormItem>
                     )}
                   />
-
-                  {/* <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Password..."
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
 
                   <FormField
                     control={form.control}
@@ -236,20 +203,6 @@ const SignUp = () => {
                     )}
                   />
 
-                  {/* <div className="border border-gray-300 rounded inline-block pl-3 pt-2 mb-5">
-                  <label className="block text-black text-xs/[17px]">
-                    CONFIRM PASSWORD
-                  </label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    className="text-xs w-full border-none outline-none"
-                    onChange={handleChange}
-                    value={userInfo.confirmPassword}
-                  />
-                </div> */}
 
                   <div className="flex justify-end mb-4">
                     <Link
