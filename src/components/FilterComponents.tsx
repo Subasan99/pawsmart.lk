@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const FilterComponent = () => {
   const [specializationId, setSpecializationId] = useState<number | null>(null);

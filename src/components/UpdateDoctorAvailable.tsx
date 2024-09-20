@@ -1,24 +1,16 @@
 'use client';
-import React, { useState } from 'react';
-import './Scheduler.css';
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  Card
 } from '@/components/ui/card';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPencilAlt,
-  faCamera,
-  faSave,
-  faTimes,
-  faPlus,
   faChevronLeft,
   faChevronRight,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons';
-import Image from 'next/image';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { addDays, format, startOfWeek } from 'date-fns';
+import React, { useState } from 'react';
+import './Scheduler.css';
 
 interface UpdateDoctorAvailableProps {
   handleEdit: () => void;

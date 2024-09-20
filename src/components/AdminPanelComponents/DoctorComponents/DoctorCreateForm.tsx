@@ -1,18 +1,26 @@
 "use client";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+import { createDoctor } from "@/app/admin/doctors/action";
+import { MultiSelect } from "@/components/shared/multi-select";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -20,26 +28,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { DatePickerDemo } from "@/components/ui/date-picker";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import GenderPicker from "@/components/shared/gender-picker";
-import { useEffect, useState } from "react";
-import { useSpecializationStore } from "@/store/specializationStore";
-import { getAllSpecializations } from "@/api/route";
-import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
-import { MultiSelect } from "@/components/shared/multi-select";
-import { createDoctor } from "@/app/admin/doctors/action";
+import { Textarea } from "@/components/ui/textarea";
 import { Doctor } from "@/lib/typings";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useState } from "react";
 
 const formSchema = z.object({
   firstName: z.string({ required_error: "First name is required!" }),
@@ -61,17 +56,6 @@ const formSchema = z.object({
   duration: z.number({ required_error: "Duration is required!" }),
   petIds: z.array(z.string()),
   qualification: z.string({ required_error: "Qualification is required" }),
-  // dayAllocationRequestList: z.array(
-  //   z.object({
-  //     day: z.string({ required_error: "Day is required!" }),
-  //     timeSlots: z.array(
-  //       z.object({
-  //         startTime: z.string({ required_error: "Start time is required!" }),
-  //         endTime: z.string({ required_error: "End time is required!" }),
-  //       })
-  //     ),
-  //   })
-  // ),
 });
 
 type Props = {

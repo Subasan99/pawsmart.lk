@@ -1,8 +1,8 @@
 "use client";
+import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import DefaultImage from "../../../../public/default_user.png";
-import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
 import { archiveSpecializationById } from "./action";
 
 export type Columns = {

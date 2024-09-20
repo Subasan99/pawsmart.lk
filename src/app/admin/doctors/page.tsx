@@ -1,13 +1,13 @@
 "use client";
+import { getAllPets, getAllSpecializations } from "@/api/route";
+import DoctorCreate from "@/components/AdminPanelComponents/DoctorComponents/DoctorCreate";
+import { useAdminStore } from "@/store/adminStore";
+import { usePetStore } from "@/store/petStore";
+import { useSpecializationStore } from "@/store/specializationStore";
 import { useEffect } from "react";
-import { columns } from "./columns";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDoctorData } from "./action";
-import { useAdminStore } from "@/store/adminStore";
-import DoctorCreate from "@/components/AdminPanelComponents/DoctorComponents/DoctorCreate";
-import { useSpecializationStore } from "@/store/specializationStore";
-import { getAllPets, getAllSpecializations } from "@/api/route";
-import { usePetStore } from "@/store/petStore";
+import { columns } from "./columns";
 
 export default function DemoPage() {
   const [doctors, setAllDoctors] = useAdminStore((state: any) => [

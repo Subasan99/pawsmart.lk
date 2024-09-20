@@ -1,24 +1,24 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import Logo from "../../../../public/logowhite.png";
-import Logoeffect from "../../../../public/stubby.png";
-import booking from "../../../../public/booking.png";
-import { useRouter } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
+import { signOut } from "@/api/route";
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
 } from "@/app/(signedin)/home/action";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { usePetStore } from "@/store/petStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import PopularDoctors from "@/components/Image";
 import FilterDropdown from "@/components/FilterDropdown";
+import PopularDoctors from "@/components/Image";
 import { useAuthStore } from "@/store/authStore";
-import { signOut } from "@/api/route";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { useDoctorStore } from "@/store/doctorStore";
+import { useMedicineStore } from "@/store/medicinesStore";
+import { usePetStore } from "@/store/petStore";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import booking from "../../../../public/booking.png";
+import Logo from "../../../../public/logowhite.png";
+import Logoeffect from "../../../../public/stubby.png";
 
 export default function Home() {
   const [doctorName, setDoctorName] = useState<string>("");

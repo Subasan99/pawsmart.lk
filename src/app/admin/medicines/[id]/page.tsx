@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import DefaultImage from "../../../../../public/default_user.png";
+import MedicineAppointments from "@/components/AdminPanelComponents/MedicineComponents/MedicineAppointments";
+import MedicineTimeSlots from "@/components/AdminPanelComponents/MedicineComponents/MedicineTimeSlots";
 import EditIcon from "@/components/svg/edit_icon";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MedicineAppointments from "@/components/AdminPanelComponents/MedicineComponents/MedicineAppointments";
-import MedicineTimeSlots from "@/components/AdminPanelComponents/MedicineComponents/MedicineTimeSlots";
 import { useMedicineStore } from "@/store/medicinesStore";
-import { getMedicineById, getAppointmentsByMedicineId, updateMedicineTimeSlot } from "../action";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import DefaultImage from "../../../../../public/default_user.png";
+import { getAppointmentsByMedicineId, getMedicineById, updateMedicineTimeSlot } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [

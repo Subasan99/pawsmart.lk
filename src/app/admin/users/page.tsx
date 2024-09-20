@@ -1,9 +1,9 @@
 "use client";
-import { useEffect } from "react";
-import { columns } from "./columns";
 import { DataTable } from "@/components/AdminPanelComponents/data-table";
-import { getUserData } from "./action";
 import { useUserStore } from "@/store/userStore";
+import { useEffect } from "react";
+import { getUserData } from "./action";
+import { columns } from "./columns";
 
 export default function Index() {
   const [users, setAllUsers] = useUserStore((state: any) => [

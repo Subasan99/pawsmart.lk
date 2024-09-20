@@ -5,7 +5,7 @@ import { DataTable } from "../data-table";
 import { doctorColumns } from "../../../app/admin/appointments/columns";
 
 interface Props {
-  appointments: Appointment[];
+  appointments: any[];
 }
 
 const DoctorAppointments = (props: Props) => {

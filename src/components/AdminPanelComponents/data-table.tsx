@@ -4,8 +4,8 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
   getPaginationRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
 
 import {
@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

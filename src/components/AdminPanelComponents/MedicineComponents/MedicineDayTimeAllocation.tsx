@@ -1,17 +1,6 @@
 "use client";
-import { Switch } from "@/components/ui/switch";
-import { dayTimeSlotResponses } from "@/lib/typings";
 import PlusIcon from "@/components/svg/plus_icon";
-import { formatTime24to12 } from "@/lib/utils";
-import { useState } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,9 +9,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import TimePicker from "../../shared/time-picker";
-import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
+import { dayTimeSlotResponses } from "@/lib/typings";
+import { formatTime24to12 } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { z } from "zod";
+import TimePicker from "../../shared/time-picker";
 
 interface Props {
   setModal: any;

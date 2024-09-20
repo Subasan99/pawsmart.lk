@@ -1,15 +1,12 @@
 'use client';
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  faCamera
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 import React, { useRef, useState } from 'react';
 import './Scheduler.css';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faPencilAlt,
-  faCamera,
-  faSave,
-  faTimes,
-} from '@fortawesome/free-solid-svg-icons';
-import Image from 'next/image';
 
 interface DoctorProfileProps {
   handleEdit: () => void;

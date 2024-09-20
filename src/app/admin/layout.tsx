@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import DoctorFooter from "@/components/DoctorFooter";
 import AdminHeader from "@/components/AdminPanelComponents/AdminHeader";
 import SideBar from "@/components/AdminPanelComponents/SideBar";
+import DoctorFooter from "@/components/DoctorFooter";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 

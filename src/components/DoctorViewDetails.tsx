@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from 'react';
 
 interface DoctorViewDetailsProps {
   nameOfDocView: string;

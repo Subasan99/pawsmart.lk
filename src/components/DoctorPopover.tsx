@@ -1,6 +1,6 @@
 import Image from 'next/image';
+import changePasswordImage from '../../public/changePassword.jpg';
 import DoctorImage from '../../public/doctor.png';
-import changePasswordImage from '../../../public/changePassword.jpg';
 
 const DoctorPopover = () => {
   return (

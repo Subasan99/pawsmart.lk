@@ -1,11 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { registerUser } from './action';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import moment from 'moment';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -20,11 +15,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import { CalendarIcon, Eye, EyeOff } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
 import {
   Select,
   SelectContent,
@@ -32,8 +22,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { CalendarIcon, Eye, EyeOff } from 'lucide-react';
+import moment from 'moment';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { registerUser } from './action';
 
 const formSchema = z.object({
   firstName: z.string({ required_error: 'Please enter your first name!' }),
@@ -203,26 +203,6 @@ const SignUp = () => {
                       )}
                     />
                   </div>
-                  {/*                   
-                  <div className=" rounded inline-block ">
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="password"
-                              placeholder="pasword.."
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div> */}
 
                   <div className="rounded inline-block">
                     <FormField

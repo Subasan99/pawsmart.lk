@@ -1,14 +1,9 @@
 "use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import RootLayout from "../layout";
-import Dropdown from "@/components/DropDown";
 import AppointmentBook from "@/components/AppointmentBook";
-import ReviewSection from "@/components/Review";
-import InfoSection from "@/components/DepInfo";
-import petImage from "../../../../components/png/dogBooking.png";
-import { getLoginUserDetails } from "@/api/route";
 import Header from "@/components/Header";
+import Image from "next/image";
+import { useState } from "react";
+import petImage from "../../../../components/png/dogBooking.png";
 
 const AppointmentDoctor = () => {
   const handleClick = (imageName: string) => {
@@ -65,9 +60,6 @@ const AppointmentDoctor = () => {
   const handleRatingChange = (value: string) => setRating(value);
   const handleReviewChange = (value: string) => setReviewmessage(value);
 
-  // useEffect(() => {
-  //   getLoginUserDetails().then((response) => setLogin(response));
-  // }, []);
 
   return (
     <div className="flex flex-row w-full items-start justify-center content-center">

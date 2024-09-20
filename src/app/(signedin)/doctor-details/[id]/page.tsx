@@ -1,14 +1,13 @@
 "use client";
-import EditIcon from "@/components/svg/edit_icon";
-import { useDoctorStore } from "@/store/doctorStore";
-import DefaultImage from "../../../../../public/default_user.png";
-import Image from "next/image";
-import GenderIcon from "@/components/svg/gender-icon";
-import { useEffect, useState } from "react";
 import DaySlot from "@/components/shared/day-slot";
-import { getDoctorById } from "./action";
+import GenderIcon from "@/components/svg/gender-icon";
 import { Button } from "@/components/ui/button";
+import { useDoctorStore } from "@/store/doctorStore";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import DefaultImage from "../../../../../public/default_user.png";
+import { getDoctorById } from "./action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();

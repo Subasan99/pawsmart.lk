@@ -1,18 +1,14 @@
-import Image from 'next/image';
-import Logo from '../../public/stubby.png';
 import {
-  Building,
-  Building2,
   Facebook,
   Hospital,
   Instagram,
   Mail,
-  Mailbox,
   Phone,
   Twitter,
-  TwitterIcon,
-  Youtube,
+  Youtube
 } from 'lucide-react';
+import Image from 'next/image';
+import Logo from '../../public/stubby.png';
 
 export default function Footer() {
   return (

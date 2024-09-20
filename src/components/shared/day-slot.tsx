@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { boolean } from "zod";
-import { Separator } from "../ui/separator";
 import { formatTime24to12 } from "@/lib/utils";
+import { useState } from "react";
+import { Separator } from "../ui/separator";
 
 interface Props {
   daySlots: any[];

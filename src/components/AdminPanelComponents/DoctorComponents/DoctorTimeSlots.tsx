@@ -1,10 +1,6 @@
-import EditIcon from "@/components/svg/edit_icon";
 import { Separator } from "@/components/ui/separator";
-import { Slider } from "@/components/ui/slider";
 import { DayTimeSlotResponses } from "@/lib/typings";
 import { formatTime24to12 } from "@/lib/utils";
-import moment from "moment";
-import { useState } from "react";
 import DayTimeSlotModal from "./DayTimeSlotModal";
 
 interface Props {

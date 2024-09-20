@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getAppointmentsByDoctorId, getDoctorById } from "./action";
-import { useDoctorStore } from "@/store/doctorStore";
-import Image from "next/image";
-import DefaultImage from "../../../../../public/default_user.png";
+import DoctorAppointments from "@/components/AdminPanelComponents/DoctorComponents/DoctorAppointments";
+import DoctorTimeSlots from "@/components/AdminPanelComponents/DoctorComponents/DoctorTimeSlots";
 import EditIcon from "@/components/svg/edit_icon";
 import GenderIcon from "@/components/svg/gender-icon";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DoctorAppointments from "@/components/AdminPanelComponents/DoctorComponents/DoctorAppointments";
-import DoctorTimeSlots from "@/components/AdminPanelComponents/DoctorComponents/DoctorTimeSlots";
-import { updateTimeSlot } from "./action";
+import { useDoctorStore } from "@/store/doctorStore";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import DefaultImage from "../../../../../public/default_user.png";
+import { getAppointmentsByDoctorId, getDoctorById, updateTimeSlot } from "./action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [

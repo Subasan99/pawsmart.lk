@@ -1,10 +1,4 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
-import Image from 'next/image';
-import Logo from '../../public/logowhite.png';
-import Logoeffect from '../../public/stubby.png';
-import { useRouter } from 'next/navigation';
-import { useDoctorStore } from '@/store/doctorStore';
 import {
   getDepartmentData,
   getDoctorData,
@@ -12,19 +6,24 @@ import {
   getPetData,
 } from '@/app/(signedin)/home/action';
 import { useDepartmentStore } from '@/store/departmentStore';
+import { useDoctorStore } from '@/store/doctorStore';
 import { usePetStore } from '@/store/petStore';
-// import { useMedicinesStore } from "@/store/medicinesStore";
-import changePasswordImage from '../../../public/changePassword.jpg';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import Logo from '../../public/logowhite.png';
+import Logoeffect from '../../public/stubby.png';
+import changePasswordImage from '../../public/changePassword.jpg';
 
-import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import SideBarIcon from '@/components/svg/side_bar_icon';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import UserIcon from './svg/user_icon';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import DoctorPopover from './DoctorPopover';
+import UserIcon from './svg/user_icon';
 
 export default function DoctorHeader() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
