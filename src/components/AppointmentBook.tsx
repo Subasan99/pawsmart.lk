@@ -598,7 +598,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
               </Button>
             ) : (
               <a
-                href={'/auth'}
+                href={'/auth?mode=signin'}
                 className="px-3 cursor-pointer py-3 md:w-fit self-center bg-primary text-white rounded-lg"
               >
                 Login to continue

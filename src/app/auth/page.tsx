@@ -96,7 +96,7 @@ const AuthScreens = () => {
     }).then((res: any) => {
       if (res.success) {
         toast.success(res.message, {
-          onDismiss: () => router.push('/auth'),
+          onDismiss: () => router.push('/auth?mode=signin'),
         });
       } else {
         toast.error(res.message);
@@ -141,8 +141,8 @@ const AuthScreens = () => {
 
   return (
     <div className="relative flex flex-col items-center justify-center h-screen bg-gray-50 overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0 overflow-hidden z-0">
+   
+      {/* <div className="absolute inset-0 overflow-hidden z-0">
         <div className="relative h-full w-full">
           <video
             autoPlay
@@ -155,7 +155,7 @@ const AuthScreens = () => {
           </video>
           <div className="absolute inset-0 bg-black opacity-60"></div>
         </div>
-      </div>
+      </div> */}
 
       <div className="relative z-10 bg-white p-8 rounded-lg shadow-md w-100 h-auto">
         <div className="flex justify-between mb-6 gap-x-4">

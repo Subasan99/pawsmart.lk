@@ -282,7 +282,7 @@ export default function Home() {
                     {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
                   </li>
                   <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                    <a href="/auth" className="hover:text-black">
+                    <a href="/auth?mode=signin" className="hover:text-black">
                       Sign In
                     </a>
                   </li>
