@@ -1,6 +1,5 @@
 'use client';
 import { signOut } from '@/api/route';
-('use client');
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Logo from '../../../../public/logowhite.png';
