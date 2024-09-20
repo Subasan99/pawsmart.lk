@@ -203,3 +203,57 @@ export const getAppointmentBooking = async () => {
     throw error; // Ensures the calling function can handle the error if needed
   }
 };
+
+export const getHospitalFilterData = async (
+
+  searchText: string,
+  
+  params: {
+    pageCount: number;
+    pageSize: number;
+  },
+  cityId?:string,
+) => {
+  try {
+    const response = await axiosInstance.get(
+  `hospital/filter?searchTerm=${searchText}${cityId ? `&cityId=${cityId}` : ''}`, 
+  {
+    params: {
+      pageSize: params.pageSize,
+      pageCount: params.pageCount,
+    },
+  }
+);
+
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+
+export const getCities = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/cities`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching booking:", error);
+    throw error; // Ensures the calling function can handle the error if needed
+  }
+};
+
+
+export const getHospital = async () => {
+  try {
+    const response = await axiosInstance.get(
+      `/hospitals`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching booking:", error);
+    throw error; 
+  }
+};

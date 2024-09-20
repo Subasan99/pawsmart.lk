@@ -4,7 +4,7 @@ interface FilterDropdownProps {
   options: Array<{ label: string; value: string }>;
   placeholder: string;
   onChange: (lable: string) => void;
-  value: string; // Add this line
+  value: any; // Add this line
 }
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
@@ -27,8 +27,8 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     );
   };
 
-  const handleSelect = (lable: string) => {
-    onChange(lable);
+  const handleSelect = (option: any) => {
+    onChange(option);
     setSearchTerm(""); // Reset search term
     setFilteredOptions(options); // Reset options
     setDropdownVisible(false); // Hide the dropdown
@@ -49,7 +49,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
       <input
         type="text"
         placeholder={placeholder}
-        value={value}
+        value={value.label}
         onChange={handleSearch}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -62,7 +62,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
               <li
                 key={index}
                 className="px-4 py-2 cursor-pointer hover:bg-gray-200"
-                onClick={() => handleSelect(option.label)}
+                onClick={() => handleSelect(option)}
               >
                 {option.label}
               </li>
