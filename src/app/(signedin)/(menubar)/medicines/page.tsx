@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
-import { useMedicineStore } from "@/store/medicinesStore";
-import { getMedicineFilterData } from "../../home/action";
-import MultipleImagesProps from "@/components/SinglePageImage";
 import Header from "@/components/Header";
+import MultipleImagesProps from "@/components/SinglePageImage";
+import { useMedicineStore } from "@/store/medicinesStore";
+import { useEffect } from "react";
+import { getMedicineFilterData } from "../../home/action";
 
 interface Medicine {
   preSignedUrl: string;

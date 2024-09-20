@@ -1,24 +1,25 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import Logo from "../../../../public/logowhite.png";
-import Logoeffect from "../../../../public/stubby.png";
-import booking from "../../../../public/booking.png";
-import { useRouter } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
+import { signOut } from "@/api/route";
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
 } from "@/app/(signedin)/home/action";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { usePetStore } from "@/store/petStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import PopularDoctors from "@/components/Image";
 import FilterDropdown from "@/components/FilterDropdown";
+import PopularDoctors from "@/components/Image";
 import { useAuthStore } from "@/store/authStore";
-import { signOut } from "@/api/route";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { useDoctorStore } from "@/store/doctorStore";
+import { useMedicineStore } from "@/store/medicinesStore";
+import { usePetStore } from "@/store/petStore";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import booking from "../../../../public/booking.png";
+import Logo from "../../../../public/logowhite.png";
+import Logoeffect from "../../../../public/stubby.png";
+import doc from "../../../../public/doc.png";
 
 export default function Home() {
   const [doctorName, setDoctorName] = useState<string>("");
@@ -346,6 +347,45 @@ export default function Home() {
             pathname={"/departments"}
             query={departmentDatas}
           />
+        </div>
+        <div>
+          {/* Main Section */}
+          <section className="flex flex-col items-center py-12 z-5 w-full px-4 pb-8 max-w-6xl mx-auto">
+            <div className="flex flex-row justify-between items-center w-full">
+              <div className=" m1 flex-1 text-center">
+                <h1 className="text-4xl font-bold leading-snug">
+                  Find Pet Healthcare Near You with
+                  <span className="text-red-500"> One Click</span>
+                </h1>
+                <p className="mt-4 text-gray-600">
+                  Find the nearest hospital with ease.
+                  <br />
+                  Get instant access to healthcare services in your area,
+                  <br />
+                  right from the comfort of your home.
+                </p>
+                <div className="mt-6 space-x-4">
+                  <button className="bg-white border border-blue-500 text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition">
+                    Nearest Hospital
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative m2 flex-1 flex items-center justify-center">
+                <Image
+                  src={doc}
+                  alt="Dr. Tyrone Grindle"
+                  width={300}
+                  height={400}
+                  className="rounded-lg "
+                />
+                <div className="absolute bottom-0 bg-blue-900 text-white p-3 rounded-md shadow-lg ml-80 transform -translate-x-1/2 border-r-2 border-red-500">
+                  <p className="text-sm">Greetings & Welcome to</p>
+                  <p className="text-lg font-bold text-center">STUBBY</p>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
 
         <div id="doctors" className="pb-8 pt-20">

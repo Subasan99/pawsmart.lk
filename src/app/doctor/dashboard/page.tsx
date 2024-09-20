@@ -1,8 +1,8 @@
 import AppointmentCard from "@/components/AppointmentCard";
-import { Appointment } from "@/lib/typings";
-import DoctorImage from "../../../../public/doctor.png";
-import Image from "next/image";
 import EditIcon from "@/components/svg/edit_icon";
+import { Appointment } from "@/lib/typings";
+import Image from "next/image";
+import DoctorImage from "../../../../public/doctor.png";
 
 const Index = () => {
   const appointments = [

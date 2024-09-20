@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import './Scheduler.css';
 import {
-  Card,
-  CardHeader,
-  CardTitle,
+  Card
 } from '@/components/ui/card';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
   faChevronRight,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
-import { addDays, format, startOfWeek, parseISO } from 'date-fns';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { addDays, format, startOfWeek } from 'date-fns';
+import { useState } from 'react';
+import './Scheduler.css';
 
 const DoctorProfile = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');

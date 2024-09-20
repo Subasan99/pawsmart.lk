@@ -1,7 +1,7 @@
 "use client";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import {
+  editSpecializationById
+} from "@/app/admin/specializations/action";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -18,14 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import {
-  createSpecialization,
-  editSpecializationById,
-} from "@/app/admin/specializations/action";
-import { Specialization } from "@/lib/typings";
 import { Textarea } from "@/components/ui/textarea";
+import { Specialization } from "@/lib/typings";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
   specializationName: z.string({

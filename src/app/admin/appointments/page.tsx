@@ -1,10 +1,10 @@
 "use client";
-import { useState,useEffect } from "react";
-import { doctorColumns, medicinesColumns } from "./columns";
 import { DataTable } from "@/components/AdminPanelComponents/data-table";
-import { getBookingData } from "./action";
-import { useBookingStore } from "@/store/bookingStore";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useBookingStore } from "@/store/bookingStore";
+import { useEffect, useState } from "react";
+import { getBookingData } from "./action";
+import { doctorColumns, medicinesColumns } from "./columns";
 
 export default function Index() {
   const [bookings, setAllBookings] = useBookingStore((state: any) => [

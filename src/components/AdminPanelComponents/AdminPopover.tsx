@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import DoctorImage from '../../../public/doctor.png';
-import changePasswordImage from '../../../public/changePassword.jpg';
 import { signOut } from '@/api/route';
+import Image from 'next/image';
+import changePasswordImage from '../../../public/changePassword.jpg';
+import DoctorImage from '../../../public/doctor.png';
 
 const AdminPopover = () => {
   return (

@@ -1,12 +1,11 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import DoctorAvailable from '@/components/DoctorAvailable';
 import DoctorProfile from '@/components/DoctorProfile';
 import DoctorViewDetails from '@/components/DoctorViewDetails';
-import { getBookingFilterData, getDoctorByIdData } from '../(signedin)/home/action';
-import { useDoctorStore } from '@/store/doctorStore';
-import DoctorAvailable from '@/components/DoctorAvailable';
-import UpdateDoctorAvailable from '@/components/UpdateDoctorAvailable';
 import { useBookingStore } from '@/store/bookingStore';
+import { useDoctorStore } from '@/store/doctorStore';
+import { useEffect, useState } from 'react';
+import { getBookingFilterData } from '../(signedin)/home/action';
 
 const DoctorProfilePage = () => {
   const [doctor, setAllDoctor] = useDoctorStore((state: any) => [

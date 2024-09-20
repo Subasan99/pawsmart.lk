@@ -1,7 +1,7 @@
+import DoctorFooter from "@/components/DoctorFooter";
+import DoctorHeader from "@/components/DoctorHeader";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import DoctorHeader from "@/components/DoctorHeader";
-import DoctorFooter from "@/components/DoctorFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 

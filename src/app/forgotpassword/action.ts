@@ -1,6 +1,5 @@
 'use server';
 import { axiosInstance } from '@/utils/client';
-import { cookies } from 'next/headers';
 
 export const forgotPassword = async (email: string) => {
   try {

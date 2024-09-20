@@ -1,6 +1,5 @@
-import { user } from '@nextui-org/react';
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { toast } from 'sonner';
 
 const protectedRoutes = ['/admin', '/doctor'];

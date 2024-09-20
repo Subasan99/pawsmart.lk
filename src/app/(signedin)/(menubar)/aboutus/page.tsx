@@ -1,7 +1,4 @@
-import React from "react";
 import Image from "next/image";
-import RootLayout from "../layout";
-import Header from "@/components/Header";
 
 const AboutUs = () => {
   return (

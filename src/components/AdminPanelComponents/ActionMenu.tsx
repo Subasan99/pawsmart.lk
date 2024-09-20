@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import EllipsisIcon from "../svg/ellipsis-icon";
-import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { getDepartmentData } from "@/app/(signedin)/home/action";
 import {
   Dialog,
   DialogContent,
@@ -16,14 +8,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import PetEditForm from "./PetComponents/PetEditForm";
+import EllipsisIcon from "../svg/ellipsis-icon";
+import { Button } from "../ui/button";
 import DepartmentEditForm from "./DepartmentComponents/DepartmentEditForm";
 import MedicineEditForm from "./MedicineComponents/MedicineEditForm";
+import PetEditForm from "./PetComponents/PetEditForm";
 import SpecializationEditForm from "./SpecializationComponents/SpecializationEditForm";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { getDepartmentData } from "@/app/(signedin)/home/action";
 
 interface Props {
   pathName: string;

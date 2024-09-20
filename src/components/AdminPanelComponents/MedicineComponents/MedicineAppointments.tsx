@@ -1,11 +1,11 @@
 "use client";
 
+import { DataTable } from "@/components/AdminPanelComponents/data-table";
 import { Appointment } from "@/lib/typings";
 import { medicinesColumns } from "../../../app/admin/appointments/columns";
-import { DataTable } from "@/components/AdminPanelComponents/data-table";
 
 interface Props {
-  appointments: Appointment[];
+  appointments: any[];
 }
 
 const MedicineAppointments = (props: Props) => {

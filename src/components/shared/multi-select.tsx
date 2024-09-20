@@ -62,16 +62,15 @@
 //     </Select>
 //   );
 // }
-import * as React from "react";
-import { X } from "lucide-react";
 import {
   Select,
-  SelectTrigger,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectTrigger,
 } from "@/components/ui/select";
+import { X } from "lucide-react";
 
 interface Option {
   id: string;

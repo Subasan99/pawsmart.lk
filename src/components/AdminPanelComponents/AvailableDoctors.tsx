@@ -81,7 +81,7 @@ const AvailableDoctors = () => {
       <div className="text-xl font-bold">Doctors on Duty</div>
       <div className="flex w-full overflow-x-auto gap-3">
         {doctors.length > 0 ? (
-          doctors.map((doctor: Doctor) => (
+          doctors.map((doctor: any) => (
             <DoctorCard key={doctor?.id} doctor={doctor} />
           ))
         ) : (

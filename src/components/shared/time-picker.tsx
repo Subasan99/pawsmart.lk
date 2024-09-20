@@ -1,9 +1,8 @@
 "use client";
-import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
-import { Button } from "../ui/button";
-import { useState } from "react";
-import moment from "moment";
 import { formatTime24to12 } from "@/lib/utils";
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 type TimePickerProps = {
   value: string;

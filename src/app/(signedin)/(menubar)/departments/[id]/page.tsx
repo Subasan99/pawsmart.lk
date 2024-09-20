@@ -1,6 +1,5 @@
 "use client";
 
-import { getDoctorFilterData } from "@/app/(signedin)/home/action";
 import { getDepartmentById } from "@/app/admin/departments/action";
 import { getDoctorData } from "@/app/admin/doctors/action";
 import PopularDoctors from "@/components/Image";
@@ -15,7 +14,6 @@ const Index = ({ params }: { params: { id: string } }) => {
   async function fetchData() {
     const response = await getDoctorData(1, 10, undefined, params.id);
     const dep = await getDepartmentById(params.id);
-    // setSelectedMedicine(response);
     console.log(dep);
     setDepartment(dep);
     setDoctors(response?.records);

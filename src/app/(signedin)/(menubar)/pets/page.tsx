@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
-import { usePetStore } from "@/store/petStore";
-import { getPetFilterData } from "../../home/action";
-import MultipleImagesProps from "@/components/SinglePageImage";
 import Header from "@/components/Header";
+import MultipleImagesProps from "@/components/SinglePageImage";
+import { usePetStore } from "@/store/petStore";
+import { useEffect } from "react";
+import { getPetFilterData } from "../../home/action";
 
 interface Pet {
   preSignedUrl: string;

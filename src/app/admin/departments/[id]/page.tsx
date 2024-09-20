@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
-import Image from "next/image";
-import DefaultImage from "../../../../../public/default_user.png";
 import EditIcon from "@/components/svg/edit_icon";
 import { useDepartmentStore } from "@/store/departmentStore";
+import Image from "next/image";
+import { useEffect } from "react";
+import DefaultImage from "../../../../../public/default_user.png";
 import { getDepartmentById } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {

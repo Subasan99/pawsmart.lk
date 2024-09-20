@@ -1,6 +1,6 @@
 "use server";
 
-import { DayTimeSlotResponses, MedicineCreate, dayTimeSlotResponses } from "@/lib/typings";
+import { MedicineCreate, dayTimeSlotResponses } from "@/lib/typings";
 import { axiosInstance } from "@/utils/client";
 
 export async function getMedicineData(

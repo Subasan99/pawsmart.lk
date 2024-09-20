@@ -1,31 +1,29 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
-import Image from 'next/image';
-import Logo from '../../../public/stubby.png';
-import Logoeffect from '../../../public/stubby.png';
-import { useRouter } from 'next/navigation';
-import { useDoctorStore } from '@/store/doctorStore';
+import { signOut } from '@/api/route';
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
 } from '@/app/(signedin)/home/action';
-import { useDepartmentStore } from '@/store/departmentStore';
-import { usePetStore } from '@/store/petStore';
-import { useMedicineStore } from '@/store/medicinesStore';
-import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import SideBarIcon from '@/components/svg/side_bar_icon';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { useDoctorStore } from '@/store/doctorStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import { usePetStore } from '@/store/petStore';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import changePasswordImage from '../../../public/changePassword.jpg';
+import { default as Logo, default as Logoeffect } from '../../../public/stubby.png';
 import UserIcon from '../svg/user_icon';
 import AdminPopover from './AdminPopover';
-import { usePathname } from 'next/navigation';
-import { signOut } from '@/api/route';
-import changePasswordImage from '../../../public/changePassword.jpg';
 
 export default function AdminHeader() {
   const pathname = usePathname();

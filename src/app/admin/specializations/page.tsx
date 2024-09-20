@@ -1,12 +1,12 @@
 "use client";
-import { useEffect } from "react";
-import { columns } from "./columns";
-import { DataTable } from "@/components/AdminPanelComponents/data-table";
-import { getSpecializationData } from "./action";
-import { useSpecializationStore } from "@/store/specializationStore";
-import SpecializationCreate from "@/components/AdminPanelComponents/SpecializationComponents/SpecializationCreate";
 import { getDepartmentData } from "@/app/(signedin)/home/action";
+import { DataTable } from "@/components/AdminPanelComponents/data-table";
+import SpecializationCreate from "@/components/AdminPanelComponents/SpecializationComponents/SpecializationCreate";
 import { useDepartmentStore } from "@/store/departmentStore";
+import { useSpecializationStore } from "@/store/specializationStore";
+import { useEffect } from "react";
+import { getSpecializationData } from "./action";
+import { columns } from "./columns";
 
 export default function Index() {
   const [specializations, setAllSpecializations] = useSpecializationStore((state: any) => [

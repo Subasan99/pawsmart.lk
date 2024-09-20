@@ -1,4 +1,6 @@
 'use client';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -8,26 +10,21 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Link from 'next/link';
-import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { loginUser, registerUser } from './action';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
-import { useAuthStore } from '@/store/authStore';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/store/authStore';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon, Eye, EyeOff } from 'lucide-react';
 import moment from 'moment';
-import { Calendar } from '@/components/ui/calendar';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import { loginUser, registerUser } from './action';
 
 const formSchema = z.object({
   email: z

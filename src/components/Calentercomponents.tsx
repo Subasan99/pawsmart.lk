@@ -1,8 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { Calendar } from './ui/calendar';
-import './Scheduler.css';
 import moment from 'moment';
+import React, { useState } from 'react';
+import './Scheduler.css';
+import { Calendar } from './ui/calendar';
 
 import {
   Card,

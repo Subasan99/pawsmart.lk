@@ -1,10 +1,8 @@
 "use client";
-import React, { useState } from "react";
 import Calentercomponents from "@/components/Calentercomponents";
+import { useState } from "react";
 
-import { useSearchParams } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Pets = () => {
   type TimeSlot = any;
