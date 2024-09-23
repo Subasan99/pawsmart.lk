@@ -1,12 +1,12 @@
-"use server";
-import { axiosInstance } from "@/utils/client";
+'use server';
+import { axiosInstance } from '@/utils/client';
 
 export const getDoctorData = async () => {
   try {
     const response = await axiosInstance.get(`/doctors`);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 export const getSpecializationData = async () => {
@@ -14,16 +14,16 @@ export const getSpecializationData = async () => {
     const response = await axiosInstance.get(`/specialization`);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
-export const getDoctorByIdData = async (doctorid:any) => {
+export const getDoctorByIdData = async (doctorid: any) => {
   try {
     const response = await axiosInstance.get(`/doctor/${doctorid}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching doctor data:', error);
-    return null; 
+    return null;
   }
 };
 export const getDepartmentData = async () => {
@@ -31,7 +31,7 @@ export const getDepartmentData = async () => {
     const response = await axiosInstance.get(`/departments`);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
@@ -40,7 +40,7 @@ export const getPetData = async () => {
     const response = await axiosInstance.get(`/pets`);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 export const getMedicinesData = async () => {
@@ -49,7 +49,7 @@ export const getMedicinesData = async () => {
 
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
@@ -67,7 +67,7 @@ export const getDeparmentFilterData = async (params: {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
@@ -86,13 +86,12 @@ export const getDoctorFilterData = async (params: {
         departmentId: params.departmentId,
         specializationId: params.specializationId,
         petId: params.petId,
-        
       },
     });
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
@@ -110,7 +109,7 @@ export const getPetFilterData = async (params: {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
@@ -128,23 +127,22 @@ export const getMedicineFilterData = async (params: {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
 export const getBookingFilterData = async (params: {
-  doctorId:any,
+  doctorId: any;
   pageCount: number;
   pageSize: number;
 }) => {
   try {
     const response = await axiosInstance.get(`/booking/filter`, {
       params: {
-        doctorId:params.doctorId,
+        doctorId: params.doctorId,
         pageSize: params.pageSize,
         pageCount: params.pageCount,
       },
-
     });
     return response.data;
   } catch (error) {
@@ -170,10 +168,10 @@ export const appointmentbooking = async (
       userId,
     };
 
-    const response = await axiosInstance.post("/booking", data);
+    const response = await axiosInstance.post('/booking', data);
     return response.data;
   } catch (error) {
-    console.error("error");
+    console.error('error');
   }
 };
 
@@ -188,7 +186,7 @@ export const get = async (params: { pageCount: number; pageSize: number }) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
 
@@ -199,61 +197,48 @@ export const getAppointmentBooking = async () => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching booking:", error);
+    console.error('Error fetching booking:', error);
     throw error; // Ensures the calling function can handle the error if needed
   }
 };
 
-export const getHospitalFilterData = async (
-
-  searchText: string,
-  
-  params: {
-    pageCount: number;
-    pageSize: number;
-  },
-  cityId?:string,
-) => {
+export const getHospitalFilterData = async (params: {
+  pageCount: number;
+  pageSize: number;
+  searchTerm?: string;
+  cityId?: string;
+}) => {
   try {
-    const response = await axiosInstance.get(
-  `hospital/filter?searchTerm=${searchText}${cityId ? `&cityId=${cityId}` : ''}`, 
-  {
-    params: {
-      pageSize: params.pageSize,
-      pageCount: params.pageCount,
-    },
-  }
-);
+    const response = await axiosInstance.get(`hospital/filter?`, {
+      params: {
+        pageSize: params.pageSize,
+        pageCount: params.pageCount,
+        searchTerm: params?.searchTerm,
+        cityId: params?.cityId,
+      },
+    });
 
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    console.log('error', error);
   }
 };
-
 
 export const getCities = async () => {
   try {
-    const response = await axiosInstance.get(
-      `/cities`
-    );
+    const response = await axiosInstance.get(`/cities`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching booking:", error);
-    throw error; // Ensures the calling function can handle the error if needed
+    throw error;
   }
 };
 
-
-export const getHospital = async () => {
+export const getHospital = async (id: any) => {
   try {
-    const response = await axiosInstance.get(
-      `/hospitals`
-    );
+    const response = await axiosInstance.get(`/hospital/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching booking:", error);
-    throw error; 
+    console.error('Error fetching doctor data:', error);
+    return null;
   }
 };

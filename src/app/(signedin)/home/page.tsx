@@ -11,6 +11,7 @@ import {
   getCities,
   getDepartmentData,
   getDoctorData,
+  getHospital,
   getHospitalFilterData,
   getMedicinesData,
   getPetData,
@@ -22,22 +23,13 @@ import { useDepartmentStore } from '@/store/departmentStore';
 import { useMedicineStore } from '@/store/medicinesStore';
 import { usePetStore } from '@/store/petStore';
 import doc from '../../../../public/doc.png';
+import { json } from 'stream/consumers';
 
 export default function Home() {
   const [doctorName, setDoctorName] = useState<string>('');
   const [cityName, setCityName] = useState<any>('');
   const [searchData, setsearchData] = useState('');
   const [cityData, setCitiesData] = useState('');
-  const handleFilter = async () => {
-    const searchTextData = await getHospitalFilterData(searchData, {
-      pageSize: 10,
-      pageCount: 1,
-    });
-
-    if (searchTextData) {
-      router.push('/hospitals');
-    }
-  };
 
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
@@ -244,6 +236,27 @@ export default function Home() {
   if (loading) {
     return <div>Loading ....!</div>;
   }
+
+  const handleFilter = async () => {
+    // const searchTextData = await getHospitalFilterData({
+    //   pageSize: 10,
+    //   pageCount: 1,
+    //   searchTerm: searchData,
+    // });
+    // const result = searchTextData?.records.map((record: any) => ({
+    //   id: record?.id,
+    // }));
+
+    const result = {
+      searchData: searchData,
+      cityId: cityName.value,
+    };
+    const encodedRecords = encodeURIComponent(JSON.stringify(result));
+    // if (searchTextData?.records?.length) {
+    if (searchData || cityName) {
+      await router.push(`/hospitals/${encodedRecords}`);
+    }
+  };
 
   return (
     <>
