@@ -233,9 +233,18 @@ export const getCities = async () => {
   }
 };
 
-export const getHospital = async (id: any) => {
+export const getByIdHospital = async (id: any) => {
   try {
     const response = await axiosInstance.get(`/hospital/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching doctor data:', error);
+    return null;
+  }
+};
+export const getHospitals = async () => {
+  try {
+    const response = await axiosInstance.get(`/hospitals`);
     return response.data;
   } catch (error) {
     console.error('Error fetching doctor data:', error);

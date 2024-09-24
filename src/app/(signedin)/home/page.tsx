@@ -11,8 +11,6 @@ import {
   getCities,
   getDepartmentData,
   getDoctorData,
-  getHospital,
-  getHospitalFilterData,
   getMedicinesData,
   getPetData,
 } from '@/app/(signedin)/home/action';
@@ -251,7 +249,7 @@ export default function Home() {
       searchData: searchData,
       cityId: cityName.value,
     };
-    const encodedRecords = encodeURIComponent(JSON.stringify(result));
+    const encodedRecords = (JSON.stringify(result));
     // if (searchTextData?.records?.length) {
     if (searchData || cityName) {
       await router.push(`/hospitals/${encodedRecords}`);
@@ -290,10 +288,12 @@ export default function Home() {
                       Find Nearest Medical Facility
                     </h1>
                     <div className="flex gap-4 justify-center md:justify-start mt-6">
-                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
+                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"   onClick={() => router.push('/viewallhospi')}
+                      >
                         View Hospitals
                       </button>
-                      <button className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200">
+                      <button className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200" onClick={() => router.push('/doctors')}
+                      >
                         View Doctors
                       </button>
                     </div>
@@ -357,7 +357,8 @@ export default function Home() {
                     <h3 className="text-lg font-bold">
                       Are You Make an Appointment
                     </h3>
-                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4">
+                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4" onClick={() => router.push('/Appointments')}
+                    >
                       Appointment
                     </button>
                   </div>
