@@ -1,29 +1,32 @@
-'use client';
-import { signOut } from '@/api/route';
+"use client";
+import { signOut } from "@/api/route";
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from '@/app/(signedin)/home/action';
-import SideBarIcon from '@/components/svg/side_bar_icon';
+} from "@/app/home/action";
+import SideBarIcon from "@/components/svg/side_bar_icon";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useDepartmentStore } from '@/store/departmentStore';
-import { useDoctorStore } from '@/store/doctorStore';
-import { useMedicineStore } from '@/store/medicinesStore';
-import { usePetStore } from '@/store/petStore';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import changePasswordImage from '../../../public/changePassword.jpg';
-import { default as Logo, default as Logoeffect } from '../../../public/stubby.png';
-import UserIcon from '../svg/user_icon';
-import AdminPopover from './AdminPopover';
+} from "@/components/ui/popover";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { useDoctorStore } from "@/store/doctorStore";
+import { useMedicineStore } from "@/store/medicinesStore";
+import { usePetStore } from "@/store/petStore";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import changePasswordImage from "../../../public/changePassword.jpg";
+import {
+  default as Logo,
+  default as Logoeffect,
+} from "../../../public/stubby.png";
+import UserIcon from "../svg/user_icon";
+import AdminPopover from "./AdminPopover";
 
 export default function AdminHeader() {
   const pathname = usePathname();
@@ -47,13 +50,13 @@ export default function AdminHeader() {
   ]);
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState('bg-transparent');
-  const [textColor, setTextColor] = useState('text-white'); // Default text color
+  const [headerBg, setHeaderBg] = useState("bg-transparent");
+  const [textColor, setTextColor] = useState("text-white"); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
 
   useEffect(() => {
-    setHeaderBg('bg-white bg-opacity-90');
-    setTextColor('text-black');
+    setHeaderBg("bg-white bg-opacity-90");
+    setTextColor("text-black");
     setLogo(Logoeffect);
   }, []);
 
@@ -68,7 +71,7 @@ export default function AdminHeader() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 

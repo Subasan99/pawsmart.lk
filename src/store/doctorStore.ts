@@ -19,6 +19,9 @@ export const useDoctorStore = create<Store>()(
       doctors: [],
       selectedDoctor: null,
       doctorAppointments: [],
+      setLoading: (loading: boolean) => {
+        set({ loading: true });
+      },
       setAllDoctors: (doctors: any[]) => {
         set({ doctors: doctors, loading: false });
       },

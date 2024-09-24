@@ -1,9 +1,9 @@
 "use client";
-import Header from "@/components/Header";
+import Header from "@/components/HomeComponent/Header";
 import MultipleImagesProps from "@/components/SinglePageImage";
 import { usePetStore } from "@/store/petStore";
 import { useEffect } from "react";
-import { getPetFilterData } from "../../home/action";
+import { getPetFilterData } from "../../../home/action";
 
 interface Pet {
   preSignedUrl: string;
@@ -40,6 +40,8 @@ const Pets = () => {
       }))
     : [];
 
+    console.log(pets)
+
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
   };
@@ -53,7 +55,8 @@ const Pets = () => {
         title="Pets Nutritional"
         description="Your Pets' Nutritional Health is Very Important & Our Priority"
         handleClick={handleClick}
-        doctors={petdata}
+        doctors={pets}
+        pathname="/pets"
       />
     </div>
   );

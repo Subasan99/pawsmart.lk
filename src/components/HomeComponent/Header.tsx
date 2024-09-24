@@ -16,7 +16,8 @@ import { usePetStore } from "@/store/petStore";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import Logoeffect from "../../public/stubby.png";
+import Logo from "../../../public/logowhite.png";
+import Logoeffect from "../../../public/stubby.png";
 
 export default function Home() {
   const pathName = usePathname();
@@ -40,13 +41,41 @@ export default function Home() {
   ]);
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-white bg-opacity-90");
-  const [textColor, setTextColor] = useState("text-black"); // Default text color
-  const [logo, setLogo] = useState(Logoeffect); // Default logo
+  const [headerBg, setHeaderBg] = useState("bg-transparent bg-opacity-90");
+  const [textColor, setTextColor] = useState("text-white"); // Default text color
+  const [logo, setLogo] = useState(Logo); // Default logo
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
     state.setLogin,
   ]);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      // if (!pathName.startsWith("/home")) {
+      //   setHeaderBg("bg-white bg-opacity-90");
+      //   setTextColor("text-black");
+      //   setLogo(Logoeffect);
+      //   return;
+      // }
+      if (scrollY > 0) {
+        setHeaderBg("bg-white bg-opacity-90");
+        setTextColor("text-black");
+        setLogo(Logoeffect);
+      } else {
+        setHeaderBg("bg-transparent");
+        setTextColor("text-white");
+        setLogo(Logo);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    fetchData();
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -67,6 +96,14 @@ export default function Home() {
     console.log("Search button clicked");
   };
 
+  const handleSearch = () => {
+    console.log("Search initiated");
+  };
+
+  const handleClick = (imageName: any) => {
+    console.log(`${imageName} clicked!`);
+  };
+
   const doctores = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
         src: doctor.preSignedUrl,
@@ -75,10 +112,36 @@ export default function Home() {
       }))
     : [];
 
+  const departmentDatas = Array.isArray(departments)
+    ? departments.map((department: any) => ({
+        src: department.preSignedUrl,
+        alt: department.image,
+        textOverlay: department.name,
+      }))
+    : [];
+
+  const petdata = Array.isArray(pets)
+    ? pets.map((pet: any) => ({
+        src: pet.preSignedUrl,
+        alt: pet.image,
+        textOverlay: pet.name,
+      }))
+    : [];
+
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
+
+  const medicinesDatas = Array.isArray(medicines)
+    ? medicines.map((medicines: any) => ({
+        src: medicines.preSignedUrl,
+        alt: medicines.image,
+        textOverlay: medicines.name,
+        label: medicines.name,
+      }))
+    : [];
 
   const handleMouseEnter = useCallback(
     (view: string) => setActiveDropdown(view),
@@ -87,29 +150,13 @@ export default function Home() {
   const handleMouseLeave = useCallback(() => setActiveDropdown(null), []);
 
   const handleSignout = async () => {
+    setLoading(true);
     await signOut();
     setLogin(undefined);
+    setLoading(false);
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      if (!pathName.startsWith("/home")) {
-        setHeaderBg("bg-white bg-opacity-90");
-        setTextColor("text-black");
-        setLogo(Logoeffect);
-        return;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    fetchData();
-
-    // Clean up the event listener
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const navigate = (link: string) => router.push(link);
 
   const renderDropdown = (items: any[], hrefBase: string) => (
     <div className="absolute bg-white shadow-md mt-2 w-48">
@@ -137,24 +184,24 @@ export default function Home() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 bg-white bg-opacity-90`}
+      className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
     >
       <div
-        className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 text-black`}
+        className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}
       >
         <div className="flex justify-between items-center w-full md:hidden">
           <a href="/">
-            <Image src={Logoeffect} alt="Company Logo" className="w-36" />
+            <Image src={logo} alt="Company Logo" className="w-36" />
           </a>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger className="px-3">
               <SideBarIcon />
             </SheetTrigger>
             <SheetContent
-              className={`h-full flex flex-col items-start text-black`}
+              className={`h-full flex flex-col items-start ${textColor}`}
             >
-              <Image src={Logoeffect} className="w-[288px]" alt="Company Logo" />
-              <ul className="flex flex-col space-y-4 text-black">
+              <Image src={logo} className="w-[288px]" alt="Company Logo" />
+              <ul className="flex flex-col space-y-4">
                 {/* Sidebar items */}
                 <li key={0}>
                   <a href="/" className="hover:text-red-500">
@@ -236,9 +283,9 @@ export default function Home() {
             </SheetContent>
           </Sheet>
         </div>
-        <div className="hidden md:flex md:items-center w-full text-black">
+        <div className="hidden md:flex md:items-center w-full">
           <a href="/">
-            <Image src={Logoeffect} alt="Company Logo" className="w-36" />
+            <Image src={logo} alt="Company Logo" className="w-36" />
           </a>
           <nav className="flex-1 flex justify-center">
             <ul className="flex space-x-8">

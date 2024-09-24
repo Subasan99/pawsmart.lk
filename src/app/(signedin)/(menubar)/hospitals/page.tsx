@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useDoctorStore } from "@/store/doctorStore";
-import { getDoctorFilterData, getHospital } from "../../home/action";
+import { getDoctorFilterData, getHospital } from "../../../home/action";
 import MultipleImagesProps from "@/components/SinglePageImage";
-import Header from "@/components/Header";
+import Header from "@/components/HomeComponent/Header";
 import { useHospitalStore } from "@/store/hospitalStore";
 import PopularDoctors from "@/components/Image";
 
@@ -20,7 +20,7 @@ const Hospitals = () => {
     state.setAllHospitals,
   ]);
   const [error, setError] = useState<string | null>(null);
-console.log('allHospitalsallHospitalsallHospitals',allHospitals)
+  console.log("allHospitalsallHospitalsallHospitals", allHospitals);
   useEffect(() => {
     fetchData();
   }, []);
@@ -28,15 +28,14 @@ console.log('allHospitalsallHospitalsallHospitals',allHospitals)
   const fetchData = async () => {
     try {
       const hospitalData = await getHospital();
-      console.log('hospitalDatahospitalData',hospitalData)
+      console.log("hospitalDatahospitalData", hospitalData);
       setAllHospitalData(hospitalData);
-      setError(null); 
+      setError(null);
     } catch (error) {
       console.error("Error fetching data:", error);
       setError("Failed to fetch doctors. Please try again later.");
     }
   };
-
 
   const hospitals = Array.isArray(allHospitals)
     ? allHospitals.map((doctor: Doctor) => ({
@@ -64,16 +63,16 @@ console.log('allHospitalsallHospitalsallHospitals',allHospitals)
         doctors={hospitals}
       /> */}
 
-<PopularDoctors
-            title="Departments"
-            description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="/departments"
-            handleClick={handleClick}
-            linkDescription={'Departments'}
-            doctors={hospitals.slice(0, 4)}
-            pathname={'/hospital'}
-            query={hospitals}
-          />
+      <PopularDoctors
+        title="Departments"
+        description="Your Pets Nutritional Health is Very Important & Our Priority"
+        link="/departments"
+        handleClick={handleClick}
+        linkDescription={"Departments"}
+        doctors={hospitals.slice(0, 4)}
+        pathname={"/hospital"}
+        query={hospitals}
+      />
     </div>
   );
 };

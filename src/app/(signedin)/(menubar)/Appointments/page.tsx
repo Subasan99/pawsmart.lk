@@ -1,9 +1,9 @@
 "use client";
 
-import Header from "@/components/Header";
+import Header from "@/components/HomeComponent/Header";
 import CircledArrowIcon from "@/components/svg/circled-arrow-icon";
 import { useEffect, useState } from "react";
-import { getAppointmentBooking } from "../../home/action";
+import { getAppointmentBooking } from "../../../home/action";
 
 const Appointments = (premiumBookings: any, normalBookings: any) => {
   const [activeTab, setActiveTab] = useState("all");
@@ -23,15 +23,15 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
       try {
         const response = await getAppointmentBooking();
         const DoctorName = response?.records?.[0]?.doctorResponse?.name;
-        setdoctorName(DoctorName)
+        setdoctorName(DoctorName);
         const bookingDate = response?.records?.[0]?.bookingDate;
-        setbookingdate(bookingDate)
+        setbookingdate(bookingDate);
         const bookingTime = response?.records?.[0]?.time;
-        setbookingTime(bookingTime)
+        setbookingTime(bookingTime);
         const Status = response?.records?.[0]?.status;
-        setstatus(Status)
+        setstatus(Status);
         const description = response?.records?.[0]?.description;
-        setdescription(description)
+        setdescription(description);
       } catch (error) {
         console.error(error);
       }
@@ -44,9 +44,7 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
     switch (activeTab) {
       case "premium":
         return (
-          
           <div className="flex flex-row gap-3  items-center justify-start w-full flex-1 p-8">
-            
             <div className="bg-blue-500 p-4 rounded-lg w-40 h-fit self-center items-center text-center">
               <div className="text-sm text-white">Doctor Name</div>
               <div className="text-sm font-medium">{DoctorName}</div>
@@ -97,31 +95,30 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
   };
   return (
     // <RootLayout pageName="Appointments">
-      <div className="container mx-auto mt-16 bg-[#F7F8F9] rounded-xl">
-        <div className="sticky z-30 top-0 md:static h-fit">
+    <div className="container mx-auto mt-16 bg-[#F7F8F9] rounded-xl">
+      <div className="sticky z-30 top-0 md:static h-fit">
         <Header />
       </div>
-        <div className="flex border-b">
-          <button
-            className={`px-4 py-2 ${
-              activeTab === "premium" ? "border-b-2 border-blue-500" : ""
-            }`}
-            onClick={() => handleTabClick("premium")}
-          >
-            Doctor
-          </button>
-          <button
-            className={`px-4 py-2 ${
-              activeTab === "normal" ? "border-b-2 border-blue-500" : ""
-            }`}
-            onClick={() => handleTabClick("normal")}
-          >
-            Medicine
-          </button>
-         
-        </div>
-        <div className="mt-4">{renderTabContent()}</div>
+      <div className="flex border-b">
+        <button
+          className={`px-4 py-2 ${
+            activeTab === "premium" ? "border-b-2 border-blue-500" : ""
+          }`}
+          onClick={() => handleTabClick("premium")}
+        >
+          Doctor
+        </button>
+        <button
+          className={`px-4 py-2 ${
+            activeTab === "normal" ? "border-b-2 border-blue-500" : ""
+          }`}
+          onClick={() => handleTabClick("normal")}
+        >
+          Medicine
+        </button>
       </div>
+      <div className="mt-4">{renderTabContent()}</div>
+    </div>
     // </RootLayout>
   );
 };

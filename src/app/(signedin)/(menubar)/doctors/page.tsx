@@ -1,9 +1,9 @@
 "use client";
-import Header from "@/components/Header";
+import Header from "@/components/HomeComponent/Header";
 import MultipleImagesProps from "@/components/SinglePageImage";
 import { useDoctorStore } from "@/store/doctorStore";
 import { useEffect, useState } from "react";
-import { getDoctorFilterData } from "../../home/action";
+import { getDoctorFilterData } from "../../../home/action";
 
 interface Doctor {
   preSignedUrl: string;

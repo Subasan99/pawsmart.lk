@@ -2,7 +2,10 @@
 import MultipleImagesProps from "@/components/SinglePageImage";
 import { useDepartmentStore } from "@/store/departmentStore";
 import { useEffect } from "react";
-import { getDeparmentFilterData, getDepartmentData } from "../../home/action";
+import {
+  getDeparmentFilterData,
+  getDepartmentData,
+} from "../../../home/action";
 
 const Department = () => {
   const [departments, setAllDepartments] = useDepartmentStore((state: any) => [

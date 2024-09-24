@@ -1,29 +1,29 @@
-'use client';
+"use client";
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from '@/app/(signedin)/home/action';
-import { useDepartmentStore } from '@/store/departmentStore';
-import { useDoctorStore } from '@/store/doctorStore';
-import { usePetStore } from '@/store/petStore';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import Logo from '../../public/logowhite.png';
-import Logoeffect from '../../public/stubby.png';
-import changePasswordImage from '../../public/changePassword.jpg';
+} from "@/app/home/action";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { useDoctorStore } from "@/store/doctorStore";
+import { usePetStore } from "@/store/petStore";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Logo from "../../public/logowhite.png";
+import Logoeffect from "../../public/stubby.png";
+import changePasswordImage from "../../public/changePassword.jpg";
 
-import SideBarIcon from '@/components/svg/side_bar_icon';
+import SideBarIcon from "@/components/svg/side_bar_icon";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import DoctorPopover from './DoctorPopover';
-import UserIcon from './svg/user_icon';
+} from "@/components/ui/popover";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import DoctorPopover from "./DoctorPopover";
+import UserIcon from "./svg/user_icon";
 
 export default function DoctorHeader() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -46,13 +46,13 @@ export default function DoctorHeader() {
   ]);
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState('bg-transparent');
-  const [textColor, setTextColor] = useState('text-white'); // Default text color
+  const [headerBg, setHeaderBg] = useState("bg-transparent");
+  const [textColor, setTextColor] = useState("text-white"); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
 
   useEffect(() => {
-    setHeaderBg('bg-white bg-opacity-90');
-    setTextColor('text-black');
+    setHeaderBg("bg-white bg-opacity-90");
+    setTextColor("text-black");
     setLogo(Logoeffect);
   }, []);
 
@@ -67,7 +67,7 @@ export default function DoctorHeader() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -185,5 +185,5 @@ export default function DoctorHeader() {
   );
 }
 function useMedicinesStore(arg0: (state: any) => any[]): [any, any] {
-  throw new Error('Function not implemented.');
+  throw new Error("Function not implemented.");
 }
