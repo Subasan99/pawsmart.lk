@@ -20,7 +20,6 @@ import Logo from "../../../public/logowhite.png";
 import Logoeffect from "../../../public/stubby.png";
 
 export default function Home() {
-  const pathName = usePathname();
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
     state.setAllDoctors,
@@ -39,7 +38,6 @@ export default function Home() {
     state.medicines,
     state.setAllMedicines,
   ]);
-
   // State to track scroll position
   const [headerBg, setHeaderBg] = useState("bg-transparent bg-opacity-90");
   const [textColor, setTextColor] = useState("text-white"); // Default text color
@@ -96,52 +94,11 @@ export default function Home() {
     console.log("Search button clicked");
   };
 
-  const handleSearch = () => {
-    console.log("Search initiated");
-  };
-
-  const handleClick = (imageName: any) => {
-    console.log(`${imageName} clicked!`);
-  };
-
-  const doctores = Array.isArray(doctors)
-    ? doctors.map((doctor: any) => ({
-        src: doctor.preSignedUrl,
-        alt: doctor.image,
-        textOverlay: doctor.name,
-      }))
-    : [];
-
-  const departmentDatas = Array.isArray(departments)
-    ? departments.map((department: any) => ({
-        src: department.preSignedUrl,
-        alt: department.image,
-        textOverlay: department.name,
-      }))
-    : [];
-
-  const petdata = Array.isArray(pets)
-    ? pets.map((pet: any) => ({
-        src: pet.preSignedUrl,
-        alt: pet.image,
-        textOverlay: pet.name,
-      }))
-    : [];
-
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
-
-  const medicinesDatas = Array.isArray(medicines)
-    ? medicines.map((medicines: any) => ({
-        src: medicines.preSignedUrl,
-        alt: medicines.image,
-        textOverlay: medicines.name,
-        label: medicines.name,
-      }))
-    : [];
 
   const handleMouseEnter = useCallback(
     (view: string) => setActiveDropdown(view),
@@ -213,11 +170,13 @@ export default function Home() {
                     About Us
                   </a>
                 </li>
-                <li key={2}>
-                  <a href="/Appointments" className="hover:text-red-500">
-                    Appointments
-                  </a>
-                </li>
+                {login && (
+                  <li key={2}>
+                    <a href="/Appointments" className="hover:text-red-500">
+                      Appointments
+                    </a>
+                  </li>
+                )}
                 <li
                   onClick={() => handleMouseEnter("departments")}
                   className="hover:text-red-500 relative"
@@ -300,11 +259,13 @@ export default function Home() {
                   About Us
                 </a>
               </li>
-              <li key={2}>
-                <a href="/Appointments" className="hover:text-red-500">
-                  Appointments{" "}
-                </a>
-              </li>
+              {login && (
+                <li key={2}>
+                  <a href="/Appointments" className="hover:text-red-500">
+                    Appointments{" "}
+                  </a>
+                </li>
+              )}
               <li
                 onMouseEnter={() => handleMouseEnter("departments")}
                 onMouseLeave={handleMouseLeave}

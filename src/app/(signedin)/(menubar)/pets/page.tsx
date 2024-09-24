@@ -4,6 +4,7 @@ import MultipleImagesProps from "@/components/SinglePageImage";
 import { usePetStore } from "@/store/petStore";
 import { useEffect } from "react";
 import { getPetFilterData } from "../../../home/action";
+import Loader from "@/components/Loader";
 
 interface Pet {
   preSignedUrl: string;
@@ -12,9 +13,11 @@ interface Pet {
 }
 
 const Pets = () => {
-  const [pets, setAllPets] = usePetStore((state: any) => [
+  const [pets, setAllPets, loading, setLoading] = usePetStore((state: any) => [
     state.pets,
     state.setAllPets,
+    state.loading,
+    state.setLoading,
   ]);
 
   useEffect(() => {
@@ -23,6 +26,7 @@ const Pets = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const petData = await getPetFilterData({ pageSize: 10, pageCount: 1 });
       setAllPets(petData.records);
     } catch (error) {
@@ -40,17 +44,24 @@ const Pets = () => {
       }))
     : [];
 
-    console.log(pets)
+  console.log(pets);
 
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
   };
 
-  return (
-    <div id="pets" className="pb-8 pt-0">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
+  if (loading || !pets) {
+    return (
+      <div className="mt-14 px-7 w-full h-full flex flex-col bg-gray-100 items-center py-4">
+        <div className="w-full max-w-[1204px] justify-center items-center flex flex-col px-3 py-5 h-full rounded-lg">
+          <Loader className="h-10 w-10" />
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div id="pets" className="pb-8 pt-2 w-full">
       <MultipleImagesProps
         title="Pets Nutritional"
         description="Your Pets' Nutritional Health is Very Important & Our Priority"

@@ -4,6 +4,7 @@ import MultipleImagesProps from "@/components/SinglePageImage";
 import { useDoctorStore } from "@/store/doctorStore";
 import { useEffect, useState } from "react";
 import { getDoctorFilterData } from "../../../home/action";
+import Loader from "@/components/Loader";
 
 interface Doctor {
   preSignedUrl: string;
@@ -13,11 +14,14 @@ interface Doctor {
 }
 
 const Doctors = () => {
-  const [allDoctors, setAllDoctors] = useDoctorStore((state: any) => [
-    state.doctors,
-    state.setAllDoctors,
-  ]);
-  const [error, setError] = useState<string | null>(null);
+  const [allDoctors, setAllDoctors, loading, setLoading] = useDoctorStore(
+    (state: any) => [
+      state.doctors,
+      state.setAllDoctors,
+      state.loading,
+      state.setLoading,
+    ]
+  );
 
   useEffect(() => {
     fetchData();
@@ -25,15 +29,14 @@ const Doctors = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const doctorsData = await getDoctorFilterData({
         pageSize: 10,
         pageCount: 1,
       });
       setAllDoctors(doctorsData.records);
-      setError(null); // Clear error if data fetch is successful
     } catch (error) {
       console.error("Error fetching data:", error);
-      setError("Failed to fetch doctors. Please try again later.");
     }
   };
 
@@ -51,16 +54,23 @@ const Doctors = () => {
     console.log(`Image clicked: ${imageName}`);
   };
 
-  return (
-    <div id="doctors" className="pb-8 pt-0">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
+  if (loading || !allDoctors) {
+    return (
+      <div className="mt-14 px-7 w-full h-full flex flex-col bg-gray-100 items-center py-4">
+        <div className="w-full max-w-[1204px] justify-center items-center flex flex-col px-3 py-5 h-full rounded-lg">
+          <Loader className="h-10 w-10" />
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div id="doctors" className="pb-8 pt-3 w-full">
       <MultipleImagesProps
         title="Popular Doctors"
         description="Meet With Professional Doctors."
         handleClick={handleClick}
-        doctors={doctores}
+        doctors={allDoctors}
       />
     </div>
   );

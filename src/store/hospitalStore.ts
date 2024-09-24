@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 type Store = {
   loading: boolean;
   hospitals: Hospital[];
-
+  
 
 };
 

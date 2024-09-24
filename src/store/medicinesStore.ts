@@ -10,6 +10,7 @@ type Store = {
   setSelectedMedicine: (medicine: Medicine | null | undefined) => void;
   medicineAppointments: Appointment[];
   setMedicineAppointments: (appointments: Appointment[]) => void;
+  setLoading: (loading: boolean) => void;
 };
 
 export const useMedicineStore = create<Store>()(
@@ -28,11 +29,14 @@ export const useMedicineStore = create<Store>()(
       },
       setSelectedMedicine: (medicine: Medicine | null | undefined) => {
         console.log("setSelectedMedicine", medicine);
-        
+
         set({ selectedMedicine: medicine, loading: false });
       },
       setMedicineAppointments: (appointments: Appointment[]) => {
         set({ medicineAppointments: appointments });
+      },
+      setLoading: (loading: boolean) => {
+        set({ loading: loading });
       },
     }),
     {

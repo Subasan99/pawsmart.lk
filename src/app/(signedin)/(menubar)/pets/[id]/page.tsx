@@ -60,8 +60,9 @@ const Index = ({ params }: { params: { id: string } }) => {
           handleClick={handleClick}
           linkDescription="Doctors"
           doctors={doctors}
-          pathname={"/doctor-details"}
+          pathname={"/appointmentdoctor"}
           query={doctores}
+          doctor={true}
         />
       </div>
     </div>

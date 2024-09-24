@@ -1,12 +1,9 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Header from '@/components/Header';
-import PopularDoctors from '@/components/Image';
-import {
-  
-  getHospitalFilterData,
-} from '@/app/home/action';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useEffect, useState } from "react";
+import Header from "@/components/Header";
+import PopularDoctors from "@/components/Image";
+import { getHospitalFilterData } from "@/app/home/action";
+import { useRouter } from "next/navigation";
 
 interface Hospital {
   preSignedUrl: string;
@@ -26,7 +23,6 @@ interface Doctor {
 }
 
 const Index = ({ params }: { params: { records: string } }) => {
-  
   const router = useRouter();
   const decodedRecords = JSON.parse(decodeURIComponent(params?.records));
   const [data, setData] = useState<any[]>([]);
@@ -46,8 +42,8 @@ const Index = ({ params }: { params: { records: string } }) => {
         cityId: decodedRecords?.cityId,
       });
       const result = searchTextData?.records.map((record: any) => ({
-        id:record?.id,
-        src: record?.preSignedUrl||defaultImage,
+        id: record?.id,
+        src: record?.preSignedUrl || defaultImage,
         alt: record?.name,
         textOverlay: record?.name,
         description: record?.description,
@@ -55,35 +51,31 @@ const Index = ({ params }: { params: { records: string } }) => {
       }));
 
       setData(result);
-   
     } catch (error) {
-      console.error('Error fetching hospital data:', error);
+      console.error("Error fetching hospital data:", error);
     }
   };
 
   const handleClick = (id: string) => {
     if (id) {
-      console.log('object',id)
+      console.log("object", id);
     }
   };
 
   return (
-    <div id="hospitals" className="pb-8 pt-20">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
+  
+      <div id="hospital" className="pb-8 pt-5">
+        <PopularDoctors
+          title="Popular Hospital"
+          description="see Your Hospital"
+          handleClick={handleClick}
+          doctors={data}
+          linkDescription={""}
+          pathname={"/hospital"}
+          query={data}
+        />
       </div>
-      <div id="hospital" className="pb-8 pt-20">
-      <PopularDoctors
-        title="Popular Hospital"
-        description="see Your Hospital"
-        handleClick={handleClick}
-        doctors={data}
-        linkDescription={''}
-        pathname={'/hospital'}
-        query={data}
-      />
-    </div>
-    </div>  
+  
   );
 };
 

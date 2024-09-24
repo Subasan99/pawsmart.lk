@@ -1,9 +1,13 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { getByIdHospital } from '../../../home/action';
-import Header from '@/components/Header';
-import { Phone } from 'lucide-react';
+"use client";
+import React, { useEffect, useState } from "react";
+import { useDoctorStore } from "@/store/doctorStore";
+import { getByIdHospital } from "@/app/home/action";
+import MultipleImagesProps from "@/components/SinglePageImage";
+import Header from "@/components/Header";
+import { useHospitalStore } from "@/store/hospitalStore";
+import PopularDoctors from "@/components/Image";
+import { useRouter } from "next/navigation";
+import { Phone } from "lucide-react";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [hospital, setHospital] = useState<any>(null);

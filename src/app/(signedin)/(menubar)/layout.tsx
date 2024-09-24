@@ -53,7 +53,7 @@ export default function RootLayout({
 }: RootLayoutProps) {
   return (
     // <div className={inter.className}>
-      <div className="w-full flex flex-col container pt-5 px-7 mx-auto my-5 grow">
+      <div className="w-screen container min-h-full flex flex-col pt-5 md:px-7 mx-auto my-5 grow">
         <div className="border-l-2 border-red-500 pl-2">
           <h2 className="font-bold text-2xl">{pageName}</h2>
         </div>
