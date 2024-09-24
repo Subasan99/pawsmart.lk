@@ -1,12 +1,13 @@
-"use client";
-import AppointmentBook from "@/components/AppointmentBook";
-import Header from "@/components/HomeComponent/Header";
-import Image from "next/image";
-import { useState } from "react";
-import DefaultDoc from "../../../../../public/default_user.png";
-import { useDoctorStore } from "@/store/doctorStore";
-import { DEFAULT_CIPHERS } from "tls";
-import Loader from "@/components/Loader";
+'use client';
+import AppointmentBook from '@/components/AppointmentBook';
+import Header from '@/components/HomeComponent/Header';
+import Image from 'next/image';
+import { useState } from 'react';
+import DefaultDoc from '../../../../../public/default_user.png';
+import { useDoctorStore } from '@/store/doctorStore';
+import { DEFAULT_CIPHERS } from 'tls';
+import Loader from '@/components/Loader';
+import { Mail, Smartphone } from 'lucide-react';
 
 const AppointmentDoctor = () => {
   const handleClick = (imageName: string) => {
@@ -20,25 +21,25 @@ const AppointmentDoctor = () => {
   ]);
 
   const doctorOptions = [
-    { label: "Select doctor", value: "" },
-    { label: "Doctor 1", value: "doctor1" },
-    { label: "Doctor 2", value: "doctor2" },
-    { label: "Doctor 3", value: "doctor3" },
+    { label: 'Select doctor', value: '' },
+    { label: 'Doctor 1', value: 'doctor1' },
+    { label: 'Doctor 2', value: 'doctor2' },
+    { label: 'Doctor 3', value: 'doctor3' },
   ];
 
   const doctor = [
-    { label: "Select doctor", value: "" },
-    { label: "Doctor 1x", value: "doctor1f" },
-    { label: "Doctor 2c", value: "doctor2c" },
-    { label: "Doctor 3x", value: "doctor3c" },
+    { label: 'Select doctor', value: '' },
+    { label: 'Doctor 1x', value: 'doctor1f' },
+    { label: 'Doctor 2c', value: 'doctor2c' },
+    { label: 'Doctor 3x', value: 'doctor3c' },
   ];
 
   const [appointmentInfo, setAppointmentInfo] = useState({
-    message: "",
-    startDate: "",
-    serialNumber: "",
-    selectedDoctor: "",
-    selectedValue: "",
+    message: '',
+    startDate: '',
+    serialNumber: '',
+    selectedDoctor: '',
+    selectedValue: '',
   });
 
   const handleChange = (field: any, value: any) => {
@@ -46,15 +47,15 @@ const AppointmentDoctor = () => {
   };
 
   const options = [
-    { value: "1", label: "1" },
-    { value: "2", label: "2" },
-    { value: "3", label: "3" },
-    { value: "4", label: "4" },
-    { value: "5", label: "5" },
+    { value: '1', label: '1' },
+    { value: '2', label: '2' },
+    { value: '3', label: '3' },
+    { value: '4', label: '4' },
+    { value: '5', label: '5' },
   ];
 
-  const [rating, setRating] = useState("");
-  const [Reviewmessage, setReviewmessage] = useState("");
+  const [rating, setRating] = useState('');
+  const [Reviewmessage, setReviewmessage] = useState('');
 
   const handleDoctorChange = (value: string) => {
     setRating(value);
@@ -72,14 +73,16 @@ const AppointmentDoctor = () => {
   return (
     <div className="flex flex-col md:flex-row w-full justify-start items-center md:items-center md:justify-center gap-3 h-full">
       {/* Your content here */}
-      <div className="flex w-full pt-8 md:w-[350px] md:h-full md:basis-1/2 md:justify-self-start md:justify-end self-start">
+
+      <div className="flex w-full h-full pt-8 pb-1 md:w-[350px] md:h-full md:basis-1/2 md:justify-self-start md:justify-end   self-start">
         {loading ? (
-          <div className="flex flex-col grow items-center justify-center p-10 md:max-w-[470px] bg-white border rounded shadow-md">
+          <div className="flex flex-col grow items-center justify-center p-10 md:max-w-[470px]  bg-white border rounded shadow-md">
             <Loader className="h-10 w-10" />
           </div>
         ) : (
-          <div className="flex w-full grow md:justify-self-end items-center flex-col gap-4 p-6 md:max-w-[470px] bg-white border rounded shadow-md h-full">
-            <div className="relative flex h-[250px] w-[250px] md:w-full md:h-[320px] self-center -p-6 md:bg-[#666666]">
+          <div className="flex w-full grow md:justify-self-end items-center md:h-full flex-col gap-5 p-6 md:max-w-[470px] bg-white border rounded shadow-md h-full px-10 py-10    ">
+            {/* // <div className="md:max-w-md  w-full gap-3 flex flex-col items-center px-2 py-11 border p-6 rounded shadow-md my-0 bg-white"> */}
+            <div className="relative flex h-[350px] w-[150px] md:w-full md:h-[420px] self-center -p-8  rounded-xl md:bg-[#666666]">
               {!selectedDoctor?.preSignedUrl ? (
                 <Image
                   src={selectedDoctor?.preSignedUrl}
@@ -96,7 +99,7 @@ const AppointmentDoctor = () => {
                 />
               )}
             </div>
-            <div className="flex flex-col items-center gap-2 px-2">
+            <div className="flex flex-col items-center gap-2 px-2 ">
               <div className="font-bold text-xl md:text-2xl text-center w-full">
                 <div>{selectedDoctor?.name}</div>
                 <div className="text-lg md:text-xl font-semibold w-full">
@@ -106,13 +109,16 @@ const AppointmentDoctor = () => {
                   {selectedDoctor?.specializationName}
                 </div>
               </div>
-              <div className="font-semibold text-lg md:text-xl text-center">
+              <div className="flex items-center font-semibold text-lg md:text-xl text-center">
+                <Mail className="mr-2" />
                 {selectedDoctor?.email}
               </div>
-              <div className="font-semibold text-lg md:text-xl text-center">
+              <div className="flex items-center font-semibold text-lg md:text-xl text-center">
+                <Smartphone className="mr-2" />
                 {selectedDoctor?.phoneNo}
               </div>
-              <div className="font-semibold text-md md:text-lg text-center w-full">
+
+              <div className="font-semibold text-md md:text-lg text-center  w-full">
                 &quot;{selectedDoctor?.description}&quot;
               </div>
             </div>
@@ -127,17 +133,17 @@ const AppointmentDoctor = () => {
           startDate={appointmentInfo.startDate}
           serialNumber={appointmentInfo.serialNumber}
           selectedDoctor={appointmentInfo.selectedDoctor}
-          handleDateChange={(newDate) => handleChange("startDate", newDate)}
+          handleDateChange={(newDate) => handleChange('startDate', newDate)}
           handleSerialNumberChange={(newSerialNumber) =>
-            handleChange("serialNumber", newSerialNumber)
+            handleChange('serialNumber', newSerialNumber)
           }
-          handleDoctorChange={(value) => handleChange("selectedDoctor", value)}
+          handleDoctorChange={(value) => handleChange('selectedDoctor', value)}
           handleMessageChange={(newMessage) =>
-            handleChange("message", newMessage)
+            handleChange('message', newMessage)
           }
           options={doctorOptions}
           selectedValue={appointmentInfo.selectedValue}
-          onChange={(value) => handleChange("selectedValue", value)}
+          onChange={(value) => handleChange('selectedValue', value)}
           doctors={doctor}
           handleCalendarChange={function (value: string): void {}}
           login={login}

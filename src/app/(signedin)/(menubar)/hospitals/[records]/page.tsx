@@ -5,7 +5,7 @@ import PopularDoctors from '@/components/Image';
 import {
   
   getHospitalFilterData,
-} from '@/app/(signedin)/home/action';
+} from '@/app/home/action';
 import { useRouter } from 'next/navigation';
 
 interface Hospital {
