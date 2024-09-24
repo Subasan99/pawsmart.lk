@@ -1,19 +1,31 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useDoctorStore } from "@/store/doctorStore";
-import { getByIdHospital } from "@/app/home/action";
-import MultipleImagesProps from "@/components/SinglePageImage";
-import Header from "@/components/Header";
-import { useHospitalStore } from "@/store/hospitalStore";
-import PopularDoctors from "@/components/Image";
-import { useRouter } from "next/navigation";
-import { Phone } from "lucide-react";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { useDoctorStore } from '@/store/doctorStore';
+import { getByIdHospital } from '@/app/home/action';
+import MultipleImagesProps from '@/components/SinglePageImage';
+import Header from '@/components/Header';
+import { useHospitalStore } from '@/store/hospitalStore';
+import PopularDoctors from '@/components/Image';
+import { useRouter } from 'next/navigation';
+import { Phone } from 'lucide-react';
 
 const Index = ({ params }: { params: { id: string } }) => {
-  const [hospital, setHospital] = useState<any>(null);
-  const [doctors, setDoctors] = useState<any[]>([]);
-  const [deparments, setDeparment] = useState<any[]>([]);
-  const [medicines, setMedicines] = useState<any[]>([]);
+  const [
+    selectedHospital,
+    setSelectedHospital,
+    departments,
+    doctors,
+    medicines,
+    setLoading,
+  ] = useHospitalStore((state) => [
+    state.selectedHospital,
+    state.setSelectedHospital,
+    state.departments,
+    state.doctors,
+    state.medicines,
+    state.setLoading,
+  ]);
+
   const [showDoctors, setShowDoctors] = useState(true);
   const [showMedicines, setShowMedicines] = useState(true);
   const [showDepartments, setShowDeparments] = useState(true);
@@ -23,42 +35,16 @@ const Index = ({ params }: { params: { id: string } }) => {
 
   const getByHospitalDetails = async () => {
     try {
+      setLoading(true);
       const getByHospital = await getByIdHospital(params?.id);
 
-      console.log(
-        'getByHospitalgetByHospitalgetByHospitalgetByHospital',
-        getByHospital
-      );
-      const deparmentList: any[] = [];
-
-      getByHospital?.doctorDepartmentResponses?.forEach((department: any) => {
-        const departmentResponse = department.departmentResponse;
-        if (departmentResponse) {
-          deparmentList.push(departmentResponse);
-        }
-      });
-
-      const doctorList: any[] = [];
-      await getByHospital?.doctorDepartmentResponses?.forEach(
-        (department: any) => {
-          department.doctorResponses.forEach((doctor: any) => {
-            doctorList.push(doctor);
-          });
-        }
-      );
-
-      const medicineList: any[] = [];
-      await getByHospital?.medicineResponses?.forEach((medicine: any) => {
-        medicineList.push(medicine);
-      });
-      setHospital(getByHospital);
-      setDeparment(deparmentList);
-      setDoctors(doctorList);
-      setMedicines(medicineList);
+      setSelectedHospital(getByHospital);
     } catch (error) {
       console.error(error);
     }
   };
+
+  console.log(selectedHospital, departments, doctors, medicines);
 
   const handleViewDoctors = () => {
     setShowDoctors(true);
@@ -107,7 +93,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             <div className="m-1 flex-1 text-center">
               <h1 className="text-3xl md:text-4xl font-bold leading-snug">
                 Easily locate the nearest
-                <span className="text-red-500"> {hospital?.name}</span>
+                <span className="text-red-500"> {selectedHospital?.name}</span>
               </h1>
               <p className="mt-4 text-gray-600">
                 Hospital and access healthcare services in your area.
@@ -117,10 +103,12 @@ const Index = ({ params }: { params: { id: string } }) => {
                 and explore Medifin for convenient medical solutions—all from
                 the comfort of your home.
               </p>
-              <p className="mt-4 text-gray-600">{hospital?.description}</p>
               <p className="mt-4 text-gray-600">
-                Location: {hospital?.city}, {hospital?.district},{' '}
-                {hospital?.province}
+                {selectedHospital?.description}
+              </p>
+              <p className="mt-4 text-gray-600">
+                Location: {selectedHospital?.city}, {selectedHospital?.district}
+                , {selectedHospital?.province}
               </p>
             </div>
           </div>
@@ -190,8 +178,8 @@ const Index = ({ params }: { params: { id: string } }) => {
 
           {activeTab === 'doctors' && (
             <button
-            className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
-            onClick={handleViewDoctors}
+              className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
+              onClick={handleViewDoctors}
             >
               View Doctors
             </button>
@@ -199,8 +187,8 @@ const Index = ({ params }: { params: { id: string } }) => {
 
           {activeTab === 'medicines' && (
             <button
-            className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
-            onClick={handleViewMedicines}
+              className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
+              onClick={handleViewMedicines}
             >
               View Medicines
             </button>
@@ -217,8 +205,8 @@ const Index = ({ params }: { params: { id: string } }) => {
 
           {activeTab === 'reviews' && (
             <button
-            className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
-            onClick={handleViewDoctors}
+              className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
+              onClick={handleViewDoctors}
             >
               View Reviews
             </button>
@@ -244,19 +232,19 @@ const Index = ({ params }: { params: { id: string } }) => {
                       <div className="flex">
                         <div className="flex-grow pl-4">
                           <h1 className="text-xl font-bold leading-snug">
-                            {doctor.name}
+                            {doctor?.name}
                           </h1>
                           <p className="mt-1 text-sm text-gray-500">
-                            Gender: {doctor.gender}
+                            Gender: {doctor?.gender}
                           </p>
                           <p className="mt-1 text-sm text-gray-500">
-                            Qualification: {doctor.qualification}
+                            Qualification: {doctor?.qualification}
                           </p>
                           <p className="mt-1 text-sm text-gray-500">
-                            Specialization: {doctor.specializationName}
+                            Specialization: {doctor?.specializationName}
                           </p>
                           <p className="text-sm text-gray-500">
-                            Duration: {doctor.duration} mins
+                            Duration: {doctor?.duration} mins
                           </p>
                         </div>
                         <div className="flex-none mt-4">
@@ -338,8 +326,8 @@ const Index = ({ params }: { params: { id: string } }) => {
           <div className="w-full mt-4">
             {showDepartments && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                {deparments.length > 0 ? (
-                  deparments.map((deparment, index) => (
+                {departments.length > 0 ? (
+                  departments?.map((deparment, index) => (
                     <div
                       key={index}
                       className="m-2 hover:bg-white shadow-lg bg-slate-100 relative"

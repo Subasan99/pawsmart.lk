@@ -40,7 +40,7 @@ export type Doctor = {
   description: string;
   departmentId: string;
   departmentName: string;
-  qualification:string;
+  qualification: string;
   image: string;
   preSignedUrl: string;
   duration: number;
@@ -177,7 +177,6 @@ export type Booking = {
   userResponse: UserBooking;
 };
 
-
 export type User = {
   id: string;
   name: string;
@@ -210,42 +209,59 @@ export type Hospital = {
   createdDate: string;
   updatedDate: string;
   doctorDepartmentResponses: {
-    departmentResponse: {
-      id: number;
-      name: string;
-      description: string;
-      image: string;
-      preSignedUrl: string | null;
-      createdDate: string;
-      updatedDate: string;
-      active: boolean;
-    };
-    doctorResponses: {
-      id: number;
-      name: string;
-      email: string;
-      phoneNo: string;
-      dateOfBirth: string;
-      gender: string;
-      specializationId: number;
-      specializationName: string;
-      description: string;
-      departmentId: number | null;
-      departmentName: string | null;
-      qualification: string | null;
-      image: string | null;
-      preSignedUrl: string | null;
-      duration: number;
-      dayTimeSlotResponses: {
+    departmentResponse: departmentResponse[];
+    doctorResponses: doctorResponses[];
+  }[];
+  medicineResponses: medicineResponse[];
+  active: boolean;
+};
+export type departmentResponse = {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  preSignedUrl: string | null;
+  createdDate: string;
+  updatedDate: string;
+  active: boolean;
+};
+
+export type doctorResponses = {
+  id: number;
+  name: string;
+  email: string;
+  phoneNo: string;
+  dateOfBirth: string;
+  gender: string;
+  specializationId: number;
+  specializationName: string;
+  description: string;
+  departmentId: number | null;
+  departmentName: string | null;
+  qualification: string | null;
+  image: string | null;
+  preSignedUrl: string | null;
+  duration: number;
+  dayTimeSlotResponses:
+    | {
         day: string;
         timeSlots: { startTime: string; endTime: string }[];
         appointmentTimes: string[];
-      }[] | null;
-      createdDate: string;
-      updatedDate: string;
-      active: boolean;
-    }[];
-  }[];
-  medicineResponses: any[]; 
+      }[]
+    | null;
+  createdDate: string;
+  updatedDate: string;
+  active: boolean;
+};
+export type medicineResponse = {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  preSignedUrl: string | null;
+  dayTimeSlotResponses: any | null;
+  duration: any;
+  createdDate: string;
+  updatedDate: string;
   active: boolean;
 };
