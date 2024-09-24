@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-full w-full flex flex-col">
+    <div className="h-full min-h-screen w-full flex flex-col">
       <Header />
       <div className="grow bg-gray-100">{children}</div>
       <div className="mt-auto justify-end">

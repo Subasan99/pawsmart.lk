@@ -8,6 +8,7 @@ type Store = {
   pet: Pet[];
   selectedPet: Pet | null | undefined;
   setSelectedPet: (pet: Pet | null | undefined) => void;
+  setLoading : (loading: boolean) => void;
 };
 
 export const usePetStore = create<Store>()(
@@ -25,6 +26,9 @@ export const usePetStore = create<Store>()(
       },
       setSelectedPet: (pet: Pet | null | undefined) => {
         set({ selectedPet: pet, loading: false });
+      },
+      setLoading: (loading: boolean) => {
+        set({ loading: loading });
       },
     }),
     {

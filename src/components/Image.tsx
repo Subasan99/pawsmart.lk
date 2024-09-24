@@ -41,7 +41,7 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
   console.log(doctors);
 
   return (
-    <div className="w-full container pt-5 px-7 mx-auto">
+    <div className="w-full container pt-5 px-0 md:px-7 mx-auto">
       <div className="border-l-2 border-red-500 pl-2">
         <h2 className="font-bold text-2xl">{title}</h2>
       </div>
@@ -86,7 +86,7 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
                 width={1000}
                 height={1000}
                 alt={image.name}
-                className="w-full h-auto object-cover md:w-100 md:h-80 transition-transform duration-300 ease-in-out hover:scale-105"
+                className="w-full h-60 object-top object-cover md:w-100 md:h-80 transition-transform duration-300 ease-in-out hover:scale-105"
               />
             </Link>
           ))}

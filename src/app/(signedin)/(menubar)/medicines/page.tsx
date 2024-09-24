@@ -4,6 +4,7 @@ import MultipleImagesProps from "@/components/SinglePageImage";
 import { useMedicineStore } from "@/store/medicinesStore";
 import { useEffect } from "react";
 import { getMedicineFilterData } from "../../../home/action";
+import Loader from "@/components/Loader";
 
 interface Medicine {
   preSignedUrl: string;
@@ -12,10 +13,14 @@ interface Medicine {
 }
 
 const Medicines = () => {
-  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
-    state.medicines,
-    state.setAllMedicines,
-  ]);
+  const [medicines, setAllMedicines, loading, setLoading] = useMedicineStore(
+    (state: any) => [
+      state.medicines,
+      state.setAllMedicines,
+      state.loading,
+      state.setLoading,
+    ]
+  );
 
   useEffect(() => {
     fetchData();
@@ -23,6 +28,7 @@ const Medicines = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const medicinesData = await getMedicineFilterData({
         pageSize: 10,
         pageCount: 1,
@@ -33,29 +39,28 @@ const Medicines = () => {
     }
   };
 
-  const medicinesData = Array.isArray(medicines)
-    ? medicines.map((medicine: Medicine) => ({
-        src: medicine.preSignedUrl,
-        alt: medicine.image,
-        textOverlay: medicine.name,
-        label: medicine.name,
-      }))
-    : [];
-
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
   };
 
-  return (
-    <div id="medicines" className="pb-8 pt-40">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
+  if (loading || !medicines) {
+    return (
+      <div className="mt-14 px-7 w-full h-full flex flex-col bg-gray-100 items-center py-4">
+        <div className="w-full max-w-[1204px] justify-center items-center flex flex-col px-3 py-5 h-full rounded-lg">
+          <Loader className="h-10 w-10" />
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div id="medicines" className="pb-8 pt-16 w-full">
       <MultipleImagesProps
         title="Medicines"
         description="Discover our range of medicines for your health needs."
         handleClick={handleClick}
-        doctors={medicinesData} // Consider renaming `doctors` to something more appropriate like `items` or `images`
+        pathname="medicines"
+        doctors={medicines} // Consider renaming `doctors` to something more appropriate like `items` or `images`
       />
     </div>
   );

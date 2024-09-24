@@ -1,16 +1,16 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useDoctorStore } from '@/store/doctorStore';
-import { getDoctorFilterData, getHospital } from '../../../home/action';
-import MultipleImagesProps from '@/components/SinglePageImage';
-import Header from '@/components/Header';
-import { useHospitalStore } from '@/store/hospitalStore';
-import PopularDoctors from '@/components/Image';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useEffect, useState } from "react";
+import { useDoctorStore } from "@/store/doctorStore";
+import { getHospital } from "@/app/home/action";
+import MultipleImagesProps from "@/components/SinglePageImage";
+import Header from "@/components/Header";
+import { useHospitalStore } from "@/store/hospitalStore";
+import PopularDoctors from "@/components/Image";
+import { useRouter } from "next/navigation";
 
 const Index = ({ params }: { params: { id: string } }) => {
-  console.log('objectammmaaaaa', params?.id);
-  const [hospital, sethospital] = useState<any>('');
+  console.log("objectammmaaaaa", params?.id);
+  const [hospital, sethospital] = useState<any>("");
   const [doctors, setDoctors] = useState<any[]>([]);
   useEffect(() => {
     getByHospitalDetails();
@@ -34,48 +34,44 @@ const Index = ({ params }: { params: { id: string } }) => {
       return null;
     }
   };
-  const defaultImage = '/department.png';
+  const defaultImage = "/department.png";
 
   return (
     <div id="hospitals" className="pb-8 pt-20">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
-      </div>
-
       <div
         className="m-10"
         style={{
-          border: '1px solid #ddd',
-          padding: '30px',
-          borderRadius: '8px',
-          display: 'flex',
-          maxWidth: '500px',
-          backgroundColor: 'white',
+          border: "1px solid #ddd",
+          padding: "30px",
+          borderRadius: "8px",
+          display: "flex",
+          maxWidth: "500px",
+          backgroundColor: "white",
         }}
       >
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: "relative" }}>
           <img
             src={defaultImage}
             alt="Hospital Building"
-            style={{ width: '150px', height: 'auto', borderRadius: '8px' }}
+            style={{ width: "150px", height: "auto", borderRadius: "8px" }}
           />
           <span
             style={{
-              position: 'absolute',
-              top: '8px',
-              left: '8px',
-              backgroundColor: 'red',
-              color: 'white',
-              padding: '4px 8px',
-              borderRadius: '50%',
-              fontWeight: 'bold',
+              position: "absolute",
+              top: "8px",
+              left: "8px",
+              backgroundColor: "red",
+              color: "white",
+              padding: "4px 8px",
+              borderRadius: "50%",
+              fontWeight: "bold",
             }}
           >
             ✨
           </span>
         </div>
 
-        <div style={{ marginLeft: '16px' }}>
+        <div style={{ marginLeft: "16px" }}>
           <a href="/hospitals" className="hover:text-red-500">
             Hospital
           </a>
@@ -83,21 +79,21 @@ const Index = ({ params }: { params: { id: string } }) => {
           
           </h2> */}
 
-          <h2 style={{ fontSize: '1.5em', margin: '0' }}>
+          <h2 style={{ fontSize: "1.5em", margin: "0" }}>
             {hospital?.name}
             {/* <span style={{ color: 'green' }}>✔️</span> */}
           </h2>
           <p>
-            Location: {hospital?.city}, {hospital?.district},{' '}
+            Location: {hospital?.city}, {hospital?.district},{" "}
             {hospital?.province}
           </p>
           <div
-            style={{ display: 'flex', alignItems: 'center', marginTop: '8px' }}
+            style={{ display: "flex", alignItems: "center", marginTop: "8px" }}
           >
-            <span style={{ color: 'gold' }}>⭐⭐⭐⭐⭐</span>
-            <span style={{ marginLeft: '8px' }}>2100 Feedback</span>
+            <span style={{ color: "gold" }}>⭐⭐⭐⭐⭐</span>
+            <span style={{ marginLeft: "8px" }}>2100 Feedback</span>
           </div>
-          <p style={{ margin: '12px 0', color: '#555' }}>
+          <p style={{ margin: "12px 0", color: "#555" }}>
             {hospital?.description}
           </p>
           {/* <div style={{ display: 'flex', gap: '10px' }}>
@@ -107,26 +103,25 @@ const Index = ({ params }: { params: { id: string } }) => {
         </div>
       </div>
 
-
       {doctors.length > 0 ? (
-  <div
-    style={{
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      gap: '20px',
-    }}
-  >
-{doctors.length > 0 ? (
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-between', // Ensures spacing between cards
-      gap: '20px', // Optional, extra spacing between cards
-      flexWrap: 'nowrap', // Prevents wrapping of the cards
-    }}
-  >
-    {/* {doctors.map((doctor, index) => (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-around",
+            gap: "20px",
+          }}
+        >
+          {doctors.length > 0 ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between", // Ensures spacing between cards
+                gap: "20px", // Optional, extra spacing between cards
+                flexWrap: "nowrap", // Prevents wrapping of the cards
+              }}
+            >
+              {/* {doctors.map((doctor, index) => (
       <div
         key={index}
         className="m-10"
@@ -170,16 +165,14 @@ const Index = ({ params }: { params: { id: string } }) => {
         </div>
       </div>
     ))} */}
-  </div>
-) : (
-  <p className="m-10">No doctors available</p>
-)}
-
-  </div>
-) : (
-  <p className="m-10">No doctors available</p>
-)}
-
+            </div>
+          ) : (
+            <p className="m-10">No doctors available</p>
+          )}
+        </div>
+      ) : (
+        <p className="m-10">No doctors available</p>
+      )}
     </div>
   );
 };

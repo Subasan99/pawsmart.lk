@@ -8,6 +8,7 @@ type Store = {
   department: Department[];
   selectedDepartment: Department | null | undefined;
   setSelectedDepartment: (department: Department | null | undefined) => void;
+  setLoading: (loading: boolean) => void;
 };
 
 export const useDepartmentStore = create<Store>()(
@@ -25,6 +26,9 @@ export const useDepartmentStore = create<Store>()(
       },
       setSelectedDepartment: (department: Department | null | undefined) => {
         set({ selectedDepartment: department, loading: false });
+      },
+      setLoading(loading: boolean) {
+        set({ loading: loading });
       },
     }),
     {

@@ -343,9 +343,9 @@ export default function Home() {
             link="/departments"
             handleClick={handleClick}
             linkDescription={"Departments"}
-            doctors={departmentDatas.slice(0, 4)}
+            doctors={departments.slice(0, 4)}
             pathname={"/departments"}
-            query={departmentDatas}
+            query={departments}
           />
         </div>
         <div>
@@ -395,9 +395,9 @@ export default function Home() {
             link="/doctors"
             handleClick={handleClick}
             linkDescription="Doctors"
-            doctors={doctores.slice(0, 4)}
+            doctors={doctors.slice(0, 4)}
             pathname={"/doctor-details"}
-            query={doctores}
+            query={doctors}
           />
         </div>
         <div id="pets" className="pb-8 pt-20">
@@ -407,7 +407,7 @@ export default function Home() {
             link="/pets"
             handleClick={handleClick}
             linkDescription={"Pets"}
-            doctors={petdata.slice(0, 4)}
+            doctors={pets.slice(0, 4)}
             pathname={"/pets"}
             query={petdata}
           />

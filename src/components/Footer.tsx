@@ -45,11 +45,11 @@ export default function Footer() {
             <Youtube className="hover:text-red-500" />
             <Instagram className="hover:text-red-500" />
           </div>
-          <div className="w-full flex gap-1 py-2">
+          {/* <div className="w-full flex gap-1 py-2">
             <div className="text-red-500 hover:text-black">English</div>
             <div className="text-red-500 hover:text-black">English</div>
             <div className="text-red-500 hover:text-black">English</div>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col py-3 md:w-1/4 px-1 w-full gap-2">
           <div className="font-semibold text-lg mb-2">Departments</div>

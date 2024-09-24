@@ -6,24 +6,29 @@ import {
   getDeparmentFilterData,
   getDepartmentData,
 } from "../../../home/action";
+import Loader from "@/components/Loader";
 
 const Department = () => {
-  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
-    state.departments,
-    state.setAllDepartments,
-  ]);
+  const [departments, setAllDepartments, loading, setLoading] =
+    useDepartmentStore((state: any) => [
+      state.departments,
+      state.setAllDepartments,
+      state.loading,
+      state.setLoading,
+    ]);
 
   useEffect(() => {
     fetchData();
   }, [getDepartmentData]);
   const fetchData = async () => {
     try {
+      setLoading(true);
       const departmentData = await getDeparmentFilterData({
         pageSize: 10,
         pageCount: 1,
       });
 
-      setAllDepartments(departmentData);
+      setAllDepartments(departmentData?.records);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -43,13 +48,25 @@ const Department = () => {
     console.log(`Image clicked: ${imageName}`);
   };
 
+  console.log(departments)
+
+  if (loading || !departments) {
+    return (
+      <div className="mt-14 px-7 w-full h-full flex flex-col items-center py-4">
+        <div className="w-full grow max-w-[1204px] justify-center items-center flex flex-col px-3 py-5 h-full rounded-lg">
+          <Loader className="h-10 w-10" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div id="departments" className="pb-8 pt-20">
       <MultipleImagesProps
         title="Departments"
         description="Your Pets Nutritional Health is Very Important & Our Priority"
         handleClick={handleClick}
-        doctors={departmentDatas}
+        doctors={departments}
         pathname={"/departments"}
         query={departmentDatas}
       />

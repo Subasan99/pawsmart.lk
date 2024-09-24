@@ -50,7 +50,7 @@ const Index = ({ params }: { params: { id: string } }) => {
     );
   }
   return (
-    <div className="mt-14 px-7 w-full flex flex-col items-center py-4">
+    <div className="mt-14 px-0 md:px-7 w-full flex flex-col items-center py-4">
       <div className="w-full flex flex-col max-w-[1204px] gap-y-3">
         <PopularDoctors
           title={`${department?.name}`}
