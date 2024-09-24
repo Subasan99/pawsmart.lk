@@ -1,12 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useDoctorStore } from '@/store/doctorStore';
 import { getByIdHospital } from '@/app/home/action';
-import MultipleImagesProps from '@/components/SinglePageImage';
 import Header from '@/components/Header';
 import { useHospitalStore } from '@/store/hospitalStore';
-import PopularDoctors from '@/components/Image';
-import { useRouter } from 'next/navigation';
 import { Phone } from 'lucide-react';
 
 const Index = ({ params }: { params: { id: string } }) => {
@@ -43,8 +39,6 @@ const Index = ({ params }: { params: { id: string } }) => {
       console.error(error);
     }
   };
-
-  console.log(selectedHospital, departments, doctors, medicines);
 
   const handleViewDoctors = () => {
     setShowDoctors(true);
@@ -274,8 +268,6 @@ const Index = ({ params }: { params: { id: string } }) => {
             )}
           </div>
         )}
-
-        {/* Medicines Section */}
         {activeTab === 'medicines' && (
           <div className="mt-8">
             {showMedicines && (

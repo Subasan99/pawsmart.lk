@@ -17,7 +17,6 @@ const Index = ({ params }: { params: { records: string } }) => {
     getHospitalDetails();
   }, []);
 
-  const defaultImage = '/department.png';
 
   const getHospitalDetails = async () => {
     try {
@@ -34,15 +33,7 @@ const Index = ({ params }: { params: { records: string } }) => {
     }
   };
 
-  console.log('hospitalshospitalshospitals', hospitals);
-  const hospitalsResult = hospitals?.map((record: any) => ({
-    id: record?.id,
-    src: record?.preSignedUrl || defaultImage,
-    alt: record?.name,
-    textOverlay: record?.name,
-    description: record?.description,
-    dayTimeSlotResponses: [],
-  }));
+
   const handleClick = (id: string) => {
     if (id) {
       console.log('object', id);
