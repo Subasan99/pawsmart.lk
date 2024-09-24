@@ -44,7 +44,7 @@ const Department = () => {
   };
 
   return (
-    <div id="departments" className="pb-8 pt-20">
+    <div id="departments" className="pb-8 pt-0">
       <MultipleImagesProps
         title="Departments"
         description="Your Pets Nutritional Health is Very Important & Our Priority"

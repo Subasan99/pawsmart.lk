@@ -52,7 +52,7 @@ const Doctors = () => {
   };
 
   return (
-    <div id="doctors" className="pb-8 pt-20">
+    <div id="doctors" className="pb-8 pt-0">
       <div className="sticky z-30 top-0 md:static h-fit">
         <Header />
       </div>

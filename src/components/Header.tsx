@@ -157,7 +157,7 @@ export default function Home() {
               <ul className="flex flex-col space-y-4 text-black">
                 {/* Sidebar items */}
                 <li key={0}>
-                  <a href="/" className="hover:text-red-500">
+                  <a href="/home" className="hover:text-red-500">
                     Home
                   </a>
                 </li>
@@ -244,7 +244,7 @@ export default function Home() {
             <ul className="flex space-x-8">
               {/* Navbar items */}
               <li key={0}>
-                <a href="/" className="hover:text-red-500">
+                <a href="/home" className="hover:text-red-500">
                   Home
                 </a>
               </li>
