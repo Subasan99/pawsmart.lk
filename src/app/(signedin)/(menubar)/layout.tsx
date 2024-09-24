@@ -52,8 +52,8 @@ export default function RootLayout({
   description,
 }: RootLayoutProps) {
   return (
-    <div className={inter.className}>
-      <div className="w-full container pt-5 px-7 mx-auto my-5">
+    // <div className={inter.className}>
+      <div className="w-full flex flex-col container pt-5 px-7 mx-auto my-5 grow">
         <div className="border-l-2 border-red-500 pl-2">
           <h2 className="font-bold text-2xl">{pageName}</h2>
         </div>
@@ -62,8 +62,7 @@ export default function RootLayout({
             {description}
           </p>
         </div>
-        <div className="flex-grow">{children}</div>
+        <div className="flex grow">{children}</div>
       </div>
-    </div>
   );
 }

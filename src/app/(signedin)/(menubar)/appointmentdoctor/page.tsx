@@ -1,15 +1,23 @@
 "use client";
 import AppointmentBook from "@/components/AppointmentBook";
-import Header from "@/components/Header";
+import Header from "@/components/HomeComponent/Header";
 import Image from "next/image";
 import { useState } from "react";
-import petImage from "../../../../components/png/dogBooking.png";
+import DefaultDoc from "../../../../../public/default_user.png";
+import { useDoctorStore } from "@/store/doctorStore";
+import { DEFAULT_CIPHERS } from "tls";
+import Loader from "@/components/Loader";
 
 const AppointmentDoctor = () => {
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
   };
   const [login, setLogin] = useState<any | undefined>();
+
+  const [selectedDoctor, loading] = useDoctorStore((state: any) => [
+    state.selectedDoctor,
+    state.loading,
+  ]);
 
   const doctorOptions = [
     { label: "Select doctor", value: "" },
@@ -55,25 +63,65 @@ const AppointmentDoctor = () => {
   const handleMessageReview = (value: string) => {
     setReviewmessage(value);
   };
+  console.log(selectedDoctor);
 
   const [votedrating, setVotedRating] = useState(0);
   const handleRatingChange = (value: string) => setRating(value);
   const handleReviewChange = (value: string) => setReviewmessage(value);
 
-
   return (
-    <div className="flex flex-row w-full items-start justify-center content-center">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
-      </div>
+    <div className="flex flex-col md:flex-row w-full justify-start items-center md:items-center md:justify-center gap-3 h-full">
       {/* Your content here */}
-      <div className="hidden md:flex p-10">
-        <Image src={petImage} alt="Company Logo" width={600} height={400} />
+      <div className="flex w-full pt-8 md:w-[350px] md:h-full md:basis-1/2 md:justify-self-start md:justify-end self-start">
+        {loading ? (
+          <div className="flex flex-col grow items-center justify-center p-10 md:max-w-[470px] bg-white border rounded shadow-md">
+            <Loader className="h-10 w-10" />
+          </div>
+        ) : (
+          <div className="flex w-full grow md:justify-self-end items-center flex-col gap-4 p-6 md:max-w-[470px] bg-white border rounded shadow-md h-full">
+            <div className="relative flex h-[250px] w-[250px] md:w-full md:h-[320px] self-center -p-6 md:bg-[#666666]">
+              {!selectedDoctor?.preSignedUrl ? (
+                <Image
+                  src={selectedDoctor?.preSignedUrl}
+                  alt="doctor"
+                  fill
+                  className="object-cover object-top rounded-full md:rounded-none"
+                />
+              ) : (
+                <Image
+                  src={DefaultDoc}
+                  alt="doctor"
+                  fill
+                  className="object-contain"
+                />
+              )}
+            </div>
+            <div className="flex flex-col items-center gap-2 px-2">
+              <div className="font-bold text-xl md:text-2xl text-center w-full">
+                <div>{selectedDoctor?.name}</div>
+                <div className="text-lg md:text-xl font-semibold w-full">
+                  {selectedDoctor?.departmentName}
+                </div>
+                <div className="text-lg md:text-xl font-semibold w-full">
+                  {selectedDoctor?.specializationName}
+                </div>
+              </div>
+              <div className="font-semibold text-lg md:text-xl text-center">
+                {selectedDoctor?.email}
+              </div>
+              <div className="font-semibold text-lg md:text-xl text-center">
+                {selectedDoctor?.phoneNo}
+              </div>
+              <div className="font-semibold text-md md:text-lg text-center w-full">
+                &quot;{selectedDoctor?.description}&quot;
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      <div className="flex w-full md:w-fit md:grow">
-      {/* @ts-expect-error */}
-      <AppointmentBook
+      <div className="flex w-full md:w-fit md:basis-1/2">
+        {/* @ts-expect-error */}
+        <AppointmentBook
           userId="1"
           message={appointmentInfo.message}
           startDate={appointmentInfo.startDate}

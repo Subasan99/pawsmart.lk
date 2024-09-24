@@ -5,7 +5,7 @@ import {
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from "@/app/(signedin)/home/action";
+} from "@/app/home/action";
 import FilterDropdown from "@/components/FilterDropdown";
 import PopularDoctors from "@/components/Image";
 import { useAuthStore } from "@/store/authStore";

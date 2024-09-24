@@ -3,13 +3,14 @@
 import { getDepartmentById } from "@/app/admin/departments/action";
 import { getDoctorData } from "@/app/admin/doctors/action";
 import PopularDoctors from "@/components/Image";
+import Loader from "@/components/Loader";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [doctors, setDoctors] = useState<any>([]);
-  const [department, setDepartment] = useState<any>(undefined)
+  const [department, setDepartment] = useState<any>(undefined);
   const [dloading, setdLoading] = useState<boolean>(true);
   async function fetchData() {
     const response = await getDoctorData(1, 10, undefined, params.id);
@@ -41,9 +42,9 @@ const Index = ({ params }: { params: { id: string } }) => {
   }, []);
   if (dloading && !department) {
     return (
-      <div className="mt-14 px-7 w-full flex flex-colbg-gray-100 items-center py-4">
-        <div className="w-full max-w-[1204px] flex flex-col px-3 py-5 h-full rounded-lg">
-          Loading...!
+      <div className="mt-14 px-7 w-full h-full flex flex-col bg-gray-100 items-center py-4">
+        <div className="w-full max-w-[1204px] justify-center items-center flex flex-col px-3 py-5 h-full rounded-lg">
+          <Loader className="h-10 w-10"/>
         </div>
       </div>
     );
@@ -54,12 +55,13 @@ const Index = ({ params }: { params: { id: string } }) => {
         <PopularDoctors
           title={`${department?.name}`}
           description="Meet With Professional Doctors."
-        //   link="/doctors"
+          //   link="/doctors"
           handleClick={handleClick}
           linkDescription="Doctors"
-          doctors={doctores}
-          pathname={"/doctor-details"}
+          doctors={doctors}
+          pathname={"/appointmentdoctor"}
           query={doctores}
+          doctor={true}
         />
       </div>
     </div>

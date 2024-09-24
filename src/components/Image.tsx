@@ -1,4 +1,5 @@
 "use client";
+import { useDoctorStore } from "@/store/doctorStore";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,9 +10,9 @@ interface PopularDoctorsProps {
   linkDescription: string;
   doctors: {
     id?: string;
-    src: string;
-    alt: string;
-    textOverlay: string;
+    preSignedUrl: string;
+    name: string;
+    departmentName: string;
     description?: string;
     specializationName?: string;
     dayTimeSlotResponses?: [];
@@ -19,6 +20,7 @@ interface PopularDoctorsProps {
   handleClick: (imageName: any, image: any, id: any) => void;
   pathname?: string;
   query?: [] | any;
+  doctor?: boolean;
 }
 
 const PopularDoctors: React.FC<PopularDoctorsProps> = ({
@@ -30,10 +32,14 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
   handleClick,
   pathname,
   query = [],
+  doctor,
 }) => {
-
   const defaultImage = "/department.png";
-  
+  const [setSelectedDoctor] = useDoctorStore((state: any) => [
+    state.setSelectedDoctor,
+  ]);
+  console.log(doctors);
+
   return (
     <div className="w-full container pt-5 px-7 mx-auto">
       <div className="border-l-2 border-red-500 pl-2">
@@ -47,38 +53,48 @@ const PopularDoctors: React.FC<PopularDoctorsProps> = ({
           </a>
         )}
       </div>
-      
+
       {doctors.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-5">
           {doctors.map((image, index) => (
             <Link
               key={index}
               href={{
-                pathname: `${pathname}${image.id ? `/${image.id}` : ""}`,
+                pathname: `${pathname}${
+                  image.id && !doctor ? `/${image.id}` : ""
+                }`,
+                query: doctor
+                  ? {
+                      doctorId: image.id,
+                    }
+                  : undefined,
               }}
-              onClick={() =>
-                handleClick(image.textOverlay, image.src, image.id)
-              }
+              onClick={() => {
+                if (doctor) setSelectedDoctor(image);
+                handleClick(image.name, image.preSignedUrl, image.id);
+              }}
               className="cursor-pointer relative overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105"
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
               <div className="absolute bottom-0 left-0 w-full bg-gray-800 bg-opacity-60 text-white text-center p-2 shadow-md md:bg-opacity-10 md:text-left">
                 <span className="text-base md:text-lg truncate">
-                  {image.textOverlay}
+                  {image.name}
                 </span>
               </div>
               <Image
-                src={image.src || defaultImage}
+                src={image.preSignedUrl || defaultImage}
                 width={1000}
                 height={1000}
-                alt={image.alt}
+                alt={image.name}
                 className="w-full h-auto object-cover md:w-100 md:h-80 transition-transform duration-300 ease-in-out hover:scale-105"
               />
             </Link>
           ))}
         </div>
       ) : (
-        <h1 className="text-center font-bold text-2xl text-gray-500 pt-5">No data available</h1>
+        <h1 className="text-center font-bold text-2xl text-gray-500 pt-5">
+          No data available
+        </h1>
       )}
     </div>
   );

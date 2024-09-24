@@ -1,6 +1,6 @@
 "use client";
 
-import { getDepartmentData } from "@/app/(signedin)/home/action";
+import { getDepartmentData } from "@/app/home/action";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +31,7 @@ interface Props {
   view?: boolean;
   edit?: boolean;
   data?: any;
-  component?: "pet" | "department" | "medicine" | "specialization"|"";
+  component?: "pet" | "department" | "medicine" | "specialization" | "";
 }
 
 const ActionMenu = (props: Props) => {
