@@ -35,34 +35,6 @@ const Index = ({ params }: { params: { records: string } }) => {
     getHospitalDetails();
   }, []);
 
-  // const getByHospitalDetails = async () => {
-  //   try {
-  //     // const hospitalPromises = decodedRecords.map(async (record: any) => {
-  //     //   try {
-  //     //     return await getHospital(record.id);
-  //     //   } catch (err) {
-  //     //     console.error(`Failed to fetch hospital with id: ${record.id}`, err);
-  //     //     return null;
-  //     //   }
-  //     // });
-
-  //     // const hospitalData = await Promise.all(hospitalPromises);
-  //     // const filteredHospitalData = hospitalData.filter((hospital) => hospital !== null);
-  //     // const formattedData = filteredHospitalData.map((hospital: any) => ({
-  //     //   src: hospital?.preSignedUrl || hospital?.image,
-  //     //   alt: hospital?.name,
-  //     //   textOverlay: hospital?.name,
-  //     //   description: hospital?.description,
-  //     //   dayTimeSlotResponses: [],
-  //     // }));
-
-  //     // setData(formattedData);
-  //     // console.log('Formatted Hospital Data:', formattedData);
-
-  //   } catch (error) {
-  //     console.error('Error fetching hospital data:', error);
-  //   }
-  // };
   const defaultImage = "/department.png";
 
   const getHospitalDetails = async () => {
