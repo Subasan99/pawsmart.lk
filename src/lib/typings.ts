@@ -227,7 +227,7 @@ export type departmentResponse = {
 };
 
 export type doctorResponses = {
-  id: number;
+  id: any;
   name: string;
   email: string;
   phoneNo: string;

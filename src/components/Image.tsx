@@ -18,7 +18,7 @@ interface PopularDoctorsProps {
     dayTimeSlotResponses?: [];
   }[];
   handleClick: (imageName: any, image: any, id: any) => void;
-  pathname?: string;
+  pathname?: string|any;
   query?: [] | any;
   doctor?: boolean;
 }

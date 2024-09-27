@@ -197,7 +197,7 @@ export default function Home() {
                 </li>
                 {login ? (
                   <div
-                    onClick={handleSignout}
+                    onClick={async () =>  await signOut()}
                     className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
                   >
                     <p className="hover:text-black">SignOut</p>
@@ -293,7 +293,11 @@ export default function Home() {
           <div className="flex space-x-4">
             {login ? (
               <button
-                onClick={handleSignout}
+              onClick={async () => {
+                await signOut();
+                setLogin(undefined);
+              }}
+              
                 className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
               >
                 Signout

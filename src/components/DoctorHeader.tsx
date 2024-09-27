@@ -24,6 +24,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import DoctorPopover from "./DoctorPopover";
 import UserIcon from "./svg/user_icon";
+import { signOut } from "@/api/route";
 
 export default function DoctorHeader() {
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
@@ -135,7 +136,9 @@ export default function DoctorHeader() {
                     </div>
                   </li>
 
-                  <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8">
+                  <li 
+                   onClick={() =>  async () =>  await signOut()}
+                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8">
                     <a href="/auth?mode=signin" className="hover:text-black">
                       Sign Out
                     </a>

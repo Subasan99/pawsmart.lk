@@ -4,8 +4,11 @@ import { getByIdHospital } from '@/app/home/action';
 import Header from '@/components/Header';
 import { useHospitalStore } from '@/store/hospitalStore';
 import { Phone } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import DocBook from '@/components/ui/docBook';
 
 const Index = ({ params }: { params: { id: string } }) => {
+  const router = useRouter();
   const [
     selectedHospital,
     setSelectedHospital,
@@ -58,7 +61,14 @@ const Index = ({ params }: { params: { id: string } }) => {
   const handleTabClick = (tab: any) => {
     setActiveTab(tab);
   };
+  const [selectedDoctor, setSelectedDoctor] = useState(null); 
+  const handleSetSelectedDoctor = (doctor: any) => {
+    setSelectedDoctor(doctor); 
+  };
 
+  const handleClick = (imageName: any) => {
+    console.log(`${imageName} clicked!`);
+  };
   return (
     <div id="hospitals" className="pb-8 pt-20">
       <div className="sticky z-30 top-0 md:static h-fit">
@@ -110,161 +120,78 @@ const Index = ({ params }: { params: { id: string } }) => {
       </div>
 
       <div className="mt-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="flex space-x-4 mt-8">
+        <div className="flex flex-col md:flex-row justify-between items-start p-2 md:p-2 lg:p-2 max-w-full">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-8 w-full">
             <button
-              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 ${
+              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 min-w-[150px] ${
                 activeTab === 'doctors'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200'
               }`}
               onClick={() => handleTabClick('doctors')}
             >
-              <h2 className="font-bold text-sm md:text-base">
+              <h2 className="font-bold text-sm md:text-base lg:text-lg">
                 Find the Doctors
               </h2>
-              <p className="text-xs md:text-sm border-l-2 border-white-500 mb-2">
+              <p className="text-xs md:text-sm lg:text-base border-l-2 border-white-500 mb-2">
                 and Book
               </p>
             </button>
             <button
-              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 ${
+              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 min-w-[150px] ${
                 activeTab === 'medicines'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200'
               }`}
               onClick={() => handleTabClick('medicines')}
             >
-              <h2 className="font-bold text-sm md:text-base">
-                {' '}
+              <h2 className="font-bold text-sm md:text-base lg:text-lg">
                 Find the Medicines
               </h2>
-              <p className="text-xs md:text-sm border-l-2 border-white-500 mb-2">
+              <p className="text-xs md:text-sm lg:text-base border-l-2 border-white-500 mb-2">
                 and Book
               </p>
             </button>
             <button
-              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 ${
+              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 min-w-[150px] ${
                 activeTab === 'departments'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200'
               }`}
               onClick={() => handleTabClick('departments')}
             >
-              <h2 className="font-bold text-sm md:text-base">
+              <h2 className="font-bold text-sm md:text-base lg:text-lg">
                 Find the Departments
               </h2>
-              <p className="text-xs md:text-sm border-l-2 border-white-500 mb-2">
+              <p className="text-xs md:text-sm lg:text-base border-l-2 border-white-500 mb-2">
                 and Book
               </p>
             </button>
             <button
-              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 ${
+              className={`px-4 py-2 rounded-md border-l-8 border-red-500 pl-2 min-w-[150px] ${
                 activeTab === 'reviews'
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-200'
               }`}
               onClick={() => handleTabClick('reviews')}
             >
-              <h2 className="font-bold text-sm md:text-base"> Reviews</h2>
+              <h2 className="font-bold text-sm md:text-base lg:text-lg">
+                {' '}
+                Reviews
+              </h2>
             </button>
           </div>
-
-          {activeTab === 'doctors' && (
-            <button
-              className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
-              onClick={handleViewDoctors}
-            >
-              View Doctors
-            </button>
-          )}
-
-          {activeTab === 'medicines' && (
-            <button
-              className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
-              onClick={handleViewMedicines}
-            >
-              View Medicines
-            </button>
-          )}
-
-          {activeTab === 'departments' && (
-            <button
-              className="bg-blue-700 text-white px-4  py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
-              onClick={handleViewDepartments}
-            >
-              View Departments
-            </button>
-          )}
-
-          {activeTab === 'reviews' && (
-            <button
-              className="bg-blue-700 text-white px-4 py-2 w-44 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-4 md:mt-0"
-              onClick={handleViewDoctors}
-            >
-              View Reviews
-            </button>
-          )}
         </div>
-
         {activeTab === 'doctors' && (
           <div className="w-full mt-4">
             {showDoctors && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-                {doctors.length > 0 ? (
-                  doctors.map((doctor, index) => (
-                    <div
-                      key={index}
-                      className="m-2 hover:bg-white shadow-lg bg-slate-100 relative"
-                      style={{
-                        border: '1px solid #ddd',
-                        padding: '20px',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                      }}
-                    >
-                      <div className="flex">
-                        <div className="flex-grow pl-4">
-                          <h1 className="text-xl font-bold leading-snug">
-                            {doctor?.name}
-                          </h1>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Gender: {doctor?.gender}
-                          </p>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Qualification: {doctor?.qualification}
-                          </p>
-                          <p className="mt-1 text-sm text-gray-500">
-                            Specialization: {doctor?.specializationName}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Duration: {doctor?.duration} mins
-                          </p>
-                        </div>
-                        <div className="flex-none mt-4">
-                          <img
-                            src={defaultImage}
-                            alt="Doctor"
-                            className="w-28 h-28 rounded-md"
-                          />
-                          <button className="bg-blue-600 text-white px-6 py-2 mt-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Book Now
-                          </button>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="mt-2 text-sm text-gray-500">
-                          Description: {doctor.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="m-10 text-center justify-center text-xl align-middle text-gray-600">
-                    No doctors available
-                  </p>
-                )}
-              </div>
+              <DocBook
+                doctors={doctors}
+                defaultImage="/department.png"
+                pathname="/appointmentdoctor"
+                doctor={true}
+                handleClick={handleClick}
+              />
             )}
           </div>
         )}
@@ -282,6 +209,7 @@ const Index = ({ params }: { params: { id: string } }) => {
                         padding: '20px',
                         borderRadius: '8px',
                         cursor: 'pointer',
+                        paddingBottom: '60px',
                       }}
                     >
                       <div className="flex-none text-center">
@@ -299,7 +227,7 @@ const Index = ({ params }: { params: { id: string } }) => {
                           Description: {medicine.description}
                         </p>
                       </div>
-                      <button className="absolute bottom-1 right-1 bg-blue-600 text-white px-4 py-1 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                      <button className="absolute bottom-2 right-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Book Now
                       </button>
                     </div>

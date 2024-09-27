@@ -251,3 +251,22 @@ export const getHospitals = async () => {
     return null;
   }
 };
+export const getAppointmentBookingFilterData = async (params: {
+  pageCount: number;
+  pageSize: number;
+  userId?: string;
+}) => {
+  try {
+    const response = await axiosInstance.get(`booking/filter?`, {
+      params: {
+        pageSize: params.pageSize,
+        pageCount: params.pageCount,
+        userId: params?.userId,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};

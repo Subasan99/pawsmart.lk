@@ -27,7 +27,10 @@ export default function Home() {
   const [cityName, setCityName] = useState<any>("");
   const [searchData, setsearchData] = useState("");
   const [cityData, setCitiesData] = useState("");
-
+  const [login, setLogin] = useAuthStore((state) => [
+    state.login,
+    state.setLogin,
+  ]);
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
     state.setAllDoctors,
@@ -71,15 +74,10 @@ export default function Home() {
       })
     : [];
 
-  console.log(citiesOptions);
 
   const [headerBg, setHeaderBg] = useState("bg-transparent");
   const [textColor, setTextColor] = useState("text-white"); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
-  const [login, setLogin] = useAuthStore((state) => [
-    state.login,
-    state.setLogin,
-  ]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -123,7 +121,7 @@ export default function Home() {
   };
 
   const handleButtonClick = () => {
-    console.log("Search button clicked");
+    // console.log("Search button clicked");
   };
 
   const handleSignout = async () => {
@@ -138,7 +136,7 @@ export default function Home() {
   };
 
   const handleClick = (imageName: any) => {
-    console.log(`${imageName} clicked!`);
+    // console.log(`${imageName} clicked!`);
   };
 
   const doctores = Array.isArray(doctors)
@@ -227,7 +225,6 @@ export default function Home() {
   const handleDateChange = (e: any) => {
     const inputDate = e.target.value;
     setsearchData(inputDate);
-    console.log("inputDateinputDate", inputDate);
   };
 
   if (loading) {
@@ -249,7 +246,6 @@ export default function Home() {
       cityId: cityName.value,
     };
     const encodedRecords = (JSON.stringify(result));
-    // if (searchTextData?.records?.length) {
     if (searchData || cityName) {
       await router.push(`/hospitals/${encodedRecords}`);
     }
@@ -380,7 +376,6 @@ export default function Home() {
           />
         </div>
         <div>
-          {/* Main Section */}
           <section className="flex flex-col items-center py-12 z-5 w-full px-4 pb-8 max-w-6xl mx-auto">
             <div className="flex flex-row justify-between items-center w-full">
               <div className=" m1 flex-1 text-center">

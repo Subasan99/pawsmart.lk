@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import changePasswordImage from '../../public/changePassword.jpg';
 import DoctorImage from '../../public/doctor.png';
+import { signOut } from '@/api/route';
 
 const DoctorPopover = () => {
   return (
@@ -29,7 +30,10 @@ const DoctorPopover = () => {
         </a>
       </div>
 
-      <div className="bg-red-500 hover:bg-yellow-500 hover:text-black text-white px-4 py-1 rounded w-full text-center cursor-pointer">
+      <div 
+       onClick={async () =>  await signOut()}
+      className="bg-red-500 hover:bg-yellow-500 hover:text-black text-white px-4 py-1 rounded w-full text-center cursor-pointer"
+      >
         <a href="/auth?mode=signin" className="">
           Sign Out
         </a>

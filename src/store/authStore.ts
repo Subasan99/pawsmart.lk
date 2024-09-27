@@ -12,7 +12,7 @@ export const useAuthStore = create<Store>()(
       login: undefined,
       setLogin: (login: any) => {
         console.log('login response',login);
-        set({ login: login });
+        set({ login: login,});
       },
     }),
     {
