@@ -1,4 +1,3 @@
-"use client";
 import { signOut } from "@/api/route";
 import {
   getDepartmentData,
@@ -14,7 +13,7 @@ import { useDoctorStore } from "@/store/doctorStore";
 import { useMedicineStore } from "@/store/medicinesStore";
 import { usePetStore } from "@/store/petStore";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Logo from "../../../public/logowhite.png";
 import Logoeffect from "../../../public/stubby.png";
@@ -38,23 +37,33 @@ export default function Home() {
     state.medicines,
     state.setAllMedicines,
   ]);
-  // State to track scroll position
+  
   const [headerBg, setHeaderBg] = useState("bg-transparent bg-opacity-90");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
-  const [logo, setLogo] = useState(Logo); // Default logo
+  const [textColor, setTextColor] = useState("text-white");
+  const [logo, setLogo] = useState(Logo);
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
     state.setLogin,
   ]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const petData = await getPetData();
+      const departmentData = await getDepartmentData();
+      const doctorData = await getDoctorData();
+      const medicinesData = await getMedicinesData();
+      setAllDepartments(departmentData);
+      setAllMedicines(medicinesData);
+      setAllPets(petData);
+      setAllDoctors(doctorData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [setAllDepartments, setAllMedicines, setAllPets, setAllDoctors]);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      // if (!pathName.startsWith("/home")) {
-      //   setHeaderBg("bg-white bg-opacity-90");
-      //   setTextColor("text-black");
-      //   setLogo(Logoeffect);
-      //   return;
-      // }
       if (scrollY > 0) {
         setHeaderBg("bg-white bg-opacity-90");
         setTextColor("text-black");
@@ -69,26 +78,10 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll);
     fetchData();
 
-    // Clean up the event listener
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const petData = await getPetData();
-      const departmentData = await getDepartmentData();
-      const doctorData = await getDoctorData();
-      const medicinesData = await getMedicinesData();
-      setAllDepartments(departmentData);
-      setAllMedicines(medicinesData);
-      setAllPets(petData);
-      setAllDoctors(doctorData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  }, [fetchData]);
 
   const handleButtonClick = () => {
     console.log("Search button clicked");
@@ -97,7 +90,7 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-
+  
   const router = useRouter();
 
   const handleMouseEnter = useCallback(
@@ -112,8 +105,6 @@ export default function Home() {
     setLogin(undefined);
     setLoading(false);
   };
-
-  const navigate = (link: string) => router.push(link);
 
   const renderDropdown = (items: any[], hrefBase: string) => (
     <div className="absolute bg-white shadow-md mt-2 w-48">
@@ -140,12 +131,8 @@ export default function Home() {
   );
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
-    >
-      <div
-        className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}
-      >
+    <header className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}>
+      <div className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}>
         <div className="flex justify-between items-center w-full md:hidden">
           <a href="/">
             <Image src={logo} alt="Company Logo" className="w-36" />
@@ -154,87 +141,47 @@ export default function Home() {
             <SheetTrigger className="px-3">
               <SideBarIcon />
             </SheetTrigger>
-            <SheetContent
-              className={`h-full flex flex-col items-start ${textColor}`}
-            >
+            <SheetContent className={`h-full flex flex-col items-start ${textColor}`}>
               <Image src={logo} className="w-[288px]" alt="Company Logo" />
               <ul className="flex flex-col space-y-4">
-                {/* Sidebar items */}
                 <li key={0}>
-                  <a href="/" className="hover:text-red-500">
-                    Home
-                  </a>
+                  <a href="/" className="hover:text-red-500">Home</a>
                 </li>
                 <li key={1}>
-                  <a href="/aboutus" className="hover:text-red-500">
-                    About Us
-                  </a>
+                  <a href="/aboutus" className="hover:text-red-500">About Us</a>
                 </li>
                 {login && (
                   <li key={2}>
-                    <a href="/Appointments" className="hover:text-red-500">
-                      Appointments
-                    </a>
+                    <a href="/Appointments" className="hover:text-red-500">Appointments</a>
                   </li>
                 )}
-                <li
-                  onClick={() => handleMouseEnter("departments")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/departments" className="hover:text-red-500">
-                    Departments
-                  </a>
-                  {activeDropdown === "departments" &&
-                    renderDropdown(departments, "/departments")}
+                <li onClick={() => handleMouseEnter("departments")} className="hover:text-red-500 relative">
+                  <a href="/departments" className="hover:text-red-500">Departments</a>
+                  {activeDropdown === "departments" && renderDropdown(departments, "/departments")}
                 </li>
-                <li
-                  onClick={() => handleMouseEnter("doctors")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/doctors" className="hover:text-red-500">
-                    Doctors
-                  </a>
-                  {activeDropdown === "doctors" &&
-                    renderDropdown(doctors, "/doctor-details")}
+                <li onClick={() => handleMouseEnter("doctors")} className="hover:text-red-500 relative">
+                  <a href="/doctors" className="hover:text-red-500">Doctors</a>
+                  {activeDropdown === "doctors" && renderDropdown(doctors, "/doctor-details")}
                 </li>
-                <li
-                  onClick={() => handleMouseEnter("medicines")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/medicines" className="hover:text-red-500">
-                    Medicines
-                  </a>
-                  {activeDropdown === "medicines" &&
-                    renderDropdown(medicines, "/medicines")}
+                <li onClick={() => handleMouseEnter("medicines")} className="hover:text-red-500 relative">
+                  <a href="/medicines" className="hover:text-red-500">Medicines</a>
+                  {activeDropdown === "medicines" && renderDropdown(medicines, "/medicines")}
                 </li>
-                <li
-                  onClick={() => handleMouseEnter("pets")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/pets" className="hover:text-red-500">
-                    Pets
-                  </a>
+                <li onClick={() => handleMouseEnter("pets")} className="hover:text-red-500 relative">
+                  <a href="/pets" className="hover:text-red-500">Pets</a>
                   {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
                 </li>
                 {login ? (
-                  <div
-                    onClick={handleSignout}
-                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                  >
+                  <div onClick={handleSignout} className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
                     <p className="hover:text-black">SignOut</p>
                   </div>
                 ) : (
                   <>
-                    {" "}
                     <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                      <a href="/auth?mode=signin" className="hover:text-black">
-                        Sign In
-                      </a>
+                      <a href="/auth?mode=signin" className="hover:text-black">Sign In</a>
                     </li>
                     <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                      <a href="/auth?mode=signup" className="hover:text-black">
-                        Sign Up
-                      </a>
+                      <a href="/auth?mode=signup" className="hover:text-black">Sign Up</a>
                     </li>
                   </>
                 )}
@@ -248,98 +195,57 @@ export default function Home() {
           </a>
           <nav className="flex-1 flex justify-center">
             <ul className="flex space-x-8">
-              {/* Navbar items */}
               <li key={0}>
-                <a href="/" className="hover:text-red-500">
-                  Home
-                </a>
+                <a href="/" className="hover:text-red-500">Home</a>
               </li>
               <li key={1}>
-                <a href="/aboutus" className="hover:text-red-500">
-                  About Us
-                </a>
+                <a href="/aboutus" className="hover:text-red-500">About Us</a>
               </li>
               {login && (
                 <li key={2}>
-                  <a href="/Appointments" className="hover:text-red-500">
-                    Appointments{" "}
-                  </a>
+                  <a href="/Appointments" className="hover:text-red-500">Appointments</a>
                 </li>
               )}
-              <li
-                onMouseEnter={() => handleMouseEnter("departments")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/departments" className="hover:text-red-500">
-                  Departments
-                </a>
-                {activeDropdown === "departments" &&
-                  renderDropdown(departments, "/departments")}
+              <li onMouseEnter={() => handleMouseEnter("departments")} onMouseLeave={handleMouseLeave} className="hover:text-red-500 relative">
+                <a href="/departments" className="hover:text-red-500">Departments</a>
+                {activeDropdown === "departments" && renderDropdown(departments, "/departments")}
               </li>
-              <li
-                onMouseEnter={() => handleMouseEnter("doctors")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/doctors" className="hover:text-red-500">
-                  Doctors
-                </a>
-                {activeDropdown === "doctors" &&
-                  renderDropdown(doctors, "/doctor-details")}
+              <li onMouseEnter={() => handleMouseEnter("doctors")} onMouseLeave={handleMouseLeave} className="hover:text-red-500 relative">
+                <a href="/doctors" className="hover:text-red-500">Doctors</a>
+                {activeDropdown === "doctors" && renderDropdown(doctors, "/doctor-details")}
               </li>
-              <li
-                onMouseEnter={() => handleMouseEnter("medicines")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/medicines" className="hover:text-red-500">
-                  Medicines
-                </a>
-                {activeDropdown === "medicines" &&
-                  renderDropdown(medicines, "/medicines")}
+              <li onMouseEnter={() => handleMouseEnter("medicines")} onMouseLeave={handleMouseLeave} className="hover:text-red-500 relative">
+                <a href="/medicines" className="hover:text-red-500">Medicines</a>
+                {activeDropdown === "medicines" && renderDropdown(medicines, "/medicines")}
               </li>
-              <li
-                onMouseEnter={() => handleMouseEnter("pets")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/pets" className="hover:text-red-500">
-                  Pets
-                </a>
+              <li onMouseEnter={() => handleMouseEnter("pets")} onMouseLeave={handleMouseLeave} className="hover:text-red-500 relative">
+                <a href="/pets" className="hover:text-red-500">Pets</a>
                 {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
               </li>
             </ul>
           </nav>
-          <div className="flex space-x-4">
+          <div>
             {login ? (
               <button
-              onClick={async () => {
-                await signOut();
-                setLogin(undefined);
-              }}
-              
+                onClick={handleSignout}
                 className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
               >
-                Signout
+                Sign Out
               </button>
             ) : (
               <>
-                <button
-                  onClick={handleButtonClick}
+                <a
+                  href="/auth?mode=signin"
+                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded mr-2"
+                >
+                  Sign In
+                </a>
+                <a
+                  href="/auth?mode=signup"
                   className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
                 >
-                  <a href="/auth?mode=signin">Sign In</a>
-                </button>
-                <button
-                  onClick={handleButtonClick}
-                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                >
-                  {/* <a href="/auth">Sign Up</a>
-                   */}
-
-                  <a href="/auth?mode=signup">Sign Up</a>
-                </button>
+                  Sign Up
+                </a>
               </>
             )}
           </div>

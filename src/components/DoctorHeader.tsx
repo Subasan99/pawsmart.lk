@@ -10,7 +10,7 @@ import { useDoctorStore } from "@/store/doctorStore";
 import { usePetStore } from "@/store/petStore";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Logo from "../../public/logowhite.png";
 import Logoeffect from "../../public/stubby.png";
 import changePasswordImage from "../../public/changePassword.jpg";
@@ -27,24 +27,7 @@ import UserIcon from "./svg/user_icon";
 import { signOut } from "@/api/route";
 
 export default function DoctorHeader() {
-  const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
-    state.doctors,
-    state.setAllDoctors,
-  ]);
-  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
-    state.departments,
-    state.setAllDepartments,
-  ]);
 
-  const [pets, setAllPets] = usePetStore((state: any) => [
-    state.pets,
-    state.setAllPets,
-  ]);
-
-  const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
-    state.medicines,
-    state.setAllMedicines,
-  ]);
 
   // State to track scroll position
   const [headerBg, setHeaderBg] = useState("bg-transparent");
@@ -57,28 +40,12 @@ export default function DoctorHeader() {
     setLogo(Logoeffect);
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const petData = await getPetData();
-      const departmentData = await getDepartmentData();
-      const doctorData = await getDoctorData();
-      const medicinesData = await getMedicinesData();
-      setAllDepartments(departmentData);
-      setAllMedicines(medicinesData);
-      setAllPets(petData);
-      setAllDoctors(doctorData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const [open, setOpen] = useState(false);
-
-  const router = useRouter();
+  const router = useRouter()
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/auth?mode=signin");
+  };
 
   return (
     <>
@@ -127,7 +94,7 @@ export default function DoctorHeader() {
                         <div className="w-15 h-15">
                           <Image
                             src={changePasswordImage}
-                            alt="Doctor"
+                            alt="Change Password"
                             className="w-10 h-15 rounded-full object-cover"
                           />
                         </div>
@@ -136,12 +103,11 @@ export default function DoctorHeader() {
                     </div>
                   </li>
 
-                  <li 
-                   onClick={() =>  async () =>  await signOut()}
-                  className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8">
-                    <a href="/auth?mode=signin" className="hover:text-black">
-                      Sign Out
-                    </a>
+                  <li
+                    onClick={handleSignOut}
+                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8 cursor-pointer"
+                  >
+                    Sign Out
                   </li>
                 </ul>
               </SheetContent>
@@ -186,7 +152,4 @@ export default function DoctorHeader() {
       </header>
     </>
   );
-}
-function useMedicinesStore(arg0: (state: any) => any[]): [any, any] {
-  throw new Error("Function not implemented.");
 }

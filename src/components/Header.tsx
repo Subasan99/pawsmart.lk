@@ -28,12 +28,10 @@ export default function Home() {
     state.departments,
     state.setAllDepartments,
   ]);
-
   const [pets, setAllPets] = usePetStore((state: any) => [
     state.pets,
     state.setAllPets,
   ]);
-
   const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
@@ -43,7 +41,7 @@ export default function Home() {
     state.setLogin,
   ]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const petData = await getPetData();
       const departmentData = await getDepartmentData();
@@ -56,7 +54,7 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [departments, medicines, pets, doctors]);
 
   const handleButtonClick = () => {
     console.log("Search button clicked");
@@ -88,7 +86,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const renderDropdown = (items: any[], hrefBase: string) => (
     <div className="absolute bg-white shadow-md mt-2 w-48">
@@ -115,12 +113,8 @@ export default function Home() {
   );
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 bg-white bg-opacity-90`}
-    >
-      <div
-        className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 text-black`}
-      >
+    <header className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 bg-white bg-opacity-90`}>
+      <div className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 text-black`}>
         <div className="flex justify-between items-center w-full md:hidden">
           <a href="/">
             <Image src={Logoeffect} alt="Company Logo" className="w-36" />
@@ -129,91 +123,47 @@ export default function Home() {
             <SheetTrigger className="px-3">
               <SideBarIcon />
             </SheetTrigger>
-            <SheetContent
-              className={`h-full flex flex-col items-start text-black`}
-            >
-              <Image
-                src={Logoeffect}
-                className="w-[288px]"
-                alt="Company Logo"
-              />
+            <SheetContent className={`h-full flex flex-col items-start text-black`}>
+              <Image src={Logoeffect} className="w-[288px]" alt="Company Logo" />
               <ul className="flex flex-col space-y-4 text-black">
-                {/* Sidebar items */}
                 <li key={0}>
-                  <a href="/" className="hover:text-red-500">
-                    Home
-                  </a>
+                  <a href="/" className="hover:text-red-500">Home</a>
                 </li>
                 <li key={1}>
-                  <a href="/aboutus" className="hover:text-red-500">
-                    About Us
-                  </a>
+                  <a href="/aboutus" className="hover:text-red-500">About Us</a>
                 </li>
                 {login && (
                   <li key={2}>
-                    <a href="/Appointments" className="hover:text-red-500">
-                      Appointments
-                    </a>
+                    <a href="/Appointments" className="hover:text-red-500">Appointments</a>
                   </li>
                 )}
-                <li
-                  onClick={() => handleMouseEnter("departments")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/departments" className="hover:text-red-500">
-                    Departments
-                  </a>
-                  {activeDropdown === "departments" &&
-                    renderDropdown(departments, "/departments")}
+                <li onClick={() => handleMouseEnter("departments")} className="hover:text-red-500 relative">
+                  <a href="/departments" className="hover:text-red-500">Departments</a>
+                  {activeDropdown === "departments" && renderDropdown(departments, "/departments")}
                 </li>
-                <li
-                  onClick={() => handleMouseEnter("doctors")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/doctors" className="hover:text-red-500">
-                    Doctors
-                  </a>
-                  {activeDropdown === "doctors" &&
-                    renderDropdown(doctors, "/doctor-details")}
+                <li onClick={() => handleMouseEnter("doctors")} className="hover:text-red-500 relative">
+                  <a href="/doctors" className="hover:text-red-500">Doctors</a>
+                  {activeDropdown === "doctors" && renderDropdown(doctors, "/doctor-details")}
                 </li>
-                <li
-                  onClick={() => handleMouseEnter("medicines")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/medicines" className="hover:text-red-500">
-                    Medicines
-                  </a>
-                  {activeDropdown === "medicines" &&
-                    renderDropdown(medicines, "/medicines")}
+                <li onClick={() => handleMouseEnter("medicines")} className="hover:text-red-500 relative">
+                  <a href="/medicines" className="hover:text-red-500">Medicines</a>
+                  {activeDropdown === "medicines" && renderDropdown(medicines, "/medicines")}
                 </li>
-                <li
-                  onClick={() => handleMouseEnter("pets")}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/pets" className="hover:text-red-500">
-                    Pets
-                  </a>
+                <li onClick={() => handleMouseEnter("pets")} className="hover:text-red-500 relative">
+                  <a href="/pets" className="hover:text-red-500">Pets</a>
                   {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
                 </li>
                 {login ? (
-                  <div
-                    onClick={async () =>  await signOut()}
-                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                  >
+                  <div onClick={handleSignout} className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
                     <p className="hover:text-black">SignOut</p>
                   </div>
                 ) : (
                   <>
-                    {" "}
                     <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                      <a href="/auth?mode=signin" className="hover:text-black">
-                        Sign In
-                      </a>
+                      <a href="/auth?mode=signin" className="hover:text-black">Sign In</a>
                     </li>
                     <li className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
-                      <a href="/auth?mode=signup" className="hover:text-black">
-                        Sign Up
-                      </a>
+                      <a href="/auth?mode=signup" className="hover:text-black">Sign Up</a>
                     </li>
                   </>
                 )}
@@ -227,76 +177,39 @@ export default function Home() {
           </a>
           <nav className="flex-1 flex justify-center">
             <ul className="flex space-x-8 text-black">
-              {/* Navbar items */}
               <li key={0}>
-                <a href="/" className="hover:text-red-500">
-                  Home
-                </a>
+                <a href="/" className="hover:text-red-500">Home</a>
               </li>
               <li key={1}>
-                <a href="/aboutus" className="hover:text-red-500">
-                  About Us
-                </a>
+                <a href="/aboutus" className="hover:text-red-500">About Us</a>
               </li>
               {login && (
                 <li key={2}>
-                  <a href="/Appointments" className="hover:text-red-500">
-                    Appointments{" "}
-                  </a>
+                  <a href="/Appointments" className="hover:text-red-500">Appointments</a>
                 </li>
               )}
-              <li
-                onMouseEnter={() => handleMouseEnter("departments")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/departments" className="hover:text-red-500">
-                  Departments
-                </a>
-                {activeDropdown === "departments" &&
-                  renderDropdown(departments, "/departments")}
+              <li onMouseEnter={() => handleMouseEnter("departments")} onMouseLeave={handleMouseLeave} className="relative">
+                <a href="/departments" className="hover:text-red-500">Departments</a>
+                {activeDropdown === "departments" && renderDropdown(departments, "/departments")}
               </li>
-              <li
-                onMouseEnter={() => handleMouseEnter("doctors")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/doctors" className="hover:text-red-500">
-                  Doctors
-                </a>
-                {activeDropdown === "doctors" &&
-                  renderDropdown(doctors, "/doctor-details")}
+              <li onMouseEnter={() => handleMouseEnter("doctors")} onMouseLeave={handleMouseLeave} className="relative">
+                <a href="/doctors" className="hover:text-red-500">Doctors</a>
+                {activeDropdown === "doctors" && renderDropdown(doctors, "/doctor-details")}
               </li>
-              <li
-                onMouseEnter={() => handleMouseEnter("medicines")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/medicines" className="hover:text-red-500">
-                  Medicines
-                </a>
-                {activeDropdown === "medicines" &&
-                  renderDropdown(medicines, "/medicines")}
+              <li onMouseEnter={() => handleMouseEnter("medicines")} onMouseLeave={handleMouseLeave} className="relative">
+                <a href="/medicines" className="hover:text-red-500">Medicines</a>
+                {activeDropdown === "medicines" && renderDropdown(medicines, "/medicines")}
               </li>
-              <li
-                onMouseEnter={() => handleMouseEnter("pets")}
-                onMouseLeave={handleMouseLeave}
-                className="relative"
-              >
-                <a href="/pets" className="hover:text-red-500">
-                  Pets
-                </a>
+              <li onMouseEnter={() => handleMouseEnter("pets")} onMouseLeave={handleMouseLeave} className="relative">
+                <a href="/pets" className="hover:text-red-500">Pets</a>
                 {activeDropdown === "pets" && renderDropdown(pets, "/pets")}
               </li>
-            </ul>
+                          </ul>
           </nav>
           <div className="flex space-x-4">
             {login ? (
               <button
-              onClick={async () => {
-                await signOut();
-                setLogin(undefined);
-              }}
+              onClick={handleSignout}
               
                 className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
               >

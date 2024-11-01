@@ -6,6 +6,7 @@ import { useHospitalStore } from '@/store/hospitalStore';
 import { Phone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import DocBook from '@/components/ui/docBook';
+import Image from 'next/image'; // Import the Image component
 
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -28,6 +29,8 @@ const Index = ({ params }: { params: { id: string } }) => {
   const [showDoctors, setShowDoctors] = useState(true);
   const [showMedicines, setShowMedicines] = useState(true);
   const [showDepartments, setShowDeparments] = useState(true);
+  
+  // Add the function to useEffect's dependency array
   useEffect(() => {
     getByHospitalDetails();
   }, [params?.id]);
@@ -36,39 +39,25 @@ const Index = ({ params }: { params: { id: string } }) => {
     try {
       setLoading(true);
       const getByHospital = await getByIdHospital(params?.id);
-
       setSelectedHospital(getByHospital);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false); // Ensure loading is set to false after fetching
     }
   };
 
-  const handleViewDoctors = () => {
-    setShowDoctors(true);
-  };
-
-  const handleViewMedicines = () => {
-    setShowMedicines(true);
-  };
-
-  const handleViewDepartments = () => {
-    setShowDeparments(true);
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
   };
 
   const defaultImage = '/hello.png';
   const [activeTab, setActiveTab] = useState('doctors');
 
-  const handleTabClick = (tab: any) => {
-    setActiveTab(tab);
-  };
-  const [selectedDoctor, setSelectedDoctor] = useState(null); 
-  const handleSetSelectedDoctor = (doctor: any) => {
-    setSelectedDoctor(doctor); 
-  };
-
-  const handleClick = (imageName: any) => {
+  const handleClick = (imageName: string) => {
     console.log(`${imageName} clicked!`);
   };
+  
   return (
     <div id="hospitals" className="pb-8 pt-20">
       <div className="sticky z-30 top-0 md:static h-fit">
@@ -78,10 +67,12 @@ const Index = ({ params }: { params: { id: string } }) => {
         <section className="flex flex-col items-center py-12 z-5 w-full px-4 pb-8 max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start w-full">
             <div className="relative m-2 flex-1 flex flex-col items-center">
-              <img
+              <Image
                 src={defaultImage}
                 alt="Hospital Building"
                 className="w-full h-96 rounded-md transform rotate-[-15deg] object-cover"
+                width={300} // Add width and height to Image
+                height={300}
               />
               <div
                 className="absolute top-1 right-0 hover:bg-red-600 bg-blue-900 h-16 w-36 text-white p-3 rounded-md shadow-lg transform translate-x-1/5 border-r-2 border-red-500"
@@ -111,8 +102,7 @@ const Index = ({ params }: { params: { id: string } }) => {
                 {selectedHospital?.description}
               </p>
               <p className="mt-4 text-gray-600">
-                Location: {selectedHospital?.city}, {selectedHospital?.district}
-                , {selectedHospital?.province}
+                Location: {selectedHospital?.city}, {selectedHospital?.district}, {selectedHospital?.province}
               </p>
             </div>
           </div>
@@ -182,6 +172,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             </button>
           </div>
         </div>
+        
         {activeTab === 'doctors' && (
           <div className="w-full mt-4">
             {showDoctors && (
@@ -195,6 +186,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             )}
           </div>
         )}
+        
         {activeTab === 'medicines' && (
           <div className="mt-8">
             {showMedicines && (
@@ -213,10 +205,12 @@ const Index = ({ params }: { params: { id: string } }) => {
                       }}
                     >
                       <div className="flex-none text-center">
-                        <img
+                        <Image
                           src={defaultImage}
                           alt="Medicine"
                           className="w-28 h-28 rounded-md mx-auto"
+                          width={100} // Add width and height to Image
+                          height={100}
                         />
                       </div>
                       <div className="text-center mt-4">
@@ -241,11 +235,11 @@ const Index = ({ params }: { params: { id: string } }) => {
             )}
           </div>
         )}
-
+        
         {activeTab === 'departments' && (
           <div className="w-full mt-4">
             {showDepartments && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 {departments.length > 0 ? (
                   departments?.map((deparment, index) => (
                     <div
@@ -256,13 +250,16 @@ const Index = ({ params }: { params: { id: string } }) => {
                         padding: '20px',
                         borderRadius: '8px',
                         cursor: 'pointer',
+                        paddingBottom: '60px',
                       }}
                     >
                       <div className="flex-none text-center">
-                        <img
+                        <Image
                           src={defaultImage}
-                          alt="Medicine"
+                          alt="Department"
                           className="w-28 h-28 rounded-md mx-auto"
+                          width={100} // Add width and height to Image
+                          height={100}
                         />
                       </div>
                       <div className="text-center mt-4">
@@ -276,9 +273,7 @@ const Index = ({ params }: { params: { id: string } }) => {
                     </div>
                   ))
                 ) : (
-                  <p className="m-10 text-center justify-center text-xl align-middle text-gray-600">
-                    No deparments
-                  </p>
+                  <p>No departments available.</p>
                 )}
               </div>
             )}
@@ -287,7 +282,8 @@ const Index = ({ params }: { params: { id: string } }) => {
 
         {activeTab === 'reviews' && (
           <div className="mt-8">
-            <h2 className="font-bold text-2xl">Reviews</h2>
+            <h2 className="text-2xl font-bold">Reviews</h2>
+            {/* Add review section here */}
           </div>
         )}
       </div>

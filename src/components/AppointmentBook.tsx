@@ -51,17 +51,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Label } from '@radix-ui/react-label';
 import { loginUser } from '@/app/auth/action';
 import { usePetStore } from '@/store/petStore';
 import { getAllPets } from '@/api/route';
-import {
-  HoverCardContent,
-  HoverCardTrigger,
-  HoverCard,
-} from '@radix-ui/react-hover-card';
 import SuccessModal from './ui/popup';
-import { Value } from '@radix-ui/react-select';
 interface AppointmentProps {
   userId: string | undefined;
   message: string;
@@ -200,22 +193,6 @@ const Appointment: React.FC<AppointmentProps> = () => {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // const handleSignIn = async (values: z.infer<typeof signInFormSchema>) => {
-  //   setLoading(true);
-  //   const response = await loginUser({
-  //     email: values.email,
-  //     password: values.password,
-  //   });
-  //   if (response.success) {
-  //     setLogin(response);
-  //     toast.success(response.message);
-  //     setIsDialogOpen(false);
-  //     setShouldSubmit(true);
-  //   } else {
-  //     toast.error(response.message);
-  //   }
-  //   setLoading(false);
-  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -274,32 +251,9 @@ const Appointment: React.FC<AppointmentProps> = () => {
     });
   }
 
-  // const handleOkClick = async () => {
-  //   console.log('object', { ...form.getValues(), userId: login?.userId });
-  //   setshowMessage(false);
-  //   // if (form.getValues()) {
-  //   // onSubmitForm;
-  //   // }
-  //   if (form.getValues() && login?.userId) {
-  //     // onSubmitForm({ ...form.getValues(), userId: login?.userId });
-  //   }
-  // };
-  // const handleFormSubmit = (
-  //   values: z.infer<typeof signInFormSchema | typeof formSchema>,
-  //   formType: 'signIn' | 'appointment'
-  // ) => {
-  //   if (!login) {
-  //     // setSavedFormData(form.getValues());
-  //     handleSignIn(values as z.infer<typeof signInFormSchema>);
-  //   } else {
-  //     onSubmitForm(values as z.infer<typeof formSchema>);
-  //   }
-  // };
-
   const handleSignIn = async (values: z.infer<typeof signInFormSchema>) => {
 
     setLoading(true);
-    // console.log('form.getValues()form.getValues()',form.getValues())
     const response = await loginUser({
       email: values.email,
       password: values.password,
@@ -380,24 +334,9 @@ const Appointment: React.FC<AppointmentProps> = () => {
         <div className={`${!login ? 'blur' : 'remove-blur'}`}>
           <Form {...form}>
             <form
-              // onSubmit={(e) => {
-              //   e.preventDefault();
-
-              //   if (!login) {
-              //     toast.error('Please log in to create an appointment.');
-              //     return;
-              //   }
-              //   {
-              //     form.handleSubmit(onSubmit)(e);
-              //   }
-              // }}
-              // onSubmit={form.handleSubmit(onSubmit)}
               onSubmit={form.handleSubmit( onSubmitForm)}
-              // onSubmit={form.handleSubmit((data) => console.log('Form Submitted', data))}
-
               className="space-y-3 flex flex-col px-2 w-full"
             >
-              {/* <div className={`${!login ? 'blur' : 'remove-blur'}`}> */}
               <div className="flex flex-col md:flex-row gap-2 w-full">
                 <FormField
                   control={form.control}
@@ -422,10 +361,8 @@ const Appointment: React.FC<AppointmentProps> = () => {
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       {' '}
-                      {/* Use flex-1 to allow equal growth */}
                       <FormLabel className="text-xs md:text-md text-left">
                         {' '}
-                        {/* Align label text to the left */}
                         Your Pet&apos;s Age
                       </FormLabel>
                       <FormControl>

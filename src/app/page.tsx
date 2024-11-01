@@ -2,14 +2,9 @@
 import { signOut } from "@/api/route";
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-// import Logo from "../../public/logowhite.png";
 import Logo from "../../public/logowhite.png";
-// import Logoeffect from "../../../public/stubby.png";
 import Logoeffect from "../../public/stubby.png";
-
-// import booking from "../../../public/booking.png";
 import booking from "../../public/booking.png";
-
 import { useRouter } from "next/navigation";
 import { useDoctorStore } from "@/store/doctorStore";
 import {
@@ -44,12 +39,10 @@ export default function Home() {
     state.departments,
     state.setAllDepartments,
   ]);
-
   const [pets, setAllPets] = usePetStore((state: any) => [
     state.pets,
     state.setAllPets,
   ]);
-
   const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
@@ -70,15 +63,11 @@ export default function Home() {
     : [];
 
   const citiesOptions = Array.isArray(cityData)
-    ? cityData.map((city: any) => {
-        // console.log(city)
-        return {
-          label: city.name,
-          value: city.id,
-        };
-      })
+    ? cityData.map((city: any) => ({
+        label: city.name,
+        value: city.id,
+      }))
     : [];
-
 
   const [headerBg, setHeaderBg] = useState("bg-transparent");
   const [textColor, setTextColor] = useState("text-white"); // Default text color
@@ -99,15 +88,17 @@ export default function Home() {
     };
 
     window.addEventListener("scroll", handleScroll);
+    
+    // Fetch data on mount
     fetchData();
 
     // Clean up the event listener
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, []); // Include fetchData in the dependency array
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const petData = await getPetData();
       const departmentData = await getDepartmentData();
@@ -123,23 +114,11 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [setAllMedicines, setAllDepartments, setAllPets, setAllDoctors, setCitiesData]);
 
   const handleButtonClick = () => {
     // console.log("Search button clicked");
   };
-
-  const handleSignout = async () => {
-    setLoading(true);
-    await signOut();
-    setLogin(undefined);
-    setLoading(false);
-  };
-
-  const handleSearch = () => {
-    console.log("Search initiated");
-  };
-
   const handleClick = (imageName: any) => {
     // console.log(`${imageName} clicked!`);
   };
@@ -193,7 +172,7 @@ export default function Home() {
   const handleMouseEnter = useCallback(
     (view: string) => setActiveDropdown(view),
     []
-  );
+  );  
   const handleMouseLeave = useCallback(() => setActiveDropdown(null), []);
 
   const navigate = (link: string) => router.push(link);
@@ -237,20 +216,11 @@ export default function Home() {
   }
 
   const handleFilter = async () => {
-    // const searchTextData = await getHospitalFilterData({
-    //   pageSize: 10,
-    //   pageCount: 1,
-    //   searchTerm: searchData,
-    // });
-    // const result = searchTextData?.records.map((record: any) => ({
-    //   id: record?.id,
-    // }));
-
     const result = {
       searchData: searchData,
       cityId: cityName.value,
     };
-    const encodedRecords = (JSON.stringify(result));
+    const encodedRecords = JSON.stringify(result);
     if (searchData || cityName) {
       await router.push(`/hospitals/${encodedRecords}`);
     }
@@ -316,13 +286,13 @@ export default function Home() {
                     <div className="relative z-2 home-first w-full pt-4">
                       <section className="mb-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                          <input
+                      <input
                             type="text"
                             placeholder="Search doctors, clinics, hospitals, etc."
                             value={searchData}
-                            onChange={handleDateChange}
+                        onChange={handleDateChange}
                             className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          />
+                      />
                           <FilterDropdown
                             options={citiesOptions}
                             placeholder="Select Location"
@@ -332,12 +302,12 @@ export default function Home() {
                             value={cityName}
                           />
 
-                          <button
-                            onClick={handleFilter}
+                      <button
+                        onClick={handleFilter}
                             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          >
-                            Search
-                          </button>
+                      >
+                        Search
+                      </button>
                         </div>
                       </section>
                     </div>
@@ -348,7 +318,7 @@ export default function Home() {
               {/* Join As Doctor Component */}
               <div className="bg-gray-200  rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-1/3">
                 <div className="flex items-center">
-                  <Image
+                    <Image
                     src={booking}
                     alt="Your Image"
                     className="w-1/2 h-auto object-cover rounded-lg -mt-10"
@@ -369,7 +339,7 @@ export default function Home() {
         </div>
 
         <div id="departments" className="pb-8 pt-20">
-          <PopularDoctors
+                    <PopularDoctors
             title="Departments"
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/departments"

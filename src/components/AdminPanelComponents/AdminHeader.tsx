@@ -19,7 +19,7 @@ import { useMedicineStore } from "@/store/medicinesStore";
 import { usePetStore } from "@/store/petStore";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import changePasswordImage from "../../../public/changePassword.jpg";
 import {
   default as Logo,
@@ -38,12 +38,10 @@ export default function AdminHeader() {
     state.departments,
     state.setAllDepartments,
   ]);
-
   const [pets, setAllPets] = usePetStore((state: any) => [
     state.pets,
     state.setAllPets,
   ]);
-
   const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
@@ -60,7 +58,7 @@ export default function AdminHeader() {
     setLogo(Logoeffect);
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const petData = await getPetData();
       const departmentData = await getDepartmentData();
@@ -73,11 +71,11 @@ export default function AdminHeader() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [setAllDepartments, setAllMedicines, setAllPets, setAllDoctors]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]); // Include fetchData in the dependency array
 
   const [open, setOpen] = useState(false);
   const [sOpen, setSOpen] = useState(false);
@@ -126,7 +124,7 @@ export default function AdminHeader() {
                   </li>
 
                   <li
-                    onClick={() => async () =>  await signOut()}
+                    onClick={async () => await signOut()}
                     className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8"
                   >
                     <a href="/auth?mode=signin" className="hover:text-black">

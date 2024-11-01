@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const FilterComponent = () => {
@@ -112,7 +113,13 @@ const FilterComponent = () => {
         <ul>
           {doctors.map((doctor: any) => (
             <li key={doctor.id} className="border p-4 mb-2 rounded-md">
-              <img src={doctor.preSignedUrl} alt={doctor.name} className="w-20 h-20 rounded-full" />
+              <Image 
+                src={doctor.preSignedUrl} 
+                alt={doctor.name} 
+                className="w-20 h-20 rounded-full" 
+                width={80} 
+                height={80} 
+              />
               <h4 className="text-lg font-semibold">{doctor.name}</h4>
               <p>{doctor.specialization?.name}</p>
               <p>{doctor.specialization?.department?.name}</p>

@@ -3,7 +3,7 @@
 import EditIcon from "@/components/svg/edit_icon";
 import { useUserStore } from "@/store/userStore";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import DefaultImage from "../../../../../public/default_user.png";
 import { getUserById } from "../action";
 
@@ -16,20 +16,21 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.selectedUser,
     state.setSelectedUser,
     state.loading,
-  
   ]);
 
-  async function handleSelectUser() {
+  // Memoize handleSelectUser to prevent unnecessary re-creation
+  const handleSelectUser = useCallback(async () => {
     const data = await getUserById(params.id);
     setSelectedUser(data);
-  }
+  }, [params.id, setSelectedUser]);
 
   useEffect(() => {
     handleSelectUser();
-  }, [params.id]);
+  }, [handleSelectUser]);
 
+  // Early return for loading state
   if (loading) {
-    <div>Loading...!</div>;
+    return <div>Loading...!</div>; // Fixed the return statement here
   }
 
   return (
@@ -40,7 +41,7 @@ const Index = ({ params }: { params: { id: string } }) => {
           <EditIcon className="absolute top-5 right-5 z-10 cursor-pointer" />
           {selectedUser?.preSignedUrl ? (
             <Image
-              src={selectedUser?.preSignedUrl}
+              src={selectedUser.preSignedUrl}
               alt="User Image"
               width={200}
               height={200}
@@ -58,10 +59,10 @@ const Index = ({ params }: { params: { id: string } }) => {
         </div>
         <div className="grow flex flex-col gap-2 px-3 py-2">
           <div className="font-bold text-2xl flex gap-2 items-center">
-            {selectedUser?.name} {" "}
+            {selectedUser?.name}{" "}
           </div>
           <div className="font-semibold text-xl">
-          &quot;{selectedUser?.description}&quot;
+            &quot;{selectedUser?.description}&quot;
           </div>
         </div>
       </div>
@@ -70,5 +71,3 @@ const Index = ({ params }: { params: { id: string } }) => {
 };
 
 export default Index;
-
-
