@@ -17,7 +17,6 @@ const Index = ({ params }: { params: { id: string } }) => {
     setdLoading(true); // Optional: Start loading before fetching data
     const response = await getDoctorData(1, 10, undefined, params.id);
     const dep = await getDepartmentById(params.id);
-    console.log(dep);
     setDepartment(dep);
     setDoctors(response?.records);
     setdLoading(false);

@@ -17,7 +17,7 @@ import { format } from 'date-fns';
 import { Calendar as CalendarIcon, Eye, EyeOff, } from 'lucide-react';
 import moment from 'moment';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -115,11 +115,8 @@ const Appointment: React.FC<AppointmentProps> = () => {
   ]);
 
 
-  const [savedFormData, setSavedFormData] = useState<z.infer<
-    typeof formSchema
-  > | null>(null);
+ 
   const searchParams = useSearchParams();
-  // const [login, setLogin] = useState<any | undefined>();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -142,10 +139,6 @@ const Appointment: React.FC<AppointmentProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isCalendarOpen, setCalendarOpen] = useState(false);
-  // docName = queryData.imageName || "";
-
-  // const datesearch = searchParams.get("date");
-
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [loginSucess, setloginSucess] = useState<string | null>(null);
   const [formSucess, setFormSucess] = useState<string | null>(null);
@@ -177,10 +170,6 @@ const Appointment: React.FC<AppointmentProps> = () => {
   const [selecteddDoctor, setSelecteddDoctor] = useState<string | null>(null);
   const [selectedMedicine, setSelectedMedicine] = useState<string | null>(null);
 
-  // async function getLoginDetailss() {
-  //   const details = await getLoginUserDetails();
-  //   setLogin(details);
-  // }
   const [loadingSub, setLoadingSub] = useState(false);
 
   const signInForm = useForm({
@@ -198,32 +187,38 @@ const Appointment: React.FC<AppointmentProps> = () => {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
-  const fetchData = async () => {
-    try {
-      const [doctorData, medicineData, petsData] = await Promise.all([
-        getDoctorData(),
-        getMedicineData(),
-        getAllPets(),
-      ]);
 
-      if (searchParams.get('doctorId')) {
-        setSelecteddDoctor(searchParams.get('doctorId')!);
-      } else if (searchParams.get('medicineId')) {
-        setSelectedMedicine(searchParams.get('medicineId')!);
-      }
+// Memoize fetchData using useCallback
+const fetchData = useCallback(async () => {
+  try {
+    const [doctorData, medicineData, petsData] = await Promise.all([
+      getDoctorData(),
+      getMedicineData(),
+      getAllPets(),
+    ]);
 
-      setAllDoctors(doctorData);
-      setAllMedicines(medicineData);
-      setAllPet(petsData);
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
+    if (searchParams.get('doctorId')) {
+      setSelecteddDoctor(searchParams.get('doctorId')!);
+    } else if (searchParams.get('medicineId')) {
+      setSelectedMedicine(searchParams.get('medicineId')!);
     }
-  };
+
+    setAllDoctors(doctorData);
+    setAllMedicines(medicineData);
+    setAllPet(petsData);
+    setIsLoading(false);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}, [setAllDoctors, setAllMedicines, setAllPet, searchParams]);
+
+useEffect(() => {
+  fetchData();
+}, [fetchData]);
+
+
+
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -902,59 +897,11 @@ const Appointment: React.FC<AppointmentProps> = () => {
             </DialogContent>
           </Dialog>
         </div>):(null)}
-        {/* <div className="bg-red-600 ">
-          {showMessage && (
-            <Dialog open={showMessage} onOpenChange={setshowMessage}>
-              <DialogTrigger asChild></DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>{loginSucess}</DialogTitle>
-                  <DialogDescription>Continu To Submit Form.</DialogDescription>
-                </DialogHeader>
-                <Button onClick={handleOkClick}>Yes</Button>
-              </DialogContent>
-            </Dialog>
-          )}
-        </div> */}
+  
 
         <div className="bg-red-600 ">
           {showBook && (
-            // <Dialog open={showBook} onOpenChange={setshowBook}>
-            //   <DialogTrigger asChild></DialogTrigger>
-            //   <DialogContent 
-            //   className="sm:max-w-[425px]"
-              
-              
-            //   >
-            //     <DialogHeader>
-            //       <DialogTitle style={{ textAlign: 'center' }}>
-            //         {formSucess}
-            //       </DialogTitle>
-            //       <DialogDescription
-            //         style={{
-            //           textAlign: 'center',
-            //           display: 'flex',
-            //           flexDirection: 'column',
-            //           alignItems: 'center',
-            //         }}
-            //       >
-            //         <div
-            //           style={{
-            //             display: 'flex',
-            //             justifyContent: 'center',
-            //             alignItems: 'center',
-            //           }}
-            //         >
-            //           <Smile className="mr-2" />
-            //         </div>
-            //         <br />
-            //         Thank You
-            //       </DialogDescription>
-            //     </DialogHeader>
-            //     <Button onClick={handleClick}>OK</Button>
-            //   </DialogContent>
-            // </Dialog>
-
+        
             <SuccessModal loading={''} successMessage={formSucess} handleClick={() => {
               setshowBook(false);
               router.push('/');

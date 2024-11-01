@@ -23,7 +23,6 @@ export async function getAllPets() {
 }
 export async function getLoginUserDetails() {
   const userDetails = await cookieStore.get("token");
-  console.log(JSON.parse(userDetails?.value!));
   return JSON.parse(userDetails?.value!);
 }
 

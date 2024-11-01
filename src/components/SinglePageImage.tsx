@@ -26,7 +26,6 @@ const MultipleImagesProps: React.FC<MultipleImagesProps> = ({
   handleClick,
   pathname,
 }) => {
-  console.log(doctors);
   const defaultImage = "/department.png";
   return (
     <div className="w-full container pt-20 pb-20 px-0 md:px-7 mx-auto">

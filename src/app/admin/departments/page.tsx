@@ -19,9 +19,9 @@ export default function DemoPage() {
   }, [setAllDepartments]);
 
   useEffect(() => {
-    console.log(departments);
     fetchData();
-  }, [fetchData]); // Include fetchData in the dependency array
+  }, [fetchData]);
+  
 
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">

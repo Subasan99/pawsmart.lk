@@ -1,32 +1,32 @@
-"use client";
-import { signOut } from "@/api/route";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
-import Logo from "../../public/logowhite.png";
-import Logoeffect from "../../public/stubby.png";
-import booking from "../../public/booking.png";
-import { useRouter } from "next/navigation";
-import { useDoctorStore } from "@/store/doctorStore";
+'use client';
+import { signOut } from '@/api/route';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import Logo from '../../public/logowhite.png';
+import Logoeffect from '../../public/stubby.png';
+import booking from '../../public/booking.png';
+import { useRouter } from 'next/navigation';
+import { useDoctorStore } from '@/store/doctorStore';
 import {
   getCities,
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from "@/app/home/action";
-import FilterDropdown from "@/components/FilterDropdown";
-import PopularDoctors from "@/components/Image";
-import { useAuthStore } from "@/store/authStore";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import { usePetStore } from "@/store/petStore";
-import doc from "../../public/doc.png";
+} from '@/app/home/action';
+import FilterDropdown from '@/components/FilterDropdown';
+import PopularDoctors from '@/components/Image';
+import { useAuthStore } from '@/store/authStore';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import { usePetStore } from '@/store/petStore';
+import doc from '../../public/doc.png';
 
 export default function Home() {
-  const [doctorName, setDoctorName] = useState<string>("");
-  const [cityName, setCityName] = useState<any>("");
-  const [searchData, setsearchData] = useState("");
-  const [cityData, setCitiesData] = useState("");
+  const [doctorName, setDoctorName] = useState<string>('');
+  const [cityName, setCityName] = useState<any>('');
+  const [searchData, setsearchData] = useState('');
+  const [cityData, setCitiesData] = useState('');
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
     state.setLogin,
@@ -69,34 +69,9 @@ export default function Home() {
       }))
     : [];
 
-  const [headerBg, setHeaderBg] = useState("bg-transparent");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
+  const [headerBg, setHeaderBg] = useState('bg-transparent');
+  const [textColor, setTextColor] = useState('text-white'); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      if (scrollY > 0) {
-        setHeaderBg("bg-white bg-opacity-90");
-        setTextColor("text-black");
-        setLogo(Logoeffect);
-      } else {
-        setHeaderBg("bg-transparent");
-        setTextColor("text-white");
-        setLogo(Logo);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    
-    // Fetch data on mount
-    fetchData();
-
-    // Clean up the event listener
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []); // Include fetchData in the dependency array
 
   const fetchData = useCallback(async () => {
     try {
@@ -112,28 +87,45 @@ export default function Home() {
       setAllDoctors(doctorData);
       setCitiesData(citiesData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
-  }, [setAllMedicines, setAllDepartments, setAllPets, setAllDoctors, setCitiesData]);
+  }, [
+    setAllMedicines,
+    setAllDepartments,
+    setAllPets,
+    setAllDoctors,
+    setCitiesData,
+  ]);
 
-  const handleButtonClick = () => {
-    // console.log("Search button clicked");
-  };
   const handleClick = (imageName: any) => {
     // console.log(`${imageName} clicked!`);
   };
 
-  const doctores = Array.isArray(doctors)
-    ? doctors.map((doctor: any) => ({
-        id: doctor.id,
-        src: doctor.preSignedUrl,
-        alt: doctor.image,
-        textOverlay: doctor.name,
-        description: doctor.description,
-        specializationName: doctor.specializationName,
-        dayTimeSlotResponses: doctor.dayTimeSlotResponses,
-      }))
-    : [];
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 0) {
+        setHeaderBg('bg-white bg-opacity-90');
+        setTextColor('text-black');
+        setLogo(Logoeffect);
+      } else {
+        setHeaderBg('bg-transparent');
+        setTextColor('text-white');
+        setLogo(Logo);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Fetch data on mount
+    fetchData();
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [fetchData]); // Include fetchData in the dependency array
+
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
         src: department.preSignedUrl,
@@ -152,9 +144,6 @@ export default function Home() {
       }))
     : [];
 
-  const [open, setOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
@@ -168,43 +157,6 @@ export default function Home() {
         label: medicines.name,
       }))
     : [];
-
-  const handleMouseEnter = useCallback(
-    (view: string) => setActiveDropdown(view),
-    []
-  );  
-  const handleMouseLeave = useCallback(() => setActiveDropdown(null), []);
-
-  const navigate = (link: string) => router.push(link);
-
-  const renderDropdown = (items: any[], hrefBase: string) => (
-    <div className="absolute bg-white shadow-md mt-2 w-48">
-      <hr className="my-2" />
-      <ul className="flex flex-col space-y-2">
-        {items &&
-          Array.isArray(items) &&
-          items.map(
-            (item, index) =>
-              item && (
-                <li key={index}>
-                  <a
-                    href={`${hrefBase}/${item.name}`}
-                    className="text-gray-600 block px-4 py-2"
-                  >
-                    {item.name}
-                    <hr className="mt-2" />
-                  </a>
-                </li>
-              )
-          )}
-      </ul>
-    </div>
-  );
-
-  const formatDate = (date: any) => {
-    const [month, day, year] = date.split("/");
-    return `${year}-${month}-${day}`;
-  };
 
   const handleDateChange = (e: any) => {
     const inputDate = e.target.value;
@@ -238,11 +190,11 @@ export default function Home() {
                   loop
                   muted
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: 'cover' }}
                 >
                   <source src="/Logvideo.mp4" type="video/mp4" />
                 </video>
-                <div className="absolute inset-0 bg-black opacity-60"></div>{" "}
+                <div className="absolute inset-0 bg-black opacity-60"></div>{' '}
                 {/* Black shadow overlay */}
               </div>
             </div>
@@ -258,11 +210,15 @@ export default function Home() {
                       Find Nearest Medical Facility
                     </h1>
                     <div className="flex gap-4 justify-center md:justify-start mt-6">
-                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"   onClick={() => router.push('/viewallhospi')}
+                      <button
+                        className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"
+                        onClick={() => router.push('/viewallhospi')}
                       >
                         View Hospitals
                       </button>
-                      <button className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200" onClick={() => router.push('/doctors')}
+                      <button
+                        className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200"
+                        onClick={() => router.push('/doctors')}
                       >
                         View Doctors
                       </button>
@@ -286,13 +242,13 @@ export default function Home() {
                     <div className="relative z-2 home-first w-full pt-4">
                       <section className="mb-8">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                      <input
+                          <input
                             type="text"
                             placeholder="Search doctors, clinics, hospitals, etc."
                             value={searchData}
-                        onChange={handleDateChange}
+                            onChange={handleDateChange}
                             className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                      />
+                          />
                           <FilterDropdown
                             options={citiesOptions}
                             placeholder="Select Location"
@@ -302,12 +258,12 @@ export default function Home() {
                             value={cityName}
                           />
 
-                      <button
-                        onClick={handleFilter}
+                          <button
+                            onClick={handleFilter}
                             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        Search
-                      </button>
+                          >
+                            Search
+                          </button>
                         </div>
                       </section>
                     </div>
@@ -318,7 +274,7 @@ export default function Home() {
               {/* Join As Doctor Component */}
               <div className="bg-gray-200  rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-1/3">
                 <div className="flex items-center">
-                    <Image
+                  <Image
                     src={booking}
                     alt="Your Image"
                     className="w-1/2 h-auto object-cover rounded-lg -mt-10"
@@ -327,7 +283,9 @@ export default function Home() {
                     <h3 className="text-lg font-bold">
                       Are You Make an Appointment
                     </h3>
-                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4" onClick={() => router.push('/Appointments')}
+                    <button
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4"
+                      onClick={() => router.push('/Appointments')}
                     >
                       Appointment
                     </button>
@@ -339,14 +297,14 @@ export default function Home() {
         </div>
 
         <div id="departments" className="pb-8 pt-20">
-                    <PopularDoctors
+          <PopularDoctors
             title="Departments"
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/departments"
             handleClick={handleClick}
-            linkDescription={"Departments"}
+            linkDescription={'Departments'}
             doctors={departments.slice(0, 4)}
-            pathname={"/departments"}
+            pathname={'/departments'}
             query={departmentDatas}
           />
         </div>
@@ -397,7 +355,7 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription="Doctors"
             doctors={doctors.slice(0, 4)}
-            pathname={"/appointmentdoctor"}
+            pathname={'/appointmentdoctor'}
             query={doctors}
             doctor={true}
           />
@@ -408,9 +366,9 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/pets"
             handleClick={handleClick}
-            linkDescription={"Pets"}
+            linkDescription={'Pets'}
             doctors={pets.slice(0, 4)}
-            pathname={"/pets"}
+            pathname={'/pets'}
             query={petdata}
           />
         </div>

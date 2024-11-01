@@ -17,14 +17,12 @@ export default function Index() {
 
   const fetchData = useCallback(async () => {
     const data = await getBookingData(1, 10);
-    console.log(data);
     setAllBookings(data?.records);
   }, [setAllBookings]);
   useEffect(() => {
-    console.log(bookings);
     fetchData();
-  }, [fetchData]); // Include fetchData in the dependency array
-
+  }, [fetchData]);
+  
   const filteredBookings = bookings.filter((booking: any) =>
     currentTab === "doctors"
       ? booking.bookingType === "DOCTOR"
