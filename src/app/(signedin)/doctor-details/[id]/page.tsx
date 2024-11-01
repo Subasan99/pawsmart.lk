@@ -39,7 +39,7 @@ const Index = ({ params }: { params: { id: string } }) => {
     };
 
     fetchData();
-  }, [params.id]); 
+  }, [params.id, setSelectedDoctor]); // Include setSelectedDoctor in the dependency array
 
   if (dloading && !selectedDoctor) {
     return (
@@ -77,10 +77,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             <div className="grow w-1/2 min-w-fit items-center md:items-start flex flex-col gap-2 px-3 py-2">
               <div className="font-bold text-2xl flex gap-2 items-center">
                 {selectedDoctor?.name}{" "}
-                <GenderIcon
-                  gender={selectedDoctor?.gender}
-                  className="w-6 h-6"
-                />
+                <GenderIcon gender={selectedDoctor?.gender} className="w-6 h-6" />
               </div>
               <div>
                 <div className="font-semibold mb-1">
@@ -91,15 +88,9 @@ const Index = ({ params }: { params: { id: string } }) => {
                 </div>
               </div>
               <div className="flex flex-col items-start">
-                <div className="font-semibold text-xl">
-                  {selectedDoctor?.email}
-                </div>
-                <div className="font-semibold text-xl">
-                  {selectedDoctor?.phoneNo}
-                </div>
-                <div className="font-semibold text-xl">
-                  &quot;{selectedDoctor?.description}&quot;
-                </div>
+                <div className="font-semibold text-xl">{selectedDoctor?.email}</div>
+                <div className="font-semibold text-xl">{selectedDoctor?.phoneNo}</div>
+                <div className="font-semibold text-xl">&quot;{selectedDoctor?.description}&quot;</div>
               </div>
             </div>
           </div>

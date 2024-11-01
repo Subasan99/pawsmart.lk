@@ -54,7 +54,8 @@ export default function Home() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }, [departments, medicines, pets, doctors]);
+  }, [setAllDepartments, setAllMedicines, setAllPets, setAllDoctors]);
+  
 
   const handleButtonClick = () => {
     console.log("Search button clicked");

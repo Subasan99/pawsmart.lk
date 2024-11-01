@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getByIdHospital } from '@/app/home/action';
 import Header from '@/components/Header';
 import { useHospitalStore } from '@/store/hospitalStore';
@@ -30,12 +30,9 @@ const Index = ({ params }: { params: { id: string } }) => {
   const [showMedicines, setShowMedicines] = useState(true);
   const [showDepartments, setShowDeparments] = useState(true);
   
-  // Add the function to useEffect's dependency array
-  useEffect(() => {
-    getByHospitalDetails();
-  }, [params?.id]);
 
-  const getByHospitalDetails = async () => {
+
+  const getByHospitalDetails = useCallback(async () => {
     try {
       setLoading(true);
       const getByHospital = await getByIdHospital(params?.id);
@@ -43,9 +40,13 @@ const Index = ({ params }: { params: { id: string } }) => {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false); // Ensure loading is set to false after fetching
+      setLoading(false);
     }
-  };
+  }, [params?.id, setLoading, setSelectedHospital]); // Add dependencies
+
+  useEffect(() => {
+    getByHospitalDetails();
+  }, [getByHospitalDetails]);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);

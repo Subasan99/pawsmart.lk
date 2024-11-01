@@ -1,7 +1,7 @@
 "use client";
 import DepartmentCreate from "@/components/AdminPanelComponents/DepartmentComponents/DepartmentCreate";
 import { useDepartmentStore } from "@/store/departmentStore";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDepartmentData } from "./action";
 import { columns } from "./columns";
@@ -11,15 +11,18 @@ export default function DemoPage() {
     state.departments,
     state.setAllDepartments,
   ]);
-  async function fetchData() {
+
+  const fetchData = useCallback(async () => {
     const data = await getDepartmentData(1, 10);
     console.log(data);
     setAllDepartments(data?.records);
-  }
+  }, [setAllDepartments]);
+
   useEffect(() => {
     console.log(departments);
     fetchData();
-  }, []);
+  }, [fetchData]); // Include fetchData in the dependency array
+
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
       <div className="self-end">

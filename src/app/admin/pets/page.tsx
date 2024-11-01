@@ -23,7 +23,8 @@ export default function Index() {
   useEffect(() => {
     console.log(pets);
     fetchData();
-  }, [fetchData]); // Include fetchData in the dependency array
+  }, [fetchData, pets]); 
+  
 
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">

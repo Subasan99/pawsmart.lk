@@ -38,7 +38,8 @@ const Index = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     handleSelectMedicine();
-  }, [params.id]);
+  }, [handleSelectMedicine]); 
+  
 
   if (loading) {
     return <div>Loading...!</div>; // Make sure to return the loading state

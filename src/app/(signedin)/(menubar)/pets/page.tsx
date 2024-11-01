@@ -35,7 +35,7 @@ const Pets = () => {
     };
 
     fetchData(); // Call the fetchData function
-  }, []); // Only fetch data on component mount
+  }, [setAllPets, setLoading]); // Include setAllPets and setLoading in the dependency array
 
   const petdata = Array.isArray(pets)
     ? pets.map((pet: Pet) => ({

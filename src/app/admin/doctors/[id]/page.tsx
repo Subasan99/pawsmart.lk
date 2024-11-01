@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDoctorStore } from "@/store/doctorStore";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import DefaultImage from "../../../../../public/default_user.png";
 import { getAppointmentsByDoctorId, getDoctorById, updateTimeSlot } from "./action";
 
@@ -29,20 +29,19 @@ const Index = ({ params }: { params: { id: string } }) => {
 
   const [dayTimeSlotModal, setDayTimeSlotModal] = useState<boolean>(false);
 
-  async function handleSelectDoctor() {
+  const handleSelectDoctor = useCallback(async () => {
     const data = await getDoctorById(params.id);
     const appointments = await getAppointmentsByDoctorId(params.id, 1, 10);
     setSelectedDoctor(data);
-  }
-
-  console.log(selectedDoctor);
+    setDoctorAppointments(appointments); // Ensure you're also setting appointments
+  }, [params.id, setSelectedDoctor, setDoctorAppointments]); // Add dependencies
 
   useEffect(() => {
     handleSelectDoctor();
-  }, [params.id]);
+  }, [handleSelectDoctor]); // Include handleSelectDoctor to prevent the warning
 
   if (loading) {
-    <div>Loading...!</div>;
+    return <div>Loading...!</div>; // Ensure to return the loading state
   }
 
   return (

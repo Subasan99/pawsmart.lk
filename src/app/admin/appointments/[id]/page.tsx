@@ -1,7 +1,7 @@
 "use client";
 
 import { useBookingStore } from "@/store/bookingStore";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { getBookingById } from "../action";
 
 const Index = ({ params }: { params: { id: string } }) => {
@@ -13,14 +13,14 @@ const Index = ({ params }: { params: { id: string } }) => {
     ]
   );
 
-  async function handleSelectBooking() {
+  const handleSelectBooking = useCallback(async () => {
     const data = await getBookingById(params.id);
     setSelectedBooking(data);
-  }
+  }, [params.id, setSelectedBooking]);
 
   useEffect(() => {
     handleSelectBooking();
-  }, [params.id]);
+  }, [handleSelectBooking]); // Include handleSelectBooking in the dependency array
 
   if (loading) {
     return <div>Loading...!</div>;
@@ -43,7 +43,6 @@ const Index = ({ params }: { params: { id: string } }) => {
   return (
     <div className="flex flex-col px-3 bg-white py-5 h-full w-full rounded-lg">
       <div className="flex relative">
-
         <div className="grow flex flex-col gap-2 px-3 py-2">
           <div className="text-lg">
             <div>
@@ -110,8 +109,7 @@ const Index = ({ params }: { params: { id: string } }) => {
       <div className="mt-4 p-3 bg-gray-100 rounded-lg">
         <h3 className="text-xl font-bold">User Details</h3>
         <div>
-          <strong>Name:</strong> {userResponse?.firstName}{" "}
-          {userResponse?.lastName}
+          <strong>Name:</strong> {userResponse?.firstName} {userResponse?.lastName}
         </div>
         <div>
           <strong>Email:</strong> {userResponse?.email}

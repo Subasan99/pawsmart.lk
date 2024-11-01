@@ -5,22 +5,23 @@ import { getDoctorData } from "@/app/admin/doctors/action";
 import PopularDoctors from "@/components/Image";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [doctors, setDoctors] = useState<any>([]);
   const [department, setDepartment] = useState<any>(undefined);
   const [dloading, setdLoading] = useState<boolean>(true);
-  async function fetchData() {
+
+  const fetchData = useCallback(async () => {
+    setdLoading(true); // Optional: Start loading before fetching data
     const response = await getDoctorData(1, 10, undefined, params.id);
     const dep = await getDepartmentById(params.id);
     console.log(dep);
     setDepartment(dep);
     setDoctors(response?.records);
     setdLoading(false);
-  }
-
+  }, [params.id]); // Add dependencies
   const handleClick = (imageName: any) => {
     console.log(`${imageName} clicked!`);
   };
@@ -36,19 +37,20 @@ const Index = ({ params }: { params: { id: string } }) => {
         dayTimeSlotResponses: doctor.dayTimeSlotResponses,
       }))
     : [];
-
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]); // Use the memoized function
+
   if (dloading && !department) {
     return (
       <div className="mt-14 px-7 w-full h-full flex flex-col bg-gray-100 items-center py-4">
         <div className="w-full max-w-[1204px] justify-center items-center flex flex-col px-3 py-5 h-full rounded-lg">
-          <Loader className="h-10 w-10"/>
+          <Loader className="h-10 w-10" />
         </div>
       </div>
     );
   }
+  
   return (
     <div className="mt-14 px-0 md:px-7 w-full flex flex-col items-center py-4">
       <div className="w-full flex flex-col max-w-[1204px] gap-y-3">

@@ -1,8 +1,9 @@
 "use client";
+
 import { DataTable } from "@/components/AdminPanelComponents/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBookingStore } from "@/store/bookingStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getBookingData } from "./action";
 import { doctorColumns, medicinesColumns } from "./columns";
 
@@ -14,15 +15,15 @@ export default function Index() {
 
   const [currentTab, setCurrentTab] = useState("doctors");
 
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     const data = await getBookingData(1, 10);
     console.log(data);
     setAllBookings(data?.records);
-  }
+  }, [setAllBookings]);
   useEffect(() => {
     console.log(bookings);
     fetchData();
-  }, []);
+  }, [fetchData]); // Include fetchData in the dependency array
 
   const filteredBookings = bookings.filter((booking: any) =>
     currentTab === "doctors"

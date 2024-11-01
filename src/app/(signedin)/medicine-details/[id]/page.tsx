@@ -32,7 +32,7 @@ const Index = ({ params }: { params: { id: string } }) => {
     };
 
     fetchData();
-  }, [params.id]);
+  }, [params.id, setSelectedMedicine]); // Include setSelectedMedicine in the dependency array
 
   if (dloading && !selectedMedicine) {
     return (
@@ -43,6 +43,7 @@ const Index = ({ params }: { params: { id: string } }) => {
       </div>
     );
   }
+
   return (
     <div className="mt-14 px-7 w-full flex flex-col items-center py-4">
       <div className="w-full flex flex-col max-w-[1204px] gap-y-3">
@@ -52,7 +53,7 @@ const Index = ({ params }: { params: { id: string } }) => {
               {selectedMedicine?.preSignedUrl ? (
                 <Image
                   src={selectedMedicine?.preSignedUrl}
-                  alt="Doctor Image"
+                  alt="Medicine Image"
                   width={200}
                   height={200}
                   className="rounded-full border-4 object-cover h-[200px] w-[200px]"
