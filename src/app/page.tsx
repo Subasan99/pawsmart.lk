@@ -294,13 +294,6 @@ export default function Home() {
                             className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           />
 
-                          <FilterDropdown
-                            options={departmentOptions}
-                            placeholder="Select Location"
-                            onChange={setDepartmentName}
-                            value={departmentName}
-                          />
-
                           <button
                             onClick={handleFilter}
                             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

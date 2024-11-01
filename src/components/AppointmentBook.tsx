@@ -3,6 +3,7 @@ import { createAppointment } from '@/app/(signedin)/(menubar)/appointmentdoctor/
 import { getDoctorData } from '@/app/home/action';
 import { getMedicineData } from '@/app/admin/medicines/action';
 import { Button } from '@/components/ui/button';
+
 import {
   Popover,
   PopoverContent,
@@ -13,7 +14,7 @@ import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Eye, EyeOff } from 'lucide-react';
+import { Calendar as CalendarIcon, Eye, EyeOff, } from 'lucide-react';
 import moment from 'moment';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -54,6 +55,13 @@ import { Label } from '@radix-ui/react-label';
 import { loginUser } from '@/app/auth/action';
 import { usePetStore } from '@/store/petStore';
 import { getAllPets } from '@/api/route';
+import {
+  HoverCardContent,
+  HoverCardTrigger,
+  HoverCard,
+} from '@radix-ui/react-hover-card';
+import SuccessModal from './ui/popup';
+import { Value } from '@radix-ui/react-select';
 interface AppointmentProps {
   userId: string | undefined;
   message: string;
@@ -92,11 +100,12 @@ const formSchema = z.object({
   bookingType: z.string({
     required_error: 'Appointment Type is not selected!',
   }),
-  userId: z.number(),
+  // userId: z.number(),
   petName: z.string({ required_error: "Please Enter your pet's name!" }),
   petAge: z.number({ required_error: "Please select your pet's Age!" }),
   petType: z.string({ required_error: 'Please select the pet type!' }),
 });
+
 const signInFormSchema = z.object({
   email: z
     .string({ required_error: 'Please enter your email!' })
@@ -105,11 +114,17 @@ const signInFormSchema = z.object({
 });
 
 const Appointment: React.FC<AppointmentProps> = () => {
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
     state.setLogin,
   ]);
-  const [shouldSubmit, setShouldSubmit] = useState(false);
+
+
+  const [savedFormData, setSavedFormData] = useState<z.infer<
+    typeof formSchema
+  > | null>(null);
   const searchParams = useSearchParams();
   // const [login, setLogin] = useState<any | undefined>();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -124,7 +139,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
       time: undefined,
       description: undefined,
       bookingType: searchParams.get('doctorId') ? 'DOCTOR' : 'MEDICINE',
-      userId: login?.userId,
+      // userId: login?.userId,
       petName: undefined,
       petAge: 1,
       petType: undefined,
@@ -138,30 +153,33 @@ const Appointment: React.FC<AppointmentProps> = () => {
 
   // const datesearch = searchParams.get("date");
 
-  // useEffect(() => {
-  //   if (shouldSubmit && login) {
-  //     form.handleSubmit(onSubmit);
-  //     router.push('/home');
-  //   }
-  // }, [shouldSubmit, login]);
-
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [loginSucess, setloginSucess] = useState<string | null>(null);
+  const [formSucess, setFormSucess] = useState<string | null>(null);
 
-  const [doctors, setAllDoctors, setSelectedDoctor, setLoading] =
-    useDoctorStore((state: any) => [
-      state.doctors,
-      state.setAllDoctors,
-      state.setSelectedDoctor,
-      state.setLoading,
-    ]);
+  const [showMessage, setshowMessage] = useState<boolean>(false);
+  const [showBook, setshowBook] = useState<boolean>(false);
+
+  const [
+    doctors,
+    setAllDoctors,
+    setSelectedDoctor,
+    // selectedDoctor,
+    setLoading,
+  ] = useDoctorStore((state: any) => [
+    state.doctors,
+    state.setAllDoctors,
+    state.setSelectedDoctor,
+    // state.selectedDoctor,
+    state.setLoading,
+  ]);
   const [pet, setAllPet, setSelectedPet] = usePetStore((state: any) => [
     state.pet,
     state.setAllPet,
     state.setSelectedPet,
   ]);
 
-  // const [doctor, setAllDoctors] = useState<Doctor[]>([]); // Initialize an empty array
-  const [medicine, setAllMedicines] = useState<Medicine[]>([]); // Initialize an empty array
+  const [medicine, setAllMedicines] = useState<Medicine[]>([]);
 
   const [selecteddDoctor, setSelecteddDoctor] = useState<string | null>(null);
   const [selectedMedicine, setSelectedMedicine] = useState<string | null>(null);
@@ -180,31 +198,24 @@ const Appointment: React.FC<AppointmentProps> = () => {
     },
   });
 
-  // const handleSignIn = (data: z.infer<typeof signInFormSchema>) => {
-  //   setLoadingSub(true);
-  //   setTimeout(() => {
-  //     console.log("Sign In Data", data);
-  //     setLoadingSub(false);
-  //   }, 2000);
-  // };
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleSignIn = async (values: z.infer<typeof signInFormSchema>) => {
-    setLoading(true);
-    const response = await loginUser({
-      email: values.email,
-      password: values.password,
-    });
-    if (response.success) {
-      setLogin(response);
-      toast.success(response.message);
-      setIsDialogOpen(false);
-      setShouldSubmit(true);
-    } else {
-      toast.error(response.message);
-    }
-    setLoading(false);
-  };
+  // const handleSignIn = async (values: z.infer<typeof signInFormSchema>) => {
+  //   setLoading(true);
+  //   const response = await loginUser({
+  //     email: values.email,
+  //     password: values.password,
+  //   });
+  //   if (response.success) {
+  //     setLogin(response);
+  //     toast.success(response.message);
+  //     setIsDialogOpen(false);
+  //     setShouldSubmit(true);
+  //   } else {
+  //     toast.error(response.message);
+  //   }
+  //   setLoading(false);
+  // };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -249,7 +260,8 @@ const Appointment: React.FC<AppointmentProps> = () => {
     createAppointment({
       ...values,
       bookingDate: moment(values.bookingDate).format('YYYY-MM-DD'),
-      userId: values.userId.toString(),
+      // userId: values.userId.toString(),
+      userId: login?.userId.toString(),
     }).then((res: any) => {
       if (res.success) {
         toast.success(res.message);
@@ -260,13 +272,77 @@ const Appointment: React.FC<AppointmentProps> = () => {
         toast.error('Oops! Something went wrong. Please try again!');
       }
     });
-    setShouldSubmit(false);
   }
 
-  // if (!doctor.length) {
-  //   return <div>Loading ... !</div>;
-  // }
+  // const handleOkClick = async () => {
+  //   console.log('object', { ...form.getValues(), userId: login?.userId });
+  //   setshowMessage(false);
+  //   // if (form.getValues()) {
+  //   // onSubmitForm;
+  //   // }
+  //   if (form.getValues() && login?.userId) {
+  //     // onSubmitForm({ ...form.getValues(), userId: login?.userId });
+  //   }
+  // };
+  // const handleFormSubmit = (
+  //   values: z.infer<typeof signInFormSchema | typeof formSchema>,
+  //   formType: 'signIn' | 'appointment'
+  // ) => {
+  //   if (!login) {
+  //     // setSavedFormData(form.getValues());
+  //     handleSignIn(values as z.infer<typeof signInFormSchema>);
+  //   } else {
+  //     onSubmitForm(values as z.infer<typeof formSchema>);
+  //   }
+  // };
 
+  const handleSignIn = async (values: z.infer<typeof signInFormSchema>) => {
+
+    setLoading(true);
+    // console.log('form.getValues()form.getValues()',form.getValues())
+    const response = await loginUser({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (response.success) {
+      setLogin(response);
+      toast.success(response.message);
+      setshowMessage(true);
+      setIsDialogOpen(false);
+    } else {
+      toast.error(response.message);
+    }
+    setLoading(false);
+  };
+
+  const onSubmitForm = (values: z.infer<typeof formSchema>) => {
+
+    setIsSubmitting(true);
+    createAppointment({
+      ...values,
+      bookingDate: moment(values?.bookingDate).format('YYYY-MM-DD'),
+      // userId: values?.userId ===undefined ?login?.userId : values.userId.toString()
+      userId: login?.userId
+
+
+    }).then((res: any) => {
+      if (res.success) {
+        setFormSucess(res.message);
+        setshowBook(true);
+        // router.push('/home');
+      } else {
+        toast.error(res.message);
+        setIsSubmitting(false);
+      }
+    });
+  };
+
+  const handleClick = async () => {
+    console.log("Modal OK button clicked!");
+    setshowBook(false);
+    router.push('/home');
+  };
   if (!medicine && searchParams.get('medicineId')) {
     return (
       <div className="w-full">
@@ -292,6 +368,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
     { id: 3, name: 'Rabbit' },
     { id: 4, name: 'Hamster' },
   ];
+
   return (
     <div className="w-full">
       {/* <div className="flex w-full grow md:justify-self-end items-center md:h-full flex-col gap-5 p-6 md:max-w-[470px] //shadow-md  bg-white border rounded  h-full px-8 py-5"> */}
@@ -299,422 +376,393 @@ const Appointment: React.FC<AppointmentProps> = () => {
         <h2 className="text-xl flex w-full justify-center text-center mb-2">
           Appointment Booking
         </h2>
-        <Form {...form}>
-          <form
-            // onSubmit={(e) => {
-            //   e.preventDefault();
 
-            //   if (!login) {
-            //     toast.error('Please log in to create an appointment.');
-            //     return;
-            //   }
-            //   {
-            //     form.handleSubmit(onSubmit)(e);
-            //   }
-            // }}
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-3 flex flex-col px-2 w-full"
-          >
-            <div className="flex flex-col md:flex-row gap-2 w-full">
-              <FormField
-                control={form.control}
-                name="petName"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    {' '}
-      
-                    <FormLabel className="text-xs md:text-md text-left">
-                      {' '}
-             
-                      Your Pet&apos;s Name
-                    </FormLabel>
-                    <FormControl>
-                      <Input placeholder="Pet's name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="petAge"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    {' '}
-                    {/* Use flex-1 to allow equal growth */}
-                    <FormLabel className="text-xs md:text-md text-left">
-                      {' '}
-                      {/* Align label text to the left */}
-                      Your Pet&apos;s Age
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Select.."
-                        className="w-full" // Ensure the input takes full width
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="flex flex-col md:flex-row gap-2 w-full">
-              <FormField
-                control={form.control}
-                name="petType"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    {' '}
-                    {/* Ensures equal growth */}
-                    <FormLabel className="text-xs md:text-md text-left">
-                      Your Pet&apos;s Type
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => {
-                          console.log(value);
-                          field.onChange(value);
-                          setLoading(true);
-                          setSelectedPet(
-                            pet.find((pee: any) => pee.id === parseInt(value))
-                          );
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <SelectTrigger className="w-full">
-                          {field.value
-                            ? pet.find(
-                                (pee: any) => pee.id === parseInt(field.value)
-                              )?.name
-                            : 'Select an option'}
-                        </SelectTrigger>
-                        <SelectContent>
-                          {pet.length ? (
-                            pet.map((pee: any) => (
-                              <SelectItem key={pee.id} value={pee.id}>
-                                {pee.name}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem disabled value={''}>
-                              No options
-                            </SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+        <div className={`${!login ? 'blur' : 'remove-blur'}`}>
+          <Form {...form}>
+            <form
+              // onSubmit={(e) => {
+              //   e.preventDefault();
 
-            <div className="flex flex-col md:flex-row gap-2 w-full">
-              {searchParams.get('doctorId') && (
+              //   if (!login) {
+              //     toast.error('Please log in to create an appointment.');
+              //     return;
+              //   }
+              //   {
+              //     form.handleSubmit(onSubmit)(e);
+              //   }
+              // }}
+              // onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit( onSubmitForm)}
+              // onSubmit={form.handleSubmit((data) => console.log('Form Submitted', data))}
+
+              className="space-y-3 flex flex-col px-2 w-full"
+            >
+              {/* <div className={`${!login ? 'blur' : 'remove-blur'}`}> */}
+              <div className="flex flex-col md:flex-row gap-2 w-full">
                 <FormField
                   control={form.control}
-                  name="id"
+                  name="petName"
                   render={({ field }) => (
-                    <FormItem className="md:w-1/2 w-full">
-                      <FormLabel className="text-xs md:text-md">
-                        Select a Doctor
+                    <FormItem className="flex-1">
+                      {' '}
+                      <FormLabel className="text-xs md:text-md text-left">
+                        {' '}
+                        Your Pet&apos;s Name
                       </FormLabel>
                       <FormControl>
-                        <Select
-                          onValueChange={(value) => {
-                            console.log(value);
-                            field.onChange(value);
-                            // setSelecteddDoctor(value);
-                            setLoading(true);
-                            setSelectedDoctor(
-                              doctors.find(
-                                (doc: any) => doc.id === parseInt(value)
-                              )
-                            );
-                          }}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            {/* <SelectValue> */}
-                            {field.value
-                              ? doctors.find(
-                                  (doc: any) => doc.id === parseInt(field.value)
-                                )?.name
-                              : 'Select an option'}
-                            {/* </SelectValue> */}
-                          </SelectTrigger>
-                          <SelectContent>
-                            {doctors.length ? (
-                              doctors.map((doc: any) => (
-                                <SelectItem key={doc.id} value={doc.id}>
-                                  {doc.name}
-                                </SelectItem>
-                              ))
-                            ) : (
-                              <SelectItem disabled value={''}>
-                                No options
-                              </SelectItem>
-                            )}
-                          </SelectContent>
-                        </Select>
+                        <Input placeholder="Pet's name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              )}
-              {searchParams.get('medicineId') && (
                 <FormField
                   control={form.control}
-                  name="id"
+                  name="petAge"
                   render={({ field }) => (
-                    <FormItem className="md:w-1/2 w-full">
-                      <FormLabel className="text-xs md:text-md">
-                        Select Medicine
+                    <FormItem className="flex-1">
+                      {' '}
+                      {/* Use flex-1 to allow equal growth */}
+                      <FormLabel className="text-xs md:text-md text-left">
+                        {' '}
+                        {/* Align label text to the left */}
+                        Your Pet&apos;s Age
                       </FormLabel>
                       <FormControl>
-                        <Select
-                          onValueChange={(value) => {
-                            field.onChange(value);
-                            setSelectedMedicine(value);
-                          }}
-                          defaultValue={field.value}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a medicine">
-                              {field.value
-                                ? medicine.find((med) => med.id === field.value)
-                                    ?.name
-                                : 'Select an option'}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            {medicine.length ? (
-                              medicine.map((med) => (
-                                <SelectItem key={med.id} value={med.id}>
-                                  {med.name}
-                                </SelectItem>
-                              ))
-                            ) : (
-                              <SelectItem disabled value={''}>
-                                No options
-                              </SelectItem>
-                            )}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-            </div>
-            <div className="flex flex-col w-full md:w-full md:flex-row gap-2 ">
-              {searchParams.get('doctorId') && (
-                <FormField
-                  control={form.control}
-                  name="bookingDate"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1 grow">
-                      <FormLabel className="text-xs md:text-md">
-                        Appointment Date
-                      </FormLabel>
-                      <Popover
-                        open={isCalendarOpen}
-                        onOpenChange={setCalendarOpen}
-                      >
-                        {/* <Popover> */}
-                        <PopoverTrigger
-                          disabled={selecteddDoctor ? false : true}
-                          asChild
-                        >
-                          <FormControl>
-                            <Button
-                              variant={'outline'}
-                              className={cn(
-                                'pl-3 text-left font-normal',
-                                !field.value && 'text-muted-foreground'
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, 'yyyy-MM-dd')
-                              ) : (
-                                <span className="">Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          {doctors
-                            .find(
-                              (doctor: Doctor) => doctor.id === selecteddDoctor
-                            )
-                            ?.dayTimeSlotResponses.some(
-                              (day: any) =>
-                                day.day ===
-                                moment(date).format('dddd').toUpperCase()
-                            )}
-
-                          <Calendar
-                            mode="single"
-                            selected={new Date(field.value)}
-                            onSelect={(date) => {
-                              field.onChange(date);
-                              setCalendarOpen(false);
-                            }}
-                            disabled={(date) => {
-                              const doctorAvailability = doctors.find(
-                                (doc: Doctor) =>
-                                  doc.id == selecteddDoctor?.toString()
-                              )?.dayTimeSlotResponses;
-
-                              if (!doctorAvailability) return true; // If no availability, disable all dates
-
-                              const isDateAvailable = doctorAvailability.some(
-                                (day: any) => {
-                                  return (
-                                    day.day ===
-                                    moment(date).format('dddd').toUpperCase()
-                                  );
-                                }
-                              );
-
-                              return (
-                                date < new Date() ||
-                                date < new Date('1900-01-01') ||
-                                !isDateAvailable
-                              );
-                            }}
-                            minimized-calendar
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-              {searchParams.get('medicineId') && (
-                <FormField
-                  control={form.control}
-                  name="bookingDate"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1 grow">
-                      <FormLabel className="text-xs md:text-md">
-                        Appointment Date
-                      </FormLabel>
-
-                      <Popover>
-                        <PopoverTrigger
-                          disabled={selectedMedicine ? false : true}
-                          asChild
-                        >
-                          <FormControl>
-                            <Button
-                              variant={'outline'}
-                              className={cn(
-                                'pl-3 text-left font-normal',
-                                !field.value && 'text-muted-foreground'
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, 'PPP')
-                              ) : (
-                                <span className="">Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          {medicine
-                            .find(
-                              (medicine: Medicine) =>
-                                medicine.id === selectedMedicine
-                            )
-                            ?.dayTimeSlotResponses.some(
-                              (day: any) =>
-                                day.day ===
-                                moment(date).format('dddd').toUpperCase()
-                            )}
-                          <Calendar
-                            mode="single"
-                            selected={new Date(field.value)}
-                            onSelect={(date) => field.onChange(date)}
-                            disabled={(date) => {
-                              const medicineAvailability = medicine.find(
-                                (doc: Medicine) =>
-                                  doc.id == selectedMedicine?.toString()
-                              )?.dayTimeSlotResponses;
-
-                              if (!medicineAvailability) return true; // If no availability, disable all dates
-
-                              const isDateAvailable = medicineAvailability.some(
-                                (day: any) => {
-                                  return (
-                                    day.day ===
-                                    moment(date).format('dddd').toUpperCase()
-                                  );
-                                }
-                              );
-
-                              return (
-                                date < new Date() ||
-                                date < new Date('1900-01-01') ||
-                                !isDateAvailable
-                              );
-                            }}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-              {searchParams.get('doctorId') ? (
-                <FormField
-                  control={form.control}
-                  name="time"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-1 grow">
-                      <FormLabel className="text-xs md:text-md">
-                        Select a time
-                      </FormLabel>
-                      <FormControl>
-                        <TimePicker
-                          disabled={
-                            form.getValues('bookingDate') ? false : true
-                          }
-                          values={form.getValues()}
-                          appointmentTimes={
-                            doctors
-                              .find(
-                                (doc: Doctor) =>
-                                  doc.id == selecteddDoctor?.toString()
-                              )
-                              ?.dayTimeSlotResponses?.find(
-                                (day: any) =>
-                                  day.day ===
-                                  moment(form.getValues('bookingDate'))
-                                    .format('dddd')
-                                    .toUpperCase()
-                              )?.appointmentTimes
-                          }
+                        <Input
+                          type="number"
+                          placeholder="Select.."
+                          className="w-full"
                           {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              ) : (
-                <div className="flex flex-col md:flex-row gap-2 w-full">
+              </div>
+              <div className="flex flex-col md:flex-row gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="petType"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      {' '}
+                      {/* Ensures equal growth */}
+                      <FormLabel className="text-xs md:text-md text-left">
+                        Your Pet&apos;s Type
+                      </FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={(value) => {
+                            console.log(value);
+                            field.onChange(value);
+                            setLoading(true);
+                            setSelectedPet(
+                              pet.find((pee: any) => pee.id === parseInt(value))
+                            );
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <SelectTrigger className="w-full">
+                            {field.value
+                              ? pet.find(
+                                  (pee: any) => pee.id === parseInt(field.value)
+                                )?.name
+                              : 'Select an option'}
+                          </SelectTrigger>
+                          <SelectContent>
+                            {pet.length ? (
+                              pet.map((pee: any) => (
+                                <SelectItem key={pee.id} value={pee.id}>
+                                  {pee.name}
+                                </SelectItem>
+                              ))
+                            ) : (
+                              <SelectItem disabled value={''}>
+                                No options
+                              </SelectItem>
+                            )}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col md:flex-row gap-2 w-full">
+                {searchParams.get('doctorId') && (
+                  <FormField
+                    control={form.control}
+                    name="id"
+                    render={({ field }) => (
+                      <FormItem className="md:w-1/2 w-full">
+                        <FormLabel className="text-xs md:text-md">
+                          Select a Doctor
+                        </FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={(value) => {
+                              console.log('dated', value);
+                              field.onChange(value);
+                              // setSelecteddDoctor(value);
+                              setLoading(true);
+                              setSelectedDoctor(
+                                doctors.find(
+                                  (doc: any) => doc.id === parseInt(value)
+                                )
+                              );
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger className="w-full">
+                              {/* <SelectValue> */}
+                              {field.value
+                                ? doctors.find(
+                                    (doc: any) =>
+                                      doc.id === parseInt(field.value)
+                                  )?.name
+                                : 'Select an option'}
+                              {/* </SelectValue> */}
+                            </SelectTrigger>
+                            <SelectContent>
+                              {doctors.length ? (
+                                doctors.map((doc: any) => (
+                                  <SelectItem key={doc.id} value={doc.id}>
+                                    {doc.name}
+                                  </SelectItem>
+                                ))
+                              ) : (
+                                <SelectItem disabled value={''}>
+                                  No options
+                                </SelectItem>
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {searchParams.get('medicineId') && (
+                  <FormField
+                    control={form.control}
+                    name="id"
+                    render={({ field }) => (
+                      <FormItem className="md:w-1/2 w-full">
+                        <FormLabel className="text-xs md:text-md">
+                          Select Medicine
+                        </FormLabel>
+                        <FormControl>
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedMedicine(value);
+                            }}
+                            defaultValue={field.value}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a medicine">
+                                {field.value
+                                  ? medicine.find(
+                                      (med) => med.id === field.value
+                                    )?.name
+                                  : 'Select an option'}
+                              </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {medicine.length ? (
+                                medicine.map((med) => (
+                                  <SelectItem key={med.id} value={med.id}>
+                                    {med.name}
+                                  </SelectItem>
+                                ))
+                              ) : (
+                                <SelectItem disabled value={''}>
+                                  No options
+                                </SelectItem>
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
+          
+              <div className="flex flex-col w-full md:w-full md:flex-row gap-2 ">
+                {searchParams.get('doctorId') && login  && (
+                  <FormField
+                    control={form.control}
+                    name="bookingDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col gap-1 grow">
+                        <FormLabel className="text-xs md:text-md">
+                          Appointment Date
+                        </FormLabel>
+                        <Popover
+                          open={isCalendarOpen}
+                          onOpenChange={setCalendarOpen}
+                        >
+                          {/* <Popover> */}
+                          <PopoverTrigger
+                            disabled={selecteddDoctor ? false : true}
+                            asChild
+                          >
+                            <FormControl>
+                              <Button
+                                variant={'outline'}
+                                className={cn(
+                                  'pl-3 text-left font-normal',
+                                  !field.value && 'text-muted-foreground'
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, 'yyyy-MM-dd')
+                                ) : (
+                                  <span className="">Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            {doctors
+                              .find(
+                                (doctor: Doctor) =>
+                                  doctor.id === selecteddDoctor
+                              )
+                              ?.dayTimeSlotResponses.some(
+                                (day: any) =>
+                                  day.day ===
+                                  moment(date).format('dddd').toUpperCase()
+                              )}
+
+                            <Calendar
+                              mode="single"
+                              selected={new Date(field.value)}
+                              onSelect={(date) => {
+                                field.onChange(date);
+                                setCalendarOpen(false);
+                              }}
+                              disabled={(date) => {
+                                const doctorAvailability = doctors.find(
+                                  (doc: Doctor) =>
+                                    doc.id == selecteddDoctor?.toString()
+                                )?.dayTimeSlotResponses;
+
+                                if (!doctorAvailability) return true;
+
+                                const isDateAvailable = doctorAvailability.some(
+                                  (day: any) => {
+                                    return (
+                                      day.day ===
+                                      moment(date).format('dddd').toUpperCase()
+                                    );
+                                  }
+                                );
+
+                                return (
+                                  date < new Date() ||
+                                  date < new Date('1900-01-01') ||
+                                  !isDateAvailable
+                                );
+                              }}
+                              minimized-calendar
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {searchParams.get('medicineId') && (
+                  <FormField
+                    control={form.control}
+                    name="bookingDate"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col gap-1 grow">
+                        <FormLabel className="text-xs md:text-md">
+                          Appointment Date
+                        </FormLabel>
+
+                        <Popover>
+                          <PopoverTrigger
+                            disabled={selectedMedicine ? false : true}
+                            asChild
+                          >
+                            <FormControl>
+                              <Button
+                                variant={'outline'}
+                                className={cn(
+                                  'pl-3 text-left font-normal',
+                                  !field.value && 'text-muted-foreground'
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, 'PPP')
+                                ) : (
+                                  <span className="">Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            {medicine
+                              .find(
+                                (medicine: Medicine) =>
+                                  medicine.id === selectedMedicine
+                              )
+                              ?.dayTimeSlotResponses.some(
+                                (day: any) =>
+                                  day.day ===
+                                  moment(date).format('dddd').toUpperCase()
+                              )}
+                            <Calendar
+                              mode="single"
+                              selected={new Date(field.value)}
+                              onSelect={(date) => field.onChange(date)}
+                              disabled={(date) => {
+                                const medicineAvailability = medicine.find(
+                                  (doc: Medicine) =>
+                                    doc.id == selectedMedicine?.toString()
+                                )?.dayTimeSlotResponses;
+
+                                if (!medicineAvailability) return true; // If no availability, disable all dates
+
+                                const isDateAvailable =
+                                  medicineAvailability.some((day: any) => {
+                                    return (
+                                      day.day ===
+                                      moment(date).format('dddd').toUpperCase()
+                                    );
+                                  });
+
+                                return (
+                                  date < new Date() ||
+                                  date < new Date('1900-01-01') ||
+                                  !isDateAvailable
+                                );
+                              }}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+                {searchParams.get('doctorId') ? (
                   <FormField
                     control={form.control}
                     name="time"
@@ -730,10 +778,10 @@ const Appointment: React.FC<AppointmentProps> = () => {
                             }
                             values={form.getValues()}
                             appointmentTimes={
-                              medicine
+                              doctors
                                 .find(
-                                  (doc: Medicine) =>
-                                    doc.id == selectedMedicine?.toString()
+                                  (doc: Doctor) =>
+                                    doc.id == selecteddDoctor?.toString()
                                 )
                                 ?.dayTimeSlotResponses?.find(
                                   (day: any) =>
@@ -750,123 +798,234 @@ const Appointment: React.FC<AppointmentProps> = () => {
                       </FormItem>
                     )}
                   />
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col md:flex-row gap-2 w-full">
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="w-full ">
-                    <FormLabel className="text-xs md:text-md">
-                      Your Reason for the appointment
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter your reason here..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                ) : (
+                  <div className="flex flex-col md:flex-row gap-2 w-full">
+                    <FormField
+                      control={form.control}
+                      name="time"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1 grow">
+                          <FormLabel className="text-xs md:text-md">
+                            Select a time
+                          </FormLabel>
+                          <FormControl>
+                            <TimePicker
+                              disabled={
+                                form.getValues('bookingDate') ? false : true
+                              }
+                              values={form.getValues()}
+                              appointmentTimes={
+                                medicine
+                                  .find(
+                                    (doc: Medicine) =>
+                                      doc.id == selectedMedicine?.toString()
+                                  )
+                                  ?.dayTimeSlotResponses?.find(
+                                    (day: any) =>
+                                      day.day ===
+                                      moment(form.getValues('bookingDate'))
+                                        .format('dddd')
+                                        .toUpperCase()
+                                  )?.appointmentTimes
+                              }
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 )}
-              />
-            </div>
-            {login ? (
+              </div>
+
+
+              <div className="flex flex-col md:flex-row gap-2 w-full">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="w-full ">
+                      <FormLabel className="text-xs md:text-md">
+                        Your Reason for the appointment
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter your reason here..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {/* </div> */}
+
+              {login &&(
+                <button
+                  className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
+                  type="submit"
+                  disabled={isSubmitting} 
+                  // onClick={() => form.getValues ? onSubmitForm({ ...form.getValues(), userId: login?.userId }) : ''}
+
+                >
+                  Submit
+                </button>
+              ) 
+
+              
+              }
+            </form>
+          </Form>
+        </div>
+        {!login ? (
+        <div className="space-y-3 flex flex-col px-2 w-full">
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
               <button
                 className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
                 type="submit"
               >
-                Submit
+                Login to continue
               </button>
-            ) : (
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                 <button
-                    className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
-                    type="submit"
-                  >
-                    Login to continue
-                  </button>
-                  {/* </a> */}
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>Login</DialogTitle>
-                    <DialogDescription>
-                      Enter your credentials to log in.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <Form {...signInForm}>
-                    <form onSubmit={signInForm.handleSubmit(handleSignIn)}>
-                      <FormField
-                        control={signInForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Email Address" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={signInForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Input
-                                  type={showPassword ? 'text' : 'password'}
-                                  placeholder="Password"
-                                  {...field}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={togglePasswordVisibility}
-                                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
-                                >
-                                  {showPassword ? (
-                                    <Eye className="h-6 w-6 opacity-50" />
-                                  ) : (
-                                    <EyeOff className="h-6 w-6 opacity-50" />
-                                  )}
-                                </button>
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <div className="flex justify-end mb-4">
-                        <a
-                          href="/forgotpassword"
-                          className="text-sm underline text-black font-bold"
-                        >
-                          Forgot password?
-                        </a>
-                      </div>
-                      <DialogFooter>
-                        <button
-                          disabled={loadingSub}
-                          type="submit"
-                          className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800"
-                        >
-                          {loadingSub ? 'Signing in...' : 'Sign In'}
-                        </button>
-                      </DialogFooter>
-                    </form>
-                  </Form>
-                </DialogContent>
-              </Dialog>
-            )}
-          </form>
-        </Form>
+              {/* </a> */}
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Login</DialogTitle>
+                <DialogDescription>
+                  Enter your credentials to log in.
+                </DialogDescription>
+              </DialogHeader>
+              <Form {...signInForm}>
+                <form onSubmit={signInForm.handleSubmit(handleSignIn)}>
+                  <FormField
+                    control={signInForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Address</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Email Address" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={signInForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showPassword ? 'text' : 'password'}
+                              placeholder="Password"
+                              {...field}
+                            />
+                            <button
+                              type="button"
+                              onClick={togglePasswordVisibility}
+                              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                            >
+                              {showPassword ? (
+                                <Eye className="h-6 w-6 opacity-50" />
+                              ) : (
+                                <EyeOff className="h-6 w-6 opacity-50" />
+                              )}
+                            </button>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-end mb-4">
+                    <a
+                      href="/forgotpassword"
+                      className="text-sm underline text-black font-bold"
+                    >
+                      Forgot password?
+                    </a>
+                  </div>
+                  <DialogFooter>
+                    <button
+                      disabled={loadingSub}
+                      type="submit"
+                      className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800"
+                    >
+                      {loadingSub ? 'Signing in...' : 'Sign In'}
+                    </button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>):(null)}
+        {/* <div className="bg-red-600 ">
+          {showMessage && (
+            <Dialog open={showMessage} onOpenChange={setshowMessage}>
+              <DialogTrigger asChild></DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>{loginSucess}</DialogTitle>
+                  <DialogDescription>Continu To Submit Form.</DialogDescription>
+                </DialogHeader>
+                <Button onClick={handleOkClick}>Yes</Button>
+              </DialogContent>
+            </Dialog>
+          )}
+        </div> */}
+
+        <div className="bg-red-600 ">
+          {showBook && (
+            // <Dialog open={showBook} onOpenChange={setshowBook}>
+            //   <DialogTrigger asChild></DialogTrigger>
+            //   <DialogContent 
+            //   className="sm:max-w-[425px]"
+              
+              
+            //   >
+            //     <DialogHeader>
+            //       <DialogTitle style={{ textAlign: 'center' }}>
+            //         {formSucess}
+            //       </DialogTitle>
+            //       <DialogDescription
+            //         style={{
+            //           textAlign: 'center',
+            //           display: 'flex',
+            //           flexDirection: 'column',
+            //           alignItems: 'center',
+            //         }}
+            //       >
+            //         <div
+            //           style={{
+            //             display: 'flex',
+            //             justifyContent: 'center',
+            //             alignItems: 'center',
+            //           }}
+            //         >
+            //           <Smile className="mr-2" />
+            //         </div>
+            //         <br />
+            //         Thank You
+            //       </DialogDescription>
+            //     </DialogHeader>
+            //     <Button onClick={handleClick}>OK</Button>
+            //   </DialogContent>
+            // </Dialog>
+
+            <SuccessModal loading={''} successMessage={formSucess} handleClick={() => {
+              setshowBook(false);
+              router.push('/home');
+            }}
+          />
+          )}
+        </div>
+
         <div className="text-xs mt-2 mb-2  align-center justify-center ">
           No money charged in this step
         </div>
