@@ -23,21 +23,22 @@ const Medicines = () => {
   );
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const medicinesData = await getMedicineFilterData({
+          pageSize: 10,
+          pageCount: 1,
+        });
+        setAllMedicines(medicinesData.records);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
-  }, []); // Only fetch data on component mount
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const medicinesData = await getMedicineFilterData({
-        pageSize: 10,
-        pageCount: 1,
-      });
-      setAllMedicines(medicinesData.records); // Ensure correct structure if `medicinesData` contains `records`
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  }, [setAllMedicines, setLoading]);
 
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
@@ -60,7 +61,7 @@ const Medicines = () => {
         description="Discover our range of medicines for your health needs."
         handleClick={handleClick}
         pathname="medicines"
-        doctors={medicines} // Consider renaming `doctors` to something more appropriate like `items` or `images`
+        doctors={medicines}
       />
     </div>
   );

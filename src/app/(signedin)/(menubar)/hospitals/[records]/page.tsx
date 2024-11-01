@@ -1,9 +1,7 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import Header from '@/components/Header';
+import React, { useEffect } from 'react';
 import PopularDoctors from '@/components/Image';
 import { getHospitalFilterData } from '@/app/home/action';
-import { useRouter } from 'next/navigation';
 import { useHospitalStore } from '@/store/hospitalStore';
 
 const Index = ({ params }: { params: { records: string } }) => {
@@ -14,25 +12,21 @@ const Index = ({ params }: { params: { records: string } }) => {
   ]);
 
   useEffect(() => {
-    getHospitalDetails();
-  }, []);
-
-
-  const getHospitalDetails = async () => {
-    try {
-      const searchTextData = await getHospitalFilterData({
-        pageSize: 10,
-        pageCount: 1,
-        searchTerm: decodedRecords?.searchData,
-        cityId: decodedRecords?.cityId,
-      });
-
-      setAllHospitals(searchTextData?.records);
-    } catch (error) {
-      console.error('Error fetching hospital data:', error);
-    }
-  };
-
+    const getHospitalDetails = async () => {
+      try {
+        const searchTextData = await getHospitalFilterData({
+          pageSize: 10,
+          pageCount: 1,
+          searchTerm: decodedRecords?.searchData,
+          cityId: decodedRecords?.cityId,
+        });
+        setAllHospitals(searchTextData?.records);
+      } catch (error) {
+        console.error('Error fetching hospital data:', error);
+      }
+    };
+    getHospitalDetails(); 
+  }, [decodedRecords, setAllHospitals]);
 
   const handleClick = (id: string) => {
     if (id) {
@@ -43,8 +37,8 @@ const Index = ({ params }: { params: { records: string } }) => {
   return (
     <div id="hospital" className="pb-8 pt-5 w-full">
       <PopularDoctors
-        title="Popular Hospital"
-        description="see Your Hospital"
+        title="Popular Hospitals"
+        description="See Your Hospital"
         handleClick={handleClick}
         doctors={hospitals}
         linkDescription={''}

@@ -16,7 +16,7 @@ const AppointmentDoctor = () => {
     state.selectedDoctor,
     state.loading,
   ]);
-console.log('objeselectedDoctorct',selectedDoctor)
+
   const [appointmentInfo, setAppointmentInfo] = useState({
     message: '',
     startDate: '',

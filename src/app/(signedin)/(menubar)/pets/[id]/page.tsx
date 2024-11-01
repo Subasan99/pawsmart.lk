@@ -12,15 +12,24 @@ const Index = ({ params }: { params: { id: string } }) => {
   const [doctors, setDoctors] = useState<any>([]);
   const [pet, setPet] = useState<any>(undefined);
   const [dloading, setdLoading] = useState<boolean>(true);
-  async function fetchData() {
-    const response = await getDoctorData(1, 10, undefined, params.id);
-    const dep = await getPetById(params.id);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getDoctorData(1, 10, undefined, params.id);
+        const dep = await getPetById(params.id);
 
-    console.log(dep);
-    setPet(dep);
-    setDoctors(response?.records);
-    setdLoading(false);
-  }
+        console.log(dep);
+        setPet(dep);
+        setDoctors(response?.records);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setdLoading(false); 
+      }
+    };
+    fetchData();
+  }, [params.id]);
 
   const handleClick = (imageName: any) => {
     console.log(`${imageName} clicked!`);
@@ -38,12 +47,9 @@ const Index = ({ params }: { params: { id: string } }) => {
       }))
     : [];
 
-  useEffect(() => {
-    fetchData();
-  }, []);
   if (dloading && !pet) {
     return (
-      <div className="mt-14 px-7 w-full flex flex-colbg-gray-100 items-center py-4">
+      <div className="mt-14 px-7 w-full flex flex-col bg-gray-100 items-center py-4">
         <div className="w-full max-w-[1204px] flex flex-col items-center justify-center px-3 py-5 h-full rounded-lg">
           <Loader className="h-10 w-10" />
         </div>
@@ -56,7 +62,7 @@ const Index = ({ params }: { params: { id: string } }) => {
         <PopularDoctors
           title={`${pet?.name}`}
           description="Meet With Professional Doctors."
-          //   link="/doctors"
+          // link="/doctors"
           handleClick={handleClick}
           linkDescription="Doctors"
           doctors={doctors}

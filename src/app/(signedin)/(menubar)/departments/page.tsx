@@ -2,10 +2,7 @@
 import MultipleImagesProps from "@/components/SinglePageImage";
 import { useDepartmentStore } from "@/store/departmentStore";
 import { useEffect } from "react";
-import {
-  getDeparmentFilterData,
-  getDepartmentData,
-} from "../../../home/action";
+import { getDeparmentFilterData } from "../../../home/action";
 import Loader from "@/components/Loader";
 
 const Department = () => {
@@ -18,21 +15,23 @@ const Department = () => {
     ]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      if (departments && departments.length > 0) return; // Skip fetch if data already exists
+      try {
+        setLoading(true);
+        const departmentData = await getDeparmentFilterData({
+          pageSize: 10,
+          pageCount: 1,
+        });
+        setAllDepartments(departmentData?.records);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
-  }, [getDepartmentData]);
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const departmentData = await getDeparmentFilterData({
-        pageSize: 10,
-        pageCount: 1,
-      });
-
-      setAllDepartments(departmentData?.records);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  }, [departments, setAllDepartments, setLoading]); // Include relevant dependencies
 
   const departmentDatas = Array.isArray(departments)
     ? departments.map((department: any) => ({
@@ -47,8 +46,6 @@ const Department = () => {
   const handleClick = (imageName: string) => {
     console.log(`Image clicked: ${imageName}`);
   };
-
-  console.log(departments)
 
   if (loading || !departments) {
     return (

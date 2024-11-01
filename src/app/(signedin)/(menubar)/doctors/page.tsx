@@ -2,7 +2,7 @@
 import Header from "@/components/HomeComponent/Header";
 import MultipleImagesProps from "@/components/SinglePageImage";
 import { useDoctorStore } from "@/store/doctorStore";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getDoctorFilterData } from "../../../home/action";
 import Loader from "@/components/Loader";
 
@@ -24,21 +24,22 @@ const Doctors = () => {
   );
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const doctorsData = await getDoctorFilterData({
+          pageSize: 10,
+          pageCount: 1,
+        });
+        setAllDoctors(doctorsData.records);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchData();
-  }, []); // Empty dependency array
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const doctorsData = await getDoctorFilterData({
-        pageSize: 10,
-        pageCount: 1,
-      });
-      setAllDoctors(doctorsData.records);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  }, [setAllDoctors, setLoading]);
 
   const doctores = Array.isArray(allDoctors)
     ? allDoctors.map((doctor: Doctor) => ({

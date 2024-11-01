@@ -12,15 +12,22 @@ const Index = ({ params }: { params: { id: string } }) => {
   const [doctors, setDoctors] = useState<any>([]);
   const [medicine, setMedicine] = useState<any>(undefined);
   const [dloading, setdLoading] = useState<boolean>(true);
-  async function fetchData() {
-    const response = await getDoctorData(1, 10, undefined, params.id);
-    const dep = await getMedicineById(params.id);
 
-    console.log(dep);
-    setMedicine(dep);
-    setDoctors(response?.records);
-    setdLoading(false);
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getDoctorData(1, 10, undefined, params.id);
+        const dep = await getMedicineById(params.id);
+        setMedicine(dep);
+        setDoctors(response?.records);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setdLoading(false); 
+      }
+    };
+    fetchData(); 
+  }, [params.id]); 
 
   const handleClick = (imageName: any) => {
     console.log(`${imageName} clicked!`);
@@ -38,10 +45,6 @@ const Index = ({ params }: { params: { id: string } }) => {
       }))
     : [];
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   if (dloading && !medicine) {
     return (
       <div className="mt-14 px-7 w-full h-full flex flex-col bg-gray-100 items-center py-4">
@@ -57,7 +60,7 @@ const Index = ({ params }: { params: { id: string } }) => {
         <PopularDoctors
           title={`${medicine?.name}`}
           description="Meet With Professional Doctors."
-          //   link="/doctors"
+          // link="/doctors"
           handleClick={handleClick}
           linkDescription="Doctors"
           doctors={doctors}

@@ -2,7 +2,7 @@
 
 import Header from '@/components/HomeComponent/Header';
 import CircledArrowIcon from '@/components/svg/circled-arrow-icon';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   getAppointmentBooking,
   getAppointmentBookingFilterData,
@@ -21,33 +21,28 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
       state.doctorfiltAppointments,
     ]);
   const [activeTab, setActiveTab] = useState('all');
-  const [DoctorName, setdoctorName] = useState<any[]>([]); // For storing the API response
-  const [BookingDate, setbookingdate] = useState<any[]>([]); // For storing the API response
-  const [BookingTime, setbookingTime] = useState<any[]>([]); // For storing the API response
-
-  const [Status, setstatus] = useState<any[]>([]); // For storing the API response
-  const [Description, setdescription] = useState<any[]>([]); // For storing the API response
 
   const handleTabClick = (tab: any) => {
     setActiveTab(tab);
   };
-  useEffect(() => {
-    getAppointmentDetails();
-  }, []);
 
-  const getAppointmentDetails = async () => {
+  const getAppointmentDetails = useCallback(async () => {
     try {
-      const filterAppoinmentLinst = await getAppointmentBookingFilterData({
+      const filterAppointmentList = await getAppointmentBookingFilterData({
         pageSize: 10,
         pageCount: 1,
         userId: login?.userId,
       });
 
-      setDoctorAppointments(filterAppoinmentLinst?.records);
+      setDoctorAppointments(filterAppointmentList?.records);
     } catch (error) {
       console.error('Error fetching hospital data:', error);
     }
-  };
+  }, [login?.userId, setDoctorAppointments]);
+
+  useEffect(() => {
+    getAppointmentDetails();
+  }, [getAppointmentDetails]);
   const renderTabContent = () => {
     switch (activeTab) {
       case 'premium':
@@ -110,7 +105,6 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
   };
 
   return (
-
     <div className="container mx-auto mt-16 bg-[#F7F8F9] rounded-xl">
       <div className="sticky z-30 top-0 md:static h-fit">
         <Header />
@@ -136,7 +130,6 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
       </div>
       <div className="mt-4">{renderTabContent()}</div>
     </div>
-    // </RootLayout>
   );
 };
 

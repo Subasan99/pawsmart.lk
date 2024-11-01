@@ -21,19 +21,21 @@ const Pets = () => {
   ]);
 
   useEffect(() => {
-    fetchData();
-  }, []); // Only fetch data on component mount
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const petData = await getPetFilterData({ pageSize: 10, pageCount: 1 });
+        setAllPets(petData.records);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Optionally, set some state to display an error message to the user
+      } finally {
+        setLoading(false); // Ensure loading state is updated after the data fetching is done
+      }
+    };
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const petData = await getPetFilterData({ pageSize: 10, pageCount: 1 });
-      setAllPets(petData.records);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      // Optionally, set some state to display an error message to the user
-    }
-  };
+    fetchData(); // Call the fetchData function
+  }, []); // Only fetch data on component mount
 
   const petdata = Array.isArray(pets)
     ? pets.map((pet: Pet) => ({
@@ -66,7 +68,7 @@ const Pets = () => {
         title="Pets Nutritional"
         description="Your Pets' Nutritional Health is Very Important & Our Priority"
         handleClick={handleClick}
-        doctors={pets}
+        doctors={pets} 
         pathname="/pets"
       />
     </div>

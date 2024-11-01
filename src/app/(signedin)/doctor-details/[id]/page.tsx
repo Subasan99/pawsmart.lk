@@ -26,26 +26,30 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.setDoctorAppointments,
   ]);
 
-  async function fetchData() {
-    const response = await getDoctorById(params.id);
-    setSelectedDoctor(response);
-    setdLoading(false);
-  }
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getDoctorById(params.id);
+        setSelectedDoctor(response);
+      } catch (error) {
+        console.error("Failed to fetch doctor data:", error);
+      } finally {
+        setdLoading(false);
+      }
+    };
+
     fetchData();
-  }, [params.id]);
+  }, [params.id]); 
 
   if (dloading && !selectedDoctor) {
     return (
-      <div className="mt-14 px-7 w-full flex flex-colbg-gray-100 items-center py-4">
+      <div className="mt-14 px-7 w-full flex flex-col bg-gray-100 items-center py-4">
         <div className="w-full max-w-[1204px] flex flex-col px-3 py-5 h-full rounded-lg">
           Loading...!
         </div>
       </div>
     );
   }
-  console.log(selectedDoctor);
   return (
     <div className="mt-14 px-7 w-full flex flex-col items-center py-4">
       <div className="w-full flex flex-col max-w-[1204px] gap-y-3">
@@ -71,7 +75,7 @@ const Index = ({ params }: { params: { id: string } }) => {
               )}
             </div>
             <div className="grow w-1/2 min-w-fit items-center md:items-start flex flex-col gap-2 px-3 py-2">
-              <div className="font-bold text-2xl flex gap-2 items-center ">
+              <div className="font-bold text-2xl flex gap-2 items-center">
                 {selectedDoctor?.name}{" "}
                 <GenderIcon
                   gender={selectedDoctor?.gender}
