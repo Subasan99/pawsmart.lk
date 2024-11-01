@@ -1,3 +1,5 @@
+"use client";
+
 import { getAllPets, getAllSpecializations } from "@/api/route";
 import DoctorCreate from "@/components/AdminPanelComponents/DoctorComponents/DoctorCreate";
 import { useAdminStore } from "@/store/adminStore";
