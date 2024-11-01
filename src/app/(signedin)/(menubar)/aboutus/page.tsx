@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const AboutUs = () => {
   return (
-    // <RootLayout pageName="About Us">
+
     <div className="bg-gray-100">
       <div className="w-full max-w-[1196px] pt-5 px-7  mx-auto">
         <div className="pl-2">

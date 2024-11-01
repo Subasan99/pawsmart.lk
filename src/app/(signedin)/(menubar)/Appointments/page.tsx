@@ -110,7 +110,7 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
   };
 
   return (
-    // <RootLayout pageName="Appointments">
+
     <div className="container mx-auto mt-16 bg-[#F7F8F9] rounded-xl">
       <div className="sticky z-30 top-0 md:static h-fit">
         <Header />
