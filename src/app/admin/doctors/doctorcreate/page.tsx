@@ -1,17 +1,18 @@
-"use client";
-import { DayPickerProvider, DayPickerProps } from "react-day-picker"; // Import DayPickerProvider and DayPickerProps
-import { useEffect, useState } from "react";
-import { getAllPets, getAllSpecializations } from "@/api/route";
-import { useAdminStore } from "@/store/adminStore";
-import { usePetStore } from "@/store/petStore";
-import { useSpecializationStore } from "@/store/specializationStore";
-import { DataTable } from "../../../components/AdminPanelComponents/data-table";
-import { getDoctorData } from "./action";
-import { columns } from "./columns";
-import { Button } from "react-day-picker";  // Assuming Button is from react-day-picker
-import { useRouter } from "next/navigation";
+'use client';
+import { DayPickerProvider, DayPickerProps } from 'react-day-picker'; // Import DayPickerProvider and DayPickerProps
+import { useEffect, useState } from 'react';
+import { getAllPets, getAllSpecializations } from '@/api/route';
+import { useAdminStore } from '@/store/adminStore';
+import { usePetStore } from '@/store/petStore';
+import { useSpecializationStore } from '@/store/specializationStore';
+import { Button } from 'react-day-picker'; // Assuming Button is from react-day-picker
+import { useRouter } from 'next/navigation';
+import { getDoctorData } from '../action';
+import { columns } from '../columns';
+import { DataTable } from '@/components/AdminPanelComponents/data-table';
+import DocCreateForm from '@/components/AdminPanelComponents/DoctorComponents/DocCreateForm';
 
-export default function DemoPage() {
+const Index = () => {
   const router = useRouter();
   const [doctors, setAllDoctors] = useAdminStore((state: any) => [
     state.doctors,
@@ -20,9 +21,10 @@ export default function DemoPage() {
   const [specialization, setAllSpecialization] = useSpecializationStore(
     (state: any) => [state.specialization, state.setAllSpecialization]
   );
-  const [pet, setAllPet] = usePetStore(
-    (state: any) => [state.pet, state.setAllPet]
-  );
+  const [pet, setAllPet] = usePetStore((state: any) => [
+    state.pet,
+    state.setAllPet,
+  ]);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -39,27 +41,26 @@ export default function DemoPage() {
     fetchData();
   }, []);
 
-  // Define DayPickerProps for the DayPickerProvider
+
   const dayPickerProps: DayPickerProps = {
-    mode: "single",  // Can be "single", "multiple", etc., depending on usage
+    mode: 'single', 
     required: false,
   };
 
   return (
-    <DayPickerProvider initialProps={dayPickerProps}> {/* Provide initialProps */}
-      <div className="container flex flex-col gap-4 mx-auto py-5 relative" style={{ overflow: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}>
-        <div className="self-end ">
-          <Button className="bg-blue-500 p-2 rounded-xl" onClick={() => router.push('/admin/doctors/doctorcreate')}>
-            Create
-          </Button>
-        </div>
-        <DataTable columns={columns} data={doctors} />
+    <DayPickerProvider initialProps={dayPickerProps}>
+      {' '}
+      <div className="container flex flex-col gap-4 mx-auto py-5 relative">
+        <DocCreateForm
+          specialization={specialization}
+          pet={pet}
+        />
       </div>
     </DayPickerProvider>
   );
-}
+};
 
-
+export default Index;
 
 // "use client";
 // import { useEffect, useState } from "react";

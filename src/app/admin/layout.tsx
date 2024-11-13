@@ -23,16 +23,13 @@ export default function RootLayout({
           <div className="sticky z-30 top-0 h-fit">
             <AdminHeader />
           </div>
-          <div className="flex mt-16 w-full grow h-full">
-            <div className="fixed top-12 left-0 w-1/5 h-full bg-white">
+          <div className="flex mt-20 w-full grow h-full">
+            <div className="fixed top-12 left-0 w-1/6 h-full bg-white">
               <SideBar />
             </div>
-            <div className="ml-[20%] w-full max-w-[1204px] overflow-y-auto pb-10">
+            <div className="ml-[18%] w-full max-w-[1350px] overflow-y-auto pb-10">
               {children}
             </div>
-          </div>
-          <div className="mt-auto w-full z-40">
-            <DoctorFooter />
           </div>
         </div>
       </body>

@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
 import PopularDoctors from '@/components/Image';
-import { getHospitals } from '@/app/(signedin)/home/action';
 import { useRouter } from 'next/navigation';
+import { getHospitals } from '@/app/home/action';
 
 interface Hospital {
   preSignedUrl: string;

@@ -44,7 +44,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="">
-      <div className="rounded-md border">
+      <div className="rounded-md border" style={{ maxHeight: '535px', overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none',msOverflowStyle: "none" }}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

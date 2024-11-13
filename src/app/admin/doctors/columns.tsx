@@ -12,6 +12,7 @@ export type Columns = {
   dateOfBirth: string;
   gender: string;
   specializationId: string;
+  departmentName: string;
   specializationName: string;
   description: string;
   image: string;
@@ -27,7 +28,7 @@ export type Columns = {
 export const columns: ColumnDef<Columns>[] = [
   {
     accessorKey: "fullName",
-    header: () => <div className="font-bold text-center">Full Name</div>,
+    header: () => <div className="font-bold text-start">Full Name</div>,
     cell: ({ row }) => (
       <div className="justify-center py-0">
         <div className="flex items-center gap-3 justify-start">
@@ -62,27 +63,34 @@ export const columns: ColumnDef<Columns>[] = [
   },
   {
     accessorKey: "phoneNo",
-    header: () => <div className="font-bold text-center">Phone Number</div>,
+    header: () => <div className="font-bold text-start">Phone Number</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.phoneNo}</div>
+      <div className="text-s">{row.original.phoneNo}</div>
     ),
   },
   {
     accessorKey: "specializationName",
-    header: () => <div className="font-bold text-center">Specialization</div>,
+    header: () => <div className="font-bold text-start">Specialization</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.specializationName}</div>
+      <div className="text-start">{row.original.specializationName}</div>
+    ),
+  },
+  {
+    accessorKey: "departmentName",
+    header: () => <div className="font-bold text-start">Department Name</div>,
+    cell: ({ row }) => (
+      <div className="text-start">{row.original.departmentName}</div>
     ),
   },
   {
     id: "actions",
     cell: ({ row }) => (
-      <div className="text-center flex justify-center">
+      <div className="text-start flex justify-center">
         <ActionMenu 
         pathName={`/admin/doctors/${row.original.id}`}
         view={true} />
       </div>
     ),
-    header: () => <div className="text-center font-bold">Actions</div>,
+    header: () => <div className="text-start font-bold">Actions</div>,
   },
 ];

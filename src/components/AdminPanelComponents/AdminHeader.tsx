@@ -88,7 +88,7 @@ export default function AdminHeader() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
+        className={`fixed top-0 left-0 shadow-md h-16  w-full z-10 transition-all duration-300 ${headerBg}`}
       >
         <div
           className={`w-full h-fit flex flex-col md:flex-row justify-between items-center px-8 py-2 ${textColor}`}

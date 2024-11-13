@@ -62,7 +62,7 @@ export type DoctorCreate = {
   specializationId: string;
   description: string;
   duration: number;
-  petIds: string[];
+  petIds: number[];
 };
 
 export type DayTimeSlotResponses = {

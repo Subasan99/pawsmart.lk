@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-          <div className="min-h-screen">{children}</div>
+          <div>{children}</div>
           <Toaster richColors />
       </body>
     </html>
