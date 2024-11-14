@@ -7,6 +7,7 @@ import { useSpecializationStore } from "@/store/specializationStore";
 import { useEffect } from "react";
 import { getMedicineData } from "./action";
 import { columns } from "./columns";
+import { Syringe } from "lucide-react";
 
 export default function Index() {
   const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
@@ -28,7 +29,10 @@ export default function Index() {
   }, []);
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
-      {/* <Filteration getApi={fetchData} /> */}
+       <div className="flex items-center">
+    <Syringe className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
+    <div className="font-bold text-2xl">Vaccination</div>
+    </div>
       <div className="self-end">
         <MedicineCreate />
       </div>

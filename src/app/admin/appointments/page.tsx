@@ -5,6 +5,7 @@ import { useBookingStore } from "@/store/bookingStore";
 import { useEffect, useState } from "react";
 import { getBookingData } from "./action";
 import { doctorColumns, medicinesColumns } from "./columns";
+import { Calendar } from "lucide-react";
 
 export default function Index() {
   const [bookings, setAllBookings] = useBookingStore((state: any) => [
@@ -31,6 +32,10 @@ export default function Index() {
   );
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
+         <div className="flex items-center">
+    <Calendar className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
+    <div className="font-bold text-2xl">Appointments</div>
+    </div>
       <Tabs
         defaultValue="doctors"
         className="w-full py-2"

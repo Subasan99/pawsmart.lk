@@ -9,13 +9,16 @@ import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDoctorData } from "./action";
 import { columns } from "./columns";
 import { Button } from "react-day-picker";  // Assuming Button is from react-day-picker
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Stethoscope } from "lucide-react";
 
 export default function DemoPage() {
   const router = useRouter();
-  const [doctors, setAllDoctors] = useAdminStore((state: any) => [
+  
+  const [doctors, setAllDoctors,loading] = useAdminStore((state: any) => [
     state.doctors,
     state.setAllDoctors,
+    state.loading
   ]);
   const [specialization, setAllSpecialization] = useSpecializationStore(
     (state: any) => [state.specialization, state.setAllSpecialization]
@@ -45,11 +48,21 @@ export default function DemoPage() {
     required: false,
   };
 
+  if (loading) {
+    return <div>Loading...!</div>;
+  }
+  const pathname = usePathname();
+
   return (
     <DayPickerProvider initialProps={dayPickerProps}> {/* Provide initialProps */}
       <div className="container flex flex-col gap-4 mx-auto py-5 relative" style={{ overflow: "auto", scrollbarWidth: "none", msOverflowStyle: "none" }}>
+      <div className="flex items-center">
+  <Stethoscope className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
+  <div className="font-bold text-2xl">Doctors</div>
+</div>
+
         <div className="self-end ">
-          <Button className="bg-blue-500 p-2 rounded-xl" onClick={() => router.push('/admin/doctors/doctorcreate')}>
+          <Button className="bg-blue-600 text-white p-2 rounded-xl" onClick={() => router.push('/admin/doctors/doctorcreate')}>
             Create
           </Button>
         </div>

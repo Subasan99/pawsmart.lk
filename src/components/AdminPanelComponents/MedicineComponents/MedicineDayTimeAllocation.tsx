@@ -69,26 +69,31 @@ const MedicineDayTimeAllocation = (props: Props) => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (lastIndex !== undefined) {
+      const daySlot = medicineDayTimeSlots[lastIndex];
+      
+      // Ensure daySlot has a medicineTimeSlots array before trying to spread
+      if (!daySlot.medicineTimeSlots) {
+        daySlot.medicineTimeSlots = [];
+      }
+  
       if (lastIndex + 1 > medicineDayTimeSlots.length) {
         medicineDayTimeSlots[medicineDayTimeSlots.length - 1].medicineTimeSlots = [
           ...medicineDayTimeSlots[medicineDayTimeSlots.length - 1].medicineTimeSlots,
           values,
         ];
-        setMedicineDayTimeSlots([...medicineDayTimeSlots]);
-        form.reset();
-        handlePopoverToggle(lastIndex, false);
-        return;
+      } else {
+        medicineDayTimeSlots[lastIndex].medicineTimeSlots = [
+          ...daySlot.medicineTimeSlots,
+          values,
+        ];
       }
-      console.log(values, lastIndex);
-      medicineDayTimeSlots[lastIndex].medicineTimeSlots = [
-        ...medicineDayTimeSlots[lastIndex].medicineTimeSlots,
-        values,
-      ];
+  
       setMedicineDayTimeSlots([...medicineDayTimeSlots]);
       form.reset();
       handlePopoverToggle(lastIndex, false);
     }
   };
+  
 
   const removeMedicineTimeSlot = (medicineTimeslot: any, day: string) => {
     const updatedSlots = medicineDayTimeSlots.map((slot) =>
@@ -223,7 +228,7 @@ const MedicineDayTimeAllocation = (props: Props) => {
           props
             .medicineAllocateTimeSlot(props.id, medicineDayTimeSlots)
             .then((response: any) => {
-              if (response.success) {
+              if (response?.success) {
                 toast.success(response.message, {className: 'bg-green-200'});
                 props.setModal(false);
               } else {

@@ -24,59 +24,58 @@ const DoctorTimeSlots = (props: Props) => {
           allocateTimeSlot={props?.allocateTimeSlot}
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-bold">Duration</h1>
-        <div className="text-lx font-semibold">
-          {props?.duration ? `${props?.duration} minutes` : "Not Available"}
+      <div className="flex flex-col gap-2 mb-4 text-left mt-5">
+        <h1 className="text-xs font-semibold text-gray-800">Duration :   {props?.duration ? `${props?.duration} minutes` : "Not Available"}</h1>
+        <div className="text-xs font-semibold text-gray-600">
+        
         </div>
       </div>
-      <div className="flex flex-col w-1/2 min-w-fit gap-2">
-        <h1 className="text-xl font-bold">Timeslots</h1>
-        <div className="flex flex-col w-full min-w-fit gap-2 items-center">
-          {props?.dayTimeSlotReponse.length > 0 ? (
-            props?.dayTimeSlotReponse.map(
-              (dayTimeSlotResponse: DayTimeSlotResponses) => {
-                return (
-                  <div
-                    key={dayTimeSlotResponse.day}
-                    className="flex flex-col gap-2 w-full bg-slate-100 rounded-lg px-3 py-1 shadow-md"
-                  >
-                    <div className="flex justify-between items-center text-lg font-semibold text-gray-600">
-                      {dayTimeSlotResponse?.day}
+
+
+      <div className="flex flex-col w-full gap-2">
+        <h1 className="text-xs font-semibold text-gray-800">Timeslots</h1>
+        <div className="overflow-x-auto w-full">
+  {props?.dayTimeSlotReponse.length > 0 ? (
+    <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+      <thead>
+        <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
+          <th className="py-3 px-6 w-1/2 text-center">Day</th>
+          <th className="py-3 px-6 w-1/2 text-center">Timeslot</th>
+        </tr>
+      </thead>
+      <tbody className="text-gray-700 text-sm font-medium">
+        {props?.dayTimeSlotReponse.map((dayTimeSlotResponse: DayTimeSlotResponses) => (
+          <tr key={dayTimeSlotResponse.day} className="border-b border-gray-200">
+            <td className="py-3 px-6 w-1/2 text-center  whitespace-nowrap text-xs font-semibold text-gray-600">
+              {dayTimeSlotResponse.day}
+            </td>
+            <td className="py-3 px-6 w-1/2">
+              {dayTimeSlotResponse?.timeSlots.length > 0 ? (
+                <div className="flex flex-col gap-1">
+                  {dayTimeSlotResponse.timeSlots.map((timeslot: any, index: any) => (
+                    <div
+                      key={index}
+                      className="p-2 text-xs font-semibold text-center rounded-md  mb-1"
+                    >
+                      {formatTime24to12(timeslot.startTime)} - {formatTime24to12(timeslot.endTime)}
                     </div>
-                    <Separator />
-                    <div className="flex flex-col gap-1">
-                      {dayTimeSlotResponse?.timeSlots.length > 0 ? (
-                        <>
-                          {dayTimeSlotResponse?.timeSlots.map(
-                            (timeslot: any, index: any) => (
-                              <div
-                                key={index}
-                                className="font-semibold text-md w-fit rounded-lg p-2"
-                              >
-                                {formatTime24to12(timeslot.startTime)} -{" "}
-                                {formatTime24to12(timeslot.endTime)}
-                              </div>
-                            )
-                          )}
-                        </>
-                      ) : (
-                        <div className="text-center font-semibold text-gray-500">
-                          No timeslots available!
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              }
-            )
-          ) : (
-            <div className="text-lg font-bold text-gray-500">
-              No Time Slots Available
-            </div>
-          )}
-          <div className="text-lg font-bold">{}</div>
-        </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-gray-500">No timeslots available!</div>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <div className="text-xs font-semibold text-center justify-center items-center align-middle text-red-600">
+      No Time Slots Available
+    </div>
+  )}
+</div>
+
       </div>
     </div>
   );

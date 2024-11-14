@@ -19,7 +19,16 @@ export type Columns = {
 export const columns: ColumnDef<Columns>[] = [
   {
     accessorKey: "DepartmentName",
-    header: () => <div className="font-bold text-center">Department Name</div>,
+    header: () => (
+      <div className="flex items-center space-x-3">
+        <Image
+          alt="default image"
+          src={DefaultImage}
+          className="w-10 h-10 object-cover rounded-full border-2"
+        />
+        <div className="font-bold text-start">Department Name</div>
+      </div>
+    ),
     cell: ({ row }) => (
       <div className="justify-center py-0">
         <div className="flex items-center gap-3 ">
@@ -49,23 +58,23 @@ export const columns: ColumnDef<Columns>[] = [
   },
   {
     accessorKey: "CreatedAt",
-    header: () => <div className="font-bold text-center">Created At</div>,
+    header: () => <div className="font-bold text-start">Created At</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.createdDate}</div>
+      <div className="text-start">{row.original.createdDate}</div>
     ),
   },
   {
     accessorKey: "UpdatedAt",
-    header: () => <div className="font-bold text-center">Updated At</div>,
+    header: () => <div className="font-bold text-start">Updated At</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.updatedDate}</div>
+      <div className="text-start">{row.original.updatedDate}</div>
     ),
   },
   {
     accessorKey: "Active",
-    header: () => <div className="font-bold text-center">Active</div>,
+    header: () => <div className="font-bold text-start">Active</div>,
     cell: ({ row }) => (
-      <div className="text-center">
+      <div className="text-start">
         <span
           className={`px-2 py-1 rounded-full text-white ${
             row.original.active ? "bg-green-500" : "bg-red-500"
@@ -80,7 +89,7 @@ export const columns: ColumnDef<Columns>[] = [
   {
     id: "actions",
     cell: ({ row }) => (
-      <div className="text-center flex justify-center">
+      <div className="text-start flex justify-center">
         <ActionMenu
           delete={() => archiveDepartment(row.original.id)}
           pathName={`/admin/departments/${row.original.id}`}

@@ -49,3 +49,14 @@ export async function allocateTimeSlot(
     console.log("Error allocating time slot:", error);
   }
 }
+
+
+export async function archiveDoctorById(id: string) {
+  try {
+    const response = await axiosInstance.put(`/doctor/active?id=${id}`);
+    console.log("thusidika.....", response);
+    return response?.data;
+  } catch (error) {
+    console.log("Error archiving users", error);
+  }
+}

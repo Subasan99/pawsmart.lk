@@ -23,29 +23,29 @@ export type Columns = {
 export const doctorColumns: ColumnDef<Columns>[] = [
   {
     accessorKey: "number",
-    header: () => <div className="font-bold text-center">#</div>,
+    header: () => <div className="font-bold text-start">#</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.index + 1}</div> // row.index starts from 0, so add 1
+      <div className="text-start">{row.index + 1}</div> // row.index starts from 0, so add 1
     ),
     id: "number", // Use a unique ID for this column
   },
   {
     accessorKey: "BookingDate",
-    header: () => <div className="font-bold text-center">Booking Date</div>,
+    header: () => <div className="font-bold text-start">Booking Date</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.bookingDate}</div>
+      <div className="text-start">{row.original.bookingDate}</div>
     ),
   },
   {
     accessorKey: "BookingTime",
-    header: () => <div className="font-bold text-center">Booking Time</div>,
-    cell: ({ row }) => <div className="text-center">{row.original.time}</div>,
+    header: () => <div className="font-bold text-start">Booking Time</div>,
+    cell: ({ row }) => <div className="text-start">{row.original.time}</div>,
   },
   {
     accessorKey: "UserName",
-    header: () => <div className="font-bold text-center">User Name</div>,
+    header: () => <div className="font-bold text-start">User Name</div>,
     cell: ({ row }) => (
-      <div className="text-center">
+      <div className="text-start">
         {row.original.userResponse.firstName +
           " " +
           row.original.userResponse.lastName}
@@ -54,15 +54,15 @@ export const doctorColumns: ColumnDef<Columns>[] = [
   },
   {
     accessorKey: "DoctorName",
-    header: () => <div className="font-bold text-center">Doctor Name</div>,
+    header: () => <div className="font-bold text-start">Doctor Name</div>,
     cell: ({ row }) => {
       const doctor = row.original.doctorResponse;
-      return <div className="text-center">{doctor ? doctor.name : "N/A"}</div>;
+      return <div className="text-start">{doctor ? doctor.name : "N/A"}</div>;
     },
   },
   {
     accessorKey: "BookingStatus",
-    header: () => <div className="font-bold text-center">Booking Status</div>,
+    header: () => <div className="font-bold text-start">Booking Status</div>,
     cell: ({ row }) => {
       const status = row.original.status;
 
@@ -83,7 +83,7 @@ export const doctorColumns: ColumnDef<Columns>[] = [
       }
 
       return (
-        <div className={`text-center py-1 px-3 rounded-full ${badgeStyle}`}>
+        <div className={`text-center py-1 px-3 rounded-3xl ${badgeStyle}`}>
           {status}
         </div>
       );
@@ -93,7 +93,7 @@ export const doctorColumns: ColumnDef<Columns>[] = [
   {
     id: "actions",
     cell: ({ row }) => (
-      <div className="text-center flex justify-center">
+      <div className="text-start flex justify-center">
         <ActionMenu
           pathName={`/admin/appointments/${row.original.id}`}
           view={true}
@@ -107,29 +107,29 @@ export const doctorColumns: ColumnDef<Columns>[] = [
 export const medicinesColumns: ColumnDef<Columns>[] = [
   {
     accessorKey: "number",
-    header: () => <div className="font-bold text-center">#</div>,
+    header: () => <div className="font-bold text-start">#</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.index + 1}</div> // row.index starts from 0, so add 1
+      <div className="text-start">{row.index + 1}</div> // row.index starts from 0, so add 1
     ),
     id: "number", // Use a unique ID for this column
   },
   {
     accessorKey: "BookingDate",
-    header: () => <div className="font-bold text-center">Booking Date</div>,
+    header: () => <div className="font-bold text-start">Booking Date</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.bookingDate}</div>
+      <div className="text-start">{row.original.bookingDate}</div>
     ),
   },
   {
     accessorKey: "BookingTime",
-    header: () => <div className="font-bold text-center">Booking Time</div>,
-    cell: ({ row }) => <div className="text-center">{row.original.time}</div>,
+    header: () => <div className="font-bold text-start">Booking Time</div>,
+    cell: ({ row }) => <div className="text-start">{row.original.time}</div>,
   },
   {
     accessorKey: "UserName",
-    header: () => <div className="font-bold text-center">User Name</div>,
+    header: () => <div className="font-bold text-start">User Name</div>,
     cell: ({ row }) => (
-      <div className="text-center">
+      <div className="text-start">
         {row.original.userResponse.firstName +
           " " +
           row.original.userResponse.lastName}
@@ -139,18 +139,18 @@ export const medicinesColumns: ColumnDef<Columns>[] = [
 
   {
     accessorKey: "MedicineName",
-    header: () => <div className="font-bold text-center">Medicine Name</div>,
+    header: () => <div className="font-bold text-start">Medicine Name</div>,
     cell: ({ row }) => {
       const medicine = row.original.medicineResponse;
       return (
-        <div className="text-center">{medicine ? medicine.name : "N/A"}</div>
+        <div className="text-start">{medicine ? medicine.name : "N/A"}</div>
       );
     },
   },
 
   {
     accessorKey: "BookingStatus",
-    header: () => <div className="font-bold text-center">Booking Status</div>,
+    header: () => <div className="font-bold text-start">Booking Status</div>,
     cell: ({ row }) => {
       const status = row.original.status;
 
@@ -181,7 +181,7 @@ export const medicinesColumns: ColumnDef<Columns>[] = [
   {
     id: "actions",
     cell: ({ row }) => (
-      <div className="text-center flex justify-center">
+      <div className="text-start flex justify-center">
         <ActionMenu
           pathName={`/admin/appointments/${row.original.id}`}
           view={true}

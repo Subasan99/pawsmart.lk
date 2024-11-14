@@ -1,6 +1,6 @@
 "use client";
 
-import { getDepartmentData } from "@/app/home/action";
+import { getDepartmentData, getDoctorData } from "@/app/home/action";
 import {
   Dialog,
   DialogContent,
@@ -17,13 +17,14 @@ import {
 import { useDepartmentStore } from "@/store/departmentStore";
 import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EllipsisIcon from "../svg/ellipsis-icon";
 import { Button } from "../ui/button";
 import DepartmentEditForm from "./DepartmentComponents/DepartmentEditForm";
 import MedicineEditForm from "./MedicineComponents/MedicineEditForm";
 import PetEditForm from "./PetComponents/PetEditForm";
 import SpecializationEditForm from "./SpecializationComponents/SpecializationEditForm";
+import { getAllPets, getAllSpecializations } from "@/api/route";
 
 interface Props {
   pathName: string;
@@ -43,18 +44,20 @@ const ActionMenu = (props: Props) => {
     state.setAllDepartment,
   ]);
 
-  async function fetchData() {
-    const departments = await getDepartmentData();
-    setAllDepartment(departments);
-  }
+  const [isLoading, setIsLoading] = useState(false);
   const handleDelete = async () => {
     if (props.delete) {
+      setIsLoading(true); // Set loading to true when deletion starts
       const response = await props.delete();
+      console.log("objectresponse", response);
+
       if (response.success) {
         setDeleteOpen(false);
         console.log("Deleted");
         // Additional logic like redirecting can be added here
       }
+      
+      setIsLoading(false); // Set loading to false after deletion is complete
     }
   };
 
@@ -152,8 +155,12 @@ const ActionMenu = (props: Props) => {
               >
                 No
               </Button>
-              <Button className="px-3 py-1 bg-red-500" onClick={handleDelete}>
-                Yes
+              <Button
+                className="px-3 py-1 bg-red-500"
+                onClick={handleDelete}
+                disabled={isLoading} // Disable delete button while isLoading
+              >
+                {isLoading ? "Deleting..." : "Yes"}
               </Button>
             </div>
           </div>

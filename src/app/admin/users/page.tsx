@@ -4,6 +4,7 @@ import { useUserStore } from "@/store/userStore";
 import { useEffect } from "react";
 import { getUserData } from "./action";
 import { columns } from "./columns";
+import { User } from "lucide-react";
 
 export default function Index() {
   const [users, setAllUsers] = useUserStore((state: any) => [
@@ -21,6 +22,10 @@ export default function Index() {
   }, []);
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
+       <div className="flex items-center">
+    <User className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
+    <div className="font-bold text-2xl">Users</div>
+    </div>
     <div className="self-end">
     </div>      {/* <Filteration getApi={fetchData} /> */}
       <DataTable columns={columns} data={users} />

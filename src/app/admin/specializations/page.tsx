@@ -7,6 +7,7 @@ import { useSpecializationStore } from "@/store/specializationStore";
 import { useEffect } from "react";
 import { getSpecializationData } from "./action";
 import { columns } from "./columns";
+import { BriefcaseMedical } from "lucide-react";
 
 export default function Index() {
   const [specializations, setAllSpecializations] = useSpecializationStore(
@@ -29,6 +30,11 @@ export default function Index() {
   }, []);
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
+          <div className="flex items-center">
+    <BriefcaseMedical className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
+    <div className="font-bold text-2xl">Specializations</div>
+    </div>
+      
       <div className="self-end">
         <SpecializationCreate department={department} />
       </div>{" "}

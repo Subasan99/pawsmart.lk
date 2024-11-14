@@ -3,6 +3,8 @@ import create from "zustand";
 import { persist } from "zustand/middleware";
 
 type Store = {
+  loading?: boolean;
+
   doctors: Doctor[];
   setAllDoctors: (doctors: Doctor[]) => void;
 };
@@ -10,9 +12,10 @@ type Store = {
 export const useAdminStore = create<Store>()(
   persist(
     (set) => ({
+      loading: true,
       doctors: [],
       setAllDoctors: (doctors: Doctor[]) => {
-        set({ doctors: doctors });
+        set({ doctors: doctors, loading: false});
       },
     }),
     {

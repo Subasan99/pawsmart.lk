@@ -3,6 +3,7 @@ import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import DefaultImage from "../../../../public/default_user.png";
+import { archiveDoctorById } from "./action";
 
 export type Columns = {
   id: string;
@@ -16,6 +17,7 @@ export type Columns = {
   specializationName: string;
   description: string;
   image: string;
+  isActive: boolean;
   preSignedUrl: string | undefined;
   duration: number;
   dayTimeSlotResponses: {
@@ -28,7 +30,16 @@ export type Columns = {
 export const columns: ColumnDef<Columns>[] = [
   {
     accessorKey: "fullName",
-    header: () => <div className="font-bold text-start">Full Name</div>,
+    header: () => (
+      <div className="flex items-center space-x-3">
+        <Image
+          alt="default image"
+          src={DefaultImage}
+          className="w-10 h-10 object-cover rounded-full border-2"
+        />
+        <div className="font-bold text-start">Full Name</div>
+      </div>
+    ),
     cell: ({ row }) => (
       <div className="justify-center py-0">
         <div className="flex items-center gap-3 justify-start">
@@ -83,14 +94,34 @@ export const columns: ColumnDef<Columns>[] = [
     ),
   },
   {
+    accessorKey: "Active",
+    header: () => <div className="font-bold text-center">Active</div>,
+    cell: ({ row }) => {
+      const isActive = row.original.isActive;
+  
+      // Define badge styles based on active status
+      const badgeStyle = isActive ? "bg-green-500 text-white" : "bg-red-500 text-white";
+  
+      return (
+        <div className="text-center py-1 px-3 rounded-full">
+          <span className={`px-2 py-1 rounded-full ${badgeStyle}`}>
+            {isActive ? "Active" : "Inactive"}
+          </span>
+        </div>
+      );
+    },
+  },
+  
+  {
     id: "actions",
     cell: ({ row }) => (
       <div className="text-start flex justify-center">
         <ActionMenu 
         pathName={`/admin/doctors/${row.original.id}`}
+        delete={() => archiveDoctorById(row.original.id)}
         view={true} />
       </div>
     ),
-    header: () => <div className="text-start font-bold">Actions</div>,
+    header: () => <div className="text-center font-bold">Actions</div>,
   },
 ];

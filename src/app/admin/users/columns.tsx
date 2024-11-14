@@ -23,7 +23,16 @@ export type Columns = {
 export const columns: ColumnDef<Columns>[] = [
   {
     accessorKey: "UserName",
-    header: () => <div className="font-bold text-center">User Name</div>,
+    header: () => (
+      <div className="flex items-center space-x-3">
+        <Image
+          alt="default image"
+          src={DefaultImage}
+          className="w-10 h-10 object-cover rounded-full border-2"
+        />
+        <div className="font-bold text-start">User Name</div>
+      </div>
+    ),
     cell: ({ row }) => (
       <div className="justify-center py-0">
         <div className="flex items-center gap-3">
@@ -53,31 +62,31 @@ export const columns: ColumnDef<Columns>[] = [
   },
   {
     accessorKey: "Email",
-    header: () => <div className="font-bold text-center">Email</div>,
+    header: () => <div className="font-bold text-start">Email</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.email}</div>
+      <div className="text-start">{row.original.email}</div>
     ),
   },
   {
     accessorKey: "PhoneNumber",
-    header: () => <div className="font-bold text-center">Phone Number</div>,
+    header: () => <div className="font-bold text-start">Phone Number</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.phoneNo}</div>
+      <div className="text-start">{row.original.phoneNo}</div>
     ),
   },
   {
     accessorKey: "Role",
-    header: () => <div className="font-bold text-center">Role</div>,
+    header: () => <div className="font-bold text-start">Role</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.role}</div>
+      <div className="text-start">{row.original.role}</div>
     ),
   },
 
   {
     accessorKey: "Active",
-    header: () => <div className="font-bold text-center">Active</div>,
+    header: () => <div className="font-bold text-start">Active</div>,
     cell: ({ row }) => (
-      <div className="text-center">
+      <div className="text-start">
         <span
           className={`px-2 py-1 rounded-full text-white ${
             row.original.active ? "bg-green-500" : "bg-red-500"
@@ -91,7 +100,7 @@ export const columns: ColumnDef<Columns>[] = [
   {
     id: "actions",
     cell: ({ row }) => (
-      <div className="text-center flex justify-center">
+      <div className="text-start flex justify-center">
         <ActionMenu
           delete={() => archiveUserById(row.original.id)}
           pathName={`/admin/users/${row.original.id}`}

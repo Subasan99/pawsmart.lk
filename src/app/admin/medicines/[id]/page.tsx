@@ -71,8 +71,10 @@ const Index = ({ params }: { params: { id: string } }) => {
           <div className="font-bold text-2xl flex gap-2 items-center">
             {selectedMedicine?.name}
           </div>
-          <div className="font-semibold text-xl">
-          &quot;{selectedMedicine?.description}&quot;
+          <div className="font-normal text-xs">
+        {selectedMedicine?.description}
+          {/* &quot;{selectedMedicine?.description}&quot; */}
+
           </div>
         </div>
       </div>

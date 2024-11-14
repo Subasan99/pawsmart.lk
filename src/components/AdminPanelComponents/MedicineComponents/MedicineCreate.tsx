@@ -18,7 +18,7 @@ const MedicineCreate = (props: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button className="bg-red-500">Create</Button>
+        <Button className="bg-red-500 al">Create</Button>
       </DialogTrigger>
       <DialogContent className="h-auto overflow-y-auto">
         <DialogHeader>

@@ -1,8 +1,20 @@
-"use client";
+'use client';
 
-import { useBookingStore } from "@/store/bookingStore";
-import { useEffect } from "react";
-import { getBookingById } from "../action";
+import { useBookingStore } from '@/store/bookingStore';
+import { useEffect } from 'react';
+import { getBookingById } from '../action';
+import {
+  AlertCircle,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Heart,
+  Mail,
+  Phone,
+  PlusIcon,
+  Stethoscope,
+  User,
+} from 'lucide-react';
 
 const Index = ({ params }: { params: { id: string } }) => {
   const [selectedBooking, setSelectedBooking, loading] = useBookingStore(
@@ -39,91 +51,167 @@ const Index = ({ params }: { params: { id: string } }) => {
     petAge,
     petType,
   } = selectedBooking || {};
+  const DetailItem = ({ label, value, icon: Icon }: any) => (
+    <div className="flex items-center gap-2 ">
+      {Icon && <Icon className="w-4 h-4 text-gray-400" />}
+      <span className="font-medium text-gray-600">{label}:</span>
+      <span className="text-gray-800">{value}</span>
+    </div>
+  );
 
+  const SectionHeader = ({ title, icon: Icon, bgColor, iconColor }: any) => (
+    <div className="flex items-center gap-3 mb-4">
+      <div className={`${bgColor} p-2 rounded-full`}>
+        <Icon className={`w-6 h-6 ${iconColor}`} />
+      </div>
+      <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+    </div>
+  );
   return (
-    <div className="flex flex-col px-3 bg-white py-5 h-full w-full rounded-lg">
-      <div className="flex relative">
-
-        <div className="grow flex flex-col gap-2 px-3 py-2">
-          <div className="text-lg">
-            <div>
-              <strong>Booking Date:</strong> {bookingDate}
-            </div>
-            <div>
-              <strong>Time:</strong> {time}
-            </div>
-            <div>
-              <strong>Booking Status:</strong> {status}
-            </div>
-            <div>
-              <strong>Pet Name:</strong> {petName}
-            </div>
-            <div>
-              <strong>Pet Age:</strong> {petAge}
-            </div>
-            <div>
-              <strong>Pet Type:</strong> {petType}
-            </div>
-            <div>
-              <strong>Description:</strong> {description}
-            </div>
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+      <div className="bg-gradient-to-r  rounded-t-2xl p-6 text-black">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <h1 className="text-2xl md:text-3xl font-bold">Booking Details</h1>
+          <div
+            className={`flex items-center ${
+              status === 'CANCELED'
+                ? 'bg-red-600 text-white'
+                : status === 'COMPLETED'
+                ? 'bg-green-600 text-white'
+                : status === 'CONFIRMED'
+                ? 'bg-blue-500 text-black'
+                : 'bg-gray-600 text-white'
+            } p-2 rounded-lg`}
+          >
+            <CheckCircle className="w-5 h-5" />
+            <span className="font-semibold ml-2">{status}</span>
           </div>
         </div>
       </div>
-      {bookingType === "DOCTOR" ? (
-        <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-          <h3 className="text-xl font-bold">Doctor Details</h3>
-          <div>
-            <strong>Name:</strong> {doctorResponse?.name}
-          </div>
-          <div>
-            <strong>Email:</strong> {doctorResponse?.email}
-          </div>
-          <div>
-            <strong>Phone:</strong> {doctorResponse?.phoneNo}
-          </div>
-          <div>
-            <strong>Date of Birth:</strong> {doctorResponse?.dateOfBirth}
-          </div>
-          <div>
-            <strong>Gender:</strong> {doctorResponse?.gender}
-          </div>
-          <div>
-            <strong>Specialization:</strong>{" "}
-            {doctorResponse?.specialization}
-          </div>
-          <div>
-            <strong>Department:</strong> {doctorResponse?.department}
-          </div>
-        </div>
-      ) : (
-        <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-          <h3 className="text-xl font-bold">Medicine Details</h3>
-          <div>
-            <strong>Name:</strong> {medicineResponse?.name}
-          </div>
-          <div>
-            <strong>Description:</strong> {medicineResponse?.description}
+
+      <div className="bg-white shadow-xl rounded-b-2xl divide-y divide-gray-100">
+        <div className="p-6">
+          <SectionHeader
+            title="Booking Information"
+            icon={Calendar}
+            bgColor="bg-blue-100"
+            iconColor="text-blue-600"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 pl-14">
+            <DetailItem
+              label="Booking Date"
+              value={bookingDate}
+              icon={Calendar}
+            />
+            <DetailItem label="Time" value={time} icon={Clock} />
+            <DetailItem label="Pet Name" value={petName} icon={Heart} />
+            <DetailItem label="Pet Age" value={petAge} icon={Heart} />
+            <DetailItem label="Pet Type" value={petType} icon={Heart} />
+            <div className="col-span-full">
+              <DetailItem
+                label="Description"
+                value={description}
+                icon={AlertCircle}
+              />
+            </div>
           </div>
         </div>
-      )}
-      <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-        <h3 className="text-xl font-bold">User Details</h3>
-        <div>
-          <strong>Name:</strong> {userResponse?.firstName}{" "}
-          {userResponse?.lastName}
-        </div>
-        <div>
-          <strong>Email:</strong> {userResponse?.email}
-        </div>
-        <div>
-          <strong>Phone:</strong> {userResponse?.phoneNo}
-        </div>
-        <div>
-          <strong>Date of Birth:</strong> {userResponse?.dateOfBirth}
-        </div>
-        <div>
-          <strong>Gender:</strong> {userResponse?.gender}
+
+        {bookingType === 'DOCTOR' ? (
+          <div className="p-6">
+            <SectionHeader
+              title="Doctor Details"
+              icon={Stethoscope}
+              bgColor="bg-purple-100"
+              iconColor="text-purple-600"
+            />
+            <div className="space-y-3 pl-14">
+              <DetailItem
+                label="Name"
+                value={doctorResponse?.name}
+                icon={User}
+              />
+              <DetailItem
+                label="Email"
+                value={doctorResponse?.email}
+                icon={Mail}
+              />
+              <DetailItem
+                label="Phone"
+                value={doctorResponse?.phoneNo}
+                icon={Phone}
+              />
+              <DetailItem
+                label="Date of Birth"
+                value={doctorResponse?.dateOfBirth}
+                icon={Calendar}
+              />
+              <DetailItem
+                label="Gender"
+                value={doctorResponse?.gender}
+                icon={User}
+              />
+              <div className="flex items-center gap-2 mt-4">
+                <span className="bg-purple-50 px-3 py-1 rounded-full text-purple-600 text-sm">
+                  {doctorResponse?.specialization}
+                </span>
+                {doctorResponse?.department && (
+                  <span className="bg-purple-50 px-3 py-1 rounded-full text-purple-600 text-sm">
+                    {doctorResponse?.department}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-6">
+            <SectionHeader
+              title="Medicine Details"
+              icon={PlusIcon}
+              bgColor="bg-green-100"
+              iconColor="text-green-600"
+            />
+            <div className="space-y-3 pl-14">
+              <DetailItem label="Name" value={medicineResponse?.name} />
+              <DetailItem
+                label="Description"
+                value={medicineResponse?.description}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* User Details */}
+        <div className="p-6">
+          <SectionHeader
+            title="User Details"
+            icon={User}
+            bgColor="bg-green-100"
+            iconColor="text-green-600"
+          />
+          <div className="space-y-3 pl-14">
+            <DetailItem
+              label="Name"
+              value={`${userResponse?.firstName} ${userResponse?.lastName}`}
+              icon={User}
+            />
+            <DetailItem label="Email" value={userResponse?.email} icon={Mail} />
+            <DetailItem
+              label="Phone"
+              value={userResponse?.phoneNo}
+              icon={Phone}
+            />
+            <DetailItem
+              label="Date of Birth"
+              value={userResponse?.dateOfBirth}
+              icon={Calendar}
+            />
+            <DetailItem
+              label="Gender"
+              value={userResponse?.gender}
+              icon={User}
+            />
+          </div>
         </div>
       </div>
     </div>
