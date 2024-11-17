@@ -31,9 +31,19 @@ import { Textarea } from '@/components/ui/textarea';
 import { Doctor } from '@/lib/typings';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import {
+  CalendarIcon,
+  Clock,
+  Mail,
+  PawPrint,
+  PenSquare,
+  Phone,
+  User,
+  Users,
+
+} from 'lucide-react';
 import { useState } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   firstName: z.string({ required_error: 'First name is required!' }),
@@ -67,6 +77,7 @@ const DocCreateForm = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -80,19 +91,15 @@ const DocCreateForm = (props: Props) => {
       description: undefined,
       duration: 15,
       qualification: undefined,
-      petIds:[],
+      petIds: [],
     },
   });
-  console.log("form.getValues()",form.getValues())
-
-  console.log('Form Values: ', form.getValues('petIds'));
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
       await createDoctor(values);
-      // props.setOpen(false);
-      router.push('/admin/doctors')
+      router.push('/admin/doctors');
     } catch (error) {
       console.error('Failed to create department:', error);
     } finally {
@@ -102,256 +109,365 @@ const DocCreateForm = (props: Props) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-2">
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="w-1/2">
-                <FormLabel className="text-black">First name</FormLabel>
-                <FormControl>
-                  <Input placeholder="First name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="w-1/2">
-                <FormLabel className="text-black">Last name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Last name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 px-4 py-6 bg-white rounded-lg shadow-md"
+      >
+        {/* Section Header */}
+        <div className="text-lg font-semibold text-gray-800 border-b pb-2">
+          Doctor Information
         </div>
 
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="w-1/2">
-                <FormLabel className="text-black">Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phoneNo"
-            render={({ field }) => (
-              <FormItem className="w-1/2">
-                <FormLabel className="text-black">Phone Number</FormLabel>
-                <FormControl>
-                  <Input placeholder="Phone number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex gap-4">
-      <FormField
-        control={form.control}
-        name="dateOfBirth"
-        render={({ field }) => (
-          <FormItem className="flex flex-col w-1/2">
-            <FormLabel className="text-black">Date of birth</FormLabel>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger className="w-full" asChild>
-                <FormControl>
-                  <Button
-                    variant={'outline'}
-                    className={cn(
-                      'w-full pl-3 text-left font-normal',
-                      !field.value && 'text-muted-foreground'
-                    )}
-                    onClick={() => setOpen(true)} // Open on button click
-                  >
-                    {field.value ? (
-                      format(field.value, 'PPP')
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </FormControl>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={field.value}
-                  onSelect={(date) => {
-                    field.onChange(date);
-                    setOpen(false); // Close after selection
-                  }}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem className="flex flex-col w-1/2">
-                <FormLabel className="text-black">Gender</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+        {/* Personal Information */}
+        <div>
+          <h4 className="text-md font-medium text-gray-700 mb-4">
+            Personal Details
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* First Name */}
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                 <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <User className="h-5 w-5 text-blue-500" />
+                      <span>First Name</span>
+                    </div>
+                  </FormLabel>
                   <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="flex gap-4">
-          {/* Specialization Field */}
-          <FormField
-            control={form.control}
-            name="specializationId"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel className="text-black">Specialization</FormLabel>
-                <Select onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select specialization" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {props.specialization.length > 0 ? (
-                      props.specialization.map((specialization: any) => (
-                        <SelectItem
-                          key={specialization.id}
-                          value={String(specialization.id)}
-                        >
-                          {specialization.specializationName}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <div className="px-3 font-semibold text-gray-400 text-center">
-                        No options
-                      </div>
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="qualification"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-black">Qualification</FormLabel>
-                <FormControl>
-                  <Input placeholder="Qualification" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="w-full focus:outline-none">
-                <FormLabel className="text-black">Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Doctor description"
-                    className="resize-none w-full focus:outline-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="flex gap-4">
-          <FormField
-            control={form.control}
-            name="petIds"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-black">Pets</FormLabel>
-                <MultiSelect
-                  options={props.pet}
-                  selectedValues={field.value || []}
-                  onChange={(selected: any) => {
-                    field.onChange(selected);
-                  }}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="w-full">
-          <FormField
-            control={form.control}
-            name="duration"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-black">Duration</FormLabel>
-                <FormControl>
-                  <div className="w-full flex items-center space-x-2">
-                    <span className="font-semibold text-gray-600 text-sm">
-                      15mts
-                    </span>
-                    <Slider
-                      max={60}
-                      step={15}
-                      min={15}
-                      onChange={(e: any) => {
-                        field.onChange(parseInt(e.target.value));
-                      }}
+                    <Input
+                      placeholder="Enter first name"
+                      {...field}
+                      className="border-gray-300 focus:border-blue-500 rounded-md"
                     />
-                    <span className="font-semibold text-gray-600 text-sm">
-                      60mts
-                    </span>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Last Name */}
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <User className="h-5 w-5 text-blue-500" />
+                      <span>Last Name</span>
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter last name"
+                      {...field}
+                      className="border-gray-300 focus:border-blue-500 rounded-md"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                   <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <Mail className="h-5 w-5 text-blue-500" />
+                      <span>Email</span>
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="doctor@example.com"
+                      {...field}
+                      className="border-gray-300 focus:border-blue-500 rounded-md"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
-        <div className="flex justify-end pt-4">
-          <Button type="submit" disabled={loading} className="bg-red-500">
-            Submit
+
+        {/* Additional Details */}
+        <div>
+          <h4 className="text-md font-medium text-gray-700 mb-4">
+            Additional Details
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Phone Number */}
+            <FormField
+              control={form.control}
+              name="phoneNo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <Phone className="h-5 w-5 text-blue-500" />
+                      <span>Phone Number</span>
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="07XXXXXXXX"
+                      {...field}
+                      className="border-gray-300 focus:border-blue-500 rounded-md"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Date of Birth */}
+            <FormField
+              control={form.control}
+              name="dateOfBirth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <CalendarIcon className="h-5 w-5 text-blue-500" />
+                      <span>Date of Birth</span>
+                    </div>
+                  </FormLabel>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            'w-full pl-3 text-left font-normal border-gray-300 hover:bg-gray-50',
+                            !field.value && 'text-gray-500'
+                          )}
+                        >
+                          {field.value
+                            ? format(field.value, 'PPP')
+                            : 'Select date'}
+                          <CalendarIcon className="ml-auto h-4 w-4 text-gray-500" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="p-0">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={(date) => {
+                          field.onChange(date);
+                          setOpen(false);
+                        }}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* First Name */}
+          
+            <FormField
+              control={form.control}
+              name="specializationId"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <PenSquare className="h-5 w-5 text-blue-500" />
+                      <span>Specialization</span>
+                    </div>
+                  </FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select specialization" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {props.specialization.length > 0 ? (
+                        props.specialization.map((specialization: any) => (
+                          <SelectItem
+                            key={specialization.id}
+                            value={String(specialization.id)}
+                          >
+                            {specialization.specializationName}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <div className="px-3 font-semibold text-gray-400 text-center">
+                          No options
+                        </div>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="qualification"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <Mail className="h-5 w-5 text-blue-500" />
+                      <span>Qualification</span>
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Qualification" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+              <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem className="flex flex-col w-1/2">
+                  <FormLabel className="text-black">
+{/* Gender */}
+<div className="flex items-center space-x-2">
+  <Users className="h-5 w-5 text-blue-500" />
+  <span>Gender</span>
+</div>
+
+</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select gender" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+          </div>
+        </div>
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            {/* Phone Number */}
+            <FormField
+              control={form.control}
+              name="petIds"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black">
+                    {/* Pets */}
+                    <div className="flex items-center space-x-2">
+                      <PawPrint className="h-5 w-5 text-blue-500" />
+                      <span>Pets</span>
+                    </div>
+                  </FormLabel>
+                  <MultiSelect
+                    options={props.pet}
+                    selectedValues={field.value || []}
+                    onChange={(selected: any) => {
+                      field.onChange(selected);
+                    }}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Date of Birth */}
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <Clock className="h-5 w-5 text-blue-500" />
+                      <span>Duration</span>
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <div className="w-full flex items-center space-x-2">
+                      <span className="font-semibold text-gray-600 text-sm">
+                        15mins
+                      </span>
+                      <Slider
+                        max={60}
+                        step={15}
+                        min={15}
+                        onChange={(e: any) => {
+                          field.onChange(parseInt(e.target.value));
+                        }}
+                      />
+                      <span className="font-semibold text-gray-600 text-sm">
+                        60mins
+                      </span>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="w-full focus:outline-none">
+                    <FormLabel className="text-black">
+                      <div className="flex items-center space-x-2">
+                        <PenSquare className="h-5 w-5 text-blue-500" />
+                        <span>Description</span>
+                      </div>
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Doctor description"
+                        className="resize-none w-full focus:outline-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="bg-blue-500 text-white hover:bg-blue-600"
+          >
+            {loading ? 'Submitting...' : 'Submit'}
           </Button>
         </div>
       </form>

@@ -20,6 +20,7 @@ export const loginUser = async (userData: {
     throw error;
   }
 };
+
 export const registerUser = async (userData: {
   password: string;
   firstName: string;
@@ -29,6 +30,8 @@ export const registerUser = async (userData: {
   dateOfBirth: string;
   gender: string;
   role: string;
+  cityId: number;
+
 }) => {
   try {
     const response = await axiosInstance.post(`/user`, {
@@ -40,9 +43,10 @@ export const registerUser = async (userData: {
       dateOfBirth: userData.dateOfBirth,
       gender: userData.gender,
       role: userData.role,
+      cityId:userData.cityId,
     });
 
-    console.log(response.data);
+    console.log(response.data,"response.dataresponse.dataresponse.dataresponse.datathsy");
     return response.data;
   } catch (error) {
     console.error('Login error:', error);

@@ -10,8 +10,7 @@ import {
 } from '../../../home/action';
 import { useAuthStore } from '@/store/authStore';
 import { useDoctorStore } from '@/store/doctorStore';
-import AppointmentCard from '@/components/ui/appointmentcard';
-
+import AppointmentCard from '@/components/AppointmentCard';
 const Appointments = (premiumBookings: any, normalBookings: any) => {
   const [login] = useAuthStore((state) => [state.login]);
   const [doctorAppointments, setDoctorAppointments, doctorfiltAppointments] =
@@ -20,7 +19,7 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
       state.setDoctorAppointments,
       state.doctorfiltAppointments,
     ]);
-  const [activeTab, setActiveTab] = useState('all');
+  const [activeTab, setActiveTab] = useState('premium');
   const [DoctorName, setdoctorName] = useState<any[]>([]); // For storing the API response
   const [BookingDate, setbookingdate] = useState<any[]>([]); // For storing the API response
   const [BookingTime, setbookingTime] = useState<any[]>([]); // For storing the API response
@@ -36,6 +35,7 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
   }, []);
 
   const getAppointmentDetails = async () => {
+    console.log("login?.userId,",login)
     try {
       const filterAppoinmentLinst = await getAppointmentBookingFilterData({
         pageSize: 10,
@@ -53,7 +53,7 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
       case 'premium':
         return (
           <AppointmentCard
-            AppointmentList={doctorfiltAppointments}
+            AppointmentList={doctorAppointments}
             handleClick={handleDoctorClick}
           />
         );
@@ -70,41 +70,6 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
     }
   };
 
-  const doctors = [
-    {
-      id: '1',
-      name: 'Dr. Shahid Ali',
-      specialization: 'Radiologist',
-      imageUrl: '/images/doctor1.jpg',
-      email: 'shahid@example.com',
-      phone: '1234567890',
-      patients: [
-        {
-          id: '1',
-          name: 'Vetrovs, Madelyn',
-          appointmentDate: '02 June 2023 9:00AM',
-          imageUrl: '/images/patient1.jpg',
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Dr. Zohra Chowdhury',
-      specialization: 'Radiologist',
-      imageUrl: '/images/doctor2.jpg',
-      email: 'zohra@example.com',
-      phone: '1234567890',
-      patients: [
-        {
-          id: '2',
-          name: 'Hausmann, Veronique',
-          appointmentDate: '02 June 2023 9:00AM',
-          imageUrl: '/images/patient2.jpg',
-        },
-      ],
-    },
-  ];
-
   const handleDoctorClick = (doctorId: string) => {
     console.log('Book doctor with ID:', doctorId);
   };
@@ -112,9 +77,9 @@ const Appointments = (premiumBookings: any, normalBookings: any) => {
   return (
     // <RootLayout pageName="Appointments">
     <div className="container mx-auto mt-16 bg-[#F7F8F9] rounded-xl">
-      <div className="sticky z-30 top-0 md:static h-fit">
+      {/* <div className="sticky z-30 top-0 md:static h-fit">
         <Header />
-      </div>
+      </div> */}
 
       <div className="flex border-b">
         <button

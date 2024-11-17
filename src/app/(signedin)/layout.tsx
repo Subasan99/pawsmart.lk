@@ -18,10 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <div className="h-full min-h-screen w-full flex flex-col">
-      <Header />
+      {/* <Header /> */}
       <div className="grow bg-gray-100">{children}</div>
       <div className="mt-auto justify-end">
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

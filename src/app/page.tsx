@@ -1,38 +1,43 @@
-"use client";
-import { signOut } from "@/api/route";
+'use client';
+import { getAllSpecializations, signOut } from '@/api/route';
+import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
+import Logo from '../../public/logowhite.png';
+import Logoeffect from '../../public/stubby.png';
+import booking from '../../public/booking.png';
+import { useRouter } from 'next/navigation';
+import { useDoctorStore } from '@/store/doctorStore';
 import {
+  getCities,
   getDepartmentData,
   getDoctorData,
+  getHospitals,
   getMedicinesData,
   getPetData,
-} from "@/app/home/action";
-import FilterDropdown from "@/components/FilterDropdown";
-import PopularDoctors from "@/components/Image";
-import { useAuthStore } from "@/store/authStore";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { useDoctorStore } from "@/store/doctorStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import { usePetStore } from "@/store/petStore";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import booking from "../../public/booking.png";
-import Logo from "../../public/logowhite.png";
-import Logoeffect from "../../public/stubby.png";
-import doc from "../../public/doc.png";
+} from '@/app/home/action';
+import FilterDropdown from '@/components/FilterDropdown';
+import PopularDoctors from '@/components/Image';
+import { useAuthStore } from '@/store/authStore';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import { usePetStore } from '@/store/petStore';
+import doc from '../../public/doc.png';
+import { Hospital } from 'lucide-react';
+import { useSpecializationStore } from '@/store/specializationStore';
+import { useHospitalStore } from '@/store/hospitalStore';
 
 export default function Home() {
-  const [doctorName, setDoctorName] = useState<string>("");
-  const [departmentName, setDepartmentName] = useState("");
-  const [appointmentDate, setAppointmentDate] = useState("");
+  const [doctorName, setDoctorName] = useState<string>('');
+  const [cityName, setCityName] = useState<any>('');
+  const [hospitalName, setHospitalName] = useState<any>('');
+  const [specializationName, setSpecializationName] = useState<any>('');
 
-  const handleFilter = () => {
-    // Perform the filtering logic
-    console.log("Doctor Name:", doctorName);
-    console.log("Department Name:", departmentName);
-    console.log("Appointment Date:", appointmentDate);
-  };
-
+  const [searchData, setsearchData] = useState('');
+  const [cityData, setCitiesData] = useState('');
+  const [login, setLogin] = useAuthStore((state) => [
+    state.login,
+    state.setLogin,
+  ]);
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
     state.setAllDoctors,
@@ -41,6 +46,10 @@ export default function Home() {
     state.departments,
     state.setAllDepartments,
   ]);
+
+  const [specialization, setAllSpecialization] = useSpecializationStore(
+    (state: any) => [state.specialization, state.setAllSpecialization]
+  );
 
   const [pets, setAllPets] = usePetStore((state: any) => [
     state.pets,
@@ -52,10 +61,28 @@ export default function Home() {
     state.setAllMedicines,
   ]);
 
+  const specializationOptions = Array.isArray(specialization)
+    ? specialization.map((special: any) => ({
+        label: special.specializationName,
+        value: special.id,
+      }))
+    : [];
+
+  const [hospitals, setAllHospitals] = useHospitalStore((state: any) => [
+    state.hospitals,
+    state.setAllHospitals,
+  ]);
   const doctorOptions = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
         label: doctor.name,
         value: doctor.id,
+      }))
+    : [];
+
+  const hospitalsOptions = Array.isArray(hospitals)
+    ? hospitals.map((hospital: any) => ({
+        label: hospital.name,
+        value: hospital.id,
       }))
     : [];
 
@@ -66,37 +93,15 @@ export default function Home() {
       }))
     : [];
 
-  // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-transparent");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
-  const [logo, setLogo] = useState(Logo); // Default logo
-  const [login, setLogin] = useAuthStore((state) => [
-    state.login,
-    state.setLogin,
-  ]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      if (scrollY > 0) {
-        setHeaderBg("bg-white bg-opacity-90");
-        setTextColor("text-black");
-        setLogo(Logoeffect);
-      } else {
-        setHeaderBg("bg-transparent");
-        setTextColor("text-white");
-        setLogo(Logo);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    fetchData();
-
-    // Clean up the event listener
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const citiesOptions = Array.isArray(cityData)
+    ? cityData.map((city: any) => {
+        // console.log(city)
+        return {
+          label: city.name,
+          value: city.id,
+        };
+      })
+    : [];
 
   const fetchData = async () => {
     try {
@@ -104,33 +109,28 @@ export default function Home() {
       const departmentData = await getDepartmentData();
       const doctorData = await getDoctorData();
       const medicinesData = await getMedicinesData();
+      const citiesData = await getCities();
+      const specializations = await getAllSpecializations();
+      const hospitalData = await getHospitals();
 
       setAllMedicines(medicinesData);
       setAllDepartments(departmentData);
       setAllPets(petData);
       setAllDoctors(doctorData);
+      setCitiesData(citiesData);
+      setAllSpecialization(specializations);
+      setAllHospitals(hospitalData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
-  const handleButtonClick = () => {
-    console.log("Search button clicked");
-  };
-
-  const handleSignout = async () => {
-    setLoading(true);
-    await signOut();
-    setLogin(undefined);
-    setLoading(false);
-  };
-
-  const handleSearch = () => {
-    console.log("Search initiated");
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleClick = (imageName: any) => {
-    console.log(`${imageName} clicked!`);
+    // console.log(`${imageName} clicked!`);
   };
 
   const doctores = Array.isArray(doctors)
@@ -212,21 +212,41 @@ export default function Home() {
   );
 
   const formatDate = (date: any) => {
-    const [month, day, year] = date.split("/");
+    const [month, day, year] = date.split('/');
     return `${year}-${month}-${day}`;
   };
 
   const handleDateChange = (e: any) => {
     const inputDate = e.target.value;
-    const formattedDate = formatDate(inputDate);
-    setAppointmentDate(formattedDate);
+    setsearchData(inputDate);
   };
-
-  console.log(login);
 
   if (loading) {
     return <div>Loading ....!</div>;
   }
+
+  const handleFilter = async () => {
+    // const searchTextData = await getHospitalFilterData({
+    //   pageSize: 10,
+    //   pageCount: 1,
+    //   searchTerm: searchData,
+    // });
+    // const result = searchTextData?.records.map((record: any) => ({
+    //   id: record?.id,
+    // }));
+
+    const result = {
+      searchData: searchData,
+      cityId: cityName.value,
+      hospitalId: hospitalName.value,
+      specializationId: specializationName.value,
+    };
+    console.log("resultresultresultthusiiiiiiiparthee",result)
+    const encodedRecords = JSON.stringify(result);
+    if (searchData || cityName || hospitalName || specializationName) {
+      await router.push(`/hospitals/${encodedRecords}`);
+    }
+  };
 
   return (
     <>
@@ -240,11 +260,11 @@ export default function Home() {
                   loop
                   muted
                   className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: 'cover' }}
                 >
                   <source src="/Logvideo.mp4" type="video/mp4" />
                 </video>
-                <div className="absolute inset-0 bg-black opacity-60"></div>{" "}
+                <div className="absolute inset-0 bg-black opacity-60"></div>{' '}
                 {/* Black shadow overlay */}
               </div>
             </div>
@@ -253,17 +273,33 @@ export default function Home() {
                 <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
                   {/* Left side content */}
                   <div className="text-center md:text-left">
-                    <h3 className="text-3xl md:text-5xl font-bold text-red-500 mb-4">
-                      Emergency?
-                    </h3>
                     <h1 className="text-4xl md:text-6xl font-bold text-blue-100 mb-4">
+                      Find Pet Healthcare Near You with
+                    </h1>
+                    <h3 className="text-3xl md:text-5xl font-bold text-red-500 mb-4">
+                      One Click
+                    </h3>
+                    {/* <h1 className="text-4xl md:text-6xl font-bold text-blue-100 mb-4">
                       Find Nearest Medical Facility
+                    </h1> */}
+                    <h1 className="text-xl md:text-2xl font-medium text-blue-100 mb-4">
+                      Find the nearest hospital with ease.
+                      <br />
+                      Get instant access to healthcare services in your area,
+                      <br />
+                      right from the comfort of your home.
                     </h1>
                     <div className="flex gap-4 justify-center md:justify-start mt-6">
-                      <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"    onClick={() => router.push('/viewallhospi')}>
+                      <button
+                        className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"
+                        onClick={() => router.push('/viewallhospi')}
+                      >
                         View Hospitals
                       </button>
-                      <button className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200" onClick={() => router.push('/doctors')}>
+                      <button
+                        className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200"
+                        onClick={() => router.push('/doctors')}
+                      >
                         View Doctors
                       </button>
                     </div>
@@ -274,7 +310,6 @@ export default function Home() {
           </section>
           <div className="relative z-5 w-full px-4 pb-8 -mt-20 max-w-6xl mx-auto">
             <div className="flex flex-row justify-between space-x-4">
-              {/* Search Component */}
               <div className="bg-white rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-2/3">
                 <div className="bg-white">
                   <div className="container mx-auto">
@@ -289,9 +324,35 @@ export default function Home() {
                           <input
                             type="text"
                             placeholder="Search doctors, clinics, hospitals, etc."
-                            value={appointmentDate}
+                            value={searchData}
                             onChange={handleDateChange}
                             className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          />
+                          <FilterDropdown
+                            options={citiesOptions}
+                            placeholder="📍 Select Location"
+                            onChange={(selectedOption: any) => {
+                              setCityName(selectedOption);
+                            }}
+                            value={cityName}
+                          />
+
+                          <FilterDropdown
+                            options={hospitalsOptions}
+                            placeholder="🏥 Select Hospital"
+                            onChange={(selectedOption: any) => {
+                              setHospitalName(selectedOption);
+                            }}
+                            value={hospitalName}
+                          />
+
+                          <FilterDropdown
+                            options={specializationOptions}
+                            placeholder="🔬 Select Specialization"
+                            onChange={(selectedOption: any) => {
+                              setSpecializationName(selectedOption);
+                            }}
+                            value={specializationName}
                           />
 
                           <button
@@ -319,7 +380,10 @@ export default function Home() {
                     <h3 className="text-lg font-bold">
                       Are You Make an Appointment
                     </h3>
-                    <button className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4">
+                    <button
+                      className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 mt-4"
+                      onClick={() => router.push('/Appointments')}
+                    >
                       Appointment
                     </button>
                   </div>
@@ -335,32 +399,37 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/departments"
             handleClick={handleClick}
-            linkDescription={"Departments"}
+            linkDescription={'Departments'}
             doctors={departments.slice(0, 4)}
-            pathname={"/departments"}
-            query={departments}
+            pathname={'/departments'}
+            query={departmentDatas}
           />
         </div>
         <div>
-          {/* Main Section */}
           <section className="flex flex-col items-center py-12 z-5 w-full px-4 pb-8 max-w-6xl mx-auto">
             <div className="flex flex-row justify-between items-center w-full">
               <div className=" m1 flex-1 text-center">
                 <h1 className="text-4xl font-bold leading-snug">
-                  Find Pet Healthcare Near You with
-                  <span className="text-red-500"> One Click</span>
+                  Welcome to Stubby!
+                  <span className="text-red-500">
+                    Your one-stop solution for pet healthcare and more.
+                  </span>
                 </h1>
                 <p className="mt-4 text-gray-600">
-                  Find the nearest hospital with ease.
+                  Explore our services to find the nearest hospital,
                   <br />
-                  Get instant access to healthcare services in your area,
+                  book appointments, connect with expert doctors,
                   <br />
-                  right from the comfort of your home.
+                  and discover care for your beloved pets.
+                </p>
+                <p className="border-blue-500 text-blue-500 py-2 px-4 rounded hover:text-black transition">
+                  Sign in now to unlock appointment booking and personalized
+                  features!
                 </p>
                 <div className="mt-6 space-x-4">
-                  <button className="bg-white border border-blue-500 text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition">
+                  {/* <button className="bg-white border border-blue-500 text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition">
                     Nearest Hospital
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
@@ -389,8 +458,9 @@ export default function Home() {
             handleClick={handleClick}
             linkDescription="Doctors"
             doctors={doctors.slice(0, 4)}
-            pathname={"/doctor-details"}
+            pathname={'/appointmentdoctor'}
             query={doctors}
+            doctor={true}
           />
         </div>
         <div id="pets" className="pb-8 pt-20">
@@ -399,9 +469,9 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/pets"
             handleClick={handleClick}
-            linkDescription={"Pets"}
+            linkDescription={'Pets'}
             doctors={pets.slice(0, 4)}
-            pathname={"/pets"}
+            pathname={'/pets'}
             query={petdata}
           />
         </div>

@@ -105,7 +105,7 @@ export const columns: ColumnDef<Columns>[] = [
       return (
         <div className="text-center py-1 px-3 rounded-full">
           <span className={`px-2 py-1 rounded-full ${badgeStyle}`}>
-            {isActive ? "Active" : "Inactive"}
+            {isActive ? "Active" : "Archive"}
           </span>
         </div>
       );

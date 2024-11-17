@@ -20,7 +20,7 @@ const DoctorCreate = (props: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button className="bg-red-500">Create</Button>
+        <Button className="bg-blue-600 text-white p-2 rounded-xl">Create</Button>
       </DialogTrigger>
       <DialogContent className="h-[90vh] overflow-y-auto">
         <DialogHeader>

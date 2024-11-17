@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import SpecializationCreateForm from "./SpecializationCreateForm";
+import { PlusIcon } from "lucide-react";
 
 type Props = {
   department: any;
@@ -19,7 +20,12 @@ const SpecializationCreate = (props: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button className="bg-red-500">Create</Button>
+      <div className="self-end flex items-center">
+    <Button className="bg-blue-600 text-white p-2 rounded-xl">
+    <PlusIcon className="mr-2 h-4 w-4" /> {/* The PlusIcon */}
+      
+       Create</Button>
+  </div>
       </DialogTrigger>
       <DialogContent className="h-auto overflow-y-auto">
         <DialogHeader>

@@ -116,12 +116,16 @@ export const getPetFilterData = async (params: {
 export const getMedicineFilterData = async (params: {
   pageCount: number;
   pageSize: number;
+  name?:string;
+  date?:string;
 }) => {
   try {
     const response = await axiosInstance.get(`/medicine/filter`, {
       params: {
         pageSize: params.pageSize,
         pageCount: params.pageCount,
+        name: params.name,
+        date: params.date,
       },
     });
     console.log(response.data);
@@ -207,6 +211,8 @@ export const getHospitalFilterData = async (params: {
   pageSize: number;
   searchTerm?: string;
   cityId?: string;
+  hospitalId?: string;
+  specializationId?: string;
 }) => {
   try {
     const response = await axiosInstance.get(`hospital/filter?`, {
@@ -215,6 +221,8 @@ export const getHospitalFilterData = async (params: {
         pageCount: params.pageCount,
         searchTerm: params?.searchTerm,
         cityId: params?.cityId,
+        hospitalId:params?.hospitalId,
+        specializationId: params?.specializationId,
       },
     });
 

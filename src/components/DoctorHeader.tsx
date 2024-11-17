@@ -41,10 +41,10 @@ export default function DoctorHeader() {
     state.setAllPets,
   ]);
 
-  const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
-    state.medicines,
-    state.setAllMedicines,
-  ]);
+  // const [medicines, setAllMedicines] = useMedicinesStore((state: any) => [
+  //   state.medicines,
+  //   state.setAllMedicines,
+  // ]);
 
   // State to track scroll position
   const [headerBg, setHeaderBg] = useState("bg-transparent");
@@ -64,7 +64,7 @@ export default function DoctorHeader() {
       const doctorData = await getDoctorData();
       const medicinesData = await getMedicinesData();
       setAllDepartments(departmentData);
-      setAllMedicines(medicinesData);
+      // setAllMedicines(medicinesData);
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
@@ -186,7 +186,4 @@ export default function DoctorHeader() {
       </header>
     </>
   );
-}
-function useMedicinesStore(arg0: (state: any) => any[]): [any, any] {
-  throw new Error("Function not implemented.");
 }

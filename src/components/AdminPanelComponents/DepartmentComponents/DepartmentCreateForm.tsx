@@ -51,13 +51,13 @@ const DepartmentCreateForm = ({ setOpen, reloadTable }: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-2">
-        <div className="w-full gap-2">
+        <div className="w-full gap-2 space-y-4">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Department name</FormLabel>
+                <FormLabel className="text-black">Department name</FormLabel>
                 <FormControl>
                   <Input placeholder="Department name" {...field} />
                 </FormControl>
@@ -70,7 +70,7 @@ const DepartmentCreateForm = ({ setOpen, reloadTable }: Props) => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel className="text-black">Description</FormLabel>
                 <FormControl>
                   <Input placeholder="Description" {...field} />
                 </FormControl>
@@ -79,9 +79,11 @@ const DepartmentCreateForm = ({ setOpen, reloadTable }: Props) => {
             )}
           />
         </div>
-        <Button className="bg-red-500" type="submit">
+        <div className="flex justify-end">
+        <Button className="bg-red-500 " type="submit">
           Submit
         </Button>
+        </div>
       </form>
     </Form>
   );

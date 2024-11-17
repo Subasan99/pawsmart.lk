@@ -183,6 +183,8 @@ const Appointment: React.FC<AppointmentProps> = () => {
 
   const [selecteddDoctor, setSelecteddDoctor] = useState<string | null>(null);
   const [selectedMedicine, setSelectedMedicine] = useState<string | null>(null);
+  const [isForgotpasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const [isSignupOpen, setIsSignupOpen] = useState(false);
 
   // async function getLoginDetailss() {
   //   const details = await getLoginUserDetails();
@@ -265,7 +267,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
     }).then((res: any) => {
       if (res.success) {
         toast.success(res.message);
-        router.push('/home');
+        router.push('/');
       } else if (res.success === false) {
         toast.error(res.message);
       } else {
@@ -341,7 +343,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
   const handleClick = async () => {
     console.log("Modal OK button clicked!");
     setshowBook(false);
-    router.push('/home');
+    router.push('/');
   };
   if (!medicine && searchParams.get('medicineId')) {
     return (
@@ -943,10 +945,25 @@ const Appointment: React.FC<AppointmentProps> = () => {
                       </FormItem>
                     )}
                   />
+
+<div className='pt-2'>
+                      Need an account? {''}
+                      <button
+                        type="button"
+                        onClick={() =>
+                        {
+                          setIsForgotPasswordOpen(false) ,
+                          setIsDialogOpen(false) ,
+                          setIsSignupOpen(true)}}
+                        className="text-sm underline text-black font-bold"
+                      >
+                        {' Create One'}
+                      </button>
+                    </div>
                   <div className="flex justify-end mb-4">
                     <a
                       href="/forgotpassword"
-                      className="text-sm underline text-black font-bold"
+                      className="text-sm underline text-black font-bold mt-2"
                     >
                       Forgot password?
                     </a>
@@ -1020,7 +1037,7 @@ const Appointment: React.FC<AppointmentProps> = () => {
 
             <SuccessModal loading={''} successMessage={formSucess} handleClick={() => {
               setshowBook(false);
-              router.push('/home');
+              router.push('/');
             }}
           />
           )}

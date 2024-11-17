@@ -62,7 +62,7 @@ const MedicineCreateForm = ({ setOpen, reloadTable }: Props) => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel className="text-black">Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Name" {...field} />
                 </FormControl>
@@ -78,7 +78,7 @@ const MedicineCreateForm = ({ setOpen, reloadTable }: Props) => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel className="text-black">Description</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder="Medicine description"
@@ -97,7 +97,7 @@ const MedicineCreateForm = ({ setOpen, reloadTable }: Props) => {
             name="duration"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Duration</FormLabel>
+                <FormLabel className="text-black">Duration</FormLabel>
                 <FormControl>
                   <div className="w-full flex items-center space-x-2">
                     <span className="font-semibold text-gray-600 text-sm">
@@ -121,9 +121,11 @@ const MedicineCreateForm = ({ setOpen, reloadTable }: Props) => {
             )}
           />
         </div>
-        <Button className="bg-red-500" type="submit">
+        <div className="flex justify-end">
+        <Button className="bg-red-500 " type="submit">
           Submit
         </Button>
+        </div>
       </form>
     </Form>
   );

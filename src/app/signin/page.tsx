@@ -55,14 +55,14 @@ const SignUp = () => {
             router.push('/admin/dashboard');
             return;
           }
-          router.push('/home');
+          router.push('/');
         },
         onAutoClose: () => {
           if (response.role === 'ADMIN') {
             router.push('/admin/dashboard');
             return;
           }
-          router.push('/home');
+          router.push('/');
         },
       });
       setLoading(false);
@@ -117,7 +117,7 @@ const SignUp = () => {
               router.push('/admin/dashboard');
               return;
             }
-            router.push('/home');
+            router.push('/');
           },
         });
       } else {

@@ -1,32 +1,33 @@
-"use client";
-import { signOut } from "@/api/route";
+'use client';
+import { signOut } from '@/api/route';
 import {
   getDepartmentData,
   getDoctorData,
   getMedicinesData,
   getPetData,
-} from "@/app/home/action";
-import SideBarIcon from "@/components/svg/side_bar_icon";
+} from '@/app/home/action';
+import SideBarIcon from '@/components/svg/side_bar_icon';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useDepartmentStore } from "@/store/departmentStore";
-import { useDoctorStore } from "@/store/doctorStore";
-import { useMedicineStore } from "@/store/medicinesStore";
-import { usePetStore } from "@/store/petStore";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import changePasswordImage from "../../../public/changePassword.jpg";
+} from '@/components/ui/popover';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useDepartmentStore } from '@/store/departmentStore';
+import { useDoctorStore } from '@/store/doctorStore';
+import { useMedicineStore } from '@/store/medicinesStore';
+import { usePetStore } from '@/store/petStore';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import changePasswordImage from '../../../public/changePassword.jpg';
 import {
   default as Logo,
   default as Logoeffect,
-} from "../../../public/stubby.png";
-import UserIcon from "../svg/user_icon";
-import AdminPopover from "./AdminPopover";
+} from '../../../public/stubby.png';
+import UserIcon from '../svg/user_icon';
+import AdminPopover from './AdminPopover';
+import { useAuthStore } from '@/store/authStore';
 
 export default function AdminHeader() {
   const pathname = usePathname();
@@ -50,13 +51,12 @@ export default function AdminHeader() {
   ]);
 
   // State to track scroll position
-  const [headerBg, setHeaderBg] = useState("bg-transparent");
-  const [textColor, setTextColor] = useState("text-white"); // Default text color
+  const [headerBg, setHeaderBg] = useState('bg-transparent');
+  const [textColor, setTextColor] = useState('text-white'); // Default text color
   const [logo, setLogo] = useState(Logo); // Default logo
-
   useEffect(() => {
-    setHeaderBg("bg-white bg-opacity-90");
-    setTextColor("text-black");
+    setHeaderBg('bg-white bg-opacity-90');
+    setTextColor('text-black');
     setLogo(Logoeffect);
   }, []);
 
@@ -71,7 +71,7 @@ export default function AdminHeader() {
       setAllPets(petData);
       setAllDoctors(doctorData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
   };
 
@@ -81,9 +81,23 @@ export default function AdminHeader() {
 
   const [open, setOpen] = useState(false);
   const [sOpen, setSOpen] = useState(false);
-  console.log(pathname);
+  const [login, setLogin] = useAuthStore((state) => [
+    state.login,
+    state.setLogin,
+  ]);
 
   const router = useRouter();
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setLogin(undefined);
+      router.push('/');
+
+    } catch (error) {
+      console.error('Error during sign-out:', error);
+    }
+  };
+
 
   return (
     <>
@@ -126,11 +140,11 @@ export default function AdminHeader() {
                   </li>
 
                   <li
-                    onClick={() => async () =>  await signOut()}
+                    onClick={() => async () => await signOut()}
                     className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded absolute bottom-8"
                   >
                     <a href="/auth?mode=signin" className="hover:text-black">
-                      Sign Out
+                    LOG OUT
                     </a>
                   </li>
                 </ul>
@@ -148,7 +162,10 @@ export default function AdminHeader() {
                 </div>
               </PopoverTrigger>
               <PopoverContent>
-                <AdminPopover />
+                <AdminPopover
+                  handleSignOut={handleSignOut}
+                  adminName={login?.firstName}
+                />
               </PopoverContent>
             </Popover>
           </div>

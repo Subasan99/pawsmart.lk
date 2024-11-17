@@ -25,6 +25,8 @@ const Index = ({ params }: { params: { records: string } }) => {
         pageCount: 1,
         searchTerm: decodedRecords?.searchData,
         cityId: decodedRecords?.cityId,
+        hospitalId: decodedRecords.hospitalId,
+        specializationId: decodedRecords.specializationId,
       });
 
       setAllHospitals(searchTextData?.records);

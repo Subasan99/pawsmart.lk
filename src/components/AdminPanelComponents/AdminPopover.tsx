@@ -1,20 +1,28 @@
 import { signOut } from '@/api/route';
 import Image from 'next/image';
-import changePasswordImage from '../../../public/changePassword.jpg';
-import DoctorImage from '../../../public/doctor.png';
+import { useRouter } from 'next/navigation'; // Updated import
+import changePasswordImage from '/public/changePassword.jpg';
+import DoctorImage from '/public/doctor.png';
+import { LogOut } from 'lucide-react';
 
-const AdminPopover = () => {
+
+interface AdminPopoverProps {
+  handleSignOut: () => Promise<void>;
+  adminName:string;
+}
+
+const AdminPopover: React.FC<AdminPopoverProps> = ({ handleSignOut ,adminName}) => {
   return (
     <div className="px-3 flex flex-col w-full gap-3">
       <div className="w-full h-fit flex gap-3 items-center">
-        <div className="">
+        <div>
           <Image
             src={DoctorImage}
             alt="Doctor"
             className="w-10 h-10 rounded-full object-cover"
           />
         </div>
-        <div className="font-semibold">My Profile</div>
+        <div className="font-semibold">{adminName}</div>
       </div>
 
       <div className="w-full h-fit flex gap-3 items-center">
@@ -22,7 +30,7 @@ const AdminPopover = () => {
           <div className="w-15 h-15">
             <Image
               src={changePasswordImage}
-              alt="Doctor"
+              alt="Change Password"
               className="w-10 h-15 rounded-full object-cover"
             />
           </div>
@@ -31,12 +39,13 @@ const AdminPopover = () => {
       </div>
 
       <div
-        onClick={() => async () =>  await signOut()}
-        className="bg-red-500 hover:bg-yellow-500 hover:text-black text-white px-2 py-1 rounded w-full text-center cursor-pointer"
+        onClick={handleSignOut}
+        className="bg-red-500 hover:bg-yellow-500 flex hover:text-black text-black px-2 py-1 rounded w-full justify-center cursor-pointer"
       >
-        <a href="/auth?mode=signin" className="">
-          Sign Out
-        </a>
+         {/* <button className="flex  gap-2 cursor-pointer"> */}
+    <LogOut size={30} />
+    <span className="text-sm lg:text-lg font-semibold">LOG OUT</span>
+  {/* </button> */}
       </div>
     </div>
   );

@@ -19,10 +19,11 @@ export async function getDoctorData(
         pageSize: pageSize,
         specializationId: specializationId ? specializationId : undefined,
         departmentId: departmentId ? departmentId : undefined,
+        petId: petId ? petId : undefined,
         name: name ? name : undefined,
       },
     });
-    console.log("dffdfscs", response);
+    console.log("dffdfscsthusikal", response);
     return response?.data;
   } catch (error) {
     console.log("Error fetching doctor data:", error);

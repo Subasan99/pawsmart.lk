@@ -65,13 +65,13 @@ const SpecializationCreateForm = (props: Props) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-2">
-        <div className="w-full gap-2">
+        <div className="w-full gap-2 space-y-4">
           <FormField
             control={form.control}
             name="specializationName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Specialization name</FormLabel>
+                <FormLabel className="text-black">Specialization name</FormLabel>
                 <FormControl>
                   <Input placeholder="Specialization name" {...field} />
                 </FormControl>
@@ -85,7 +85,7 @@ const SpecializationCreateForm = (props: Props) => {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel className="text-black">Description</FormLabel>
                 <FormControl>
                   <Input placeholder="Description" {...field} />
                 </FormControl>
@@ -98,8 +98,11 @@ const SpecializationCreateForm = (props: Props) => {
             name="departmentId"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full">
-                <FormLabel>Department</FormLabel>
-                <Select onValueChange={field.onChange}>
+                <FormLabel className="text-black">Department</FormLabel>
+                <Select onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  
                   <FormControl>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select department" />
@@ -109,7 +112,7 @@ const SpecializationCreateForm = (props: Props) => {
                     {props.department.length > 0 ? (
                       props.department.map((department: any) => {
                         return (
-                          <SelectItem key={department.id} value={department.id}>
+                          <SelectItem key={department.id} value={String(department.id)}>
                             {department.name}
                           </SelectItem>
                         );
@@ -126,6 +129,7 @@ const SpecializationCreateForm = (props: Props) => {
             )}
           />
         </div>
+        <div className="flex justify-end">
         <Button
           className="bg-red-500"
           type="submit"
@@ -133,6 +137,7 @@ const SpecializationCreateForm = (props: Props) => {
         >
           {loading ? "Submitting..." : "Submit"}
         </Button>
+        </div>
       </form>
     </Form>
   );

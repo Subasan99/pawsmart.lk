@@ -138,7 +138,6 @@ export default function Home() {
       </ul>
     </div>
   );
-
   return (
     <header
       className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 ${headerBg}`}
@@ -161,7 +160,7 @@ export default function Home() {
               <ul className="flex flex-col space-y-4">
                 {/* Sidebar items */}
                 <li key={0}>
-                  <a href="/home" className="hover:text-red-500">
+                  <a href="/" className="hover:text-red-500">
                     Home
                   </a>
                 </li>
@@ -250,7 +249,7 @@ export default function Home() {
             <ul className="flex space-x-8">
               {/* Navbar items */}
               <li key={0}>
-                <a href="/home" className="hover:text-red-500">
+                <a href="/" className="hover:text-red-500">
                   Home
                 </a>
               </li>
@@ -259,7 +258,7 @@ export default function Home() {
                   About Us
                 </a>
               </li>
-              {login && (
+              {login && !login===undefined && (
                 <li key={2}>
                   <a href="/Appointments" className="hover:text-red-500">
                     Appointments{" "}

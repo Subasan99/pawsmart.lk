@@ -6,18 +6,20 @@ import { axiosInstance } from "@/utils/client";
 export async function getMedicineData(
   pageCount?: number,
   pageSize?: number,
-  name?: string
+  name?: string,
+  date?:string
 ) {
-  console.log("dfsdfdf", pageCount, pageSize);
   try {
+    console.log("objectnamedate",name,date)
     const response = await axiosInstance.get(`/medicine/filter`, {
       params: {
         pageCount: pageCount,
         pageSize: pageSize,
         name: name ? name : undefined,
+        date: date ? date : undefined,
+
       },
     });
-    console.log("dffdfscs", response);
     return response?.data?.records;
   } catch (error) {
     console.log("Error fetching medicine data:", error);

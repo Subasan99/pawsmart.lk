@@ -87,7 +87,7 @@ export const petsColumns: ColumnDef<Columns>[] = [
             row.original.active ? "bg-green-500" : "bg-red-500"
           }`}
         >
-          {row.original.active ? "Active" : "Inactive"}
+          {row.original.active ? "Active" : "Archive"}
         </span>
       </div>
     ),

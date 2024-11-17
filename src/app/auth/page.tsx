@@ -49,6 +49,8 @@ const signUpFormSchema = z.object({
   dateOfBirth: z.date({ required_error: 'Please Select the date of birth!' }),
   gender: z.string({ required_error: 'Gender is required!' }),
   role: z.string().default('USER'),
+  cityId: z.number().default(1),
+  
 });
 
 const AuthScreens = () => {
@@ -81,6 +83,8 @@ const AuthScreens = () => {
       dateOfBirth: undefined,
       gender: undefined,
       role: 'USER',
+      cityId: 1
+
     },
   });
 
@@ -117,14 +121,14 @@ const AuthScreens = () => {
             router.push('/admin/dashboard');
             return;
           }
-          router.push('/home');
+          router.push('/');
         },
         onAutoClose: () => {
           if (response.role === 'ADMIN') {
             router.push('/admin/dashboard');
             return;
           }
-          router.push('/home');
+          router.push('/');
         },
       });
       setLoading(false);
