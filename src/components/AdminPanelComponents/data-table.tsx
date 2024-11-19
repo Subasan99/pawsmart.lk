@@ -21,7 +21,8 @@ import { Button } from "@/components/ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+  // data: TData[];
+  data: TData[] | [];
   pageSize?: number | undefined;
 }
 

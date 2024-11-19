@@ -122,9 +122,11 @@ const MedicineEditForm = ({ setOpen, reloadTable, medicine, id }: Props) => {
             )}
           />
         </div>
-        <Button className="bg-red-500" type="submit">
+        <div className="flex justify-end">
+        <Button className="bg-blue-600 " type="submit">
           Submit
         </Button>
+        </div>
       </form>
     </Form>
   );

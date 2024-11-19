@@ -80,7 +80,7 @@ const PetCreateForm = ({ setOpen, reloadTable }: Props) => {
           />
         </div>
         <div className="flex justify-end">
-        <Button className="bg-red-500 " type="submit">
+        <Button className="bg-blue-600 " type="submit">
           Submit
         </Button>
         </div>

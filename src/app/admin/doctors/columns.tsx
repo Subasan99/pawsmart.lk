@@ -20,6 +20,10 @@ export type Columns = {
   isActive: boolean;
   preSignedUrl: string | undefined;
   duration: number;
+  departmentResponse:{
+    id:number;
+    name: string;
+  },
   dayTimeSlotResponses: {
     day: string;
     timeSlots: { startTime: string; endTime: string }[];
@@ -90,7 +94,7 @@ export const columns: ColumnDef<Columns>[] = [
     accessorKey: "departmentName",
     header: () => <div className="font-bold text-start">Department Name</div>,
     cell: ({ row }) => (
-      <div className="text-start">{row.original.departmentName}</div>
+      <div className="text-start">{row.original?.departmentResponse?.name}</div>
     ),
   },
   {

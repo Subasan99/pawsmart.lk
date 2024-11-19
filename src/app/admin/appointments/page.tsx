@@ -46,7 +46,7 @@ export default function Index() {
           <TabsTrigger value="medicines">Medicine Appointments</TabsTrigger>
         </TabsList>
         <TabsContent value="doctors">
-          <DataTable columns={doctorColumns} data={filteredBookings} />
+          <DataTable columns={doctorColumns} data={filteredBookings}  />
         </TabsContent>
         <TabsContent value="medicines">
           <DataTable columns={medicinesColumns} data={filteredBookings} />

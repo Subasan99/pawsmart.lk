@@ -25,9 +25,11 @@ import MedicineEditForm from "./MedicineComponents/MedicineEditForm";
 import PetEditForm from "./PetComponents/PetEditForm";
 import SpecializationEditForm from "./SpecializationComponents/SpecializationEditForm";
 import { getAllPets, getAllSpecializations } from "@/api/route";
+import HospitalEditForm from "./HospitalComponents/HospitalEditForm";
 
 interface Props {
   pathName: string;
+  navigateTo?:string;
   delete?: () => Promise<any>;
   view?: boolean;
   edit?: boolean;
@@ -54,10 +56,15 @@ const ActionMenu = (props: Props) => {
       if (response.success) {
         setDeleteOpen(false);
         console.log("Deleted");
-        // Additional logic like redirecting can be added here
       }
       
-      setIsLoading(false); // Set loading to false after deletion is complete
+      setIsLoading(false); 
+    }
+  };
+  const handleEditClick = () => {
+    if (props.navigateTo) {
+
+      router.push(props.navigateTo);
     }
   };
 
@@ -87,6 +94,10 @@ const ActionMenu = (props: Props) => {
             id={props.data?.id}
           />
         );
+        // case "hospital":
+        //   return (
+        //    <HospitalEditForm cities={[]} medicines={[]}/>
+        //   );
       case "specialization":
         return (
           <SpecializationEditForm
@@ -120,10 +131,17 @@ const ActionMenu = (props: Props) => {
             </DropdownMenuItem>
           )}
           {props.edit && (
-            <DropdownMenuItem
-              onClick={() => setEditOpen(true)}
-              className="font-semibold flex gap-2"
-            >
+ <DropdownMenuItem
+ onClick={() => {
+   if (props.navigateTo) {
+     handleEditClick();
+   } else {
+
+     setEditOpen(true);
+   }
+ }}
+ className="font-semibold flex gap-2"
+>
               <EditIcon />
               Edit
             </DropdownMenuItem>
@@ -156,7 +174,7 @@ const ActionMenu = (props: Props) => {
                 No
               </Button>
               <Button
-                className="px-3 py-1 bg-red-500"
+                className="px-3 py-1 bg-blue-600"
                 onClick={handleDelete}
                 disabled={isLoading} // Disable delete button while isLoading
               >

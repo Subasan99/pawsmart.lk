@@ -32,6 +32,7 @@ import { Doctor } from '@/lib/typings';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import {
+  Building2,
   CalendarIcon,
   Clock,
   Mail,
@@ -40,10 +41,11 @@ import {
   Phone,
   User,
   Users,
-
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getDepartmentData } from '@/app/home/action';
+import { useDepartmentStore } from '@/store/departmentStore';
 
 const formSchema = z.object({
   firstName: z.string({ required_error: 'First name is required!' }),
@@ -59,6 +61,9 @@ const formSchema = z.object({
   gender: z.string({ required_error: 'Gender is required!' }),
   specializationId: z.string({
     required_error: 'Please select a specialization!',
+  }),
+  departmentId: z.string({
+    required_error: 'Please select a deparment!',
   }),
   description: z.string({ required_error: 'Description is required!' }),
   duration: z.number({ required_error: 'Duration is required!' }),
@@ -77,6 +82,10 @@ const DocCreateForm = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
+    state.departments,
+    state.setAllDepartments,
+  ]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,6 +101,7 @@ const DocCreateForm = (props: Props) => {
       duration: 15,
       qualification: undefined,
       petIds: [],
+      departmentId:undefined,
     },
   });
 
@@ -106,6 +116,17 @@ const DocCreateForm = (props: Props) => {
       setLoading(false);
     }
   }
+
+  console.log(form.getValues());
+  async function fetchData() {
+    const departmentData = await getDepartmentData();
+    setAllDepartments(departmentData);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
 
   return (
     <Form {...form}>
@@ -130,7 +151,7 @@ const DocCreateForm = (props: Props) => {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                 <FormLabel className="text-black">
+                  <FormLabel className="text-black">
                     <div className="flex items-center space-x-2">
                       <User className="h-5 w-5 text-blue-500" />
                       <span>First Name</span>
@@ -154,7 +175,7 @@ const DocCreateForm = (props: Props) => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                <FormLabel className="text-black">
+                  <FormLabel className="text-black">
                     <div className="flex items-center space-x-2">
                       <User className="h-5 w-5 text-blue-500" />
                       <span>Last Name</span>
@@ -178,7 +199,7 @@ const DocCreateForm = (props: Props) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                   <FormLabel className="text-black">
+                  <FormLabel className="text-black">
                     <div className="flex items-center space-x-2">
                       <Mail className="h-5 w-5 text-blue-500" />
                       <span>Email</span>
@@ -279,7 +300,7 @@ const DocCreateForm = (props: Props) => {
         <div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* First Name */}
-          
+
             <FormField
               control={form.control}
               name="specializationId"
@@ -336,19 +357,18 @@ const DocCreateForm = (props: Props) => {
                 </FormItem>
               )}
             />
-              <FormField
+            <FormField
               control={form.control}
               name="gender"
               render={({ field }) => (
                 <FormItem className="flex flex-col w-1/2">
                   <FormLabel className="text-black">
-{/* Gender */}
-<div className="flex items-center space-x-2">
-  <Users className="h-5 w-5 text-blue-500" />
-  <span>Gender</span>
-</div>
-
-</FormLabel>
+                    {/* Gender */}
+                    <div className="flex items-center space-x-2">
+                      <Users className="h-5 w-5 text-blue-500" />
+                      <span>Gender</span>
+                    </div>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -368,12 +388,11 @@ const DocCreateForm = (props: Props) => {
                 </FormItem>
               )}
             />
-
           </div>
         </div>
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-            {/* Phone Number */}
+        
             <FormField
               control={form.control}
               name="petIds"
@@ -397,8 +416,47 @@ const DocCreateForm = (props: Props) => {
                 </FormItem>
               )}
             />
-
-            {/* Date of Birth */}
+  <FormField
+            control={form.control}
+            name="departmentId"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full">
+                <FormLabel className="text-black">
+                   <div className="flex items-center space-x-2">
+                      <Building2 className="h-5 w-5 text-blue-500" />
+                      <span>Deparment</span>
+                    </div>
+                    </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  // defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select department" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {departments.length > 0 ? (
+                      departments.map((department: any) => (
+                        <SelectItem
+                          key={department.id}
+                          value={String(department.id)}
+                        >
+                          {department.name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <div className="px-3 font-semibold text-gray-400 text-center">
+                        No options
+                      </div>
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
             <FormField
               control={form.control}
               name="duration"
@@ -435,28 +493,28 @@ const DocCreateForm = (props: Props) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="w-full focus:outline-none">
-                    <FormLabel className="text-black">
-                      <div className="flex items-center space-x-2">
-                        <PenSquare className="h-5 w-5 text-blue-500" />
-                        <span>Description</span>
-                      </div>
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Doctor description"
-                        className="resize-none w-full focus:outline-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="w-full focus:outline-none">
+                  <FormLabel className="text-black">
+                    <div className="flex items-center space-x-2">
+                      <PenSquare className="h-5 w-5 text-blue-500" />
+                      <span>Description</span>
+                    </div>
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Doctor description"
+                      className="resize-none w-full focus:outline-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
 

@@ -28,6 +28,24 @@ export type Appointment = {
   };
 };
 
+export type HospitalCreate = {
+  name: string;
+  description?: string;
+  cityId: number;
+  district: string;
+  province: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  openTime: string;
+  closeTime: string;
+  phoneNumber: string;
+  email: string;
+  website?: string;
+  medicineIds: number[]; 
+};
+
+
 export type Doctor = {
   id: string;
   name: string;

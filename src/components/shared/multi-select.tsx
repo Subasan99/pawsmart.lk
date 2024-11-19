@@ -40,7 +40,7 @@ export function MultiSelect({
   };
 
   // Get the available options by filtering out the selected ones
-  const availableOptions = options.filter(
+  const availableOptions = options?.filter(
     (option) => !selectedValues.includes(option.id)
   );
 
@@ -74,7 +74,7 @@ export function MultiSelect({
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Options</SelectLabel>
-            {availableOptions.map((option) => {
+            {availableOptions?.map((option) => {
               return (
                 <SelectItem key={option.id} value={String(option.id)}>  {/* Convert the number to string for compatibility with SelectItem */}
                   {option.name}

@@ -89,9 +89,14 @@ const PetEditForm = ({ setOpen, reloadTable, pet, id }: Props) => {
             )}
           />
         </div>
-        <Button className="bg-red-500" type="submit">
+        {/* <Button className="bg-red-500" type="submit">
+          Submit
+        </Button> */}
+         <div className="flex justify-end">
+        <Button className="bg-blue-600 " type="submit">
           Submit
         </Button>
+        </div>
       </form>
     </Form>
   );

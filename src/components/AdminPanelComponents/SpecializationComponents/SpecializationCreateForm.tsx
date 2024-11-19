@@ -131,7 +131,7 @@ const SpecializationCreateForm = (props: Props) => {
         </div>
         <div className="flex justify-end">
         <Button
-          className="bg-red-500"
+          className="bg-blue-600"
           type="submit"
           disabled={loading} // Disable button while loading
         >

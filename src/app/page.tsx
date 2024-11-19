@@ -25,6 +25,7 @@ import doc from '../../public/doc.png';
 import { Hospital } from 'lucide-react';
 import { useSpecializationStore } from '@/store/specializationStore';
 import { useHospitalStore } from '@/store/hospitalStore';
+import { useCityStore } from '@/store/citiesStore';
 
 export default function Home() {
   const [doctorName, setDoctorName] = useState<string>('');
@@ -33,7 +34,13 @@ export default function Home() {
   const [specializationName, setSpecializationName] = useState<any>('');
 
   const [searchData, setsearchData] = useState('');
-  const [cityData, setCitiesData] = useState('');
+
+  const [cities, setAllCities] = useCityStore((state: any) => [
+    state.cities,
+    state.setAllCities,
+  ]);
+
+
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
     state.setLogin,
@@ -93,8 +100,8 @@ export default function Home() {
       }))
     : [];
 
-  const citiesOptions = Array.isArray(cityData)
-    ? cityData.map((city: any) => {
+  const citiesOptions = Array.isArray(cities)
+    ? cities.map((city: any) => {
         // console.log(city)
         return {
           label: city.name,
@@ -117,7 +124,7 @@ export default function Home() {
       setAllDepartments(departmentData);
       setAllPets(petData);
       setAllDoctors(doctorData);
-      setCitiesData(citiesData);
+      setAllCities(citiesData);
       setAllSpecialization(specializations);
       setAllHospitals(hospitalData);
     } catch (error) {
@@ -319,51 +326,53 @@ export default function Home() {
                     <hr className="my-4 border-t-2 border-gray-300" />
 
                     <div className="relative z-2 home-first w-full pt-4">
-                      <section className="mb-8">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-                          <input
-                            type="text"
-                            placeholder="Search doctors, clinics, hospitals, etc."
-                            value={searchData}
-                            onChange={handleDateChange}
-                            className="block min-w-16 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          />
-                          <FilterDropdown
-                            options={citiesOptions}
-                            placeholder="📍 Select Location"
-                            onChange={(selectedOption: any) => {
-                              setCityName(selectedOption);
-                            }}
-                            value={cityName}
-                          />
+  <section className="mb-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+      {/* <input
+        type="text"
+        placeholder="Search doctors, clinics, hospitals, etc."
+        value={searchData}
+        onChange={handleDateChange}
+        className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+      /> */}
 
-                          <FilterDropdown
-                            options={hospitalsOptions}
-                            placeholder="🏥 Select Hospital"
-                            onChange={(selectedOption: any) => {
-                              setHospitalName(selectedOption);
-                            }}
-                            value={hospitalName}
-                          />
+      <FilterDropdown
+        options={citiesOptions}
+        placeholder="📍 Select Location"
+        onChange={(selectedOption: any) => {
+          setCityName(selectedOption);
+        }}
+        value={cityName}
+      />
 
-                          <FilterDropdown
-                            options={specializationOptions}
-                            placeholder="🔬 Select Specialization"
-                            onChange={(selectedOption: any) => {
-                              setSpecializationName(selectedOption);
-                            }}
-                            value={specializationName}
-                          />
+      <FilterDropdown
+        options={hospitalsOptions}
+        placeholder="🏥 Select Hospital"
+        onChange={(selectedOption: any) => {
+          setHospitalName(selectedOption);
+        }}
+        value={hospitalName}
+      />
 
-                          <button
-                            onClick={handleFilter}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          >
-                            Search
-                          </button>
-                        </div>
-                      </section>
-                    </div>
+      <FilterDropdown
+        options={specializationOptions}
+        placeholder="🔬 Select Specialization"
+        onChange={(selectedOption: any) => {
+          setSpecializationName(selectedOption);
+        }}
+        value={specializationName}
+      />
+
+      <button
+        onClick={handleFilter}
+        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Search
+      </button>
+    </div>
+  </section>
+</div>
+
                   </div>
                 </div>
               </div>

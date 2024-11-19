@@ -1,5 +1,14 @@
 'use client';
-import { BriefcaseMedical, Building, Calendar, Dog, Stethoscope, Syringe, User } from 'lucide-react';
+import {
+  BriefcaseMedical,
+  Building,
+  Calendar,
+  Dog,
+  Hospital,
+  Stethoscope,
+  Syringe,
+  User,
+} from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 const SideBar = () => {
@@ -17,13 +26,25 @@ const SideBar = () => {
             Dashboard
           </a>
         </li> */}
+
+      <li
+        className={`text-sm font-medium text-[#718096] text-left ${
+          pathname.includes('/admin/hospitals') && 'bg-slate-300 text-black'
+        } px-4 py-1 rounded flex items-center group`}
+      >
+        <Hospital className="mr-2 text-[#718096] group-hover:text-black transition-colors duration-200" />
+        <a href="/admin/hospitals" className="hover:text-black p-2">
+          Hospitals
+        </a>
+      </li>
+
       <li
         className={`text-sm font-medium text-[#718096] text-left ${
           pathname.includes('/admin/doctors') && 'bg-slate-300  text-black'
         } px-4 py-1 rounded flex items-center group group`}
       >
         <Stethoscope className="mr-2 text-[#718096] group-hover:text-black transition-colors duration-200" />
-        <a href="/admin/doctors" className="hover:text-black p-2 p-2">
+        <a href="/admin/doctors" className="hover:text-black p-2">
           Doctors
         </a>
       </li>
@@ -35,7 +56,8 @@ const SideBar = () => {
       >
         <Syringe className="mr-2 text-[#718096] group-hover:text-black transition-colors duration-200" />
         <a href="/admin/medicines" className="hover:text-black p-2">
-          Vaccination  </a>
+          Vaccination{' '}
+        </a>
       </li>
       <li
         className={`text-sm font-medium text-[#718096] text-left ${
@@ -69,10 +91,11 @@ const SideBar = () => {
       </li>
       <li
         className={`text-sm font-medium text-[#718096] text-left ${
-          pathname.includes('/admin/specializations') && 'bg-slate-300 text-black'
+          pathname.includes('/admin/specializations') &&
+          'bg-slate-300 text-black'
         } px-4 py-1 rounded flex items-center group`}
       >
-          <BriefcaseMedical className="mr-2 text-[#718096] group-hover:text-black transition-colors duration-200" />
+        <BriefcaseMedical className="mr-2 text-[#718096] group-hover:text-black transition-colors duration-200" />
         <a href="/admin/specializations" className="hover:text-black p-2">
           Specializations
         </a>
@@ -82,7 +105,7 @@ const SideBar = () => {
           pathname.includes('/admin/users') && 'bg-slate-300 text-black'
         } px-4 py-1 rounded flex items-center group`}
       >
-            <User className="mr-2 text-[#718096] group-hover:text-black transition-colors duration-200" />
+        <User className="mr-2 text-[#718096] group-hover:text-black transition-colors duration-200" />
         <a href="/admin/users" className="hover:text-black p-2">
           Users
         </a>

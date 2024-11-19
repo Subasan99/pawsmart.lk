@@ -10,6 +10,7 @@ export type Columns = {
   firstName: string;
   lastName: string;
   description: string;
+  city:string;
   active: boolean;
   role: string;
   image: string;
@@ -21,6 +22,7 @@ export type Columns = {
 };
 
 export const columns: ColumnDef<Columns>[] = [
+
   {
     accessorKey: "UserName",
     header: () => (
@@ -35,7 +37,7 @@ export const columns: ColumnDef<Columns>[] = [
     ),
     cell: ({ row }) => (
       <div className="justify-center py-0">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-start">
           <div className="w-10 h-10 object-contain">
             {row?.original?.preSignedUrl ? (
               <Image
@@ -54,17 +56,23 @@ export const columns: ColumnDef<Columns>[] = [
             )}
           </div>
           <div className="flex flex-col">
-            <div className="font-semibold text-sm">{row.original.firstName +" "+ row.original.lastName}</div>
+            <div className="font-semibold text-sm">
+              {row.original.firstName +" "+ row.original.lastName}
+            </div>
+            <div className="font-semibold text-[12px]">
+              {row?.original?.email}
+            </div>
           </div>
         </div>
       </div>
     ),
   },
+
   {
-    accessorKey: "Email",
-    header: () => <div className="font-bold text-start">Email</div>,
+    accessorKey: "City",
+    header: () => <div className="font-bold text-start">City</div>,
     cell: ({ row }) => (
-      <div className="text-start">{row.original.email}</div>
+      <div className="text-start">{row.original.city}</div>
     ),
   },
   {

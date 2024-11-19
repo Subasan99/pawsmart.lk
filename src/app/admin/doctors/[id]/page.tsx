@@ -11,12 +11,16 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import DefaultImage from "../../../../../public/default_user.png";
 import { getAppointmentsByDoctorId, getDoctorById, updateTimeSlot } from "./action";
-import { Edit, Mail, Phone, User } from "lucide-react";
+import { Edit, Mail, Phone, User, XIcon } from "lucide-react";
 import PetCard from "@/components/AdminPanelComponents/DoctorComponents/PetCard";
 import DoctorPets from "@/components/AdminPanelComponents/DoctorComponents/DoctorPets";
+import { useRouter } from "next/navigation";
+
+
+
 
 const Index = ({ params }: { params: { id: string } }) => {
-
+const router=useRouter();
 
   const [
     selectedDoctor,
@@ -37,6 +41,7 @@ const Index = ({ params }: { params: { id: string } }) => {
   async function handleSelectDoctor() {
     const data = await getDoctorById(params.id);
     const appointments = await getAppointmentsByDoctorId(params.id, 1, 10);
+    setDoctorAppointments(appointments);
     setSelectedDoctor(data);
   }
 
@@ -49,6 +54,9 @@ const Index = ({ params }: { params: { id: string } }) => {
   if (loading) {
     <div>Loading...!</div>;
   }
+  const handleClose = () => {
+    router.back();
+  };
 
   return (
     <div className="flex flex-col px-3 bg-white py-5 h-full w-full rounded-lg">
@@ -95,7 +103,15 @@ const Index = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div> */}
+
 <div className="bg-white rounded-lg shadow-sm">
+<button
+          type="button"
+          onClick={handleClose}
+          className="absolute top-24 right-10 text-gray-500 hover:text-gray-700"
+        >
+          <XIcon className="h-5 w-5" />
+        </button>
       <div className="p-6 border-b">
         <div className="flex items-start gap-6">
           {/* Profile Image */}

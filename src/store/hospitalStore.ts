@@ -36,38 +36,42 @@ export const useHospitalStore = create<Store>()(
       setAllHospitals: (hospitals: Hospital[]) => {
         set({ hospitals, loading: false });
       },
+      
 
       setSelectedHospital: (hospital: Hospital | null | undefined) => {
         let departments: departmentResponse[] = [];
         let doctors: doctorResponses[] = [];
         let medicines: medicineResponse[] = [];
-
+      
+       
         hospital?.doctorDepartmentResponses?.forEach((department: any) => {
           if (department?.departmentResponse) {
             departments.push(department.departmentResponse);
           }
-
+      
           department.doctorResponses?.forEach((doctor: any) => {
-            if (doctors?.some((doc: any) => doc?.id === doctor?.id)) {
-              return;
+            if (!doctors?.some((doc: any) => doc?.id === doctor?.id)) {
+              doctors.push(doctor);
             }
-            doctors.push(doctor);
           });
         });
-
+      
         hospital?.medicineResponses?.forEach((medicine: any) => {
           medicines.push(medicine);
         });
-
+      
+        // Update the store with all the processed data
         set({
           selectedHospital: hospital,
-          departments,
-          doctors,
-          medicines,
+          departments,  
+          doctors,      
+          medicines,   
           loading: false,
         });
+      
+        console.log("Updated hospital and data:", hospital);
       },
-
+      
       setDoctors: (doctors: doctorResponses[]) => {
         set({ doctors, loading: false });
       },
