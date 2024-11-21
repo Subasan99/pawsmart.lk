@@ -5,6 +5,8 @@ import { persist } from "zustand/middleware";
 type Store = {
   loading: boolean;
   specializations: Specialization[];
+  filterspecializations: Specialization[];
+
   specialization: Specialization[];
   selectedSpecialization: Specialization | null | undefined;
   setSelectedSpecialization: (specialization: Specialization | null | undefined) => void;
@@ -15,9 +17,14 @@ export const useSpecializationStore = create<Store>()(
     (set) => ({
       loading: true,
       specializations: [],
+      filterspecializations: [],
       selectedSpecialization: null,
       setAllSpecializations: (specializations: any[]) => {
         set({ specializations: specializations, loading: false });
+      },
+
+      setAllFilterSpecializations: (filterspecializations: any[]) => {
+        set({ filterspecializations: filterspecializations, loading: false });
       },
       specialization: [],
       setAllSpecialization: (specialization: any[]) => {

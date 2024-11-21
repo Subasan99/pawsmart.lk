@@ -3,10 +3,9 @@
 import { Pet } from "@/lib/typings";
 import { axiosInstance } from "@/utils/client";
 
-export async function getPetData(
+export async function getAllFilterPets(
   pageCount?: number,
   pageSize?: number,
-  doctorId?: number,
   name?: string
 ) {
   console.log("dfsdfdf", pageCount, pageSize);
@@ -18,10 +17,18 @@ export async function getPetData(
         name: name ? name : undefined,
       },
     });
-    console.log("dffdfscs", response);
     return response?.data;
   } catch (error) {
     console.log("Error fetching pet data:", error);
+  }
+}
+
+export async function getAllPets() {
+  try {
+    const response = await axiosInstance.get("/pets");
+    return response.data;
+  } catch (error) {
+    console.log("Error fetching pets:", error);
   }
 }
 

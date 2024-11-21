@@ -3,7 +3,7 @@ import DepartmentCreate from "@/components/AdminPanelComponents/DepartmentCompon
 import { useDepartmentStore } from "@/store/departmentStore";
 import { useEffect, useState } from "react";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
-import { getDepartmentData } from "./action";
+import { getAllDepartmentData, getDepartmentData } from "./action";
 import { columns } from "./columns";
 import { Building, FilterIcon } from "lucide-react";
 import {
@@ -14,9 +14,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 export default function DemoPage() {
-  const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
+  const [departments, setAllDepartments,filterdepartments,setAllfilterDepartments] = useDepartmentStore((state: any) => [
     state.departments,
     state.setAllDepartments,
+    state.filterdepartments,
+    state.setAllfilterDepartments,
   ]);
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
   const [selectedSelectedDepartment, setSelectedDepartment] = useState<
@@ -24,13 +26,16 @@ export default function DemoPage() {
   >(null);
   async function fetchData() {
     const data = await getDepartmentData(1, 10,selectedSelectedDepartment);
-    setAllDepartments(data?.records);
+    const AllDeparment = await getAllDepartmentData();
+
+    setAllfilterDepartments(data?.records);
+    setAllDepartments(AllDeparment);
   }
   useEffect(() => {
-    console.log(departments);
-    if(!isFiltersOpen){
-      selectedSelectedDepartment('');
-    }
+    // console.log(departments);
+    // if(!isFiltersOpen){
+    //   selectedSelectedDepartment(undefined);
+    // }
     fetchData();
   }, [selectedSelectedDepartment]);
   return (
@@ -108,7 +113,7 @@ export default function DemoPage() {
       <div className="self-end">
         <DepartmentCreate />
       </div>
-      <DataTable columns={columns} data={departments} />
+      <DataTable columns={columns} data={filterdepartments} />
     </div>
   );
 }

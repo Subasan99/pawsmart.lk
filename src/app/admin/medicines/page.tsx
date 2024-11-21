@@ -22,7 +22,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
-import { getMedicineData } from './action';
+import { getAllMedicinesData, getMedicineData } from './action';
 import { Value } from '@radix-ui/react-select';
 export default function Index() {
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
@@ -32,30 +32,39 @@ export default function Index() {
   const [selectedSelectedMedicines, setSelectedMedicines] = useState<
     any | undefined
   >(null);
-  const [medicines, setAllMedicines] = useMedicineStore((state: any) => [
+  const [medicines, setAllMedicines,filterMedicines,setFilterMedicines] = useMedicineStore((state: any) => [
     state.medicines,
     state.setAllMedicines,
+    state.filterMedicines,
+    state.setFilterMedicines,
   ]);
   const [specialization, setAllSpecialization] = useSpecializationStore(
     (state: any) => [state.specialization, state.setAllSpecialization]
   );
+  // useEffect(() => {
+  //   fetchData();
+  // }, [ selectedSelectedMedicines]);
+
   useEffect(() => {
+    if (!isFiltersOpen) {
+      setSelectedMedicines(undefined);
+    }
     fetchData();
-  }, [ selectedSelectedMedicines]);
+   
+  }, [selectedSelectedMedicines]);
 
   async function fetchData() {
- 
+    const medicinesData = await getAllMedicinesData();
+
     const data = await getMedicineData(
       1,
       10,
       selectedSelectedMedicines
       // selectedDate
     );
+    setFilterMedicines(data);
 
-    console.log("data",data)
- 
-    setAllMedicines(data);
-    // setAllSpecialization(specializations);
+    setAllMedicines(medicinesData);
   }
 
   return (
@@ -132,7 +141,7 @@ export default function Index() {
       <div className="self-end">
         <MedicineCreate />
       </div>
-      <DataTable columns={columns} data={medicines} />
+      <DataTable columns={columns} data={filterMedicines} />
     </div>
   );
 }

@@ -86,6 +86,16 @@ export async function editMedicineById(
   }
 }
 
+export const getAllMedicinesData = async () => {
+  try {
+    const response = await axiosInstance.get(`/medicines`);
+
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
 export async function updateMedicineTimeSlot(
   medicineId: string,
   medicineDayAllocationList: dayTimeSlotResponses

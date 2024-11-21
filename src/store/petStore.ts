@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 type Store = {
   loading: boolean;
   pets: Pet[];
+  filterpets: Pet[];
   pet: Pet[];
   selectedPet: Pet | null | undefined;
   setSelectedPet: (pet: Pet | null | undefined) => void;
@@ -16,6 +17,7 @@ export const usePetStore = create<Store>()(
     (set) => ({
       loading: true,
       pets: [],
+      filterpets: [],
       selectedPet: null,
       setAllPets: (pets: any[]) => {
         set({ pets: pets, loading: false });
@@ -23,6 +25,10 @@ export const usePetStore = create<Store>()(
       pet: [],
       setAllPet: (pet: any[]) => {
         set({ pet: pet, loading: false });
+      },
+
+      setAllFilterPets: (pets: any[]) => {
+        set({ pets: pets, loading: false });
       },
       setSelectedPet: (pet: Pet | null | undefined) => {
         set({ selectedPet: pet, loading: false });

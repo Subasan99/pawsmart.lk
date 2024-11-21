@@ -5,6 +5,8 @@ import { persist } from "zustand/middleware";
 type Store = {
   loading: boolean;
   medicines: Medicine[];
+  filterMedicines: Medicine[];
+
   medicine: Medicine[];
   selectedMedicine: Medicine | null | undefined;
   setSelectedMedicine: (medicine: Medicine | null | undefined) => void;
@@ -18,15 +20,29 @@ export const useMedicineStore = create<Store>()(
     (set) => ({
       loading: true,
       medicines: [],
+      filterMedicines: [],
+
       selectedMedicine: null,
       medicineAppointments: [],
+
+
       setAllMedicines: (medicines: any[]) => {
         set({ medicines: medicines, loading: false });
       },
+
+
+
       medicine: [],
       setAllMedicine: (medicine: any[]) => {
         set({ medicine: medicine, loading: false });
       },
+
+
+      setFilterMedicines: (filterMedicines: any[]) => {
+        set({ filterMedicines: filterMedicines, loading: false });
+      },
+
+
       setSelectedMedicine: (medicine: Medicine | null | undefined) => {
         console.log("setSelectedMedicine", medicine);
 

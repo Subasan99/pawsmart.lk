@@ -205,17 +205,17 @@ export default function Home() {
 
   };
 
-  useEffect(() => {
-    if (login?.role === 'ADMIN') {
-      router.push('/admin/dashboard');
-    } else if (login?.role === 'USER') {
-      router.push('/');
-    }else
-    {
-      router.push('/');
+  // useEffect(() => {
+  //   if (login?.role === 'ADMIN') {
+  //     router.push('/admin/dashboard');
+  //   } else if (login?.role === 'USER') {
+  //     router.push('/');
+  //   }else
+  //   {
+  //     router.push('/');
 
-    }
-  }, [login?.role]);
+  //   }
+  // }, [login?.role]);
   
 
   useEffect(() => {

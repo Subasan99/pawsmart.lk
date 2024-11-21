@@ -24,6 +24,15 @@ export async function getDepartmentData(
   }
 }
 
+export const getAllDepartmentData = async () => {
+  try {
+    const response = await axiosInstance.get(`/departments`);
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
 export async function createDepartment(department: Department) {
   try {
     const response = await axiosInstance.post("/department", department);

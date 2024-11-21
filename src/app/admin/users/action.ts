@@ -5,8 +5,8 @@ import { axiosInstance, imageaxiosInstance } from '@/utils/client';
 export async function getUserData(
   pageCount?: number,
   pageSize?: number,
+  role?: string,
   name?: string,
-  role?: string
 ) {
   console.log('dfsdfdf', pageCount, pageSize);
   try {
@@ -14,8 +14,8 @@ export async function getUserData(
       params: {
         pageCount: pageCount,
         pageSize: pageSize,
-        name: name ? name : undefined,
         role: role ? role : undefined,
+        name: name ? name : undefined,
       },
     });
     console.log('dffdfscs', response);

@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 type Store = {
   loading: boolean;
   bookings: Booking[];
+  filterbookings: Booking[];
   booking: Booking[];
   selectedBooking: Booking | null | undefined;
   setSelectedBooking: (booking: Booking | null | undefined) => void;
@@ -15,9 +16,13 @@ export const useBookingStore = create<Store>()(
     (set) => ({
       loading: true,
       bookings: [],
+      filterbookings: [],
       selectedBooking: null,
       setAllBookings: (bookings: any[]) => {
         set({ bookings: bookings, loading: false });
+      },
+      setAllFilterBookings: (filterbookings: any[]) => {
+        set({ filterbookings: filterbookings, loading: false });
       },
       booking: [],
       setAllBooking: (booking: any[]) => {
