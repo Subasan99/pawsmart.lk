@@ -4,17 +4,17 @@ import axios from 'axios';
 export const axiosInstance = axios.create({
   baseURL: process.env.API_URL,
   headers: {
-    // You can set headers dynamically, or just set it for default
-    'Content-Type': 'application/json', // Default content type for JSON
+ 
+    'Content-Type': 'application/json', 
   },
 });
 
-
 export const imageaxiosInstance = axios.create({
-  baseURL: process.env.API_URL,  
+  baseURL: process.env.API_URL,
   headers: {
-    'Content-Type': 'amultipart/form-data', 
-  },// Default content type for JSON
+    'Content-Type': 'multipart/form-data', 
+    'Accept': '*/*', 
+  },
 });
 
 // Function to dynamically handle file uploads with multipart/form-data

@@ -66,24 +66,27 @@ export const doctorColumns: ColumnDef<Columns>[] = [
     cell: ({ row }) => {
       const status = row.original.status;
 
-      // Define badge styles based on status
-      let badgeStyle = "";
+      let badgeStyle = '';
+
       switch (status) {
         case "COMPLETED":
-          badgeStyle = "bg-green-400 text-white";
+       
+          badgeStyle = "bg-green-600 text-white p-2 ";
           break;
         case "CANCELED":
-          badgeStyle = "bg-red-400 text-white";
+         
+          badgeStyle = "bg-red-600 text-white p-2 ";
           break;
         case "CONFIRMED":
-          badgeStyle = "bg-blue-400 text-black";
+          badgeStyle = "bg-blue-600 text-white p-2 ";
           break;
         default:
-          badgeStyle = "bg-gray-400 text-white"; // default case
+         
+          badgeStyle = "bg-gray-600 text-white p-2 ";
       }
-
+      
       return (
-        <div className={`text-center py-1 px-3 rounded-3xl ${badgeStyle}`}>
+        <div className={`text-center py-1 px-1  w-28 rounded-3xl ${badgeStyle}`}>
           {status}
         </div>
       );
@@ -155,20 +158,24 @@ export const medicinesColumns: ColumnDef<Columns>[] = [
       const status = row.original.status;
 
       // Define badge styles based on status
-      let badgeStyle = "";
+     
+      let badgeStyle = '';
+
       switch (status) {
         case "COMPLETED":
-          badgeStyle = "bg-green-400 text-white";
+          badgeStyle = "bg-green-400 text-white p-3 rounded-full shadow-md transform transition-all duration-200 ease-in-out hover:scale-105";
           break;
         case "CANCELED":
-          badgeStyle = "bg-red-400 text-white";
+          badgeStyle = "bg-red-400 text-white p-3 rounded-full shadow-md transform transition-all duration-200 ease-in-out hover:scale-105";
           break;
         case "CONFIRMED":
-          badgeStyle = "bg-blue-400 text-black";
+          badgeStyle = "bg-blue-400 text-black p-3 rounded-full shadow-md transform transition-all duration-200 ease-in-out hover:scale-105";
           break;
         default:
-          badgeStyle = "bg-gray-400 text-white"; // default case
+          badgeStyle = "bg-gray-400 text-white p-3 rounded-full shadow-md transform transition-all duration-200 ease-in-out hover:scale-105";
       }
+      
+      
 
       return (
         <div className={`text-center py-1 px-3 rounded-full ${badgeStyle}`}>

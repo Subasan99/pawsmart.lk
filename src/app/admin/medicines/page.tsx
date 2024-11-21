@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { getMedicineData } from './action';
+import { Value } from '@radix-ui/react-select';
 export default function Index() {
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<any | null>(null);
@@ -40,23 +41,21 @@ export default function Index() {
   );
   useEffect(() => {
     fetchData();
-  }, [selectedDate | selectedSelectedMedicines]);
+  }, [ selectedSelectedMedicines]);
 
   async function fetchData() {
-    console.log(
-      'selectedSelectedMedicinesselectedSelectedMedicines',
-      selectedSelectedMedicines
-    );
+ 
     const data = await getMedicineData(
       1,
       10,
-      selectedSelectedMedicines,
-      selectedDate
+      selectedSelectedMedicines
+      // selectedDate
     );
-    const specializations = await getAllSpecializations();
 
+    console.log("data",data)
+ 
     setAllMedicines(data);
-    setAllSpecialization(specializations);
+    // setAllSpecialization(specializations);
   }
 
   return (
@@ -78,7 +77,7 @@ export default function Index() {
         <div className="flex gap-4 items-center">
           {/* Specialization Dropdown */}
           <div className="flex-1">
-            <Select onValueChange={setSelectedMedicines}>
+            <Select onValueChange={(value) => setSelectedMedicines(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select Medicines" />
               </SelectTrigger>
@@ -97,7 +96,7 @@ export default function Index() {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex-1">
+          {/* <div className="flex-1">
             <Popover
               open={isCalendarOpen}
               onOpenChange={setCalendarOpen} // Toggle the popover open/close state
@@ -123,14 +122,11 @@ export default function Index() {
                     setSelectedDate(date);
                     setCalendarOpen(false);
                   }}
-                  disabled={(date) =>
-                    date > new Date() || date < new Date('1900-01-01')
-                  }
                   initialFocus
                 />
               </PopoverContent>
             </Popover>
-          </div>
+          </div> */}
         </div>
       )}
       <div className="self-end">

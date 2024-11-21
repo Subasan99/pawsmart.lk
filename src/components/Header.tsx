@@ -118,11 +118,14 @@ export default function Home() {
     state.medicines,
     state.setAllMedicines,
   ]);
-  const [login, setLogin] = useAuthStore((state) => [
+  const [login, setLogin, loadingAuth, ] = useAuthStore((state) => [
     state.login,
     state.setLogin,
+    state.loadingAuth,
   ]);
-console.log("loginloginloginloginlogin",login?.firstName)
+
+
+
   const fetchData = async () => {
     try {
       const petData = await getPetData();
@@ -150,6 +153,7 @@ console.log("loginloginloginloginlogin",login?.firstName)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const router = useRouter();
   const [calendarOpen, setCalendarOpen] = useState(true);
+
   const handleMouseEnter = useCallback(
     (view: string) => setActiveDropdown(view),
     []
@@ -169,13 +173,13 @@ console.log("loginloginloginloginlogin",login?.firstName)
 
   const handleSignIn = async (data: any) => {
     setLoadingSub(true);
-  
+
     try {
       const response = await loginUser({
         email: data.email,
         password: data.password,
       });
-  
+
       if (response.success) {
         setLogin(response);
         toast.success(response.message);
@@ -193,13 +197,26 @@ console.log("loginloginloginloginlogin",login?.firstName)
       setLoadingSub(false);
     }
   };
-  
 
   const handleSignout = async () => {
     await signOut();
     setLogin(undefined);
     router.push('/');
+
   };
+
+  useEffect(() => {
+    if (login?.role === 'ADMIN') {
+      router.push('/admin/dashboard');
+    } else if (login?.role === 'USER') {
+      router.push('/');
+    }else
+    {
+      router.push('/');
+
+    }
+  }, [login?.role]);
+  
 
   useEffect(() => {
     fetchData();
@@ -360,6 +377,10 @@ console.log("loginloginloginloginlogin",login?.firstName)
     }
   }
 
+  if (loadingAuth) {
+    <div>Loading...!</div>;
+  }
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-10 transition-all duration-300 bg-white bg-opacity-90`}
@@ -441,15 +462,15 @@ console.log("loginloginloginloginlogin",login?.firstName)
                   {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
                 </li>
                 {login ? (
-                  <div
-                    className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded"
-                  >
+                  <div className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
                     {/* <p className="hover:text-black">SignOut</p> */}
 
                     <button className="flex items-center gap-2 cursor-pointer">
-  <LogOut size={30} />
-  <span className="text-sm lg:text-lg font-semibold">SIGN OUT</span>
-</button>
+                      <LogOut size={30} />
+                      <span className="text-sm lg:text-lg font-semibold">
+                        SIGN OUT
+                      </span>
+                    </button>
                   </div>
                 ) : (
                   <>
@@ -534,34 +555,36 @@ console.log("loginloginloginloginlogin",login?.firstName)
           </nav>
 
           {login ? (
-
-<div className="flex items-center justify-between gap-4">
-<div className="flex items-end justify-end text-right gap-2">
-  <User size={30} />
-  <span className="text-sm lg:text-lg font-semibold">
-    {login?.firstName}
-  </span>
-</div>
-<div
-  onClick={handleSignout}
-  className="text-black justify-end items-end text-right hover:bg-yellow-500 py-1 rounded"
->
-  <button className="flex  gap-2 cursor-pointer  justify-end items-end text-right">
-    <LogOut size={30} />
-    <span className="text-sm lg:text-lg font-semibold">LOG OUT</span>
-  </button>
-</div>
-</div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-end justify-end text-right gap-2">
+                <User size={30} />
+                <span className="text-sm lg:text-lg font-semibold">
+                  {login ? `(${login?.firstName})` : ' '}
+                </span>
+              </div>
+              <div
+                onClick={handleSignout}
+                className="text-black justify-end items-end text-right hover:bg-yellow-500 py-1 rounded"
+              >
+                <button className="flex  gap-2 cursor-pointer  justify-end items-end text-right">
+                  <LogOut size={30} />
+                  <span className="text-sm lg:text-lg font-semibold">
+                    LOG OUT
+                  </span>
+                </button>
+              </div>
+            </div>
           ) : (
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <div className=" hover:bg-yellow-500 text-black px-4 py-1 rounded">
                   {/* <p className="hover:text-black">Sign In</p> */}
                   <button className="flex items-center gap-2 cursor-pointer">
-  <User size={30} />
-  <span className="text-sm lg:text-lg font-semibold">LOGIN</span>
-</button>
-
+                    <User size={30} />
+                    <span className="text-sm lg:text-lg font-semibold">
+                      LOGIN
+                    </span>
+                  </button>
                 </div>
               </DialogTrigger>
               <DialogContent>
@@ -960,49 +983,56 @@ console.log("loginloginloginloginlogin",login?.firstName)
                     />
                   </div>
                   <div className="flex flex-col gap-4 pb-6">
-                  <FormField
-  control={signupForm.control}
-  name="dateOfBirth"
-  render={({ field }) => (
-    <FormItem>
-      <FormLabel className="text-sm font-medium text-black ">
-        Date of Birth
-      </FormLabel>
-      <Popover open={calendarOpen} onOpenChange={setCalendarOpen}> {/* Bind calendar visibility to the state */}
-        <PopoverTrigger asChild>
-          <FormControl>
-            <Button
-              variant="outline"
-              className={cn(
-                'h-10 w-full pl-3 text-left font-normal transition-all focus:outline-none focus:ring-0',
-                !field.value && 'text-gray-400'
-              )}
-            >
-              {field.value ? format(field.value, 'PPP') : 'Pick a date'}
-              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-            </Button>
-          </FormControl>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-auto p-0"
-          align="start"
-        >
-          <Calendar
-            mode="single"
-            selected={field.value}
-            onSelect={(date) => {
-              field.onChange(date); // Update the form field value with the selected date
-              setCalendarOpen(false); // Close the calendar after selecting a date
-            }}
-            aria-label="Date (Show Month and Year Picker)"
-            // showMonthAndYearPickers
-          />
-        </PopoverContent>
-      </Popover>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
+                    <FormField
+                      control={signupForm.control}
+                      name="dateOfBirth"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium text-black ">
+                            Date of Birth
+                          </FormLabel>
+                          <Popover
+                            open={calendarOpen}
+                            onOpenChange={setCalendarOpen}
+                          >
+                            {' '}
+                            {/* Bind calendar visibility to the state */}
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    'h-10 w-full pl-3 text-left font-normal transition-all focus:outline-none focus:ring-0',
+                                    !field.value && 'text-gray-400'
+                                  )}
+                                >
+                                  {field.value
+                                    ? format(field.value, 'PPP')
+                                    : 'Pick a date'}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={(date) => {
+                                  field.onChange(date); // Update the form field value with the selected date
+                                  setCalendarOpen(false); // Close the calendar after selecting a date
+                                }}
+                                aria-label="Date (Show Month and Year Picker)"
+                                // showMonthAndYearPickers
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <Button
                       type="submit"

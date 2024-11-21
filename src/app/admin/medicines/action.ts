@@ -7,17 +7,17 @@ export async function getMedicineData(
   pageCount?: number,
   pageSize?: number,
   name?: string,
-  date?:string
+  // date?:string
 ) {
   try {
-    console.log("objectnamedate",name,date)
+    console.log("objectnamedate",name)
     const response = await axiosInstance.get(`/medicine/filter`, {
       params: {
         pageCount: pageCount,
         pageSize: pageSize,
         name: name ? name : undefined,
-        date: date ? date : undefined,
-
+        // date: date ? date : undefined,
+// 
       },
     });
     return response?.data?.records;

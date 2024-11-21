@@ -1,7 +1,7 @@
 "use server";
 
 import { DayTimeSlotResponses } from "@/lib/typings";
-import { axiosInstance } from "@/utils/client";
+import { axiosInstance, imageaxiosInstance } from "@/utils/client";
 
 //Fetch doctor by ID
 export async function getDoctorById(id: string) {
@@ -79,3 +79,24 @@ export async function updateTimeSlot(
     console.log("Error updating time slot: ", error);
   }
 }
+// export async function updateHospitalImage(id: any, image: any) {
+  export async function updateDoctorImage(id: any ,image:any) {
+
+    // console.log("🚀 ~ updateHospitalImage ~ image:", image)
+    // debugger
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', image);  
+  
+      console.log("Uploading image for hospital:", id); 
+      // debugger
+  
+      const response = await imageaxiosInstance.put(`hospital/{id}/image?id=${id}`, formData);
+  console.log("object",response.data)
+      return response.data; 
+    } catch (error: any) {
+      console.error("Error updating hospital image:", error?.response?.data || error.message);
+      throw error;
+    }
+  }

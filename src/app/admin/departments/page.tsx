@@ -1,26 +1,38 @@
 "use client";
 import DepartmentCreate from "@/components/AdminPanelComponents/DepartmentComponents/DepartmentCreate";
 import { useDepartmentStore } from "@/store/departmentStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DataTable } from "../../../components/AdminPanelComponents/data-table";
 import { getDepartmentData } from "./action";
 import { columns } from "./columns";
-import { Building } from "lucide-react";
-
+import { Building, FilterIcon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 export default function DemoPage() {
   const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
     state.departments,
     state.setAllDepartments,
   ]);
+  const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
+  const [selectedSelectedDepartment, setSelectedDepartment] = useState<
+    any | undefined
+  >(null);
   async function fetchData() {
-    const data = await getDepartmentData(1, 10);
-    console.log(data);
+    const data = await getDepartmentData(1, 10,selectedSelectedDepartment);
     setAllDepartments(data?.records);
   }
   useEffect(() => {
     console.log(departments);
+    if(!isFiltersOpen){
+      selectedSelectedDepartment('');
+    }
     fetchData();
-  }, []);
+  }, [selectedSelectedDepartment]);
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
       
@@ -28,6 +40,71 @@ export default function DemoPage() {
     <Building className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
     <div className="font-bold text-2xl">Departments</div>
     </div>
+
+    <div
+          className="flex items-center justify-end p-3 cursor-pointer"
+          onClick={() => setIsFiltersOpen((prev:boolean) => !prev)}
+        >
+          <FilterIcon className="h-6 w-6 text-[#8D9FBD] " />
+          <div className="font-semibold text-[#8D9FBD] ml-2">Filters</div>
+        </div>
+    
+    {isFiltersOpen && (
+        <div className="flex gap-4 items-center">
+          {/* Specialization Dropdown */}
+          <div className="flex-1">
+            <Select onValueChange={(value) => setSelectedDepartment(value)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Department" />
+              </SelectTrigger>
+              <SelectContent>
+                {departments.length > 0 ? (
+                  departments.map((item: any) => (
+                    <SelectItem key={item.id} value={String(item.name)}>
+                      {item.name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <div className="px-3 font-semibold text-gray-400 text-center">
+                    No options
+                  </div>
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+          {/* <div className="flex-1">
+            <Popover
+              open={isCalendarOpen}
+              onOpenChange={setCalendarOpen} // Toggle the popover open/close state
+            >
+              <PopoverTrigger className="w-full" asChild>
+                <Button
+                  variant={'outline'}
+                  className="w-full pl-3 text-left font-normal"
+                >
+                  {selectedDate ? (
+                    format(selectedDate, 'PPP') 
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date);
+                    setCalendarOpen(false);
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div> */}
+        </div>
+      )}
       <div className="self-end">
         <DepartmentCreate />
       </div>

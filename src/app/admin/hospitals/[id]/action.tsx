@@ -30,17 +30,22 @@ export async function getHospitalById(id: string) {
 
 
 
-export async function updateHospitalImage(id: string, image: File) {
+// export async function updateHospitalImage(id: any, image: any) {
+export async function updateHospitalImage(id: any ,image:any) {
+
+  console.log("🚀 ~ updateHospitalImage ~ image:", image)
+  // debugger
+  
   try {
     const formData = new FormData();
-    formData.append('file', image);  // Add the image file to FormData
+    formData.append('image', image);  
 
-    // console.log("Uploading image for hospital:", id); // For debugging
+    console.log("Uploading image for hospital:", formData); 
+    // debugger
 
-    // // Use the axios instance to send the PUT request
-    // const response = await imageaxiosInstance.put(`hospital/{id}/image?id=${id}`, formData);
-
-    // return response.data; // Return the response data
+    const response = await imageaxiosInstance.put(`hospital/{id}/image?id=${id}`, formData);
+console.log("imageaxiosInstanceresponse",response.data)
+    return response.data; 
   } catch (error: any) {
     console.error("Error updating hospital image:", error?.response?.data || error.message);
     throw error;

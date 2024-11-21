@@ -87,16 +87,31 @@ export default function AdminHeader() {
   ]);
 
   const router = useRouter();
+  // const handleSignOut = async () => {
+  //   try {
+  //     await signOut();
+  //     setLogin(undefined);
+  //     router.push('/');
+
+  //   } catch (error) {
+  //     console.error('Error during sign-out:', error);
+  //   }
+  // };
+
+
   const handleSignOut = async () => {
+    // setLoading(true);
     try {
-      await signOut();
+      await signOut(); 
       setLogin(undefined);
       router.push('/');
-
     } catch (error) {
       console.error('Error during sign-out:', error);
+    } finally {
+      // setLoading(false);
     }
   };
+
 
 
   return (

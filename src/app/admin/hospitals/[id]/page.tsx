@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DefaultImage from '../../../../../public/default_user.png';
 import { Edit, Mail, Phone, XIcon } from 'lucide-react';
 import { getHospitalById, updateHospitalImage } from './action';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import HospitalDepartmentDoctorCreate from '@/components/AdminPanelComponents/HospitalComponents/HospitalDepartmentDoctorCreate';
 import { useDepartmentStore } from '@/store/departmentStore';
 import { getDepartmentData } from '../../departments/action';
@@ -35,7 +35,6 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
     state.setAllDoctors,
     state.loading,
   ]);
-  console.log('selectedDepartmentIdselectedDepartmentId', selectedDepartmentId);
 
   async function fetchData() {
     const data = await getHospitalById(params.id);
@@ -56,7 +55,7 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedDepartmentId]);
 
   if (!hospital) {
     return <div>Loading...</div>;
@@ -66,25 +65,43 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
     router.back();
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleImageChange = (e: any) => {
+    debugger;
+    const file = e.target?.files[0];
     if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Please select a valid image file.');
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        alert('File size exceeds the 2 MB limit.');
+        return;
+      }
+
       setImage(file);
       setImageUrl(URL.createObjectURL(file));
     }
   };
 
   const uploadImage = async () => {
+    debugger;
+
     if (!image) return;
     setLoading(true);
-    console.log('params.id, imageparams.id, image', image);
+
     try {
-      const updatedImageUrl = await updateHospitalImage(params.id, image);
-      console.log(updatedImageUrl);
+      debugger;
+
+      const updatedImageUrl = await updateHospitalImage(params.id, imageUrl);
+      debugger;
+
       setHospital((prev: any) => ({ ...prev, preSignedUrl: updatedImageUrl }));
       setImage(null);
       setImageUrl(null);
-      alert('Image updated successfully!');
+      if (updatedImageUrl?.response === true) {
+        alert('Image updated successfully!');
+      }
     } catch (error) {
       alert('An error occurred while updating the image.');
     } finally {
@@ -94,8 +111,8 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
 
   const handleDepartmentSelect = (departmentId: number) => {
     setSelectedDepartmentId(departmentId);
-    console.log('Selected Department ID:', departmentId);
   };
+
   return (
     <div className="flex flex-col px-6 py-6 mr-6 bg-white shadow-md rounded-lg">
       <div className="flex items-start gap-6 border-b pb-4">
@@ -215,13 +232,13 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
 
           <TabsTrigger value="docdepart">Add To Department Doctor</TabsTrigger>
         </TabsList>
+
         <TabsContent value="departments">
           {hospital.doctorDepartmentResponses.map((dept: any) => (
             <div
               key={dept.departmentResponse.id}
               className="mb-6 border-b pb-4 flex items-start gap-4"
             >
-              {/* Image Section */}
               <div className="relative w-20 h-20 flex-shrink-0">
                 {dept.departmentResponse.preSignedUrl ? (
                   <Image
@@ -229,39 +246,45 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
                     alt={dept.departmentResponse.name}
                     width={80}
                     height={80}
-                    className="w-20 h-20 rounded-lg object-cover bg-gray-100"
+                    className="w-20 h-20 rounded-lg object-cover"
                   />
                 ) : (
-                  <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <span className="text-gray-400 text-sm">No Image</span>
+                  <div className="w-20 h-20 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                    No Image
                   </div>
                 )}
               </div>
 
-              {/* Text Content Section */}
               <div className="flex-1">
-                <h2 className="text-xs font-semibold text-gray-800">
+                <h3 className="font-semibold text-sm">
                   {dept.departmentResponse.name}
-                </h2>
-                <p className="text-xs text-gray-600">
-                  {dept.departmentResponse.description}
-                </p>
-
-                <div className="mt-2">
-                  <span
-                    className={`px-3 py-1 text-xs rounded-full ${
-                      dept.departmentResponse.active
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {dept.departmentResponse.active ? 'Active' : 'Inactive'}
-                  </span>
-                </div>
+                </h3>
+                <p className="text-xs">{dept.departmentResponse.description}</p>
               </div>
             </div>
           ))}
         </TabsContent>
+
+        {/*      
+        <TabsContent value="doctors">
+          {doctors.map((doctor: any) => (
+            <div key={doctor.id} className="flex items-center gap-4 border-b pb-4">
+              <div className="w-14 h-14">
+                <Image
+                  src={doctor.imageUrl || DefaultImage}
+                  alt={doctor.name}
+                  width={56}
+                  height={56}
+                  className="w-14 h-14 rounded-full object-cover"
+                />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-sm">{doctor.name}</h3>
+                <p className="text-xs">{doctor.specialization}</p>
+              </div>
+            </div>
+          ))}
+        </TabsContent> */}
 
         <TabsContent value="doctors">
           {hospital.doctorDepartmentResponses.map((dept: any) => (
@@ -337,49 +360,56 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
             </div>
           ))}
         </TabsContent>
+
         <TabsContent value="medicines">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {hospital.medicineResponses.map((medicine: any) => (
-              <div
-                key={medicine.id}
-                className="p-4 border rounded-lg flex items-start gap-4"
-              >
-                <div className="relative w-20 h-20">
-                  {medicine.preSignedUrl ? (
-                    <Image
-                      src={medicine.preSignedUrl}
-                      alt={medicine.name}
-                      width={80}
-                      height={80}
-                      className="w-20 h-20 rounded-lg object-cover bg-gray-100"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <span className="text-gray-400 text-sm">No Image</span>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold">{medicine.name}</h3>
-                  <p className="text-xs text-gray-600">
-                    {medicine.description}
-                  </p>
-                  <p className="text-xs text-gray-700">
-                    <strong>Duration:</strong> {medicine.duration} minutes
-                  </p>
-                  <span
-                    className={`inline-block px-3 py-1 mt-2 text-xs rounded-full ${
-                      medicine.active
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {medicine.active ? 'Active' : 'Inactive'}
-                  </span>
-                </div>
+          {hospital.medicineResponses.map((dept: any) => (
+            <div
+              key={dept?.id}
+              className="mb-6 border-b pb-4 flex items-start gap-4"
+            >
+              <div className="relative w-20 h-20 flex-shrink-0">
+                {dept?.preSignedUrl ? (
+                  <Image
+                    src={dept?.preSignedUrl}
+                    alt={dept?.name}
+                    width={80}
+                    height={80}
+                    className="w-20 h-20 rounded-lg object-cover"
+                  />
+                ) : (
+                  <div className="w-20 h-20 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                    No Image
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
+
+              {/* <div className="flex-1">
+                <h3 className="font-semibold text-sm">{dept?.name}</h3>
+                <p className="text-xs">{dept?.description}</p>
+                <p className="text-xs">Duration : {dept?.duration}</p>
+                <p className="text-xs">TimeSlot :{dept?.dayTimeSlotResponses}</p>
+
+              </div> */}
+
+              <div className="flex-1">
+                <h3 className="font-semibold text-sm">
+                  {dept?.name || 'No Name'}
+                </h3>
+                <p className="text-xs">
+                  {dept?.description || 'No Description'}
+                </p>
+                <p className="text-xs">
+                  Duration: {dept?.duration || 'Not Specified'}
+                </p>
+                <p className="text-xs">
+                  TimeSlot:{' '}
+                  {dept?.dayTimeSlotResponses?.length > 0
+                    ? dept.dayTimeSlotResponses.join(', ')
+                    : 'No timeslots available'}
+                </p>
+              </div>
+            </div>
+          ))}
         </TabsContent>
 
         <TabsContent value="docdepart">
