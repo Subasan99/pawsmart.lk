@@ -35,7 +35,7 @@ export const getDepartmentData = async () => {
   }
 };
 
-export const getPetData = async (p0: number, p1: number) => {
+export const getPetData = async () => {
   try {
     const response = await axiosInstance.get(`/pets`);
     return response.data;
