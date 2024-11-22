@@ -140,7 +140,6 @@ export default function Home() {
   }, []);
 
   const handleClick = (imageName: any) => {
-    // console.log(`${imageName} clicked!`);
   };
 
   const doctores = Array.isArray(doctors)
