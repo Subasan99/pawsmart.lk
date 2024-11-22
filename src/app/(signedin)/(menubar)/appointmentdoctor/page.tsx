@@ -35,6 +35,17 @@ console.log('objeselectedDoctorct',selectedDoctor)
     setAppointmentInfo((prevState) => ({ ...prevState, [field]: value }));
   };
 
+  const [dloading, setdLoading] = useState<boolean>(true);
+  if (dloading && (!selectedDoctor||!appointmentInfo)) {
+    return (
+      <div className="mt-14 px-7 w-full h-full flex flex-col bg-gray-100 items-center py-4">
+        <div className="w-full max-w-[1204px] justify-center items-center flex flex-col px-3 py-5 h-full rounded-lg">
+          <Loader className="h-10 w-10"/>
+        </div>
+      </div>
+    );
+  }
+
   return (
 <div className="w-full flex justify-center">
   <div className="flex flex-col md:flex-row w-full md:max-w-[950px] gap-4 p-6 bg-white border rounded shadow-md"> 

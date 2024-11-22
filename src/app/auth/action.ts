@@ -30,7 +30,7 @@ export const registerUser = async (userData: {
   dateOfBirth: string;
   gender: string;
   role: string;
-  cityId: number;
+  // cityId: number;
 
 }) => {
   try {
@@ -43,13 +43,12 @@ export const registerUser = async (userData: {
       dateOfBirth: userData.dateOfBirth,
       gender: userData.gender,
       role: userData.role,
-      cityId:userData.cityId,
+      // cityId:userData.cityId,
     });
 
-    console.log(response.data,"response.dataresponse.dataresponse.dataresponse.datathsy");
+
     return response.data;
   } catch (error) {
-    console.error('Login error:', error);
     throw error;
   }
 };

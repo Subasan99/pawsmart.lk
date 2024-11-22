@@ -74,20 +74,25 @@ export const getDeparmentFilterData = async (params: {
 export const getDoctorFilterData = async (params: {
   pageCount: number;
   pageSize: number;
-  departmentId?: number;
-  specializationId?: number;
-  petId?: number;
+  departmentId?: any;
+  specializationId?: any;
+  petId?: any;
+  name?:any;
+  date?:any;
 }) => {
   try {
     const response = await axiosInstance.get(`/doctor/filter`, {
       params: {
-        pageSize: params.pageSize,
-        pageCount: params.pageCount,
-        departmentId: params.departmentId,
-        specializationId: params.specializationId,
-        petId: params.petId,
+        pageSize: params.pageSize? params.pageSize: undefined,
+        pageCount: params.pageCount?params.pageCount: undefined,
+        departmentId: params.departmentId?params.departmentId: undefined,
+        specializationId: params.specializationId?params.specializationId: undefined,
+        petId: params.petId? params.petId:undefined,
+        name:params.name?params.name:undefined,
+        date:params.date?params.date:undefined
       },
     });
+    
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -213,16 +218,22 @@ export const getHospitalFilterData = async (params: {
   cityId?: string;
   hospitalId?: string;
   specializationId?: string;
+  day?: string;
+  doctorId?: string;
 }) => {
   try {
     const response = await axiosInstance.get(`hospital/filter?`, {
       params: {
-        pageSize: params.pageSize,
-        pageCount: params.pageCount,
-        searchTerm: params?.searchTerm,
-        cityId: params?.cityId,
-        hospitalId:params?.hospitalId,
-        specializationId: params?.specializationId,
+        pageSize: params.pageSize ?params.pageSize  :undefined,
+        pageCount: params.pageCount ?params.pageCount  :undefined,
+        searchTerm: params?.searchTerm ? params?.searchTerm :undefined,
+        cityId: params?.cityId ?  params?.cityId :undefined,
+        hospitalId:params?.hospitalId ?params?.hospitalId  :undefined,
+        specializationId: params?.specializationId ? params?.specializationId :undefined,
+        day: params?.day ? params?.day :undefined,
+        doctorId: params?.doctorId ? params?.doctorId :undefined,
+
+
       },
     });
 
@@ -262,7 +273,7 @@ export const getHospitals = async () => {
 export const getAppointmentBookingFilterData = async (params: {
   pageCount: number;
   pageSize: number;
-  userId?: string;
+  userId: string;
 }) => {
   try {
     const response = await axiosInstance.get(`booking/filter?`, {

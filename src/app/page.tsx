@@ -29,17 +29,17 @@ import { useCityStore } from '@/store/citiesStore';
 
 export default function Home() {
   const [doctorName, setDoctorName] = useState<string>('');
-  const [cityName, setCityName] = useState<any>('');
+  const [cityName, setCityName] = useState<any>();
   const [hospitalName, setHospitalName] = useState<any>('');
   const [specializationName, setSpecializationName] = useState<any>('');
+  const [selectedDay, setSelectedDay] = useState<any>(null);
 
-  const [searchData, setsearchData] = useState('');
-
+  const [searchData, setsearchData] = useState<any>('');
+  console.log('selectedDayselectedDayselectedDay', selectedDay?.value);
   const [cities, setAllCities] = useCityStore((state: any) => [
     state.cities,
     state.setAllCities,
   ]);
-
 
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
@@ -79,12 +79,6 @@ export default function Home() {
     state.hospitals,
     state.setAllHospitals,
   ]);
-  const doctorOptions = Array.isArray(doctors)
-    ? doctors.map((doctor: any) => ({
-        label: doctor.name,
-        value: doctor.id,
-      }))
-    : [];
 
   const hospitalsOptions = Array.isArray(hospitals)
     ? hospitals.map((hospital: any) => ({
@@ -110,6 +104,15 @@ export default function Home() {
       })
     : [];
 
+  const daysOfWeekOptions = [
+    { value: 'MONDAY', label: 'Monday' },
+    { value: 'TUESDAY', label: 'Tuesday' },
+    { value: 'WEDNESDAY', label: 'Wednesday' },
+    { value: 'THURSDAY', label: 'Thursday' },
+    { value: 'FRIDAY', label: 'Friday' },
+    { value: 'SATURDAY', label: 'Saturday' },
+    { value: 'SUNDAY', label: 'Sunday' },
+  ];
   const fetchData = async () => {
     try {
       const petData = await getPetData();
@@ -243,16 +246,18 @@ export default function Home() {
     // }));
 
     const result = {
-      searchData: searchData,
-      cityId: cityName.value,
-      hospitalId: hospitalName.value,
-      specializationId: specializationName.value,
+      cityId: cityName?.value,
+      hospitalId: hospitalName?.value,
+      day: selectedDay?.value,
     };
-    console.log("resultresultresultthusiiiiiiiparthee",result)
     const encodedRecords = JSON.stringify(result);
-    if (searchData || cityName || hospitalName || specializationName) {
+    if (cityName || hospitalName || selectedDay) {
       await router.push(`/hospitals/${encodedRecords}`);
     }
+    setSelectedDay('');
+    setCityName('');
+    setHospitalName('');
+
   };
 
   return (
@@ -321,14 +326,14 @@ export default function Home() {
                 <div className="bg-white">
                   <div className="container mx-auto">
                     <h3 className=" text-2xl font-bold mb-4">
-                      Start Your Search
+                      Start Your Search Hospital
                     </h3>
                     <hr className="my-4 border-t-2 border-gray-300" />
 
                     <div className="relative z-2 home-first w-full pt-4">
-  <section className="mb-8">
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-      {/* <input
+                      <section className="mb-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+                          {/* <input
         type="text"
         placeholder="Search doctors, clinics, hospitals, etc."
         value={searchData}
@@ -336,48 +341,54 @@ export default function Home() {
         className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       /> */}
 
-      <FilterDropdown
-        options={citiesOptions}
-        placeholder="📍 Select Location"
-        onChange={(selectedOption: any) => {
-          setCityName(selectedOption);
-        }}
-        value={cityName}
-      />
+                          <FilterDropdown
+                            options={citiesOptions}
+                            placeholder="📍 Select Location"
+                            onChange={(selectedOption: any) => {
+                              setCityName(selectedOption);
+                            }}
+                            value={cityName}
+                          />
 
-      <FilterDropdown
-        options={hospitalsOptions}
-        placeholder="🏥 Select Hospital"
-        onChange={(selectedOption: any) => {
-          setHospitalName(selectedOption);
-        }}
-        value={hospitalName}
-      />
+                          <FilterDropdown
+                            options={hospitalsOptions}
+                            placeholder="🏥 Select Hospital"
+                            onChange={(selectedOption: any) => {
+                              setHospitalName(selectedOption);
+                            }}
+                            value={hospitalName}
+                          />
 
-      <FilterDropdown
+                          <FilterDropdown
+                            options={daysOfWeekOptions}
+                            placeholder="🗓 Select Day"
+                            onChange={(selectedOption: any) =>
+                              setSelectedDay(selectedOption)
+                            }
+                            value={selectedDay}
+                          />
+                          {/* <FilterDropdown
         options={specializationOptions}
         placeholder="🔬 Select Specialization"
         onChange={(selectedOption: any) => {
           setSpecializationName(selectedOption);
         }}
         value={specializationName}
-      />
+      /> */}
 
-      <button
-        onClick={handleFilter}
-        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-      >
-        Search
-      </button>
-    </div>
-  </section>
-</div>
-
+                          <button
+                            onClick={handleFilter}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </section>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Join As Doctor Component */}
               <div className="bg-gray-200  rounded-lg shadow-lg p-4 flex-grow flex-shrink-0 w-full md:w-1/3">
                 <div className="flex items-center">
                   <Image
@@ -408,8 +419,8 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/departments"
             handleClick={handleClick}
-            linkDescription={'Departments'}
-            doctors={departments.slice(0, 4)}
+            linkDescription={'See Departments'}
+            doctors={departments?.slice(0, 4)}
             pathname={'/departments'}
             query={departmentDatas}
           />
@@ -465,8 +476,8 @@ export default function Home() {
             description="Meet With Professional Doctors."
             link="/doctors"
             handleClick={handleClick}
-            linkDescription="Doctors"
-            doctors={doctors.slice(0, 4)}
+            linkDescription="See Doctors"
+            doctors={doctors?.slice(0, 4)}
             pathname={'/appointmentdoctor'}
             query={doctors}
             doctor={true}
@@ -478,8 +489,8 @@ export default function Home() {
             description="Your Pets Nutritional Health is Very Important & Our Priority"
             link="/pets"
             handleClick={handleClick}
-            linkDescription={'Pets'}
-            doctors={pets.slice(0, 4)}
+            linkDescription={'See Pets'}
+            doctors={pets?.slice(0, 4)}
             pathname={'/pets'}
             query={petdata}
           />

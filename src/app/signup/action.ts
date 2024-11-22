@@ -23,10 +23,8 @@ export const registerUser = async (userData: {
       role: userData.role,
     });
 
-    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error('Login error:', error);
     throw error;
   }
 };

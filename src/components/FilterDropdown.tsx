@@ -49,7 +49,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
       <input
         type="text"
         placeholder={placeholder}
-        value={value.label}
+        value={value?.label}
         onChange={handleSearch}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -57,7 +57,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
       />
       {isDropdownVisible && (
         <ul className="absolute bg-white shadow-md mt-1 max-h-48 w-full overflow-y-auto z-10">
-          {filteredOptions.length > 0 ? (
+          {filteredOptions?.length > 0 ? (
             filteredOptions.map((option, index) => (
               <li
                 key={index}

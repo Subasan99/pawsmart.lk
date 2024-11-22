@@ -1,13 +1,10 @@
 'use client';
 
-import { Appointment } from '@/lib/typings';
+import { useState } from 'react';
 import Image from 'next/image';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { cn } from "@/lib/utils";
-import { useBookingStore } from '@/store/bookingStore';
-import { useState } from 'react';
-import { cancelBooking } from '@/app/admin/appointments/action';
 
 interface Doctor {
   id: string;
@@ -29,18 +26,18 @@ interface Doctor {
 }
 
 interface AppointmentCardProps {
-  AppointmentList: Doctor[];
-  handleClick: (doctorId: string) => void;
+  AppointmentList: Doctor[]|any;
+  handleCancelClick: (appointmentId: string) => void;
 }
 
 const AppointmentCard: React.FC<AppointmentCardProps> = ({
   AppointmentList = [],
-  handleClick,
+  handleCancelClick,
 }) => {
   const defaultImage = '/department.png';
-  
-  const [isPopupVisible, setIsPopupVisible] = useState(false); // Manages popup visibility
-  const [selectedAppointment, setSelectedAppointment] = useState<Doctor | null>(null); // Stores the selected appointment for cancellation
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Doctor | null>(null);
   const [isCanceling, setIsCanceling] = useState(false);
 
   const getStatusStyles = (status: string) => {
@@ -56,30 +53,18 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
     }
   };
 
-  const [selectedBooking, setSelectedBooking, loading] = useBookingStore(
-    (state: any) => [
-      state.selectedBooking,
-      state.setSelectedBooking,
-      state.loading,
-    ]
-  );
+  // const handleCancelClick = (appointment: Doctor) => {
+  //   setSelectedAppointment(appointment);
+  //   setIsPopupVisible(true);
+  // };
 
-  async function handleCancelBooking(id) {
-    if (!selectedAppointment) return; // Prevent action if no appointment is selected
-    setIsCanceling(true);
-    try {
-      // Assuming you have a cancelBooking function
-      await cancelBooking(selectedAppointment.id);
-      const updatedBooking = { ...selectedAppointment, status: 'CANCELLED' };
-      setSelectedBooking(updatedBooking);
-    } catch (error) {
-      console.error('Failed to cancel booking:', error);
-      alert('Something went wrong while canceling the booking.');
-    } finally {
-      setIsCanceling(false);
-      setIsPopupVisible(false);  // Close the popup after cancellation is confirmed
-    }
-  }
+  // const confirmCancel = async () => {
+  //   if (!selectedAppointment) return;
+  //   setIsCanceling(true);
+  //   await handleCancel(selectedAppointment.id);
+  //   setIsCanceling(false);
+  //   setIsPopupVisible(false);
+  // };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
@@ -94,11 +79,22 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
                   <p className="text-lg font-bold">{appointment.bookingDate}</p>
                   <p className="text-md text-blue-600">{appointment.time}</p>
                 </div>
-                <div className={cn(
-                  "px-3 py-1 rounded-full text-sm font-medium",
-                  getStatusStyles(appointment.status)
-                )}>
-                  {appointment.status}
+                <div className="flex flex-col items-center">
+                  <div
+                    className={cn(
+                      "px-3 py-1 rounded-full text-sm font-medium mb-2",
+                      getStatusStyles(appointment.status)
+                    )}
+                  >
+                    {appointment.status}
+                  </div>
+                  <button
+                    className="bg-red-500 p-2 text-white rounded-lg text-sm underline hover:text-white-800"
+                    onClick={() => handleCancelClick(appointment)}
+                    disabled={appointment.status.toUpperCase() !== 'PENDING'}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>
@@ -144,27 +140,10 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
                   <h3 className="font-semibold text-lg mb-1">Doctor Details</h3>
                   <p className="text-sm font-medium">{appointment.doctorResponse?.name}</p>
                   <p className="text-sm text-gray-600">{appointment.doctorResponse?.specialization}</p>
-
                 </div>
-
               </div>
             </div>
             <p className="text-sm p-4 text-gray-600">Medicine Name: {appointment.medicineResponse?.name}</p>
-
-            {/* Conditionally render Cancel Button */}
-            {appointment.status !== "CANCELLED" && (
-              <div className="p-4 bg-gray-50">
-                <button
-                  onClick={() => {
-                    setSelectedAppointment(appointment); // Select the appointment
-                    setIsPopupVisible(true); // Show the popup
-                  }}
-                  className="w-full bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                >
-                  Cancel Appointment
-                </button>
-              </div>
-            )}
           </Card>
         ))
       ) : (
@@ -174,36 +153,35 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
           </p>
         </div>
       )}
-          {isPopupVisible && selectedAppointment && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h2 className="text-xl font-bold mb-4">Cancel Appointment</h2>
-          <p className="text-gray-600 mb-6">
-            Are you sure you want to cancel this appointment? This action
-            cannot be undone.
-          </p>
-          <div className="flex justify-end gap-4">
-            <button
-              onClick={() => setIsPopupVisible(false)} // Close popup without action
-              className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleCancelBooking(appointment.id)} 
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-              disabled={isCanceling}
-            >
-              {isCanceling ? 'Canceling...' : 'Confirm'}
-            </button>
+
+      {/* Cancel Popup */}
+      {/* {isPopupVisible && selectedAppointment && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold mb-4">Cancel Appointment</h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to cancel this appointment? This action
+              cannot be undone.
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setIsPopupVisible(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmCancel}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                disabled={isCanceling}
+              >
+                {isCanceling ? 'Canceling...' : 'Confirm'}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )} */}
     </div>
-
-
-
   );
 };
 

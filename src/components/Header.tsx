@@ -88,7 +88,7 @@ const formSchema = z.object({
   dateOfBirth: z.date({ required_error: 'Please Select the date of birth!' }),
   gender: z.string({ required_error: 'Gender is required!' }),
   role: z.string({ required_error: '' }),
-  cityId: z.number({ required_error: '' }),
+  // cityId: z.number({ required_error: '' }),
 });
 
 export default function Home() {
@@ -102,6 +102,11 @@ export default function Home() {
   const [resetPass, setResetPassword] = useState<boolean>(false);
   const [otp, setOtp] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [open, setOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const router = useRouter();
+  const [calendarOpen, setCalendarOpen] = useState(true);
+
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
     state.setAllDoctors,
@@ -118,13 +123,14 @@ export default function Home() {
     state.medicines,
     state.setAllMedicines,
   ]);
-  const [login, setLogin, loadingAuth, ] = useAuthStore((state) => [
+  const [login, setLogin, loadingAuth] = useAuthStore((state) => [
     state.login,
     state.setLogin,
     state.loadingAuth,
   ]);
-
-
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -149,10 +155,6 @@ export default function Home() {
       }))
     : [];
 
-  const [open, setOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const router = useRouter();
-  const [calendarOpen, setCalendarOpen] = useState(true);
 
   const handleMouseEnter = useCallback(
     (view: string) => setActiveDropdown(view),
@@ -202,7 +204,6 @@ export default function Home() {
     await signOut();
     setLogin(undefined);
     router.push('/');
-
   };
 
   // useEffect(() => {
@@ -216,11 +217,7 @@ export default function Home() {
 
   //   }
   // }, [login?.role]);
-  
 
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const renderDropdown = (items: any[], hrefBase: string) => (
     <div className="absolute bg-white shadow-md mt-2 w-48">
@@ -344,13 +341,11 @@ export default function Home() {
       dateOfBirth: undefined,
       gender: undefined,
       role: 'USER',
-      cityId: 1,
+      // cityId: 1,
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('Form values:', values);
-
     // Format dateOfBirth if needed (you can re-enable the code if necessary)
     const formattedValues: any = {
       ...values,
@@ -361,12 +356,12 @@ export default function Home() {
 
     try {
       const response: any = await registerUser(formattedValues);
-      console.log('response.successresponse.success', response.success);
-      if (response.success === true) {
+      if (response.success === "true") {
         toast.success(response.message);
-        setIsForgotPasswordOpen(false);
         setIsSignupOpen(false);
-        await setIsDialogOpen(true);
+        setIsDialogOpen(true);
+        setIsForgotPasswordOpen(false);
+
       } else {
         toast.error(response.message);
         signupForm.reset();
@@ -559,7 +554,7 @@ export default function Home() {
               <div className="flex items-end justify-end text-right gap-2">
                 <User size={30} />
                 <span className="text-sm lg:text-lg font-semibold">
-                  {login ? `(${login?.firstName})` : ' '}
+                  {login ? `${login?.firstName}` : ' '}
                 </span>
               </div>
               <div
