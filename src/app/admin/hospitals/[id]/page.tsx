@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import DefaultImage from '../../../../../public/default_user.png';
-import { Edit, Mail, Phone, XIcon } from 'lucide-react';
-import { getHospitalById, updateHospitalImage } from './action';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import HospitalDepartmentDoctorCreate from '@/components/AdminPanelComponents/HospitalComponents/HospitalDepartmentDoctorCreate';
-import { useDepartmentStore } from '@/store/departmentStore';
-import { getDepartmentData } from '../../departments/action';
-import { getDoctorData } from '../../doctors/action';
-import { useDoctorStore } from '@/store/doctorStore';
-import { useAdminStore } from '@/store/adminStore';
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import DefaultImage from "../../../../../public/default_user.png";
+import { Edit, Mail, Phone, XIcon } from "lucide-react";
+import { getHospitalById, updateHospitalImage } from "./action";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import HospitalDepartmentDoctorCreate from "@/components/AdminPanelComponents/HospitalComponents/HospitalDepartmentDoctorCreate";
+import { useDepartmentStore } from "@/store/departmentStore";
+import { getDepartmentData } from "../../departments/action";
+import { getDoctorData } from "../../doctors/action";
+import { useDoctorStore } from "@/store/doctorStore";
+import { useAdminStore } from "@/store/adminStore";
 
 const HospitalDetails = ({ params }: { params: { id: any } }) => {
   const [hospital, setHospital] = useState<any>(null);
@@ -66,16 +66,16 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
   };
 
   const handleImageChange = (e: any) => {
-    debugger;
     const file = e.target?.files[0];
+
     if (file) {
-      if (!file.type.startsWith('image/')) {
-        alert('Please select a valid image file.');
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
         return;
       }
 
       if (file.size > 2 * 1024 * 1024) {
-        alert('File size exceeds the 2 MB limit.');
+        alert("File size exceeds the 2 MB limit.");
         return;
       }
 
@@ -84,26 +84,25 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
     }
   };
 
-  const uploadImage = async () => {
-    debugger;
-
+  const uploadImage = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!image) return;
     setLoading(true);
 
     try {
-      debugger;
+      const formData = new FormData();
+      formData.append("image", image);
 
-      const updatedImageUrl = await updateHospitalImage(params.id, imageUrl);
-      debugger;
+      const updatedImageUrl = await updateHospitalImage(params.id, formData);
 
-      setHospital((prev: any) => ({ ...prev, preSignedUrl: updatedImageUrl }));
-      setImage(null);
-      setImageUrl(null);
-      if (updatedImageUrl?.response === true) {
-        alert('Image updated successfully!');
+      if (updatedImageUrl?.success === true) {
+        setHospital((prev: any) => ({ ...prev, preSignedUrl: imageUrl }));
+        setImage(null);
+        setImageUrl(null);
+        alert("Image updated successfully!");
       }
     } catch (error) {
-      alert('An error occurred while updating the image.');
+      alert("An error occurred while updating the image. error: " + error);
     } finally {
       setLoading(false);
     }
@@ -124,6 +123,14 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
           <XIcon className="h-5 w-5" />
         </button>
         <div className="relative">
+          <div className="absolute right-1 top-24 p-1 justify-end rounded-t-lg">
+            <button
+              type="button"
+              onClick={() => document.getElementById("image-upload")?.click()}
+            >
+              <Edit className="w-5 h-5" />
+            </button>
+          </div>
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -146,14 +153,6 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={() => document.getElementById('image-upload')?.click()}
-            className="absolute bottom-2 right-2 p-1 bg-gray-100 rounded-full hover:bg-gray-200"
-          >
-            <Edit className="w-5 h-5 text-gray-500" />
-          </button>
-
           <input
             id="image-upload"
             type="file"
@@ -168,10 +167,10 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
               onClick={uploadImage}
               disabled={loading}
               className={`mt-2 px-4 py-2 text-xs rounded-md ${
-                loading ? 'bg-gray-300' : 'bg-blue-500 text-white'
+                loading ? "bg-gray-300" : "bg-blue-500 text-white"
               }`}
             >
-              {loading ? 'Uploading...' : 'Upload Image'}
+              {loading ? "Uploading..." : "Upload Image"}
             </button>
           )}
         </div>
@@ -184,11 +183,11 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
             <span
               className={`px-3 py-1 text-xs rounded-full ${
                 hospital.active
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-red-100 text-red-800'
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
               }`}
             >
-              {hospital.active ? 'Active' : 'Inactive'}
+              {hospital.active ? "Active" : "Inactive"}
             </span>
           </div>
 
@@ -205,17 +204,17 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
 
           <div className="mt-2 text-gray-700">
             <p className="text-xs">
-              <strong className="text-xs">Address:</strong> {hospital.address},{' '}
+              <strong className="text-xs">Address:</strong> {hospital.address},{" "}
               {hospital.city}, {hospital.district}, {hospital.province}
             </p>
             <p className="text-xs">
-              <strong className="text-xs">Website:</strong>{' '}
+              <strong className="text-xs">Website:</strong>{" "}
               <a href={hospital.website} className="text-blue-500">
                 {hospital.website}
               </a>
             </p>
             <p className="text-xs">
-              <strong className="text-xs">Operating Hours:</strong>{' '}
+              <strong className="text-xs">Operating Hours:</strong>{" "}
               {hospital.openTime} - {hospital.closeTime}
             </p>
           </div>
@@ -323,22 +322,22 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
                         <span
                           className={`px-2 py-1 text-xs rounded-full ${
                             doctor.isActive
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
                           }`}
                         >
-                          {doctor.isActive ? 'Active' : 'Inactive'}
+                          {doctor.isActive ? "Active" : "Inactive"}
                         </span>
                       </h3>
                       <p className="text-xs">
                         <span
                           className={`inline-block px-2 py-1 rounded-md ${
                             doctor.specializationName
-                              ? 'bg-purple-300 text-blue-800'
-                              : 'bg-gray-100 text-gray-600'
+                              ? "bg-purple-300 text-blue-800"
+                              : "bg-gray-100 text-gray-600"
                           }`}
                         >
-                          {doctor.specializationName || 'No Specialization'}
+                          {doctor.specializationName || "No Specialization"}
                         </span>
                       </p>
 
@@ -393,19 +392,19 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
 
               <div className="flex-1">
                 <h3 className="font-semibold text-sm">
-                  {dept?.name || 'No Name'}
+                  {dept?.name || "No Name"}
                 </h3>
                 <p className="text-xs">
-                  {dept?.description || 'No Description'}
+                  {dept?.description || "No Description"}
                 </p>
                 <p className="text-xs">
-                  Duration: {dept?.duration || 'Not Specified'}
+                  Duration: {dept?.duration || "Not Specified"}
                 </p>
                 <p className="text-xs">
-                  TimeSlot:{' '}
+                  TimeSlot:{" "}
                   {dept?.dayTimeSlotResponses?.length > 0
-                    ? dept.dayTimeSlotResponses.join(', ')
-                    : 'No timeslots available'}
+                    ? dept.dayTimeSlotResponses.join(", ")
+                    : "No timeslots available"}
                 </p>
               </div>
             </div>
@@ -415,7 +414,7 @@ const HospitalDetails = ({ params }: { params: { id: any } }) => {
         <TabsContent value="docdepart">
           <HospitalDepartmentDoctorCreate
             setOpen={function (open: boolean): void {
-              throw new Error('Function not implemented.');
+              throw new Error("Function not implemented.");
             }}
             reloadTable={fetchData}
             department={departments}

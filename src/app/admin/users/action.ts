@@ -8,7 +8,6 @@ export async function getUserData(
   name?: string,
   role?: string
 ) {
-  console.log('dfsdfdf', pageCount, pageSize);
   try {
     const response = await axiosInstance.get(`/user/filter`, {
       params: {
@@ -18,7 +17,6 @@ export async function getUserData(
         role: role ? role : undefined,
       },
     });
-    console.log('dffdfscs', response);
     return response?.data;
   } catch (error) {
     console.log('Error fetching user data:', error);
@@ -28,7 +26,6 @@ export async function getUserData(
 export async function getUserById(id: string) {
   try {
     const response = await axiosInstance.get(`/user/${id}`);
-    console.log('response', response);
     return response?.data;
   } catch (error) {
     console.log('Error fetching User by Id: ', error);
@@ -38,28 +35,20 @@ export async function getUserById(id: string) {
 export async function archiveUserById(id: string) {
   try {
     const response = await axiosInstance.put(`/user/active?id=${id}`);
-    console.log('response', response);
     return response?.data;
   } catch (error) {
     console.log('Error archiving users', error);
   }
 }
-export async function updateUserImage(id: any, image: any) {
-  console.log('🚀 ~ updateHospitalImage ~ image:', image);
-  // debugger
+export async function updateUserImage(id: any, imageFormData: FormData) {
 
   try {
-    const formData = new FormData();
-    formData.append('image', image);
-
-    console.log('Uploading image for hospital:', id);
-    // debugger
-
+    imageFormData.append("id", id)
+    
     const response = await imageaxiosInstance.put(
-      `user/{id}/image?id=${id}`,
-      formData
+      `user/{id}/image`,
+      imageFormData
     );
-    console.log('object', response.data);
     return response.data;
   } catch (error: any) {
     console.error(

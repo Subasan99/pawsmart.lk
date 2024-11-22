@@ -206,19 +206,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (login?.role === 'ADMIN') {
-      router.push('/admin/dashboard');
-    } else if (login?.role === 'USER') {
-      router.push('/');
-    }else
-    {
-      router.push('/');
-
-    }
-  }, [login?.role]);
-  
-
-  useEffect(() => {
     fetchData();
   }, []);
 
@@ -349,8 +336,6 @@ export default function Home() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('Form values:', values);
-
     // Format dateOfBirth if needed (you can re-enable the code if necessary)
     const formattedValues: any = {
       ...values,
@@ -361,7 +346,6 @@ export default function Home() {
 
     try {
       const response: any = await registerUser(formattedValues);
-      console.log('response.successresponse.success', response.success);
       if (response.success === true) {
         toast.success(response.message);
         setIsForgotPasswordOpen(false);

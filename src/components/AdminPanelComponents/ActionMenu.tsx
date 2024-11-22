@@ -1,6 +1,6 @@
 "use client";
 
-import { getDepartmentData, getDoctorData } from "@/app/home/action";
+import { getDepartmentData, getDoctorData, getPetData } from "@/app/home/action";
 import {
   Dialog,
   DialogContent,
@@ -15,9 +15,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDepartmentStore } from "@/store/departmentStore";
-import { EditIcon, EyeIcon, TrashIcon } from "lucide-react";
+import { EditIcon, EyeIcon, Navigation, TrashIcon, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EllipsisIcon from "../svg/ellipsis-icon";
 import { Button } from "../ui/button";
 import DepartmentEditForm from "./DepartmentComponents/DepartmentEditForm";
@@ -26,15 +26,19 @@ import PetEditForm from "./PetComponents/PetEditForm";
 import SpecializationEditForm from "./SpecializationComponents/SpecializationEditForm";
 import { getAllPets, getAllSpecializations } from "@/api/route";
 import HospitalEditForm from "./HospitalComponents/HospitalEditForm";
+import { updatePetImage } from "@/app/admin/pets/action";
+import { usePetStore } from "@/store/petStore";
 
 interface Props {
   pathName: string;
-  navigateTo?:string;
+  navigateTo?: string;
   delete?: () => Promise<any>;
   view?: boolean;
   edit?: boolean;
   data?: any;
   component?: "pet" | "department" | "medicine" | "specialization" | "";
+  imageUpload?: boolean;
+  id?: string;
 }
 
 const ActionMenu = (props: Props) => {
@@ -46,24 +50,24 @@ const ActionMenu = (props: Props) => {
     state.setAllDepartment,
   ]);
 
+  const [id, setId] = useState<string | undefined>(undefined);
+  const uploadRef = useRef(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const handleDelete = async () => {
     if (props.delete) {
       setIsLoading(true); // Set loading to true when deletion starts
       const response = await props.delete();
-      console.log("objectresponse", response);
 
       if (response.success) {
         setDeleteOpen(false);
-        console.log("Deleted");
       }
-      
-      setIsLoading(false); 
+
+      setIsLoading(false);
     }
   };
   const handleEditClick = () => {
     if (props.navigateTo) {
-
       router.push(props.navigateTo);
     }
   };
@@ -94,10 +98,6 @@ const ActionMenu = (props: Props) => {
             id={props.data?.id}
           />
         );
-        // case "hospital":
-        //   return (
-        //    <HospitalEditForm cities={[]} medicines={[]}/>
-        //   );
       case "specialization":
         return (
           <SpecializationEditForm
@@ -109,6 +109,39 @@ const ActionMenu = (props: Props) => {
         );
       default:
         return null;
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0] || null;
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert("File size exceeds the 2 MB limit.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const updatedImageUrl = await updatePetImage(id, formData);
+      if (updatedImageUrl?.success) {
+        await updatePetImage(id, formData);
+        alert("Image updated successfully!");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error during image upload:", error);
+      alert("An error occurred while updating the image.");
     }
   };
 
@@ -131,17 +164,16 @@ const ActionMenu = (props: Props) => {
             </DropdownMenuItem>
           )}
           {props.edit && (
- <DropdownMenuItem
- onClick={() => {
-   if (props.navigateTo) {
-     handleEditClick();
-   } else {
-
-     setEditOpen(true);
-   }
- }}
- className="font-semibold flex gap-2"
->
+            <DropdownMenuItem
+              onClick={() => {
+                if (props.navigateTo) {
+                  handleEditClick();
+                } else {
+                  setEditOpen(true);
+                }
+              }}
+              className="font-semibold flex gap-2"
+            >
               <EditIcon />
               Edit
             </DropdownMenuItem>
@@ -153,8 +185,42 @@ const ActionMenu = (props: Props) => {
             <TrashIcon />
             Archive
           </DropdownMenuItem>
+          {props.imageUpload && (
+            <DropdownMenuItem
+              onClick={() => {
+                if (!props.id) {
+                  return;
+                }
+                const inputElement = document.getElementById(
+                  props.id
+                ) as HTMLInputElement;
+                if (inputElement) {
+                  inputElement.value = ""; // Reset value to trigger `onChange`
+                  inputElement.click();
+                }
+                setId(props.id);
+              }}
+              className="font-semibold flex gap-2"
+            >
+              <Upload />
+              Image Upload
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {props.imageUpload && (
+        <input
+          id={props.id}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          aria-label="Upload an image"
+          onChange={(e) => {
+            handleImageUpload(e);
+          }}
+        />
+      )}
 
       {/* Delete Dialog */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>

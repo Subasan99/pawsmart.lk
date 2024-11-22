@@ -35,7 +35,7 @@ export const getDepartmentData = async () => {
   }
 };
 
-export const getPetData = async () => {
+export const getPetData = async (p0: number, p1: number) => {
   try {
     const response = await axiosInstance.get(`/pets`);
     return response.data;
@@ -64,7 +64,6 @@ export const getDeparmentFilterData = async (params: {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -88,7 +87,6 @@ export const getDoctorFilterData = async (params: {
         petId: params.petId,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -106,7 +104,6 @@ export const getPetFilterData = async (params: {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -128,7 +125,6 @@ export const getMedicineFilterData = async (params: {
         date: params.date,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -187,7 +183,6 @@ export const get = async (params: { pageCount: number; pageSize: number }) => {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);

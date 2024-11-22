@@ -1,5 +1,5 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 import {
   Pencil,
   Mail,
@@ -10,13 +10,13 @@ import {
   Clock,
   XIcon,
   Edit,
-} from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import Image from 'next/image';
-import DefaultImage from '../../../../../public/default_user.png';
-import { useUserStore } from '@/store/userStore';
-import { getUserById, updateUserImage } from '../action';
-import { useRouter } from 'next/navigation';
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import DefaultImage from "../../../../../public/default_user.png";
+import { useUserStore } from "@/store/userStore";
+import { getUserById, updateUserImage } from "../action";
+import { useRouter } from "next/navigation";
 
 const UserProfile = ({ params }: { params: { id: string } }) => {
   const [selectedUser, setSelectedUser, loading] = useUserStore(
@@ -24,7 +24,7 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
   );
   const router = useRouter();
   const [image, setImage] = useState<File | null>(null);
-  const [hospital, setHospital] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loadings, setLoading] = useState(false);
@@ -32,9 +32,10 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
     const handleSelectUser = async () => {
       const data = await getUserById(params.id);
       setSelectedUser(data);
+      setUser(data);
     };
     handleSelectUser();
-  }, [params.id, setSelectedUser]);
+  }, [params.id, setSelectedUser,loadings]);
 
   if (loading) {
     return (
@@ -46,13 +47,13 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
   const handleImageChange = (e: any) => {
     const file = e.target?.files[0];
     if (file) {
-      if (!file.type.startsWith('image/')) {
-        alert('Please select a valid image file.');
+      if (!file.type.startsWith("image/")) {
+        alert("Please select a valid image file.");
         return;
       }
 
       if (file.size > 2 * 1024 * 1024) {
-        alert('File size exceeds the 2 MB limit.');
+        alert("File size exceeds the 2 MB limit.");
         return;
       }
 
@@ -66,13 +67,19 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
     setLoading(true);
 
     try {
-      const updatedImageUrl = await updateUserImage(params.id, imageUrl);
-      setHospital((prev: any) => ({ ...prev, preSignedUrl: updatedImageUrl }));
-      setImage(null);
-      setImageUrl(null);
-      alert('Image updated successfully!');
+      const formData = new FormData();
+      formData.append("image", image);
+
+      const updatedImageUrl = await updateUserImage(params.id, formData);
+
+      if (updatedImageUrl?.success === true) {
+        setSelectedUser((prev: any) => ({ ...prev, preSignedUrl: imageUrl }));
+        setImage(null);
+        setImageUrl(null);
+        alert("Image updated successfully!");
+      }
     } catch (error) {
-      alert('An error occurred while updating the image.');
+      alert("An error occurred while updating the image.");
     } finally {
       setLoading(false);
     }
@@ -85,13 +92,13 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
     icon: Icon,
     label,
     value,
-    color = 'text-gray-700',
+    color = "text-gray-700",
   }: any) => (
     <div className="flex items-center space-x-3 p-4 w-full bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
       <Icon className="w-5 h-5 text-purple-500" />
       <div className="flex flex-col">
         <span className="text-sm font-medium text-gray-500">{label}</span>
-        <span className={`font-medium ${color}`}>{value || 'N/A'}</span>
+        <span className={`font-medium ${color}`}>{value || "N/A"}</span>
       </div>
     </div>
   );
@@ -110,7 +117,7 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
           {/* Header Section */}
           <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
             <div className="relative group">
-              <div className="relative w-48 h-48">
+              <div className="relative">
                 {/* <Image
                   src={selectedUser?.preSignedUrl || DefaultImage}
                   alt={`${selectedUser?.firstName}'s profile`}
@@ -123,37 +130,38 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
                 </button> */}
 
                 <div className="relative">
+                  <div className="absolute right-1 top-24 p-1 justify-end rounded-t-lg">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        document.getElementById("image-upload")?.click()
+                      }
+                    >
+                      <Edit className="w-5 h-5" />
+                    </button>
+                  </div>
+
                   {imageUrl ? (
                     <Image
                       src={imageUrl}
                       alt="Preview Image"
                       width={120}
                       height={120}
-                      className="w-32 h-32 rounded-lg object-cover hidden bg-gray-100"
+                      className="w-32 h-32 rounded-lg object-cover bg-gray-100"
                     />
-                  ) : selectedUser.preSignedUrl ? (
+                  ) : selectedUser?.preSignedUrl ? (
                     <Image
                       src={selectedUser.preSignedUrl}
                       alt="Hospital Image"
                       width={120}
                       height={120}
-                      className="w-32 h-32 rounded-lg hidden object-cover bg-gray-100"
+                      className="w-32 h-32 rounded-lg object-cover bg-gray-100"
                     />
                   ) : (
                     <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center">
                       <span className="text-gray-400 text-xl">No Image</span>
                     </div>
                   )}
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      document.getElementById('image-upload')?.click()
-                    }
-                    className="absolute bottom-2 right-2 p-1 bg-gray-100 rounded-full hover:bg-gray-200"
-                  >
-                    <Edit className="w-5 h-5 text-gray-500" />
-                  </button>
 
                   <input
                     id="image-upload"
@@ -167,12 +175,12 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
                     <button
                       type="button"
                       onClick={uploadImage}
-                      disabled={loading}
+                      disabled={loadings}
                       className={`mt-2 px-4 py-2 text-xs rounded-md ${
-                        loading ? 'bg-gray-300' : 'bg-blue-500 text-white'
+                        loadings ? "bg-gray-300" : "bg-blue-500 text-white"
                       }`}
                     >
-                      {loading ? 'Uploading...' : 'Upload Image'}
+                      {loadings ? "Uploading..." : "Upload Image"}
                     </button>
                   )}
                 </div>
@@ -187,19 +195,19 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
                     selectedUser?.active
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
                   }`}
                 >
-                  {selectedUser?.active ? 'Active' : 'Inactive'}
+                  {selectedUser?.active ? "Active" : "Inactive"}
                 </span>
               </div>
               <p className="text-lg text-gray-600 italic mb-4">
-                "{selectedUser?.description || 'No Description Provided'}"
+                "{selectedUser?.description || "No Description Provided"}"
               </p>
               <div className="inline-flex items-center px-4 py-2 bg-purple-50 rounded-full text-purple-700 font-medium">
                 <UserCircle className="w-5 h-5 mr-2" />
-                {selectedUser?.role || 'N/A'}
+                {selectedUser?.role || "N/A"}
               </div>
             </div>
           </div>
@@ -222,14 +230,14 @@ const UserProfile = ({ params }: { params: { id: string } }) => {
               icon={Clock}
               label="Created Date"
               value={new Date(
-                selectedUser?.createdDate || ''
+                selectedUser?.createdDate || ""
               ).toLocaleDateString()}
             />
             <InfoItem
               icon={Clock}
               label="Updated Date"
               value={new Date(
-                selectedUser?.updatedDate || ''
+                selectedUser?.updatedDate || ""
               ).toLocaleDateString()}
             />
           </div>
