@@ -1,7 +1,7 @@
 "use server";
 
 import { Pet } from "@/lib/typings";
-import { axiosInstance } from "@/utils/client";
+import { axiosInstance, imageaxiosInstance } from "@/utils/client";
 
 export async function getAllFilterPets(
   pageCount?: number,
@@ -71,5 +71,24 @@ export async function archivePetById(id: string) {
     return response?.data;
   } catch (error) {
     console.log("Error archiving pets", error);
+  }
+}
+
+export async function updatePetImage(id: any, imageFormData: FormData) {
+  try {
+    imageFormData.append("id", id)
+    
+    const response = await imageaxiosInstance.put(
+      `pet/{id}/image`,
+      imageFormData
+    );
+    console.log('object', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      'Error updating hospital image:',
+      error?.response?.data || error.message
+    );
+    throw error;
   }
 }

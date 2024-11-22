@@ -64,7 +64,6 @@ export const getDeparmentFilterData = async (params: {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -111,7 +110,6 @@ export const getPetFilterData = async (params: {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -133,7 +131,6 @@ export const getMedicineFilterData = async (params: {
         date: params.date,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -192,7 +189,6 @@ export const get = async (params: { pageCount: number; pageSize: number }) => {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);

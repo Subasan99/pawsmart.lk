@@ -103,6 +103,8 @@ export const petsColumns: ColumnDef<Columns>[] = [
           edit={true}
           data={row.original}
           component={"pet"}
+          imageUpload={true}
+          id={row.original.id}
         />
       </div>
     ),
