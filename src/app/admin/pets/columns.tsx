@@ -21,12 +21,12 @@ export const petsColumns: ColumnDef<Columns>[] = [
     accessorKey: "PetName",
     header: () => (
       <div className="flex items-center space-x-3">
-        <Image
+        {/* <Image
           alt="default image"
           src={DefaultImage}
           className="w-10 h-10 object-cover rounded-full border-2"
-        />
-        <div className="font-bold text-start">Pet Name</div>
+        /> */}
+        <div className="font-bold text-start pl-12">Pet Name</div>
       </div>
     ),
     cell: ({ row }) => (
