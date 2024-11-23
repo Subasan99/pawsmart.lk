@@ -23,12 +23,12 @@ export const columns: ColumnDef<Columns>[] = [
     accessorKey: "SpecializationName",
     header: () => (
       <div className="flex items-center space-x-3">
-        <Image
+        {/* <Image
           alt="default image"
           src={DefaultImage}
           className="w-10 h-10 object-cover rounded-full border-2"
-        />
-        <div className="font-bold text-start">Specialization Name</div>
+        /> */}
+        <div className="font-bold text-start pl-12">Specialization Name</div>
       </div>
     ),
     cell: ({ row }) => (
