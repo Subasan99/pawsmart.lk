@@ -29,14 +29,14 @@ export default function DemoPage() {
   async function fetchData() {
     const hospitalRecords = await getHospitalFilterData(filterParams);
     sethospitalRecords(hospitalRecords);
-    setAllHospitals(hospitalRecords?.records);
+    setAllHospitals(hospitalRecords);
   }
 
   const dayPickerProps: DayPickerProps = {
     mode: "single",
     required: false,
   };
-
+console.log("hospitals?.recordshospitals?.records",hospitals?.records)
   return (
     <DayPickerProvider initialProps={dayPickerProps}>
       {" "}
@@ -72,9 +72,9 @@ export default function DemoPage() {
         </div>
         <DataTable
           columns={hospitalColumns}
-          data={hospitals}
-          records={hospitalRecords}
-          pageSize={hospitalRecords?.pageSize}
+          data={hospitals?.records}
+          records={hospitals}
+          pageSize={hospitals?.pageSize}
           handleFilter={(pageNumber, pageSize) => {
             setFilterParams((prevParams) => ({
               ...prevParams,

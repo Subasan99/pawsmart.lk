@@ -108,8 +108,11 @@ const DocCreateForm = (props: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      await createDoctor(values);
+     const responsedoc= await createDoctor(values);
+     if(responsedoc){
       router.push('/admin/doctors');
+
+     }
     } catch (error) {
       console.error('Failed to create department:', error);
     } finally {

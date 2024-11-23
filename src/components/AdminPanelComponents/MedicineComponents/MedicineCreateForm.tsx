@@ -43,15 +43,21 @@ const MedicineCreateForm = ({ setOpen, reloadTable }: Props) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      await createMedicine(values);
-      setOpen(false); // Close the form
-      reloadTable(); // Reload the table
+      console.log("values:", values);
+      const createresponse = await createMedicine(values);
+      console.log("createResponse:", createresponse);
+  
+      if (createresponse.success) {
+        setOpen(false);
+        // reloadTable(); // Reload the table if needed
+      }
     } catch (error) {
       console.error("Failed to create department:", error);
     } finally {
       setLoading(false);
     }
   }
+  
 
   return (
     <Form {...form}>

@@ -51,7 +51,7 @@ export default function Index() {
     const departments = await getDepartmentData();
     const Specialization = await getAllSpecializationData();
 
-    setAllFilterSpecializations(data?.records);
+    setAllFilterSpecializations(data);
     setAllSpecializations(Specialization);
     setAllDepartment(departments);
     setspecializationRecords(data);
@@ -110,9 +110,9 @@ export default function Index() {
       {/* <Filteration getApi={fetchData} /> */}
       <DataTable
         columns={columns}
-        data={filterspecializations}
-        records={specializationRecords}
-        pageSize={specializationRecords?.pageSize}
+        data={filterspecializations?.records}
+        records={filterspecializations}
+        pageSize={filterspecializations?.pageSize}
         handleFilter={(pageNumber, pageSize) => {
           setFilterParams((prevParams) => ({
             ...prevParams,

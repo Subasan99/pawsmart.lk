@@ -77,7 +77,7 @@ export default function DemoPage() {
     const specializations = await getAllSpecializations();
     const department = await getDepartmentData(1, 10);
     const pets = await getAllPets();
-    setAllDoctors(data?.records);
+    setAllDoctors(data);
     setAllDepartments(department?.records);
     setAllSpecialization(specializations);
     setAllPet(pets);
@@ -205,9 +205,9 @@ export default function DemoPage() {
 
         <DataTable
           columns={columns}
-          data={doctors}
-          records={doctorRecords}
-          pageSize={doctorRecords?.pageSize}
+          data={doctors?.records}
+          records={doctors}
+          pageSize={doctors?.pageSize}
           handleFilter={(pageNumber, pageSize) => {
             setFilterParams((prevParams) => ({
               ...prevParams,

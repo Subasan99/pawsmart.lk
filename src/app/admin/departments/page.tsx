@@ -43,7 +43,7 @@ export default function DemoPage() {
     );
     const AllDeparment = await getAllDepartmentData();
 
-    setAllfilterDepartments(data?.records);
+    setAllfilterDepartments(data);
     setAllDepartments(AllDeparment);
     setDepartmentRecords(data);
   }
@@ -131,9 +131,9 @@ export default function DemoPage() {
       </div>
       <DataTable
         columns={columns}
-        data={filterdepartments}
-        records={departmentRecords}
-        pageSize={departmentRecords?.pageSize}
+        data={filterdepartments?.records}
+        records={filterdepartments}
+        pageSize={filterdepartments?.pageSize}
         handleFilter={(pageNumber, pageSize) => {
           setFilterParams((prevParams) => ({
             ...prevParams,

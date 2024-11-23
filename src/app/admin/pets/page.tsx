@@ -45,7 +45,7 @@ export default function Index() {
       selectedSelectedName
     );
     setAllPets(pets);
-    setAllFilterPets(data?.records);
+    setAllFilterPets(data);
     setPetRecords(data);
   }
 
@@ -95,9 +95,9 @@ export default function Index() {
       {/* <Filteration getApi={fetchData} /> */}
       <DataTable
         columns={petsColumns}
-        data={filterpets}
-        records={petRecords}
-        pageSize={petRecords?.pageSize}
+        data={filterpets.records}
+        records={filterpets}
+        pageSize={filterpets?.pageSize}
         handleFilter={(pageNumber, pageSize) => {
           setFilterParams((prevParams) => ({
             ...prevParams,

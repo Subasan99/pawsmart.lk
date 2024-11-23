@@ -33,7 +33,7 @@ export default function Index() {
       filterParams.pageSize,
       selectedSelectedRole
     );
-    setAllUsers(data?.records);
+    setAllUsers(data);
     setUserRecords(data);
   }
   useEffect(() => {
@@ -90,9 +90,9 @@ export default function Index() {
       <div className="self-end"></div>
       <DataTable
         columns={columns}
-        data={users}
-        records={userRecords}
-        pageSize={userRecords?.pageSize}
+        data={users?.records}
+        records={users}
+        pageSize={users?.pageSize}
         handleFilter={(pageNumber, pageSize) => {
           setFilterParams((prevParams) => ({
             ...prevParams,

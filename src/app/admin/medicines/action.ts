@@ -29,7 +29,7 @@ export async function getMedicineData(
 export async function createMedicine(medicine: MedicineCreate) {
   try {
     const response = await axiosInstance.post("/medicine", medicine);
-    console.log("medicine create", response);
+    return response?.data;
   } catch (error) {
     console.log("Error creating medicine:", error);
   }
