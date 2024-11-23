@@ -39,7 +39,7 @@
 
 //       setSelectedHospital(getByHospital);
 //     } catch (error) {
-//       console.error(error);
+
 //     }
 //   };
 
