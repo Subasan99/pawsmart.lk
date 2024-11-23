@@ -27,6 +27,7 @@ export async function getAppointmentsByDoctorId(
         pageSize: pageSize,
       },
     });
+    return response?.data;
   } catch (error) {
     console.log("Error fetching Appointments by Doctor Id: ", error);
   }

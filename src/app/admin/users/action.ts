@@ -44,11 +44,14 @@ export async function updateUserImage(id: any, imageFormData: FormData) {
 
   try {
     imageFormData.append("id", id)
+
+    console.log("imageformadaf",imageFormData)
     
     const response = await imageaxiosInstance.put(
       `user/{id}/image`,
       imageFormData
     );
+    console.log("response",response)
     return response.data;
   } catch (error: any) {
     console.error(

@@ -57,7 +57,6 @@ export default function DemoPage() {
   useEffect(() => {
     fetchData();
     if (!isFiltersOpen) {
-      console.log("isFiltersOpen", isFiltersOpen, !isFiltersOpen);
       setSelectedSpecialization(null);
       setSelectedPets(null);
       setSelectedDepartment(null);
