@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { DayPickerProvider, DayPickerProps } from 'react-day-picker'; // Import DayPickerProvider and DayPickerProps
-import { useEffect, useState } from 'react';
-import { DataTable } from '../../../components/AdminPanelComponents/data-table';
-import { Button } from 'react-day-picker'; // Assuming Button is from react-day-picker
-import { useRouter } from 'next/navigation';
-import { FilterIcon, Hospital, PlusIcon } from 'lucide-react';
-import { getHospitals } from './action';
-import { useHospitalStore } from '@/store/hospitalStore';
-import { hospitalColumns } from './columns';
+import { DayPickerProvider, DayPickerProps } from "react-day-picker"; // Import DayPickerProvider and DayPickerProps
+import { useEffect, useState } from "react";
+import { DataTable } from "../../../components/AdminPanelComponents/data-table";
+import { Button } from "react-day-picker"; // Assuming Button is from react-day-picker
+import { useRouter } from "next/navigation";
+import { Hospital, PlusIcon } from "lucide-react";
+import { getHospitalFilterData, getHospitals } from "./action";
+import { useHospitalStore } from "@/store/hospitalStore";
+import { hospitalColumns } from "./columns";
 
 export default function DemoPage() {
   const router = useRouter();
@@ -16,30 +16,36 @@ export default function DemoPage() {
     state.hospitals,
     state.setAllHospitals,
   ]);
+  const [hospitalRecords, sethospitalRecords] = useState<any>(undefined);
+  const [filterParams, setFilterParams] = useState({
+    pageSize: 10,
+    pageCount: 1,
+  });
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [filterParams]);
 
   async function fetchData() {
-    const hospitals = await getHospitals();
-    setAllHospitals(hospitals);
+    const hospitalRecords = await getHospitalFilterData(filterParams);
+    sethospitalRecords(hospitalRecords);
+    setAllHospitals(hospitalRecords?.records);
   }
 
   const dayPickerProps: DayPickerProps = {
-    mode: 'single',
+    mode: "single",
     required: false,
   };
 
   return (
     <DayPickerProvider initialProps={dayPickerProps}>
-      {' '}
+      {" "}
       <div
         className="container flex flex-col gap-4 mx-auto py-5 relative"
         style={{
-          overflow: 'auto',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
+          overflow: "auto",
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
         }}
       >
         <div className="flex items-center">
@@ -58,13 +64,25 @@ export default function DemoPage() {
         <div className="self-end">
           <Button
             className="bg-blue-600 text-white p-2 rounded-xl flex items-center"
-            onClick={() => router.push('/admin/hospitals/hospitalcreate')}
+            onClick={() => router.push("/admin/hospitals/hospitalcreate")}
           >
             <PlusIcon className="mr-2 h-4 w-4" />
             <span>Create</span>
           </Button>
         </div>
-        <DataTable columns={hospitalColumns} data={hospitals} />
+        <DataTable
+          columns={hospitalColumns}
+          data={hospitals}
+          records={hospitalRecords}
+          pageSize={hospitalRecords?.pageSize}
+          handleFilter={(pageNumber, pageSize) => {
+            setFilterParams((prevParams) => ({
+              ...prevParams,
+              pageCount: pageNumber,
+              pageSize: pageSize,
+            }));
+          }}
+        />
       </div>
     </DayPickerProvider>
   );

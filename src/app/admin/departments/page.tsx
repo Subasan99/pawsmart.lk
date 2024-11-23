@@ -12,9 +12,14 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 export default function DemoPage() {
-  const [departments, setAllDepartments,filterdepartments,setAllfilterDepartments] = useDepartmentStore((state: any) => [
+  const [
+    departments,
+    setAllDepartments,
+    filterdepartments,
+    setAllfilterDepartments,
+  ] = useDepartmentStore((state: any) => [
     state.departments,
     state.setAllDepartments,
     state.filterdepartments,
@@ -24,37 +29,48 @@ export default function DemoPage() {
   const [selectedSelectedDepartment, setSelectedDepartment] = useState<
     any | undefined
   >(null);
+  const [departmentRecords, setDepartmentRecords] = useState<any>(undefined);
+  const [filterParams, setFilterParams] = useState({
+    pageSize: 10,
+    pageCount: 1,
+  });
+
   async function fetchData() {
-    const data = await getDepartmentData(1, 10,selectedSelectedDepartment);
+    const data = await getDepartmentData(
+      filterParams.pageCount,
+      filterParams.pageSize,
+      selectedSelectedDepartment
+    );
     const AllDeparment = await getAllDepartmentData();
 
     setAllfilterDepartments(data?.records);
     setAllDepartments(AllDeparment);
+    setDepartmentRecords(data);
   }
+
   useEffect(() => {
     // console.log(departments);
     // if(!isFiltersOpen){
     //   selectedSelectedDepartment(undefined);
     // }
     fetchData();
-  }, [selectedSelectedDepartment]);
+  }, [selectedSelectedDepartment, filterParams]);
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
-      
       <div className="flex items-center">
-    <Building className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
-    <div className="font-bold text-2xl">Departments</div>
-    </div>
+        <Building className="mr-2 text-black font-bold  group-hover:text-black transition-colors duration-200" />
+        <div className="font-bold text-2xl">Departments</div>
+      </div>
 
-    <div
-          className="flex items-center justify-end p-3 cursor-pointer"
-          onClick={() => setIsFiltersOpen((prev:boolean) => !prev)}
-        >
-          <FilterIcon className="h-6 w-6 text-[#8D9FBD] " />
-          <div className="font-semibold text-[#8D9FBD] ml-2">Filters</div>
-        </div>
-    
-    {isFiltersOpen && (
+      <div
+        className="flex items-center justify-end p-3 cursor-pointer"
+        onClick={() => setIsFiltersOpen((prev: boolean) => !prev)}
+      >
+        <FilterIcon className="h-6 w-6 text-[#8D9FBD] " />
+        <div className="font-semibold text-[#8D9FBD] ml-2">Filters</div>
+      </div>
+
+      {isFiltersOpen && (
         <div className="flex gap-4 items-center">
           {/* Specialization Dropdown */}
           <div className="flex-1">
@@ -113,7 +129,19 @@ export default function DemoPage() {
       <div className="self-end">
         <DepartmentCreate />
       </div>
-      <DataTable columns={columns} data={filterdepartments} />
+      <DataTable
+        columns={columns}
+        data={filterdepartments}
+        records={departmentRecords}
+        pageSize={departmentRecords?.pageSize}
+        handleFilter={(pageNumber, pageSize) => {
+          setFilterParams((prevParams) => ({
+            ...prevParams,
+            pageCount: pageNumber,
+            pageSize: pageSize,
+          }));
+        }}
+      />
     </div>
   );
 }

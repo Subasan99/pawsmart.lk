@@ -17,18 +17,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button";
+import Paginator from "../Paginator";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]; 
-  data: TData[] | []; 
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[] | [];
   pageSize?: number;
+  records?: any;
+  handleFilter?: (pageNumber: number, pageSize: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  pageSize = 10,
+  pageSize,
+  records,
+  handleFilter,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -37,7 +41,7 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize, // Set page size
+        pageSize: pageSize ? pageSize : 10, // Set page size
         pageIndex: 0, // Ensure pagination starts from the first page
       },
     },
@@ -48,7 +52,6 @@ export function DataTable<TData, TValue>({
       <div
         className="rounded-md border"
         style={{
-          maxHeight: "535px",
           overflowY: "auto",
           overflowX: "hidden",
           scrollbarWidth: "none",
@@ -56,11 +59,11 @@ export function DataTable<TData, TValue>({
         }}
       >
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-700">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead className="text-white" key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -102,32 +105,20 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()} // Disable if no previous page
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()} // Disable if no next page
-        >
-          Next
-        </Button>
-        <div>
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
-        </div>
+      <div className="flex w-full justify-end py-4">
+        <Paginator
+          totalPages={records?.totalPages}
+          totalRecords={records?.totalRecords}
+          pageNumber={records?.pageNumber}
+          pageSize={records?.pageSize}
+          changePage={(pageNumber, pageSize) => {
+            handleFilter?.(pageNumber, pageSize);
+          }}
+        />
       </div>
     </div>
   );
 }
-
 
 // "use client";
 
@@ -152,10 +143,9 @@ export function DataTable<TData, TValue>({
 // import { Button } from "@/components/ui/button";
 // import Paginator from "../Paginator";
 
-
 // interface DataTableProps<TData, TValue> {
-//   columns: ColumnDef<TData, TValue>[]; 
-//   data: TData[] | []; 
+//   columns: ColumnDef<TData, TValue>[];
+//   data: TData[] | [];
 //   pageSize?: number;
 // }
 
@@ -267,4 +257,3 @@ export function DataTable<TData, TValue>({
 //     </div>
 //   );
 // }
-

@@ -35,13 +35,14 @@ export const columns: ColumnDef<Columns>[] = [
   {
     accessorKey: "fullName",
     header: () => (
-      <div className="flex items-center space-x-3">
-        <Image
+      <div className="flex">
+        {/* <Image
           alt="default image"
           src={DefaultImage}
           className="w-10 h-10 object-cover rounded-full border-2"
-        />
-        <div className="font-bold text-start">Full Name</div>
+        /> */}
+        
+        <div className="font-bold pl-14">Full Name</div>
       </div>
     ),
     cell: ({ row }) => (

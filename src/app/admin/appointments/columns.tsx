@@ -21,14 +21,14 @@ export type Columns = {
 };
 
 export const doctorColumns: ColumnDef<Columns>[] = [
-  {
-    accessorKey: "number",
-    header: () => <div className="font-bold text-start">#</div>,
-    cell: ({ row }) => (
-      <div className="text-start">{row.index + 1}</div> // row.index starts from 0, so add 1
-    ),
-    id: "number", // Use a unique ID for this column
-  },
+  // {
+  //   accessorKey: "number",
+  //   header: () => <div className="font-bold text-start">#</div>,
+  //   cell: ({ row }) => (
+  //     <div className="text-start">{row.index + 1}</div> // row.index starts from 0, so add 1
+  //   ),
+  //   id: "number", // Use a unique ID for this column
+  // },
   {
     accessorKey: "BookingDate",
     header: () => <div className="font-bold text-start">Booking Date</div>,
