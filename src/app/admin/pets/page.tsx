@@ -25,17 +25,25 @@ export default function Index() {
   const [selectedSelectedName, setSelectedName] = useState<any | undefined>(
     null
   );
-console.log("filterpets",filterpets)
+
+  
+
+
+  
+  useEffect(() => {
+    fetchData();
+  }, [selectedSelectedName]);
+
+
   async function fetchData() {
     const pets = await getAllPets();
     const data = await getAllFilterPets(1, 10,selectedSelectedName);
     setAllPets(pets);
     setAllFilterPets(data?.records);
+console.log("data?.recordsdata?.recordsdata?.records",data?.records)
+
   }
 
-  useEffect(() => {
-    fetchData();
-  }, [selectedSelectedName]);
   return (
     <div className="container flex flex-col gap-4 mx-auto py-5 relative">
         <div className="flex items-center">

@@ -185,7 +185,6 @@ export default function Home() {
       if (response.success) {
         setLogin(response);
         toast.success(response.message);
-
         setIsDialogOpen(false);
         const targetPath = response.role === 'ADMIN' ? '/admin/dashboard' : '/';
         router.push(targetPath);
@@ -204,6 +203,8 @@ export default function Home() {
     await signOut();
     setLogin(undefined);
     router.push('/');
+    window.location.reload();
+
   };
 
   // useEffect(() => {
@@ -264,6 +265,7 @@ export default function Home() {
     if (response.success) {
       toast.success(response.message);
       setResetPassword(true);
+
     } else {
       toast.error(response.message);
     }
@@ -289,6 +291,8 @@ export default function Home() {
       toast.success(response.message);
       setIsForgotPasswordOpen(false);
       setIsDialogOpen(true);
+      window.location.reload();
+
       // await router.push('/auth?mode=signin');
     } else {
       toast.error(response.message);

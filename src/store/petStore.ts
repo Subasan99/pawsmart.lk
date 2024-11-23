@@ -27,8 +27,8 @@ export const usePetStore = create<Store>()(
         set({ pet: pet, loading: false });
       },
 
-      setAllFilterPets: (pets: any[]) => {
-        set({ pets: pets, loading: false });
+      setAllFilterPets: (filterpets: any[]) => {
+        set({ filterpets: filterpets, loading: false });
       },
       setSelectedPet: (pet: Pet | null | undefined) => {
         set({ selectedPet: pet, loading: false });

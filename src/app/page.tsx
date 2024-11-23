@@ -41,9 +41,11 @@ export default function Home() {
     state.setAllCities,
   ]);
 
-  const [login, setLogin] = useAuthStore((state) => [
+  const [login, setLogin,loadingAuth] = useAuthStore((state) => [
     state.login,
     state.setLogin,
+    state.loadingAuth,
+
   ]);
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
@@ -130,6 +132,7 @@ export default function Home() {
       setAllCities(citiesData);
       setAllSpecialization(specializations);
       setAllHospitals(hospitalData);
+
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -230,7 +233,7 @@ export default function Home() {
     setsearchData(inputDate);
   };
 
-  if (loading) {
+  if (loading&&loadingAuth) {
     return <div>Loading ....!</div>;
   }
 

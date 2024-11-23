@@ -40,11 +40,11 @@ const AdminPopover: React.FC<AdminPopoverProps> = ({ handleSignOut ,adminName}) 
 
       <div
         onClick={handleSignOut}
-        className="bg-red-400 hover:bg-yellow-500 flex hover:text-black text-black px-2 py-1 rounded w-full justify-center cursor-pointer"
+        className=" hover:bg-yellow-500 flex hover:text-black text-black px-2 py-1 rounded w-full justify-center cursor-pointer"
       >
          {/* <button className="flex  gap-2 cursor-pointer"> */}
-    <LogOut size={30} />
-    <span className="text-sm lg:text-lg font-semibold">LOG OUT</span>
+    <LogOut size={20} />
+    <span className="text-sm lg:text-sm font-semibold">LOG OUT</span>
   {/* </button> */}
       </div>
     </div>

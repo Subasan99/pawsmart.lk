@@ -105,6 +105,7 @@ export default function AdminHeader() {
       await signOut(); 
       setLogin(undefined);
       router.push('/');
+      
     } catch (error) {
       console.error('Error during sign-out:', error);
     } finally {

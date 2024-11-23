@@ -351,7 +351,7 @@ const Index = ({ params }: { params: { id: string } }) => {
     }
   }, [params?.id, docName]);
 
-  console.log('ttttttttttttttttttttttttt',doctorNames);
+  console.log('ttttttttttttttttttttttttt',doctors);
 
   const getByHospitalDetails = async () => {
     try {
@@ -410,10 +410,7 @@ const Index = ({ params }: { params: { id: string } }) => {
   };
 
   return (
-    <div id="hospitals" className="pb-8 pt-20">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        {/* <Header /> */}
-      </div>
+    <div id="hospitals" className="pb-8 w-full pt-20">
       <div className="bg-white rounded-lg w-full shadow-md p-6 mb-8">
         <h3 className="text-2xl font-bold mb-4">Hospital properties found</h3>
         <hr className="my-4 border-t-2 border-gray-300" />
@@ -456,7 +453,7 @@ const Index = ({ params }: { params: { id: string } }) => {
           </button>
         </div>
       </div>
-      <div className="mt-8">
+      {/* <div className="mt-8 bg-white rounded-lg w-full shadow-md p-6 mb-8"> */}
         <div className="w-full mt-4">
           <DocBook
             doctors={doctors}
@@ -466,7 +463,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             handleClick={handleClick}
           />
         </div>
-      </div>
+      {/* </div> */}
     </div>
   );
 };

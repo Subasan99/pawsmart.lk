@@ -55,7 +55,10 @@ console.log("hospitalNamehospitalName",hospitalName);
         day: decodedRecords.day,
       });
 
-      setResHospitalName(searchTextData?.records);
+      // setResHospitalName(searchTextData?.records);
+
+      const activeHospitals = searchTextData?.records?.filter((hospital: any) => hospital.active);
+      setResHospitalName(activeHospitals);
       
     } catch (error) {
       console.error('Error fetching hospital data:', error);
@@ -71,7 +74,7 @@ console.log("hospitalNamehospitalName",hospitalName);
     setSelectedDoctor(doctor);
   };
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="w-full mx-auto px-4 py-8">
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <h3 className="text-2xl font-bold mb-4">Hospital properties found</h3>
         <hr className="my-4 border-t-2 border-gray-300" />
@@ -103,18 +106,27 @@ console.log("hospitalNamehospitalName",hospitalName);
         </div>
       </div>
   
-      <div className="space-y-12">
-        {hospitals?.map((hospital: any) => (
-          <HospitalImageCard
-            key={hospital.id}
-            item={hospital}
-            onClick={(id) => console.log('Hospital clicked:', id)}
-            pathname="/hospital"
-            setSelectedDoctor={handleDoctorSelect}
-            handleClick={handleClick}
-          />
-        ))}
-      </div>
+      {hospitals?.filter((hospital: any) => hospital.active).length > 0 ? (
+        hospitals
+          ?.filter((hospital: any) => hospital.active)
+          .map((hospital: any) => (
+            <HospitalImageCard
+              key={hospital.id}
+              item={hospital}
+              onClick={(id: any) => console.log('Hospital clicked:', id)}
+              pathname="/hospital"
+              setSelectedDoctor={handleDoctorSelect}
+              handleClick={handleClick}
+            />
+          ))
+      ) : (
+        <div className="text-center text-gray-500 text-lg">
+          No hospital found.
+        </div>
+      )}
+
+
+
     </div>
   );
   

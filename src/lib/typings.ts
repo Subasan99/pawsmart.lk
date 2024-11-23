@@ -269,7 +269,7 @@ export type doctorResponses = {
     | null;
   createdDate: string;
   updatedDate: string;
-  active: boolean;
+  isActive: boolean;
 };
 export type medicineResponse = {
   id: number;
