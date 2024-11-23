@@ -72,10 +72,10 @@ export default function DemoPage() {
       selectedDepartment,
       selectedPets
     );
-    setDoctorRecords(data);
     const specializations = await getAllSpecializations();
     const department = await getDepartmentData(1, 10);
     const pets = await getAllPets();
+    setDoctorRecords(data);
     setAllDoctors(data);
     setAllDepartments(department?.records);
     setAllSpecialization(specializations);

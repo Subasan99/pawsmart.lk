@@ -92,7 +92,7 @@ export const getDoctorFilterData = async (params: {
   pageCount: number;
   pageSize: number;
   name?: string;
-  // departmentId?: number;
+  departmentId?: number;
   petId?: number;
   specializationId?:number;
   date?: string;
@@ -105,7 +105,7 @@ export const getDoctorFilterData = async (params: {
         pageSize: params.pageSize,
         pageCount: params.pageCount,
         name: params?.name ,
-        // departmentId: params?.departmentId ,
+        departmentId: params?.departmentId ,
         petId:params?.petId ,
         specializationId: params?.specializationId,
         date: params?.date ,

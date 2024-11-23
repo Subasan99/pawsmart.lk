@@ -124,7 +124,9 @@ export const columns: ColumnDef<Columns>[] = [
         <ActionMenu 
         pathName={`/admin/doctors/${row.original.id}`}
         delete={() => archiveDoctorById(row.original.id)}
-        view={true} />
+        navigateTo={`/admin/doctors/doctoredit/${row.original.id}`}
+        view={true}
+        edit={true} />
       </div>
     ),
     header: () => <div className="text-center font-bold">Actions</div>,

@@ -304,7 +304,7 @@ const HospitalCreateForm = (props: Props) => {
                     {/* Pets */}
                     <div className="flex items-center space-x-2">
                       <PawPrint className="h-5 w-5 text-blue-500" />
-                      <span>Medicines</span>
+                      <span>Vaccination</span>
                     </div>
                   </FormLabel>
                   <MultiSelect
