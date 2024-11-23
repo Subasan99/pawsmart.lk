@@ -17,18 +17,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { Button } from "@/components/ui/button";
+import Paginator from "../Paginator";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]; 
-  data: TData[] | []; 
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[] | [];
   pageSize?: number;
+  records?: any;
+  handleFilter?: (pageNumber: number, pageSize: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   pageSize = 10,
+  records,
+  handleFilter,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -103,7 +107,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
+        {/* <Button
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
@@ -122,12 +126,20 @@ export function DataTable<TData, TValue>({
         <div>
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
-        </div>
+        </div> */}
+        <Paginator
+          totalPages={records?.totalPages}
+          totalRecords={records?.totalRecords}
+          pageNumber={records?.pageNumber}
+          pageSize={records?.pageSize}
+          changePage={(pageNumber, pageSize) => {
+            handleFilter?.(pageNumber, pageSize);
+          }}
+        />
       </div>
     </div>
   );
 }
-
 
 // "use client";
 
@@ -152,10 +164,9 @@ export function DataTable<TData, TValue>({
 // import { Button } from "@/components/ui/button";
 // import Paginator from "../Paginator";
 
-
 // interface DataTableProps<TData, TValue> {
-//   columns: ColumnDef<TData, TValue>[]; 
-//   data: TData[] | []; 
+//   columns: ColumnDef<TData, TValue>[];
+//   data: TData[] | [];
 //   pageSize?: number;
 // }
 
@@ -267,4 +278,3 @@ export function DataTable<TData, TValue>({
 //     </div>
 //   );
 // }
-

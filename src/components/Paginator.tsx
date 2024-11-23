@@ -12,9 +12,6 @@ interface IPaginatorProps {
 export default function Paginator(props: IPaginatorProps) {
   const [currentPage, setCurrentPage] = useState(props.pageNumber ? props.pageNumber : 1);
   const [currentPageSize, setCurrentPageSize] = useState(props.pageSize ? props.pageSize : 10);
-  const [pageSizeValue, setpageSizeValue] = useState({
-    PageSize: props.pageSize ? props.pageSize.toString() : "10",
-  });
 
   const totalPages = Math.max(props.totalPages, 1);
   const startIndex = (props.pageNumber - 1) * props.pageSize + 1;
@@ -34,6 +31,7 @@ export default function Paginator(props: IPaginatorProps) {
 
   const handleCurrentPageSize = (pageSize: number) => {
     setCurrentPageSize(pageSize);
+    setCurrentPage(1);
     props.changePage(1, pageSize);
   };
 
@@ -42,16 +40,17 @@ export default function Paginator(props: IPaginatorProps) {
       <div className="px-5 self-center">Items Per Page:</div>
       <div className="w-20">
         <DropDown
-          name="PageSize"
+          name="pageSize"
           options={[
+            { name: "5", value: "5" },
             { name: "10", value: "10" },
             { name: "20", value: "20" },
             { name: "50", value: "50" },
             { name: "100", value: "100" },
           ]}
-          values={pageSizeValue}
+          values={{"pageSize": currentPageSize}}
           onChange={(selectedOptions) => {
-            handleCurrentPageSize(parseInt(selectedOptions.target.value));
+            handleCurrentPageSize(selectedOptions.target.value);
           }}
         />
       </div>
