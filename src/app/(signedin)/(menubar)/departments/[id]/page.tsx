@@ -60,7 +60,7 @@ const Index = ({ params }: { params: { id: string } }) => {
           linkDescription="Doctors"
           doctors={doctors}
           pathname={"/appointmentdoctor"}
-          query={doctores}
+          // query={doctores}
           doctor={true}
         />
       </div>

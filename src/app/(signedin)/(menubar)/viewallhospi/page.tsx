@@ -1,82 +1,227 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Header from '@/components/Header';
-import PopularDoctors from '@/components/Image';
-import { useRouter } from 'next/navigation';
-import { getHospitals } from '@/app/home/action';
+import { useHospitalStore } from '@/store/hospitalStore';
+import FilterDropdown from '@/components/FilterDropdown';
+import HospitalImageCard from '@/components/HospitalImageCard';
+import { getCities, getHospitalFilterData } from '@/app/home/action';
+import { Filter } from 'lucide-react';
+import { getAllSpecializations } from '@/api/route';
+import { useSpecializationStore } from '@/store/specializationStore';
+import { useCityStore } from '@/store/citiesStore';
 
-interface Hospital {
-  preSignedUrl: string;
-  image: string;
-  name: string;
-  description: string;
-}
+const Index = () => {
+  const [hospitalName, setHospitalName] = useState<any>('');
+  const [hospitalResName, setResHospitalName] = useState<any>(undefined);
+  const [specializationsResName, setResSpecializations] =
+    useState<any>(undefined);
 
-interface Doctor {
-  id?: string;
-  src: string;
-  alt: string;
-  textOverlay: string;
-  description?: string;
-  specializationName?: string;
-  dayTimeSlotResponses?: [];
-}
+  const [citiesName, setResCities] = useState<any>(undefined);
 
-const Hospitals = () => {
-  
-  const router = useRouter();
-  const [data, setData] = useState<any[]>([]);
+  const [selectedDay, setSelectedDay] = useState<any>(null);
+  const [cityName, setCityName] = useState<any>("");
+  const [specializationName, setSpecializationName] = useState<any>('');
+  const [selectedDoctor, setSelectedDoctor] = useState<any>('');
+  const [hospitals, setAllHospitals] = useHospitalStore((state: any) => [
+    state.hospitals,
+    state.setAllHospitals,
+  ]);
+  const [specialization, setAllSpecialization] = useSpecializationStore(
+    (state: any) => [state.specialization, state.setAllSpecialization]
+  );
+
+  const [cities, setAllCities] = useCityStore((state: any) => [
+    state.cities,
+    state.setAllCities,
+  ]);
+
+
+  useEffect(() => {
+    getResHospitalDetails();
+  }, []);
+
+
 
   useEffect(() => {
     getHospitalDetails();
-  }, []);
+  }, [hospitalName, selectedDay, cityName, specializationName]);
 
-  const defaultImage = "/department.png";
+
 
   const getHospitalDetails = async () => {
     try {
-      const hospitalData = await getHospitals();
-   console.log("object",hospitalData)
-      const result = hospitalData?.map((record: any) => ({
-        id:record?.id,
-        src: record?.preSignedUrl||defaultImage,
-        alt: record?.name,
-        textOverlay: record?.name,
-        description: record?.description,
-        dayTimeSlotResponses: [],
-      }));
+      const searchTextData = await getHospitalFilterData({
+        pageSize: 10,
+        pageCount: 1,
+        searchTerm: undefined,
+        cityId: cityName.value,
+        hospitalId: hospitalName.value,
+        specializationId: specializationName.value,
+        day: selectedDay,
+      });
 
-      setData(result);
-   
+
+      
+      setAllHospitals(searchTextData?.records);
     } catch (error) {
       console.error('Error fetching hospital data:', error);
     }
   };
 
-  const handleClick = (id: string) => {
-    if (id) {
-      console.log('object',id)
+  const getResHospitalDetails = async () => {
+    try {
+      const searchTextData = await getHospitalFilterData({
+        pageSize: 10,
+        pageCount: 1,
+      });
+      const activeHospitals = searchTextData?.records?.filter(
+        (hospital: any) => hospital.active
+      );
+      const citiesData = await getCities();
+      const specializations = await getAllSpecializations();
+ 
+      
+
+      // const uniqueCities = Array.isArray(activeHospitals)
+      //   ? [...new Set(activeHospitals.map((hospital: any) => hospital.city))]
+      //   : [];
+
+      // const uniqueSpecializations = Array.isArray(activeHospitals)
+      //   ? [
+      //       ...new Set(
+      //         activeHospitals.flatMap((hospital: any) =>
+      //           hospital.doctorDepartmentResponses?.flatMap(
+      //             (dept: any) =>
+      //               dept.doctorResponses?.map(
+      //                 (doc: any) => doc.specializationName
+      //               ) || []
+      //           )
+      //         )
+      //       ),
+      //     ]
+      //   : [];
+
+      setResHospitalName(activeHospitals);
+      setAllCities(citiesData);
+      setAllSpecialization(specializations);
+
+    } catch (error) {
+      console.error('Error fetching hospital data:', error);
     }
   };
 
+  const specializationOptions = Array.isArray(specialization)
+    ? specialization.map((special: any) => ({
+        label: special.specializationName,
+        value: special.id,
+      }))
+    : [];
+
+  const citiesOptions = Array.isArray(cities)
+    ? cities.map((city: any) => {
+        // console.log(city)
+        return {
+          label: city.name,
+          value: city.id,
+        };
+      })
+    : [];
+
+  const handleClick = (name: string, url: string, id: string) => {};
+
+  const handleDoctorSelect = (doctor: any) => {
+    setSelectedDoctor(doctor);
+  };
+
+  const daysOfWeekOptions = [
+    { value: 'MONDAY', label: 'Monday' },
+    { value: 'TUESDAY', label: 'Tuesday' },
+    { value: 'WEDNESDAY', label: 'Wednesday' },
+    { value: 'THURSDAY', label: 'Thursday' },
+    { value: 'FRIDAY', label: 'Friday' },
+    { value: 'SATURDAY', label: 'Saturday' },
+    { value: 'SUNDAY', label: 'Sunday' },
+  ];
+
   return (
-    <div id="hospitals" className="pb-8 pt-20">
-      <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
+    <div className="w-full mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h3 className="text-2xl font-bold mb-4">Hospital properties found</h3>
+        <hr className="my-4 border-t-2 border-gray-300" />
+
+        <div className="flex justify-end items-center gap-6">
+          <FilterDropdown
+            options={hospitalResName?.map((h: any) => ({
+              label: h.name,
+              value: h.id,
+            }))}
+            placeholder="🏥 Select Hospital"
+            onChange={setHospitalName}
+            value={hospitalName}
+          />
+
+          <FilterDropdown
+            options={daysOfWeekOptions}
+            placeholder="🗓 Select Day"
+            onChange={(selectedOption: any) => setSelectedDay(selectedOption)}
+            value={selectedDay}
+          />
+
+          <FilterDropdown
+            options={citiesOptions}
+            placeholder="📍 Select Location"
+            onChange={(selectedOption: any) => {
+              setCityName(selectedOption);
+            }}
+            value={cityName}
+          />
+
+
+          <FilterDropdown
+            options={specializationOptions}
+            placeholder="🔬 Select Specialization"
+            onChange={(selectedOption: any) => {
+              setSpecializationName(selectedOption);
+            }}
+            value={specializationName}
+          />
+
+          {/* <button
+            onClick={()=>getHospitalDetails}
+            className="bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Search
+          </button> */}
+
+          <button
+            // onClick={getHospitalDetails}
+            className="bg-blue-600 text-white px-8 py-2.5 w-64 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+          >
+            <Filter className="w-5 h-5" />
+            Filter
+          </button>
+        </div>
       </div>
-      <div id="hospital" className="pb-8 pt-20">
-      <PopularDoctors
-        title="Popular Hospital"
-        description="see Your Hospital"
-        handleClick={handleClick}
-        doctors={data}
-        linkDescription={''}
-        pathname={''}
-        query={data}
-      />
+
+      {hospitals?.filter((hospital: any) => hospital.active).length > 0 ? (
+        hospitals
+          ?.filter((hospital: any) => hospital.active)
+          .map((hospital: any) => (
+            <HospitalImageCard
+              key={hospital.id}
+              item={hospital}
+              onClick={(id: any) => console.log('Hospital clicked:', id)}
+              pathname="/hospital"
+              setSelectedDoctor={handleDoctorSelect}
+              handleClick={handleClick}
+            />
+          ))
+      ) : (
+        <div className="text-center text-gray-500 text-lg">
+          No hospital found.
+        </div>
+      )}
     </div>
-    </div>  
   );
 };
 
-export default Hospitals;
+export default Index;

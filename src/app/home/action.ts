@@ -70,29 +70,45 @@ export const getDeparmentFilterData = async (params: {
   }
 };
 
-export const getDoctorFilterData = async (params: {
+
+export const gethospitalFilterAllData = async (params: {
   pageCount: number;
   pageSize: number;
-  departmentId?: any;
-  specializationId?: any;
-  petId?: any;
-  name?:any;
-  date?:any;
 }) => {
+  try {
+    const response = await axiosInstance.get(`/hospital/filter`, {
+      params: {
+        pageSize: params.pageSize,
+        pageCount: params.pageCount,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
+
+export async function getDoctorFilterData(
+  pageCount?: number,
+  pageSize?: number,
+  specializationId?: string,
+  departmentId?: string,
+  petId?: string,
+  name?: string
+) {
+  console.log("dfsdfdf", pageCount, pageSize,name);
   try {
     const response = await axiosInstance.get(`/doctor/filter`, {
       params: {
-        pageSize: params.pageSize? params.pageSize: undefined,
-        pageCount: params.pageCount?params.pageCount: undefined,
-        departmentId: params.departmentId?params.departmentId: undefined,
-        specializationId: params.specializationId?params.specializationId: undefined,
-        petId: params.petId? params.petId:undefined,
-        name:params.name?params.name:undefined,
-        date:params.date?params.date:undefined
+        pageCount: pageCount,
+        pageSize: pageSize,
+        specializationId: specializationId ? specializationId : undefined,
+        departmentId: departmentId ? departmentId : undefined,
+        petId: petId ? petId : undefined,
+        name: name ? name : undefined,
       },
     });
-    
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -218,6 +234,8 @@ export const getHospitalFilterData = async (params: {
   doctorId?: string;
 }) => {
   try {
+    console.log("paramsparamsparams",params)
+
     const response = await axiosInstance.get(`hospital/filter?`, {
       params: {
         pageSize: params.pageSize ?params.pageSize  :undefined,

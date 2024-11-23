@@ -11,13 +11,19 @@ import { persist } from 'zustand/middleware';
 type Store = {
   loading: boolean;
   hospitals: Hospital[];
+  filterAllHspitals: Hospital[];
   doctors: doctorResponses[];
+  doctorsinhospital: any[];
+  specializationinhospital: any[];
+
   departments: departmentResponse[];
   medicines: medicineResponse[];
   selectedHospital: Hospital | null | undefined;
   setAllHospitals: (hospitals: Hospital[]) => void;
   setSelectedHospital: (hospital: Hospital | null | undefined) => void;
-  setDoctors: (doctors: doctorResponses[]) => void;
+  setDoctors: (doctorsinhospital: any[]) => void;
+  setSpecialization: (specializationinhospital: any[]) => void;
+
   setDepartments: (departments: departmentResponse[]) => void;
   setMedicines: (medicines: medicineResponse[]) => void;
   setLoading: (loading: boolean) => void;
@@ -28,16 +34,22 @@ export const useHospitalStore = create<Store>()(
     (set) => ({
       loading: true,
       hospitals: [],
+      filterAllHspitals:[],
       doctors: [],
+      doctorsinhospital:[],
       departments: [],
       medicines: [],
+      specializationinhospital: [],
       selectedHospital: null,
 
       setAllHospitals: (hospitals: Hospital[]) => {
         set({ hospitals, loading: false });
       },
       
-
+      setFilterAllHospitals: (filterAllHspitals: Hospital[]) => {
+        set({ filterAllHspitals, loading: false });
+      },
+      
       setSelectedHospital: (hospital: Hospital | null | undefined) => {
         let departments: departmentResponse[] = [];
         let doctors: doctorResponses[] = [];
@@ -72,9 +84,14 @@ export const useHospitalStore = create<Store>()(
         console.log("Updated hospital and data:", hospital);
       },
       
-      setDoctors: (doctors: doctorResponses[]) => {
-        set({ doctors, loading: false });
+      setDoctors: (doctorsinhospital: any[]) => {
+        set({ doctorsinhospital, loading: false });
       },
+
+      setSpecialization: (specializationinhospital: any[]) => {
+        set({ specializationinhospital, loading: false });
+      },
+
 
       setDepartments: (departments: departmentResponse[]) => {
         set({ departments, loading: false });

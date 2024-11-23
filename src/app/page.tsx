@@ -11,6 +11,7 @@ import {
   getCities,
   getDepartmentData,
   getDoctorData,
+  gethospitalFilterAllData,
   getHospitals,
   getMedicinesData,
   getPetData,
@@ -41,11 +42,10 @@ export default function Home() {
     state.setAllCities,
   ]);
 
-  const [login, setLogin,loadingAuth] = useAuthStore((state) => [
+  const [login, setLogin, loadingAuth] = useAuthStore((state) => [
     state.login,
     state.setLogin,
     state.loadingAuth,
-
   ]);
   const [doctors, setAllDoctors] = useDoctorStore((state: any) => [
     state.doctors,
@@ -77,9 +77,21 @@ export default function Home() {
       }))
     : [];
 
-  const [hospitals, setAllHospitals] = useHospitalStore((state: any) => [
+  const [
+    hospitals,
+    setAllHospitals,
+    setFilterAllHospitals,
+    filterAllHspitals,
+    loading,
+    setLoading,
+  ] = useHospitalStore((state: any) => [
     state.hospitals,
     state.setAllHospitals,
+    state.setFilterAllHospitals,
+    state.filterAllHspitals,
+
+    state.loading,
+    state.setLoading,
   ]);
 
   const hospitalsOptions = Array.isArray(hospitals)
@@ -124,6 +136,10 @@ export default function Home() {
       const citiesData = await getCities();
       const specializations = await getAllSpecializations();
       const hospitalData = await getHospitals();
+      const hosptaltData = await gethospitalFilterAllData({
+        pageSize: 10,
+        pageCount: 1,
+      });
 
       setAllMedicines(medicinesData);
       setAllDepartments(departmentData);
@@ -132,7 +148,7 @@ export default function Home() {
       setAllCities(citiesData);
       setAllSpecialization(specializations);
       setAllHospitals(hospitalData);
-
+      setFilterAllHospitals(hosptaltData?.records);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -142,8 +158,7 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const handleClick = (imageName: any) => {
-  };
+  const handleClick = (imageName: any) => {};
 
   const doctores = Array.isArray(doctors)
     ? doctors.map((doctor: any) => ({
@@ -156,12 +171,12 @@ export default function Home() {
         dayTimeSlotResponses: doctor.dayTimeSlotResponses,
       }))
     : [];
-  const departmentDatas = Array.isArray(departments)
-    ? departments.map((department: any) => ({
-        src: department.preSignedUrl,
-        alt: department.image,
-        textOverlay: department.name,
-        id: department.id,
+  const hospitalDatas = Array.isArray(filterAllHspitals)
+    ? filterAllHspitals.map((hospital: any) => ({
+        src: hospital.preSignedUrl,
+        alt: hospital.image,
+        textOverlay: hospital.name,
+        id: hospital.id,
       }))
     : [];
 
@@ -177,7 +192,7 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -233,7 +248,7 @@ export default function Home() {
     setsearchData(inputDate);
   };
 
-  if (loading&&loadingAuth) {
+  if (loading && loadingAuth) {
     return <div>Loading ....!</div>;
   }
 
@@ -250,16 +265,16 @@ export default function Home() {
     const result = {
       cityId: cityName?.value,
       hospitalId: hospitalName?.value,
+      specializationId: specializationName?.value,
       day: selectedDay?.value,
     };
     const encodedRecords = JSON.stringify(result);
-    if (cityName || hospitalName || selectedDay) {
+    if (cityName || hospitalName || specializationName || selectedDay) {
       await router.push(`/hospitals/${encodedRecords}`);
     }
     setSelectedDay('');
     setCityName('');
     setHospitalName('');
-
   };
 
   return (
@@ -369,14 +384,14 @@ export default function Home() {
                             }
                             value={selectedDay}
                           />
-                          {/* <FilterDropdown
-        options={specializationOptions}
-        placeholder="🔬 Select Specialization"
-        onChange={(selectedOption: any) => {
-          setSpecializationName(selectedOption);
-        }}
-        value={specializationName}
-      /> */}
+                          <FilterDropdown
+                            options={specializationOptions}
+                            placeholder="🔬 Select Specialization"
+                            onChange={(selectedOption: any) => {
+                              setSpecializationName(selectedOption);
+                            }}
+                            value={specializationName}
+                          />
 
                           <button
                             onClick={handleFilter}
@@ -415,16 +430,15 @@ export default function Home() {
           </div>
         </div>
 
-        <div id="departments" className="pb-8 pt-20">
+        <div id="departments" className="pb-8 px-6  pt-12">
           <PopularDoctors
-            title="Departments"
+            title="Hospitals"
             description="Your Pets Nutritional Health is Very Important & Our Priority"
-            link="/departments"
+            // link="/hospitalHomepage"
             handleClick={handleClick}
             linkDescription={'See Departments'}
-            doctors={departments?.slice(0, 4)}
-            pathname={'/departments'}
-            query={departmentDatas}
+            doctors={filterAllHspitals?.slice(0, 4)}
+            // pathname={'/hospitalHomepage'}
           />
         </div>
         <div>
@@ -471,7 +485,7 @@ export default function Home() {
             </div>
           </section>
         </div>
-
+        {/* 
         <div id="doctors" className="pb-8 pt-20">
           <PopularDoctors
             title="Popular Doctors"
@@ -496,7 +510,7 @@ export default function Home() {
             pathname={'/pets'}
             query={petdata}
           />
-        </div>
+        </div> */}
       </main>
     </>
   );

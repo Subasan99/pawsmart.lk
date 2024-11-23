@@ -32,7 +32,7 @@ const HospitalImageCard = ({
       .filter(Boolean) || [];
 
   return (
-    <div className="bg-white rounded-lg p-6 flex gap-6 flex-wrap items-start relative">
+    <div className="bg-white rounded-lg p-6  flex gap-6 m-8 flex-wrap items-start relative">
 
 
       <div className="flex-shrink-0">

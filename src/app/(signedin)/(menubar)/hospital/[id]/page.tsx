@@ -307,21 +307,21 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  getByIdHospital,
-  getDoctorFilterData,
-  getHospitalFilterData,
-} from '@/app/home/action';
+import { getByIdHospital, getDoctorFilterData } from '@/app/home/action';
 import { useHospitalStore } from '@/store/hospitalStore';
 import { useRouter } from 'next/navigation';
 import DocBook from '@/components/ui/docBook';
 import FilterDropdown from '@/components/FilterDropdown';
 import { Calendar } from '@/components/ui/calendar';
 import { CloudFog } from 'lucide-react';
+import { useAdminStore } from '@/store/adminStore';
+import { useDoctorStore } from '@/store/doctorStore';
 
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [docName, setDocName] = useState<any>('');
+  const [nameSpecialization, setSelectedSpecialization] = useState<any>('');
+
   const [petName, setPetName] = useState<any>(''); // State for pet name
   const [selectedDate, setSelectedDate] = useState<any>(''); // State for selected date
   const [hospitalResName, setResHospitalName] = useState<any>(undefined);
@@ -333,6 +333,10 @@ const Index = ({ params }: { params: { id: string } }) => {
     departments,
     doctors,
     medicines,
+    doctorsinhospital,
+    setDoctors,
+    specializationinhospital,
+    setSpecialization,
     setLoading,
   ] = useHospitalStore((state) => [
     state.selectedHospital,
@@ -340,46 +344,66 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.departments,
     state.doctors,
     state.medicines,
+    state.doctorsinhospital,
+    state.setDoctors,
+    state.specializationinhospital,
+    state.setSpecialization,
     state.setLoading,
   ]);
 
   useEffect(() => {
     getByHospitalDetails();
-    if(docName){
-      doctorFilter();
+  }, []);
 
-    }
-  }, [params?.id, docName]);
-
-  console.log('ttttttttttttttttttttttttt',doctors);
+  useEffect(() => {
+    doctorFilter();
+  }, [docName?.label]);
 
   const getByHospitalDetails = async () => {
     try {
       setLoading(true);
       const getByHospital = await getByIdHospital(params?.id);
-     
-      setResHospitalName(getByHospital);
-      if(!docName){
-        setSelectedHospital(getByHospital);
+      const DoctorData = await getByIdHospital(params?.id);
+      setSelectedHospital(getByHospital);
+      // const doctorNames = DoctorData.map((doctor: any) => ({
+      //   label: doctor.name,
+      //   value: doctor.id,
+      // }));
 
-      }
+      const doctorNames =
+        DoctorData?.doctorDepartmentResponses.flatMap((department: any) =>
+          department?.doctorResponses.map((doctor: any) => ({
+            label: doctor.name, // Doctor name
+            value: doctor.id, // Doctor ID
+          }))
+        ) || [];
 
-      const doctors = getByHospital.records
-      .flatMap((record: any) =>
-        record.doctorDepartmentResponses.flatMap(
-          (dept: any) => dept.doctorResponses
-        )
-      )
-      .map((doctor: any) => ({
-        label: doctor.name, 
-        value: doctor.id, 
-      }));
+        const SpecializationNames =
+        DoctorData?.doctorDepartmentResponses.flatMap((department: any) =>
+          department?.doctorResponses.map((doctor: any) => ({
+            label: doctor.specializationName, // Doctor name
+            value: doctor.id,
+          }))
+        ) || [];
 
+      setDoctors(doctorNames);
+      setSpecialization(SpecializationNames);
+      // if (!docName) {
+      //   setSelectedHospital(getByHospital);
+      // }
 
-    setDoctorNames(doctors);
+      // const doctors = getByHospital.records
+      //   .flatMap((record: any) =>
+      //     record.doctorDepartmentResponses.flatMap(
+      //       (dept: any) => dept.doctorResponses
+      //     )
+      //   )
+      //   .map((doctor: any) => ({
+      //     label: doctor.name,
+      //     value: doctor.id,
+      //   }));
 
-    console.log("doctorsdoctorsdoctorsdoctors",doctors)
-
+      // setDoctorNames(doctors);
     } catch (error) {
       console.error(error);
     }
@@ -389,17 +413,39 @@ const Index = ({ params }: { params: { id: string } }) => {
     try {
       setLoading(true);
 
-      const searchTextData = await getHospitalFilterData({
-        pageSize: 10,
-        pageCount: 1,
-        searchTerm: undefined,
-        cityId: undefined,
-        hospitalId: undefined,
-        specializationId: undefined,
-        day: undefined,
-        doctorId: docName?.value,
-      });
-      setSelectedHospital(searchTextData.records);
+      const searchTextData = await getDoctorFilterData(
+        10,
+        1,
+        nameSpecialization.value,
+        undefined,
+        undefined,
+        docName?.label
+      );
+
+      console.log(
+        'searchTextDatasearchTextDatasearchTextData',
+        searchTextData?.records
+      );
+  
+
+      // if (searchTextData?.records?.length > 0) {
+      //   // Flatten doctorResponses from all hospitals and remove duplicates
+      //   const doctors = searchTextData.records.flatMap((hospital: any) =>
+      //     hospital.doctorDepartmentResponses?.flatMap((dept: any) =>
+      //       dept.doctorResponses || []
+      //     )
+      //   );
+  
+      //   // Deduplicate doctors by unique ID
+      //   const uniqueDoctors = doctors.filter(
+      //     (doctor: any, index: number, self: any[]) =>
+      //       self.findIndex((d: any) => d.id === doctor.id) === index
+      //   );
+  
+      //   // Store doctors in the state
+      //   useHospitalStore.getState().setDoctors(uniqueDoctors);
+      // }
+  
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -425,19 +471,26 @@ const Index = ({ params }: { params: { id: string } }) => {
             onChange={setPetName}
             value={petName}
           /> */}
+          <FilterDropdown
+            options={doctorsinhospital}
+            placeholder="👩‍⚕️ Select Doctor"
+            onChange={setDocName}
+            value={docName}
+          />
+
 <FilterDropdown
-  options={doctorNames} 
-  placeholder="👩‍⚕️ Select Doctor"
-  onChange={setDocName} 
-  value={docName}       
-/>
+            options={specializationinhospital}
+            placeholder="👩‍⚕️ Select Specialization"
+            onChange={setSelectedSpecialization}
+            value={nameSpecialization}
+          />
 
           {/* <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
             initialFocus
-          /> */}
+          /> 
           {/* <DatePicker
             selectedDate={selectedDate}
             onChange={setSelectedDate}
@@ -454,15 +507,15 @@ const Index = ({ params }: { params: { id: string } }) => {
         </div>
       </div>
       {/* <div className="mt-8 bg-white rounded-lg w-full shadow-md p-6 mb-8"> */}
-        <div className="w-full mt-4">
-          <DocBook
-            doctors={doctors}
-            defaultImage="/department.png"
-            pathname="/appointmentdoctor"
-            doctor={true}
-            handleClick={handleClick}
-          />
-        </div>
+      <div className="w-full mt-4">
+        <DocBook
+          doctors={doctors}
+          defaultImage="/department.png"
+          pathname="/appointmentdoctor"
+          doctor={true}
+          handleClick={handleClick}
+        />
+      </div>
       {/* </div> */}
     </div>
   );

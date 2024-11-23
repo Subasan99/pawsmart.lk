@@ -403,7 +403,7 @@ export default function Home() {
                 className="w-[288px]"
                 alt="Company Logo"
               />
-              <ul className="flex flex-col space-y-4 text-black">
+              <ul className="flex flex-col  space-y-4 text-black">
                 <li key={0}>
                   <a href="/" className="hover:text-red-500">
                     Home
@@ -426,11 +426,14 @@ export default function Home() {
                   className="hover:text-red-500 relative"
                 >
                   <a href="/departments" className="hover:text-red-500">
-                    Departments
+                    Hospitals
                   </a>
                   {activeDropdown === 'departments' &&
                     renderDropdown(departments, '/departments')}
                 </li>
+
+{/* 
+
                 <li
                   onClick={() => handleMouseEnter('doctors')}
                   className="hover:text-red-500 relative"
@@ -460,6 +463,9 @@ export default function Home() {
                   </a>
                   {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
                 </li>
+
+ */}
+
                 {login ? (
                   <div className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
                     {/* <p className="hover:text-black">SignOut</p> */}
@@ -513,12 +519,13 @@ export default function Home() {
                 className="relative"
               >
                 <a href="/departments" className="hover:text-red-500">
-                  Departments
+                  Hospitals
                 </a>
                 {activeDropdown === 'departments' &&
                   renderDropdown(departments, '/departments')}
               </li>
-              <li
+
+              {/* <li
                 onMouseEnter={() => handleMouseEnter('doctors')}
                 onMouseLeave={handleMouseLeave}
                 className="relative"
@@ -529,6 +536,8 @@ export default function Home() {
                 {activeDropdown === 'doctors' &&
                   renderDropdown(doctors, '/doctor-details')}
               </li>
+
+
               <li
                 onMouseEnter={() => handleMouseEnter('medicines')}
                 onMouseLeave={handleMouseLeave}
@@ -540,6 +549,9 @@ export default function Home() {
                 {activeDropdown === 'medicines' &&
                   renderDropdown(medicines, '/medicines')}
               </li>
+
+
+
               <li
                 onMouseEnter={() => handleMouseEnter('pets')}
                 onMouseLeave={handleMouseLeave}
@@ -549,7 +561,9 @@ export default function Home() {
                   Pets
                 </a>
                 {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
-              </li>
+              </li> */}
+
+
             </ul>
           </nav>
 

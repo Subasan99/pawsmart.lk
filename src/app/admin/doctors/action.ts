@@ -11,7 +11,7 @@ export async function getDoctorData(
   petId?: string,
   name?: string
 ) {
-  console.log("dfsdfdf", pageCount, pageSize);
+
   try {
     const response = await axiosInstance.get(`/doctor/filter`, {
       params: {
@@ -23,7 +23,6 @@ export async function getDoctorData(
         name: name ? name : undefined,
       },
     });
-    console.log("dffdfscsthusikal", response);
     return response?.data;
   } catch (error) {
     console.log("Error fetching doctor data:", error);

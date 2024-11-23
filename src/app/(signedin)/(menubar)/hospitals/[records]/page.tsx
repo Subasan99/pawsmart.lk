@@ -30,7 +30,7 @@ console.log("hospitalNamehospitalName",hospitalName);
         searchTerm: undefined,
         cityId: decodedRecords?.cityId,
         hospitalId: hospitalName? hospitalName?.value :decodedRecords?.hospitalId,
-        specializationId: undefined,
+        specializationId:  decodedRecords?.specializationId,
         day: decodedRecords.day,
       });
 
@@ -51,7 +51,7 @@ console.log("hospitalNamehospitalName",hospitalName);
         searchTerm: undefined,
         cityId: decodedRecords?.cityId,
         hospitalId:decodedRecords?.hospitalId,
-        specializationId: undefined,
+        specializationId:  decodedRecords?.specializationId,
         day: decodedRecords.day,
       });
 
