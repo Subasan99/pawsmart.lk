@@ -1,24 +1,22 @@
-'use client';
+"use client";
 
-import DoctorAppointments from '@/components/AdminPanelComponents/DoctorComponents/DoctorAppointments';
-import DoctorTimeSlots from '@/components/AdminPanelComponents/DoctorComponents/DoctorTimeSlots';
-import EditIcon from '@/components/svg/edit_icon';
-import GenderIcon from '@/components/svg/gender-icon';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useDoctorStore } from '@/store/doctorStore';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import DefaultImage from '../../../../../public/default_user.png';
+import DoctorAppointments from "@/components/AdminPanelComponents/DoctorComponents/DoctorAppointments";
+import DoctorTimeSlots from "@/components/AdminPanelComponents/DoctorComponents/DoctorTimeSlots";
+import EditIcon from "@/components/svg/edit_icon";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useDoctorStore } from "@/store/doctorStore";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   getAppointmentsByDoctorId,
   getDoctorById,
   updateTimeSlot,
-} from './action';
-import { Edit, Mail, Phone, User, XIcon } from 'lucide-react';
-import PetCard from '@/components/AdminPanelComponents/DoctorComponents/PetCard';
-import DoctorPets from '@/components/AdminPanelComponents/DoctorComponents/DoctorPets';
-import { useRouter } from 'next/navigation';
+} from "./action";
+import { Edit, Mail, Phone, User, XIcon } from "lucide-react";
+import DoctorPets from "@/components/AdminPanelComponents/DoctorComponents/DoctorPets";
+import { useRouter } from "next/navigation";
+import { updateUserImage } from "../../users/action";
 
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -29,34 +27,82 @@ const Index = ({ params }: { params: { id: string } }) => {
     loading,
     doctorAppointments,
     setDoctorAppointments,
+    doctorfiltAppointments,
   ] = useDoctorStore((state: any) => [
     state.selectedDoctor,
     state.setSelectedDoctor,
     state.loading,
     state.doctorAppointments,
     state.setDoctorAppointments,
+    state.doctorfiltAppointments,
   ]);
 
   const [dayTimeSlotModal, setDayTimeSlotModal] = useState<boolean>(false);
+  const [doctorAppointmentRecords, setDoctorAppointmentRecords] =
+    useState<any>(undefined);
+  const [filterParams, setFilterParams] = useState({
+    pageSize: 10,
+    pageCount: 1,
+  });
 
   async function handleSelectDoctor() {
     const data = await getDoctorById(params.id);
-    const appointments = await getAppointmentsByDoctorId(params.id, 1, 10);
-    setDoctorAppointments(appointments);
     setSelectedDoctor(data);
   }
 
-  console.log('PetCardPetCardPetCardPetCard', selectedDoctor.petResponses);
+  async function handleDoctorAppointment() {
+    const appointments = await getAppointmentsByDoctorId(
+      params.id,
+      filterParams.pageCount,
+      filterParams.pageSize
+    );
+    setDoctorAppointments(appointments.records);
+    setDoctorAppointmentRecords(appointments);
+  }
 
   useEffect(() => {
     handleSelectDoctor();
-  }, [params.id]);
+    handleDoctorAppointment();
+  }, [filterParams]);
 
   if (loading) {
     <div>Loading...!</div>;
   }
   const handleClose = () => {
     router.back();
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0] || null;
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert("File size exceeds the 2 MB limit.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+
+      const updatedImageUrl = await updateUserImage(selectedDoctor.userId, formData);
+
+      if (updatedImageUrl?.success) {
+        handleSelectDoctor();
+      }
+    } catch (error) {
+      console.error("Error during image upload:", error);
+      alert("An error occurred while updating the image.");
+    }
   };
 
   return (
@@ -130,7 +176,22 @@ const Index = ({ params }: { params: { id: string } }) => {
                   <User className="w-16 h-16 text-gray-400" />
                 </div>
               )}
-              <EditIcon className="absolute top-0 right-0 cursor-pointer" />
+              <button
+                type="button"
+                onClick={() => document.getElementById("image-upload")?.click()}
+              >
+                <EditIcon className="absolute top-0 right-0 cursor-pointer" />
+              </button>
+              <input
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                aria-label="Upload an image"
+                onChange={(e) => {
+                  handleImageUpload(e);
+                }}
+              />
             </div>
             <div className="flex-1">
               <div className="flex items-center justify-between">
@@ -139,7 +200,7 @@ const Index = ({ params }: { params: { id: string } }) => {
                     {selectedDoctor?.name}
                     {selectedDoctor?.gender && (
                       <span className="px-2 py-1 text-sm bg-blue-100 text-blue-800 rounded-full">
-                        {selectedDoctor.gender === 'female' ? 'Female' : 'Male'}
+                        {selectedDoctor.gender === "female" ? "Female" : "Male"}
                       </span>
                     )}
                   </h1>
@@ -185,7 +246,17 @@ const Index = ({ params }: { params: { id: string } }) => {
           <TabsTrigger value="pets">Pets</TabsTrigger>
         </TabsList>
         <TabsContent value="appointments">
-          <DoctorAppointments appointments={doctorAppointments} />
+          <DoctorAppointments
+            appointments={doctorfiltAppointments}
+            doctorAppointmentRecords={doctorAppointmentRecords}
+            handleFilter={(pageNumber, pageSize) => {
+              setFilterParams((prevParams) => ({
+                ...prevParams,
+                pageCount: pageNumber,
+                pageSize: pageSize,
+              }));
+            }}
+          />
         </TabsContent>
         <TabsContent value="timeslot">
           <DoctorTimeSlots
