@@ -155,7 +155,6 @@ export default function Home() {
       }))
     : [];
 
-
   const handleMouseEnter = useCallback(
     (view: string) => setActiveDropdown(view),
     []
@@ -204,7 +203,6 @@ export default function Home() {
     setLogin(undefined);
     router.push('/');
     window.location.reload();
-
   };
 
   // useEffect(() => {
@@ -218,7 +216,6 @@ export default function Home() {
 
   //   }
   // }, [login?.role]);
-
 
   const renderDropdown = (items: any[], hrefBase: string) => (
     <div className="absolute bg-white shadow-md mt-2 w-48">
@@ -265,7 +262,6 @@ export default function Home() {
     if (response.success) {
       toast.success(response.message);
       setResetPassword(true);
-
     } else {
       toast.error(response.message);
     }
@@ -360,12 +356,11 @@ export default function Home() {
 
     try {
       const response: any = await registerUser(formattedValues);
-      if (response.success === "true") {
+      if (response.success === 'true') {
         toast.success(response.message);
         setIsSignupOpen(false);
         setIsDialogOpen(true);
         setIsForgotPasswordOpen(false);
-
       } else {
         toast.error(response.message);
         signupForm.reset();
@@ -403,7 +398,10 @@ export default function Home() {
                 className="w-[288px]"
                 alt="Company Logo"
               />
+
               <ul className="flex flex-col  space-y-4 text-black">
+
+
                 <li key={0}>
                   <a href="/" className="hover:text-red-500">
                     Home
@@ -421,18 +419,28 @@ export default function Home() {
                     </a>
                   </li>
                 )}
-                <li
-                  onClick={() => handleMouseEnter('departments')}
-                  className="hover:text-red-500 relative"
-                >
-                  <a href="/departments" className="hover:text-red-500">
+
+                <li key={0}>
+                  <a href="/viewallhospi" className="hover:text-red-500">
                     Hospitals
                   </a>
-                  {activeDropdown === 'departments' &&
-                    renderDropdown(departments, '/departments')}
                 </li>
 
-{/* 
+
+
+
+                {/* <li
+                  onClick={() => handleMouseEnter('viewallhospi')}
+                  className="hover:text-red-500 relative"
+                >
+                  <a href="/viewallhospi" className="hover:text-red-500">
+                    Hospitals
+                  </a>
+                  {activeDropdown === 'viewallhospi' &&
+                    renderDropdown(departments, '/viewallhospi')}
+                </li> */}
+
+                {/* 
 
                 <li
                   onClick={() => handleMouseEnter('doctors')}
@@ -465,6 +473,8 @@ export default function Home() {
                 </li>
 
  */}
+
+ 
 
                 {login ? (
                   <div className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
@@ -513,7 +523,14 @@ export default function Home() {
                   </a>
                 </li>
               )}
-              <li
+
+              <li key={0}>
+                <a href="/viewallhospi" className="hover:text-red-500">
+                  Hospitals
+                </a>
+              </li>
+
+              {/* <li
                 onMouseEnter={() => handleMouseEnter('departments')}
                 onMouseLeave={handleMouseLeave}
                 className="relative"
@@ -523,7 +540,7 @@ export default function Home() {
                 </a>
                 {activeDropdown === 'departments' &&
                   renderDropdown(departments, '/departments')}
-              </li>
+              </li> */}
 
               {/* <li
                 onMouseEnter={() => handleMouseEnter('doctors')}
@@ -562,8 +579,6 @@ export default function Home() {
                 </a>
                 {activeDropdown === 'pets' && renderDropdown(pets, '/pets')}
               </li> */}
-
-
             </ul>
           </nav>
 

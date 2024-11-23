@@ -34,7 +34,10 @@ console.log("hospitalNamehospitalName",hospitalName);
         day: decodedRecords.day,
       });
 
-      setAllHospitals(searchTextData?.records);
+      const activeHospitals = searchTextData?.records?.filter(
+        (hospital: any) => hospital.active
+      );
+      setAllHospitals(activeHospitals);
       
     } catch (error) {
       console.error('Error fetching hospital data:', error);

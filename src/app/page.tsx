@@ -300,7 +300,6 @@ export default function Home() {
             <div className="relative z-3 flex flex-col items-center text-center py-16">
               <div className="relative py-16">
                 <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
-                  {/* Left side content */}
                   <div className="text-center md:text-left">
                     <h1 className="text-4xl md:text-6xl font-bold text-blue-100 mb-4">
                       Find Pet Healthcare Near You with
@@ -349,7 +348,7 @@ export default function Home() {
 
                     <div className="relative z-2 home-first w-full pt-4">
                       <section className="mb-8">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-5 gap-4">
                           {/* <input
         type="text"
         placeholder="Search doctors, clinics, hospitals, etc."
@@ -444,7 +443,7 @@ export default function Home() {
         <div>
           <section className="flex flex-col items-center py-12 z-5 w-full px-4 pb-8 max-w-6xl mx-auto">
             <div className="flex flex-row justify-between items-center w-full">
-              <div className=" m1 flex-1 text-center">
+              <div className="m1 flex-1 text-center">
                 <h1 className="text-4xl font-bold leading-snug">
                   Welcome to Stubby!
                   <span className="text-red-500">
@@ -452,20 +451,21 @@ export default function Home() {
                   </span>
                 </h1>
                 <p className="mt-4 text-gray-600">
-                  Explore our services to find the nearest hospital,
+                  Here, you can explore and select hospitals nearby,
                   <br />
-                  book appointments, connect with expert doctors,
+                  filter by your preferences, and choose expert doctors
                   <br />
-                  and discover care for your beloved pets.
+                  to book appointments for your beloved pets.
                 </p>
                 <p className="border-blue-500 text-blue-500 py-2 px-4 rounded hover:text-black transition">
                   Sign in now to unlock appointment booking and personalized
                   features!
                 </p>
                 <div className="mt-6 space-x-4">
+                  {/* Uncomment the button below if needed */}
                   {/* <button className="bg-white border border-blue-500 text-blue-500 py-2 px-4 rounded hover:bg-blue-500 hover:text-white transition">
-                    Nearest Hospital
-                  </button> */}
+      Select Hospital
+    </button> */}
                 </div>
               </div>
 

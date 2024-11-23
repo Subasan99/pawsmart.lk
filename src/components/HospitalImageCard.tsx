@@ -51,15 +51,6 @@ const HospitalImageCard = ({
           <p className="text-gray-500">From {item.city}</p>
           <p className="text-sm text-gray-600 mt-1">at {item.address}</p>
         </div>
-
-        {/* Medicine Names */}
-        <div className="mt-2 text-sm text-gray-600">
-          {item.medicineResponses?.map((med: any) => (
-            <span key={med.id} className="block">
-              {med.name}
-            </span>
-          ))}
-        </div>
       </div>
 
 

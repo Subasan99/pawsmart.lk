@@ -4,7 +4,6 @@ import { ArrowRight, Filter } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { IconRight } from 'react-day-picker';
-
 interface PopularDoctorsProps {
   title: string;
   description: string;
@@ -110,12 +109,26 @@ const PopularData: React.FC<PopularDoctorsProps> = ({
               ))} */}
 
               {/* See All Button */}
-              <Link
+              {/* <Link
                 href="/viewallhospi"
-                className="relative h-full col-span-2 md:col-span-1 rounded-lg overflow-hidden bg-gray-400 text-white flex flex-col items-center justify-center group"
+                className="relative h-full col-span-2 md:col-span-1 rounded-lg overflow-hidden bg-emerald-700 text-white flex flex-col items-center justify-center group"
               >
                 <ArrowRight className="text-2xl mb-2 group-hover:translate-x-1 transition-transform duration-300" />
                 <p className="font-medium">See All</p>
+              </Link> */}
+              <Link
+                href="/viewallhospi"
+                className="relative h-full col-span-2 md:col-span-1  bg-gray-400 hover:bg-slate-500  rounded-lg overflow-hidden bg-cover bg-center text-white flex flex-col items-center justify-center group"
+                style={{
+                  // backgroundImage: `url(${defaultImage})`,
+                  // filter: 'blur(0.1px)',
+                  // textDecoration: 'none',
+                }}
+              >
+                <ArrowRight className="text-7xl text-white mb-2 group-hover:translate-x-1 transition-transform duration-300 bg-gradient-to-t to-transparent" />
+                <p className="font-extrabold text-white text-4xl rounded-lg bg-gradient-to-tto-transparent ">
+                  See All
+                </p>
               </Link>
             </div>
           </div>

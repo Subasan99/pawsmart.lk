@@ -64,7 +64,20 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       />
       {isDropdownVisible && (
-        <ul className="absolute bg-white shadow-md mt-1 max-h-48 w-full overflow-y-auto z-10">
+        <ul className="absolute bg-white shadow-md mt-1 max-h-48 w-full overflow-y-auto z-10"
+        style={{
+          position: "absolute",
+          backgroundColor: "white",
+          boxShadow: "0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)",
+          marginTop: "0.25rem",
+          maxHeight: "12rem",
+          width: "100%",
+          overflowY: "auto",
+          zIndex: 10,
+          scrollbarWidth: "none", 
+          msOverflowStyle: "none", 
+        }}
+        >
           {/* Option to clear selection */}
           {value && (
             <li

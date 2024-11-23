@@ -88,32 +88,128 @@ export const gethospitalFilterAllData = async (params: {
   }
 };
 
-
-export async function getDoctorFilterData(
-  pageCount?: number,
-  pageSize?: number,
-  specializationId?: string,
-  departmentId?: string,
-  petId?: string,
-  name?: string
-) {
-  console.log("dfsdfdf", pageCount, pageSize,name);
+export const getDoctorFilterData = async (params: {
+  pageCount: number;
+  pageSize: number;
+  name?: string;
+  // departmentId?: number;
+  petId?: number;
+  specializationId?:number;
+  date?: string;
+}) => {
   try {
+    console.log("paramsparamsparams",params)
+
     const response = await axiosInstance.get(`/doctor/filter`, {
       params: {
-        pageCount: pageCount,
-        pageSize: pageSize,
-        specializationId: specializationId ? specializationId : undefined,
-        departmentId: departmentId ? departmentId : undefined,
-        petId: petId ? petId : undefined,
-        name: name ? name : undefined,
+        pageSize: params.pageSize,
+        pageCount: params.pageCount,
+        name: params?.name ,
+        // departmentId: params?.departmentId ,
+        petId:params?.petId ,
+        specializationId: params?.specializationId,
+        date: params?.date ,
+
+
       },
     });
+
     return response.data;
   } catch (error) {
     console.log('error', error);
   }
 };
+
+
+// export async function getDoctorFilterData(
+//   pageCount: number,
+//   pageSize: number,
+//   name?: string,
+//   // departmentId?: number;
+//   petId?: number,
+//   specializationId?:number,
+//   date?: string,
+// ) {
+//   try {
+//     const response = await axiosInstance.get(`/doctor/filter`, {
+//       params: {
+
+//         pageSize: pageSize?pageSize: undefined,
+//         pageCount: pageCount? pageCount: undefined,
+//         name: name?name: undefined,
+//         // departmentId: params?.departmentId ,
+//         petId:petId? petId : undefined,
+//         specializationId:specializationId? specializationId: undefined,
+//         date: date?date: undefined,
+
+//       },
+//     });
+//     return response?.data;
+//   } catch (error) {
+//     console.log("Error fetching Appointments by Doctor Id: ", error);
+//   }
+// }
+
+
+// export const getDoctorFilterData = async (params: {
+//   pageCount: number;
+//   pageSize: number;
+//   name?: string;
+//   departmentId?: number;
+//   petId?: number;
+//   specializationId?:number;
+//   date?: string;
+// }) => {
+//   try {
+//     console.log("paramsparamsparams",params)
+
+//     const response = await axiosInstance.get(`doctor/filter?`, {
+//       params: {
+//         pageSize: params.pageSize ?params.pageSize  :undefined,
+//         pageCount: params.pageCount ?params.pageCount  :undefined,
+//         name: params?.name ? params?.name :undefined,
+//         departmentId: params?.departmentId ?  params?.departmentId :undefined,
+//         petId:params?.petId ?params?.petId  :undefined,
+//         specializationId: params?.specializationId ? params?.specializationId :undefined,
+//         date: params?.date ? params?.date :undefined,
+
+
+//       },
+//     });
+
+//     return response.data;
+//   } catch (error) {
+//     console.log('error', error);
+//   }
+// };
+
+// export async function getDoctorFilterData(
+//   pageCount?: number,
+//   pageSize?: number,
+//   specializationId?: string,
+//   departmentId?: string,
+//   petId?: string,
+//   name?: string,
+//   date?: string
+// ) {
+
+//   try {
+//     const response = await axiosInstance.get(`/doctor/filter`, {
+//       params: {
+//         pageCount: pageCount,
+//         pageSize: pageSize,
+//         specializationId: specializationId ? specializationId : undefined,
+//         departmentId: departmentId ? departmentId : undefined,
+//         petId: petId ? petId : undefined,
+//         name: name ? name : undefined,
+//         date:date?date : undefined,
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.log('error', error);
+//   }
+// };
 
 export const getPetFilterData = async (params: {
   pageCount: number;

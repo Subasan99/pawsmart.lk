@@ -313,9 +313,26 @@ import { useRouter } from 'next/navigation';
 import DocBook from '@/components/ui/docBook';
 import FilterDropdown from '@/components/FilterDropdown';
 import { Calendar } from '@/components/ui/calendar';
-import { CloudFog } from 'lucide-react';
+import { CalendarIcon, CloudFog } from 'lucide-react';
 import { useAdminStore } from '@/store/adminStore';
 import { useDoctorStore } from '@/store/doctorStore';
+import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { format } from 'date-fns';
+import { getAllPets } from '@/app/admin/pets/action';
+import { usePetStore } from '@/store/petStore';
+import Pets from '../../pets/page';
 
 const Index = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -350,21 +367,31 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.setSpecialization,
     state.setLoading,
   ]);
-
+  const [pet, setAllPet] = usePetStore((state: any) => [
+    state.pet,
+    state.setAllPet,
+  ]);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
     getByHospitalDetails();
   }, []);
 
   useEffect(() => {
-    doctorFilter();
-  }, [docName?.label]);
+    // doctorFilter();
+  }, [  nameSpecialization.value,
+    petName.value,
+    selectedDate]);
 
   const getByHospitalDetails = async () => {
     try {
       setLoading(true);
       const getByHospital = await getByIdHospital(params?.id);
+      const pets = await getAllPets();
+
       const DoctorData = await getByIdHospital(params?.id);
       setSelectedHospital(getByHospital);
+      setAllPet(pets);
+
       // const doctorNames = DoctorData.map((doctor: any) => ({
       //   label: doctor.name,
       //   value: doctor.id,
@@ -378,7 +405,7 @@ const Index = ({ params }: { params: { id: string } }) => {
           }))
         ) || [];
 
-        const SpecializationNames =
+      const SpecializationNames =
         DoctorData?.doctorDepartmentResponses.flatMap((department: any) =>
           department?.doctorResponses.map((doctor: any) => ({
             label: doctor.specializationName, // Doctor name
@@ -409,49 +436,89 @@ const Index = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  const doctorFilter = async () => {
-    try {
-      setLoading(true);
+//   const doctorFilter = async () => {
+//     // debugger
+//     try {
+//       setLoading(true);
+// // debugger
+//       const searchTextData = await getDoctorFilterData({
+//         pageCount:10,
+//         pageSize:1,
+//         name:docName,
+//         departmentId:undefined,
+// petId:petName.value,
+// specializationId:nameSpecialization.value,
+// date:selectedDate
+//       });
+// // debugger
+//       console.log(
+//         'searchTextDatasearchTextDatasearchTextData',
+//         searchTextData?.data,
+//       );
 
-      const searchTextData = await getDoctorFilterData(
-        10,
-        1,
-        nameSpecialization.value,
-        undefined,
-        undefined,
-        docName?.label
-      );
+//       // if (searchTextData?.records?.length > 0) {
+//       //   // Flatten doctorResponses from all hospitals and remove duplicates
+//       //   const doctors = searchTextData.records.flatMap((hospital: any) =>
+//       //     hospital.doctorDepartmentResponses?.flatMap((dept: any) =>
+//       //       dept.doctorResponses || []
+//       //     )
+//       //   );
 
-      console.log(
-        'searchTextDatasearchTextDatasearchTextData',
-        searchTextData?.records
-      );
-  
+//       //   // Deduplicate doctors by unique ID
+//       //   const uniqueDoctors = doctors.filter(
+//       //     (doctor: any, index: number, self: any[]) =>
+//       //       self.findIndex((d: any) => d.id === doctor.id) === index
+//       //   );
 
-      // if (searchTextData?.records?.length > 0) {
-      //   // Flatten doctorResponses from all hospitals and remove duplicates
-      //   const doctors = searchTextData.records.flatMap((hospital: any) =>
-      //     hospital.doctorDepartmentResponses?.flatMap((dept: any) =>
-      //       dept.doctorResponses || []
-      //     )
-      //   );
-  
-      //   // Deduplicate doctors by unique ID
-      //   const uniqueDoctors = doctors.filter(
-      //     (doctor: any, index: number, self: any[]) =>
-      //       self.findIndex((d: any) => d.id === doctor.id) === index
-      //   );
-  
-      //   // Store doctors in the state
-      //   useHospitalStore.getState().setDoctors(uniqueDoctors);
-      // }
-  
-    } catch (error) {
-      console.error('Error fetching data:', error);
+//       //   // Store doctors in the state
+//       //   useHospitalStore.getState().setDoctors(uniqueDoctors);
+//       // }
+//     } catch (error) {
+//       console.error('Error fetching data:', error);
+//     }
+//   };
+
+const formatDate = (date:any) => {
+  const d = new Date(date);
+  return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+};
+
+const formattedDate = formatDate(selectedDate);
+
+
+const doctorFilter = async () => {
+  try {
+    setLoading(true);
+
+    // Log parameters
+    const requestData = {
+      pageCount: 10,
+      pageSize: 1,
+      name: docName.label ,
+      // departmentId: undefined,
+      petId: petName?.value,
+      specializationId: nameSpecialization?.value,
+      date: formattedDate,
+    };
+    console.log('Request Data:', requestData);
+
+    const searchTextData = await getDoctorFilterData(requestData);
+
+    console.log('Full API Response:', searchTextData);
+
+    if (searchTextData) {
+      console.log('Search Data:', searchTextData?.data);
+    } else {
+      console.warn('API returned undefined response.');
     }
-  };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const handleClick = (imageName: any) => {
+const handleClick = (imageName: any) => {
     console.log(`${imageName} clicked!`);
   };
 
@@ -462,15 +529,15 @@ const Index = ({ params }: { params: { id: string } }) => {
         <hr className="my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center gap-6">
-          {/* <FilterDropdown
-            options={doctors?.map((d: any) => ({
+        <FilterDropdown
+            options={pet?.map((d: any) => ({
               label: d.name,
               value: d.id,
             }))}
             placeholder="🐾 Select Pet"
             onChange={setPetName}
             value={petName}
-          /> */}
+          /> 
           <FilterDropdown
             options={doctorsinhospital}
             placeholder="👩‍⚕️ Select Doctor"
@@ -478,12 +545,36 @@ const Index = ({ params }: { params: { id: string } }) => {
             value={docName}
           />
 
-<FilterDropdown
+          <FilterDropdown
             options={specializationinhospital}
             placeholder="👩‍⚕️ Select Specialization"
             onChange={setSelectedSpecialization}
             value={nameSpecialization}
           />
+
+          <div className="relative">
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <button className="bg-white border border-gray-500 rounded-lg px-4 py-2 w-full flex justify-between items-center text-sm font-medium hover:bg-gray-50">
+                  {selectedDate
+                    ? format(selectedDate, 'PPP')
+                    : '📅 Select Date'}
+                  <CalendarIcon className="h-4 w-4 text-gray-500" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="p-0 z-50">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date); // Update selected date state
+                    setOpen(false); // Close the calendar after selection
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
           {/* <Calendar
             mode="single"

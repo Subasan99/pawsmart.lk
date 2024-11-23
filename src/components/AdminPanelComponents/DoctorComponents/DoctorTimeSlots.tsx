@@ -35,7 +35,7 @@ const DoctorTimeSlots = (props: Props) => {
       <div className="flex flex-col w-full gap-2">
         <h1 className="text-xs font-semibold text-gray-800">Timeslots</h1>
         <div className="overflow-x-auto w-full">
-  {props?.dayTimeSlotReponse.length > 0 ? (
+  {props?.dayTimeSlotReponse?.length > 0 ? (
     <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
       <thead>
         <tr className="bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
@@ -44,7 +44,7 @@ const DoctorTimeSlots = (props: Props) => {
         </tr>
       </thead>
       <tbody className="text-gray-700 text-sm font-medium">
-        {props?.dayTimeSlotReponse.map((dayTimeSlotResponse: DayTimeSlotResponses) => (
+        {props?.dayTimeSlotReponse?.map((dayTimeSlotResponse: DayTimeSlotResponses) => (
           <tr key={dayTimeSlotResponse.day} className="border-b border-gray-200">
             <td className="py-3 px-6 w-1/2 text-center  whitespace-nowrap text-xs font-semibold text-gray-600">
               {dayTimeSlotResponse.day}

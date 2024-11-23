@@ -252,7 +252,7 @@ const DocCreateForm = (props: Props) => {
               )}
             />
 
-            {/* Date of Birth */}
+         
             <FormField
               control={form.control}
               name="dateOfBirth"
