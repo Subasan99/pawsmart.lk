@@ -49,8 +49,8 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize,
-        pageIndex: 0,
+        pageSize: pageSize ? pageSize : 100, // Set page size
+        pageIndex: 0, // Ensure pagination starts from the first page
       },
     },
   });
@@ -117,17 +117,17 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {records && handleFilter && (
-        <div className="flex w-full justify-end py-4">
-          <Paginator
-            totalPages={records.totalPages}
-            totalRecords={records.totalRecords}
-            pageNumber={records.pageNumber}
-            pageSize={records.pageSize}
-            changePage={handleFilter}
-          />
-        </div>
-      )}
+      <div className="flex w-full justify-end py-4">
+        {records ? <Paginator
+          totalPages={records?.totalPages}
+          totalRecords={records?.totalRecords}
+          pageNumber={records?.pageNumber}
+          pageSize={records?.pageSize}
+          changePage={(pageNumber, pageSize) => {
+            handleFilter?.(pageNumber, pageSize);
+          }}
+        /> : ""}
+      </div>
     </div>
   );
 }
