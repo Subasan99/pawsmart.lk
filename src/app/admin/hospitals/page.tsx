@@ -74,6 +74,7 @@ export default function DemoPage() {
           columns={hospitalColumns}
           data={hospitals}
           records={hospitalRecords}
+          pageSize={hospitalRecords?.pageSize}
           handleFilter={(pageNumber, pageSize) => {
             setFilterParams((prevParams) => ({
               ...prevParams,

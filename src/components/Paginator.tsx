@@ -36,7 +36,7 @@ export default function Paginator(props: IPaginatorProps) {
   };
 
   return (
-    <div className="py-1 flex justify-end self-end bg-gray-200">
+    <div className="py-1 w-full rounded-sm flex justify-end self-end bg-gray-200">
       <div className="px-5 self-center">Items Per Page:</div>
       <div className="w-20">
         <DropDown
