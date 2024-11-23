@@ -1,29 +1,29 @@
-'use client';
-import { getAllSpecializations } from '@/api/route';
-import { DataTable } from '@/components/AdminPanelComponents/data-table';
-import MedicineCreate from '@/components/AdminPanelComponents/MedicineComponents/MedicineCreate';
-import { useMedicineStore } from '@/store/medicinesStore';
-import { useSpecializationStore } from '@/store/specializationStore';
-import { useEffect, useState } from 'react';
-import { columns } from './columns';
-import { CalendarIcon, FilterIcon, Syringe } from 'lucide-react';
+"use client";
+import { getAllSpecializations } from "@/api/route";
+import { DataTable } from "@/components/AdminPanelComponents/data-table";
+import MedicineCreate from "@/components/AdminPanelComponents/MedicineComponents/MedicineCreate";
+import { useMedicineStore } from "@/store/medicinesStore";
+import { useSpecializationStore } from "@/store/specializationStore";
+import { useEffect, useState } from "react";
+import { columns } from "./columns";
+import { CalendarIcon, FilterIcon, Syringe } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
-import { getAllMedicinesData, getMedicineData } from './action';
-import { Value } from '@radix-ui/react-select';
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { getAllMedicinesData, getMedicineData } from "./action";
+import { Value } from "@radix-ui/react-select";
 export default function Index() {
   const [isFiltersOpen, setIsFiltersOpen] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<any | null>(null);
@@ -32,33 +32,35 @@ export default function Index() {
   const [selectedSelectedMedicines, setSelectedMedicines] = useState<
     any | undefined
   >(null);
-  const [medicines, setAllMedicines,filterMedicines,setFilterMedicines] = useMedicineStore((state: any) => [
-    state.medicines,
-    state.setAllMedicines,
-    state.filterMedicines,
-    state.setFilterMedicines,
-  ]);
+  const [medicines, setAllMedicines, filterMedicines, setFilterMedicines] =
+    useMedicineStore((state: any) => [
+      state.medicines,
+      state.setAllMedicines,
+      state.filterMedicines,
+      state.setFilterMedicines,
+    ]);
   const [specialization, setAllSpecialization] = useSpecializationStore(
     (state: any) => [state.specialization, state.setAllSpecialization]
   );
-  // useEffect(() => {
-  //   fetchData();
-  // }, [ selectedSelectedMedicines]);
+
+  const [filterParams, setFilterParams] = useState({
+    pageSize: 10,
+    pageCount: 1,
+  });
 
   useEffect(() => {
     if (!isFiltersOpen) {
       setSelectedMedicines(undefined);
     }
     fetchData();
-   
-  }, [selectedSelectedMedicines]);
+  }, [selectedSelectedMedicines, filterParams]);
 
   async function fetchData() {
     const medicinesData = await getAllMedicinesData();
 
     const data = await getMedicineData(
-      1,
-      10,
+      filterParams.pageCount,
+      filterParams.pageSize,
       selectedSelectedMedicines
       // selectedDate
     );
@@ -141,7 +143,19 @@ export default function Index() {
       <div className="self-end">
         <MedicineCreate />
       </div>
-      <DataTable columns={columns} data={filterMedicines} />
+      <DataTable
+        columns={columns}
+        data={filterMedicines?.records}
+        records={filterMedicines}
+        pageSize={filterMedicines?.pageSize}
+        handleFilter={(pageNumber, pageSize) => {
+          setFilterParams((prevParams) => ({
+            ...prevParams,
+            pageCount: pageNumber,
+            pageSize: pageSize,
+          }));
+        }}
+      />
     </div>
   );
 }

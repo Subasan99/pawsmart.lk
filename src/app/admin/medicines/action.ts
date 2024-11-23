@@ -20,7 +20,7 @@ export async function getMedicineData(
 // 
       },
     });
-    return response?.data?.records;
+    return response?.data;
   } catch (error) {
     console.log("Error fetching medicine data:", error);
   }
