@@ -414,8 +414,8 @@ const Index = ({ params }: { params: { id: string } }) => {
       setLoading(true);
 
       const searchTextData = await getDoctorFilterData(
-        10,
         1,
+        10,
         nameSpecialization.value,
         undefined,
         undefined,
