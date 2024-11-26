@@ -222,7 +222,7 @@ import { useHospitalStore } from '@/store/hospitalStore';
 import FilterDropdown from '@/components/FilterDropdown';
 import HospitalImageCard from '@/components/HospitalImageCard';
 import { getCities, getHospitalFilterData } from '@/app/home/action';
-import { Filter } from 'lucide-react';
+import { Filter, Search } from 'lucide-react';
 import { getAllSpecializations } from '@/api/route';
 import { useSpecializationStore } from '@/store/specializationStore';
 import { useCityStore } from '@/store/citiesStore';
@@ -390,9 +390,24 @@ const Index = () => {
           />
         ))
       ) : (
-        <div className="text-center text-gray-500 text-lg">
-          No hospital found.
+        <div className="w-full">
+        <div className="text-sm text-blue-600 text-right mb-2">
+          0 Results Found
         </div>
+        <div className="border rounded-lg p-8">
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div className="w-16 h-16 bg-blue-700 rounded-full flex items-center justify-center">
+              <Search className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-gray-400 text-xl font-medium">
+              No data found
+            </div>
+            <div className="text-gray-400 text-sm max-w-lg text-center">
+              No search results found for "..."
+            </div>
+          </div>
+        </div>
+      </div>
       )}
     </div>
   );

@@ -1,5 +1,6 @@
 import { doctorResponses } from '@/lib/typings';
 import { useDoctorStore } from '@/store/doctorStore';
+import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -186,18 +187,23 @@ console.log("doctors",doctors)
                 {doc?.isActive ? 'Active' : 'Inactive'}
               </span>
               <Link
-                href={{
-                  pathname: `${pathname}${doc.id && !doctor ? `/${doc.id}` : ''}`,
-                  query: doctor ? { doctorId: doc.id } : undefined,
-                }}
-                onClick={() => {
-                  if (doctor) setSelectedDoctor(doc);
-                  handleClick(doc.name, doc.preSignedUrl, doc.id);
-                }}
-                className="block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
-              >
-                Book Appointment
-              </Link>
+  href={{
+    pathname: `${pathname}${doc.id && !doctor ? `/${doc.id}` : ''}`,
+    query: doctor ? { doctorId: doc.id } : undefined,
+  }}
+  onClick={() => {
+    if (doctor) setSelectedDoctor(doc);
+    handleClick(doc.name, doc.preSignedUrl, doc.id);
+  }}
+  className="flex items-center justify-center group bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+>
+  Book Appointment
+  <ArrowRight 
+    className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200" 
+    size={20}
+  />
+</Link>
+
              
             </div>
           </div>

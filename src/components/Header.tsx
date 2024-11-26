@@ -51,7 +51,14 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { loginUser, registerUser } from '@/app/auth/action';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Eye, EyeOff, LogOut, User } from 'lucide-react';
+import {
+  ArrowRight,
+  CalendarIcon,
+  Eye,
+  EyeOff,
+  LogOut,
+  User,
+} from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { forgotPassword, resetPassword } from '@/app/forgotpassword/action';
@@ -400,8 +407,6 @@ export default function Home() {
               />
 
               <ul className="flex flex-col  space-y-4 text-black">
-
-
                 <li key={0}>
                   <a href="/" className="hover:text-red-500">
                     Home
@@ -425,9 +430,6 @@ export default function Home() {
                     Hospitals
                   </a>
                 </li>
-
-
-
 
                 {/* <li
                   onClick={() => handleMouseEnter('viewallhospi')}
@@ -473,8 +475,6 @@ export default function Home() {
                 </li>
 
  */}
-
- 
 
                 {login ? (
                   <div className="bg-red-500 hover:bg-yellow-500 text-white px-4 py-1 rounded">
@@ -592,25 +592,43 @@ export default function Home() {
               </div>
               <div
                 onClick={handleSignout}
-                className="text-black justify-end items-end text-right hover:bg-yellow-500 py-1 rounded"
+                className="text-black justify-end items-end text-right py-1 rounded"
               >
-                <button className="flex  gap-2 cursor-pointer  justify-end items-end text-right">
+                <button className="flex items-center gap-2 group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors">
+                  <LogOut size={30} />
+                  <span className="flex items-center text-sm lg:text-lg font-semibold">
+                    LOG OUT
+                    <ArrowRight
+                      className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+                      size={20}
+                    />
+                  </span>
+                </button>
+
+                {/* <button className="flex  gap-2 cursor-pointer  justify-end items-end text-right">
                   <LogOut size={30} />
                   <span className="text-sm lg:text-lg font-semibold">
                     LOG OUT
                   </span>
-                </button>
+                </button> */}
               </div>
             </div>
           ) : (
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <div className=" hover:bg-yellow-500 text-black px-4 py-1 rounded">
+                <div
+                  //  className=" hover:bg-yellow-500 text-black px-4 py-1 rounded">
+                  className="  px-4 py-1 rounded"
+                >
                   {/* <p className="hover:text-black">Sign In</p> */}
-                  <button className="flex items-center gap-2 cursor-pointer">
+                  <button className="flex items-center gap-2 group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors">
                     <User size={30} />
-                    <span className="text-sm lg:text-lg font-semibold">
+                    <span className="flex items-center text-sm lg:text-lg font-semibold">
                       LOGIN
+                      <ArrowRight
+                        className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+                        size={20}
+                      />
                     </span>
                   </button>
                 </div>
@@ -706,9 +724,14 @@ export default function Home() {
                       <button
                         disabled={loadingSub}
                         type="submit"
-                        className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800"
+                        // className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800"
+                        className="flex w-full items-center justify-center group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors"
                       >
                         {loadingSub ? 'Signing in...' : 'Sign In'}
+                        <ArrowRight
+                          className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+                          size={20}
+                        />
                       </button>
                     </DialogFooter>
                   </form>
@@ -794,13 +817,25 @@ export default function Home() {
                           </FormItem>
                         )}
                       />
-                      <button
+                       <button
+                        disabled={loading}
+                        type="submit"
+                        className="flex items-center justify-center gap-2 group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors">
+                                                Reset Password
+
+                        <ArrowRight
+                      className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+                      size={20}
+                    />
+                      </button>
+
+                      {/* <button
                         disabled={loading}
                         type="submit"
                         className="py-2 px-8 bg-black text-white rounded cursor-pointer hover:scale-100"
                       >
                         Reset Password
-                      </button>
+                      </button> */}
                     </div>
                   </form>
                 </Form>
@@ -826,12 +861,17 @@ export default function Home() {
                           </FormItem>
                         )}
                       />
+
+
                       <button
                         disabled={loading}
                         type="submit"
-                        className="py-2 px-8 bg-black text-white rounded cursor-pointer hover:scale-105"
-                      >
+                        className="flex items-center justify-center gap-2 group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors">
                         Submit
+                        <ArrowRight
+                      className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+                      size={20}
+                    />
                       </button>
                     </div>
                   </form>
@@ -1062,11 +1102,18 @@ export default function Home() {
                       )}
                     />
 
+
+
                     <Button
                       type="submit"
-                      className="py-2 px-8 bg-black text-white rounded cursor-pointer hover:scale-105"
-                    >
+                      className="flex items-center justify-center gap-2 group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors">
+
                       Create Account
+
+                      <ArrowRight
+                      className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+                      size={20}
+                    />
                     </Button>
                   </div>
                 </form>

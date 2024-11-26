@@ -89,8 +89,8 @@ export const gethospitalFilterAllData = async (params: {
 };
 
 export const getDoctorFilterData = async (params: {
-  pageCount: number;
   pageSize: number;
+  pageCount: number;
   name?: string;
   departmentId?: number;
   petId?: number;
@@ -100,7 +100,8 @@ export const getDoctorFilterData = async (params: {
   try {
     console.log("paramsparamsparams",params)
 
-    const response = await axiosInstance.get(`/doctor/filter`, {
+    const response = await axiosInstance.get(`/doctor/filter
+      `, {
       params: {
         pageSize: params.pageSize,
         pageCount: params.pageCount,

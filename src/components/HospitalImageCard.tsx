@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 interface HospitalImageCardProps {
   item: any;
@@ -151,7 +152,7 @@ const HospitalImageCard = ({
 </div>
 
 <div className="flex flex-col justify-end items-end">
-  <Link
+  {/* <Link
     href={{
       pathname: `${pathname}${item.id ? `/${item.id}` : ''}`,
       query: item ? { doctorId: item.id } : undefined,
@@ -181,7 +182,48 @@ const HospitalImageCard = ({
           : 'Booking Unavailable'}
       </button>
     </div>
-  </Link>
+  </Link> */}
+
+
+<Link
+  href={{
+    pathname: `${pathname}${item.id ? `/${item.id}` : ''}`,
+    query: item ? { doctorId: item.id } : undefined,
+  }}
+  onClick={() => {
+    if (setSelectedDoctor) setSelectedDoctor(item);
+    if (handleClick) handleClick(item.name, item.preSignedUrl, item.id);
+  }}
+>
+  <div className="px-1 py-1 rounded text-sm font-semibold">
+    <button
+      className={`px-2 py-2 rounded-lg flex items-center justify-center text-white transition-colors group ${
+        doctors.filter((doctor: any) => doctor.isActive).length > 0 && item.active
+          ? 'bg-blue-600 hover:bg-blue-700'
+          : 'bg-gray-400 cursor-not-allowed'
+      }`}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (doctors.filter((doctor: any) => doctor.isActive).length > 0 && item.active) {
+          onClick?.(item.id);
+        }
+      }}
+      disabled={doctors.filter((doctor: any) => doctor.isActive).length === 0 || !item.active}
+    >
+      <span>
+        {doctors.filter((doctor: any) => doctor.isActive).length > 0 && item.active
+          ? 'Booking Available'
+          : 'Booking Unavailable'}
+      </span>
+      <ArrowRight
+        className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+        size={20}
+      />
+    </button>
+  </div>
+</Link>
+
+
 </div>
 
 

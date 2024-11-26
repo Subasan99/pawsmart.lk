@@ -23,10 +23,13 @@ import { useDepartmentStore } from '@/store/departmentStore';
 import { useMedicineStore } from '@/store/medicinesStore';
 import { usePetStore } from '@/store/petStore';
 import doc from '../../public/doc.png';
-import { Hospital } from 'lucide-react';
+import { ArrowRight, HeartPulse, Hospital } from 'lucide-react';
 import { useSpecializationStore } from '@/store/specializationStore';
 import { useHospitalStore } from '@/store/hospitalStore';
 import { useCityStore } from '@/store/citiesStore';
+import SpecialistCard from '@/components/HomeComponent/doctorcard';
+import AdvancedSearchFilter from '@/components/HomeComponent/AdvancedSearchFilter';
+import ServiceCard from '@/components/HomeComponent/ServiceCard';
 
 export default function Home() {
   const [doctorName, setDoctorName] = useState<string>('');
@@ -51,6 +54,7 @@ export default function Home() {
     state.doctors,
     state.setAllDoctors,
   ]);
+  console.log('doctorsdoctorsdoctors', doctors);
   const [departments, setAllDepartments] = useDepartmentStore((state: any) => [
     state.departments,
     state.setAllDepartments,
@@ -117,6 +121,17 @@ export default function Home() {
         };
       })
     : [];
+
+    
+  const petsOptions = Array.isArray(pets)
+  ? pets.map((pet: any) => {
+      // console.log(city)
+      return {
+        label: pet.name,
+        value: pet.id,
+      };
+    })
+  : [];
 
   const daysOfWeekOptions = [
     { value: 'MONDAY', label: 'Monday' },
@@ -277,6 +292,12 @@ export default function Home() {
     setHospitalName('');
   };
 
+
+  const handleSearch = (filters:any) => {
+    console.log('Search filters:', filters);
+    // Implement your search logic here
+  };
+
   return (
     <>
       <main className="bg-gray-50">
@@ -392,12 +413,25 @@ export default function Home() {
                             value={specializationName}
                           />
 
-                          <button
+                          {/* <button
                             onClick={handleFilter}
                             className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                           >
                             Search
-                          </button>
+                          </button> */}
+                          <button
+                onClick={handleFilter}
+                // className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center group transition-colors"
+  // className="flex items-center justify-center group bg-[#4CB847]-500 hover:bg-[#4CB847]-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+  className="flex items-center justify-center group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors"
+
+             >
+                Search
+                <ArrowRight 
+    className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200" 
+    size={20}
+  />
+              </button>
                         </div>
                       </section>
                     </div>
@@ -511,6 +545,101 @@ export default function Home() {
             query={petdata}
           />
         </div> */}
+   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 container mx-auto px-8 w-full py-8">
+      <ServiceCard
+        isMain
+        title="Doctor Channelling"
+        subtitle="Channel a doctor"
+        icon={
+          <div className="w-12 h-12 rounded-full bg-white/20 relative flex items-center justify-center">
+            <div className="absolute top-0 right-0 w-3 h-3 bg-white rounded-full" />
+            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+        }
+      />
+
+      <ServiceCard
+        title="ePremium"
+        subtitle="Member Benefits"
+        icon={
+          <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center">
+            <svg className="w-7 h-7 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7.2-6.3-4.8-6.3 4.8 2.3-7.2-6-4.6h7.6z" />
+            </svg>
+          </div>
+        }
+      />
+
+      <ServiceCard
+        title="Driving License Medical"
+        subtitle="Book an appointment"
+        icon={
+          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+            <svg className="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10M21 16V6a1 1 0 00-1-1h-8" />
+            </svg>
+          </div>
+        }
+      />
+
+      <ServiceCard
+        title="IOM Visa Medical"
+        subtitle="Pre-Migration Health Assessment"
+        icon={
+          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+            <svg className="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" 
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+        }
+      />
+    </div>
+
+<div className="container mt-14 mx-auto px-8 w-full py-8" >
+      <AdvancedSearchFilter
+        citiesOptions={citiesOptions}
+        petsOptions={petsOptions}
+        hospitalsOptions={hospitalsOptions}
+        specializationOptions={specializationOptions}
+        departmentOptions={departmentOptions}
+        onSearch={handleSearch}
+      />
+    </div>
+
+        <div className="container mx-auto px-4 py-8">
+          {/* <div className='flex items-center '>
+    <h2 className="text-2xl font-semibold text-gray-800 mb-8">Top Specialists</h2>
+    <HeartPulse/>
+    </div> */}
+          <div className="flex items-center space-x-2 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-800">
+              Top Specialists
+            </h2>
+            <HeartPulse className="w-6 h-6 text-red-500" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {doctors.map((doctor: any) => (
+              <SpecialistCard
+                key={doctor.id}
+                // specialist={{
+                //   name: doctor.name || "Unknown Doctor",
+                //   description: doctor.description || " ",
+                //   presignedUrl: doctor.preSignedUrl || "",
+                // }}
+                specialist={doctor}
+                onClick={() => console.log(`Clicked on doctor: ${doctor.name}`)}
+              />
+            ))}
+          </div>
+
+        </div>
       </main>
     </>
   );
