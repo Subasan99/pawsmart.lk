@@ -492,8 +492,9 @@ const doctorFilter = async () => {
 
     // Log parameters
     const requestData = {
-      pageCount: 10,
-      pageSize: 1,
+      pageSize: 10,
+
+      pageCount: 1,
       name: docName.label ,
       // departmentId: undefined,
       petId: petName?.value,
