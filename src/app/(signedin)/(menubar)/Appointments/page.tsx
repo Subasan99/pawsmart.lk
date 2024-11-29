@@ -15,6 +15,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useDoctorStore } from '@/store/doctorStore';
 import AppointmentCard from '@/components/AppointmentCard';
 import { cancelBooking } from '@/app/admin/appointments/action';
+import { toast } from 'sonner';
 
 const Appointments = () => {
   const [login] = useAuthStore((state) => [state.login]);
@@ -24,58 +25,73 @@ const Appointments = () => {
   ]);
 
   const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
-  const [selectedAppointmentId, setSelectedAppointmentId] = useState<string | null>(null);
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [dialogMessage, setDialogMessage] = useState<string>("");
   const [isAlreadyCanceled, setIsAlreadyCanceled] = useState(false);
 
   useEffect(() => {
     getAppointmentDetails();
-  }, []);
-
+  }, [login?.userId]);
+console.log("login?.userIdlogin?.userId",login?.userId)
   const getAppointmentDetails = async () => {
     try {
-      const filterAppointmentList = await getAppointmentBookingFilterData({
-        pageSize: 10,
-        pageCount: 1,
-        userId: login?.userId,
-      });
-      setDoctorAppointments(filterAppointmentList?.records || []);
+      if(login?.userId){
+        const filterAppointmentList = await getAppointmentBookingFilterData({
+          pageSize: 10,
+          pageCount: 1,
+          userId: login?.userId,
+        });
+        console.log('filterAppointmentListfilterAppointmentList',filterAppointmentList?.records);
+        setDoctorAppointments(filterAppointmentList?.records || []);
+      }
+    
     } catch (error) {
       console.error("Error fetching appointment data:", error);
     }
   };
 
   const handleCancelClick = (appointmentId: string) => {
+    setIsCancelDialogOpen(true);
+
     const appointment = doctorAppointments.find((appt) => appt.id === appointmentId);
+    console.log("roshani..",appointmentId)
 
     if (appointment?.status === "CANCELLED") {
-      // If already canceled, show appropriate message and disable further actions
       setDialogMessage("This appointment is already cancelled.");
       setIsAlreadyCanceled(true);
     } else {
-      // Proceed with cancel confirmation dialog
+
       setSelectedAppointmentId(appointmentId);
       setDialogMessage("Are you sure you want to cancel this appointment? This action cannot be undone.");
       setIsAlreadyCanceled(false);
     }
 
-    setIsCancelDialogOpen(true);
+    // setIsCancelDialogOpen(true);
   };
 
   const handleConfirmCancel = async () => {
     if (!selectedAppointmentId) return;
-
     setIsLoading(true);
     try {
-      await cancelBooking(selectedAppointmentId);
-      const updatedAppointments = doctorAppointments.map((appointment) =>
-        appointment.id === selectedAppointmentId
-          ? { ...appointment, status: "CANCELLED" }
-          : appointment
-      );
+     const appointment = await cancelBooking(selectedAppointmentId.id);
+     if(appointment?.success===true){
+      toast.success(appointment.message)
+     }
+     if(appointment?.success===false){
+      toast.error(appointment.message)
+     }
+   
+    window.location.reload();
 
-      setDoctorAppointments(updatedAppointments);
+    //  console.log("appointmentappointmentresponse",appointment)
+      // const updatedAppointments = doctorAppointments.map((appointment) =>
+      //   appointment.id === selectedAppointmentId
+      //     ? { ...appointment, status: "CANCELLED" }
+      //     : appointment
+      // );
+// console.log("updatedAppointmentsupdatedAppointments",updatedAppointments)
+      // setDoctorAppointments(updatedAppointments);
       setIsCancelDialogOpen(false);
     } catch (error) {
       console.error("Failed to cancel booking:", error);
@@ -88,7 +104,7 @@ const Appointments = () => {
   return (
     <div className="container mx-auto mt-16 bg-[#F7F8F9] rounded-xl">
       <div className="flex border-b">
-        <div className="px-4 py-2 border-b-2 border-blue-500">Appointment Details</div>
+        <div className="px-4 py-2 border-b-2 bg-gray-100 p-4 rounded-sm text-[#4CB847] border-blue-500">My Appointments</div>
       </div>
 
       <div className="mt-4">

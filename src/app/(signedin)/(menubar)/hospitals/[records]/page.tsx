@@ -78,6 +78,7 @@ const Index = ({ params }: { params: { records: string } }) => {
   };
   return (
     <div className="w-full mx-auto px-4 py-8">
+    <div className='py-4'>
       <SearchHeader
         searchText="4d Anomaly Scan -12 Weeks Nt"
         onBack={() => {
@@ -87,9 +88,9 @@ const Index = ({ params }: { params: { records: string } }) => {
           router.push(`/`);
         }}
       />
-
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h3 className="text-2xl font-bold mb-4">Hospital properties found</h3>
+</div>
+      <div className="bg-white rounded-lg shadow-sm p-4 mb-8">
+        <h3 className="text-sm font-bold mb-4">Hospital properties found</h3>
         <hr className="my-4 border-t-2 border-gray-300" />
 
         <div className="flex justify-end items-center gap-6">

@@ -46,7 +46,6 @@ export async function getBookingById(id: string) {
 export async function cancelBooking(id: string) {
   try {
     const response = await axiosInstance.put(`/booking/${id}/cancel`);
-    console.log("response", response);
     return response?.data;
   } catch (error) {
     console.log("Error archiving bookings", error);

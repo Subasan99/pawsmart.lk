@@ -1,3 +1,6 @@
+'use-client';
+
+import DoctorAppointmentCard from "@/components/DoctorComponent/ZoomMeetingScheduler";
 import Image from "next/image";
 
 const AboutUs = () => {

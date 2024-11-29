@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import Image from 'next/image';
 import Loader from '../Loader';
 import { Button } from './button';
@@ -52,10 +52,16 @@ const SuccessModal: React.FC<PSuccessModalProps> = ({
             </p>
 
             <Button
-              className="bg-green-500 text-white px-12 py-3 rounded-md hover:bg-green-600 transition-colors cursor-pointer"
+              // className="bg-green-500 text-white px-12 py-3 rounded-md hover:bg-green-600 transition-colors cursor-pointer"
+              className="flex items-center justify-center group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors"
+
               onClick={handleClick}
             >
               OK
+              <ArrowRight
+              className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+              size={20}
+            />
             </Button>
           </>
         )}

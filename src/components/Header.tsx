@@ -145,10 +145,12 @@ export default function Home() {
       const departmentData = await getDepartmentData();
       const doctorData = await getDoctorData();
       const medicinesData = await getMedicinesData();
-      setAllDepartments(departmentData);
-      setAllMedicines(medicinesData);
       setAllPets(petData);
+
+      setAllDepartments(departmentData);
       setAllDoctors(doctorData);
+
+      setAllMedicines(medicinesData);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -425,9 +427,14 @@ export default function Home() {
                   </li>
                 )}
 
-                <li key={0}>
+                <li key={3}>
                   <a href="/viewallhospi" className="hover:text-red-500">
                     Hospitals
+                  </a>
+                </li>
+                <li key={4}>
+                  <a href="/doctors" className="hover:text-red-500">
+                  Doctors
                   </a>
                 </li>
 
@@ -524,11 +531,16 @@ export default function Home() {
                 </li>
               )}
 
-              <li key={0}>
+              <li >
                 <a href="/viewallhospi" className="hover:text-red-500">
                   Hospitals
                 </a>
               </li>
+              <li >
+                  <a href="/doctors" className="hover:text-red-500">
+                  Doctors
+                  </a>
+                </li>
 
               {/* <li
                 onMouseEnter={() => handleMouseEnter('departments')}

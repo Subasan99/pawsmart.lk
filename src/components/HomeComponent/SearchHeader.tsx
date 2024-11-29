@@ -3,7 +3,7 @@ import { X, ChevronLeft } from 'lucide-react';
 
 const SearchHeader = ({ searchText, onBack, onClose }:any) => {
   return (
-    <div className="flex items-center gap-2 bg-gray-100 py-3 rounded-lg">
+    <div className="flex items-center gap-4 bg-gray-100 py-3 rounded-lg">
       <button 
         onClick={onBack}
         className="text-gray-600 hover:text-gray-800 p-1"

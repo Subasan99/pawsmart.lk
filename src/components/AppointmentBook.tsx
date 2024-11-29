@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Eye, EyeOff, } from 'lucide-react';
+import { ArrowRight, Calendar as CalendarIcon, Eye, EyeOff, } from 'lucide-react';
 import moment from 'moment';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -866,13 +866,19 @@ const Appointment: React.FC<AppointmentProps> = () => {
 
               {login &&(
                 <button
-                  className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
+                className="flex items-center justify-center group bg-[#4CB847] hover:bg-[#3A9236] text-white font-medium py-2 px-4 rounded-md transition-colors"
+
+                  // className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
                   type="submit"
                   disabled={isSubmitting} 
                   // onClick={() => form.getValues ? onSubmitForm({ ...form.getValues(), userId: login?.userId }) : ''}
 
                 >
                   Submit
+                  <ArrowRight
+              className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
+              size={20}
+            />
                 </button>
               ) 
 
