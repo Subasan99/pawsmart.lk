@@ -599,7 +599,7 @@ const DoctorsWithSerachParam = ({
 
   return (
     <div id="doctors" className="pb-8 pt-3 w-full">
-      <div className="bg-white rounded-lg shadow-lg mt-10 p-6">
+      <div className="bg-white rounded-lg shadow-lg mt-28 p-6 w-full container  px-0 md:px-7 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
         
         

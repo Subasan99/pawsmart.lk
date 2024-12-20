@@ -36,9 +36,9 @@ const AppointmentDoctor = () => {
   };
 
   return (
-<div className="w-full flex justify-center">
-  <div className="flex flex-col md:flex-row w-full md:max-w-[950px] gap-4 p-6 bg-white border rounded shadow-md"> 
-
+<div className="w-full flex justify-center container mt-10 overflow-x-hidden">
+  <div className="flex flex-col md:flex-row w-full md:max-w-[950px] gap-4 p-6 bg-white border rounded shadow-md">
+   
 
     <DoctorCard loading={loading} selectedDoctor={selectedDoctor} />
 

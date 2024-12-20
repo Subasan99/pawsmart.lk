@@ -751,12 +751,12 @@ export default function Home() {
                       right from the comfort of your home.
                     </h1>
                     <div className="flex gap-4 justify-center md:justify-start mt-6">
-                      <button
+                      {/* <button
                         className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700"
                         onClick={() => router.push('/viewallhospi')}
                       >
                         View Hospitals
-                      </button>
+                      </button> */}
                       <button
                         className="bg-blue-100 text-blue-600 px-6 py-3 rounded-lg shadow hover:bg-blue-200"
                         onClick={() => router.push('/viewalldoctors')}
@@ -1167,7 +1167,7 @@ export default function Home() {
                   key={doctor.id}
                   specialist={doctor}
                   onClick={() =>
-                    console.log(`Clicked on doctor: ${doctor.name}`)
+                    router.push(`/doctor-details/${doctor.id}`)
                   }
                 />
               ))

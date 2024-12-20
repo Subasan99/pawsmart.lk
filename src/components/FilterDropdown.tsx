@@ -49,7 +49,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
       <input
         type="text"
         placeholder={placeholder}
-        value={value.label}
+        value={value?.label}
         onChange={handleSearch}
         onFocus={handleFocus}
         onBlur={handleBlur}

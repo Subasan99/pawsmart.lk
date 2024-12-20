@@ -672,13 +672,14 @@ export default function Home() {
                   </li>
                 )}
 
-                <li key={3}>
+                {/* <li key={3}>
                   <a href="/viewallhospi" className="hover:text-red-500">
                     Hospitals
                   </a>
-                </li>
+                </li> */}
+                
                 <li key={4}>
-                  <a href="/doctors" className="hover:text-red-500">
+                  <a href="/viewalldoctors" className="hover:text-red-500">
                   Doctors
                   </a>
                 </li>
@@ -776,13 +777,13 @@ export default function Home() {
                 </li>
               )}
 
-              <li >
+              {/* <li >
                 <a href="/viewallhospi" className="hover:text-red-500">
                   Hospitals
                 </a>
-              </li>
+              </li> */}
               <li >
-                  <a href="/doctors" className="hover:text-red-500">
+                  <a href="/viewalldoctors" className="hover:text-red-500">
                   Doctors
                   </a>
                 </li>

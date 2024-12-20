@@ -58,7 +58,7 @@ const SpecialistCard = ({ specialist, onClick }: SpecialistCardProps) => {
 
   return (
     <Link
-    href={`/doctor/${specialist.id}`}
+    href={`/doctor-details/${specialist.id}`}
     onClick={(e) => {
       e.stopPropagation(); 
  

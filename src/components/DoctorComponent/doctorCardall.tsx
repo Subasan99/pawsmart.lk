@@ -127,6 +127,7 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface DoctorCardProps {
   id?: string;
@@ -137,7 +138,7 @@ interface DoctorCardProps {
   specializationName?: string;
   petResponses?: { name: string }[];
   hospitalName?: string;
-  handleClick: (imageName: any, image: any, id: any) => void;
+  // handleClick: (imageName: any, image: any, id: any) => void;
 }
 
 const DoctorCard: React.FC<DoctorCardProps> = ({
@@ -149,16 +150,26 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
   specializationName,
   petResponses,
   hospitalName,
-  handleClick,
+  // handleClick,
 }) => {
-  const defaultImage = "/department.png"; // Default image if preSignedUrl is not available
+  const defaultImage = "/department.png"; 
+  const router = useRouter(); 
+  
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Prevent click from bubbling up
+    console.log("thusi.................")
+    // handleClick(name, preSignedUrl, id); // Call the custom click handler
+    // if (id) {
+      router.push(`/doctor-details/${id}`); // Navigate to the doctor page
+    // }
+  };
 
   return (
     <Link
-      href={`/doctor/${id}`} // Navigate to /doctor/:id dynamically
+      href={`/doctor-details/${id}`} // Navigate to /doctor/:id dynamically
       onClick={(e) => {
         e.stopPropagation(); // Prevent click from bubbling up
-        handleClick(name, preSignedUrl, id); // Handle click event for doctor info
+        // handleClick(name, preSignedUrl, id); // Handle click event for doctor info
       }}
       className="cursor-pointer relative overflow-hidden transition-transform duration-300 ease-in-out hover:scale-105 shadow-lg rounded-lg p-4"
     >
@@ -205,7 +216,9 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
 
       {/* Book Now Button */}
       <div className="flex justify-center mt-4">
-        <button className="flex items-center justify-center group bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+        <button className="flex items-center justify-center group bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+              onClick={handleButtonClick}
+        >
           See Now
           <ArrowRight
             className="ml-2 w-0 opacity-0 group-hover:w-5 group-hover:opacity-100 text-white transition-all duration-200"
@@ -223,7 +236,7 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
 interface MultipleImagesDoctorProps {
   title: string;
   description: string;
-  handleClick: (imageName: any, image: any, id: any) => void;
+  handleClick?: (imageName: any, image: any, id: any) => void;
   doctors: any[];
 }
 
@@ -233,6 +246,8 @@ const MultipleImagesDoctorProps: React.FC<MultipleImagesDoctorProps> = ({
   doctors,
   handleClick,
 }) => {
+
+  
   return (
     <div className="w-full container pt-20 pb-20 px-0 md:px-7 mx-auto">
       <div className="border-l-2 border-red-500 pl-2">
@@ -254,7 +269,7 @@ const MultipleImagesDoctorProps: React.FC<MultipleImagesDoctorProps> = ({
             specializationName={doctor.specializationName}
             petResponses={doctor.petResponses}
             hospitalName={doctor.hospitalName}
-            handleClick={handleClick}
+            // handleClick={handleClick}
           />
         ))}
       </div>

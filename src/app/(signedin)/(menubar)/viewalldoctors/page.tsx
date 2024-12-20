@@ -155,7 +155,7 @@ const Doctors = ({ params }: { params: { records: string } }) => {
   };
 
   return (
-    <div className="py-8 w-full">
+    <div className="py-8 w-full container pt-20 pb-20 px-0 md:px-7 mx-auto">
       <div className="bg-white rounded-lg mt-10 shadow-md p-6 mb-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <input
@@ -229,7 +229,7 @@ const Doctors = ({ params }: { params: { records: string } }) => {
       <MultipleImagesDoctorProps
         title="Popular Doctors"
         description="Meet With Professional Doctors."
-        handleClick={handleFilterClick}
+        // handleClick={handleFilterClick}
         doctors={allDoctors}
       />
     </div>
