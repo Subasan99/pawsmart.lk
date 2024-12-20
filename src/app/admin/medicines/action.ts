@@ -6,19 +6,21 @@ import { axiosInstance } from "@/utils/client";
 export async function getMedicineData(
   pageCount?: number,
   pageSize?: number,
-  name?: string
+  name?: string,
+  // date?:string
 ) {
-  console.log("dfsdfdf", pageCount, pageSize);
   try {
+    console.log("objectnamedate",name)
     const response = await axiosInstance.get(`/medicine/filter`, {
       params: {
         pageCount: pageCount,
         pageSize: pageSize,
         name: name ? name : undefined,
+        // date: date ? date : undefined,
+// 
       },
     });
-    console.log("dffdfscs", response);
-    return response?.data?.records;
+    return response?.data;
   } catch (error) {
     console.log("Error fetching medicine data:", error);
   }
@@ -27,7 +29,7 @@ export async function getMedicineData(
 export async function createMedicine(medicine: MedicineCreate) {
   try {
     const response = await axiosInstance.post("/medicine", medicine);
-    console.log("medicine create", response);
+    return response?.data;
   } catch (error) {
     console.log("Error creating medicine:", error);
   }
@@ -83,6 +85,16 @@ export async function editMedicineById(
     console.log("Error fetching Medicine by Id: ", error);
   }
 }
+
+export const getAllMedicinesData = async () => {
+  try {
+    const response = await axiosInstance.get(`/medicines`);
+
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};
 
 export async function updateMedicineTimeSlot(
   medicineId: string,

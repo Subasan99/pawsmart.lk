@@ -3,7 +3,7 @@
 import EditIcon from "@/components/svg/edit_icon";
 import { usePetStore } from "@/store/petStore";
 import Image from "next/image";
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import DefaultImage from "../../../../../public/default_user.png";
 import { getPetById } from "../action";
 
@@ -16,21 +16,20 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.selectedPet,
     state.setSelectedPet,
     state.loading,
+  
   ]);
 
-  // Memoized function to fetch selected pet
-  const handleSelectPet = useCallback(async () => {
+  async function handleSelectPet() {
     const data = await getPetById(params.id);
     setSelectedPet(data);
-  }, [params.id, setSelectedPet]); // Include params.id and setSelectedPet as dependencies
+  }
 
   useEffect(() => {
     handleSelectPet();
-  }, [handleSelectPet]); // Include handleSelectPet in the dependency array
+  }, [params.id]);
 
-  // Handle loading state
   if (loading) {
-    return <div>Loading...!</div>; // Corrected to return the loading message
+    <div>Loading...!</div>;
   }
 
   return (
@@ -62,7 +61,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             {selectedPet?.name} {" "}
           </div>
           <div className="font-semibold text-xl">
-            &quot;{selectedPet?.description}&quot;
+          &quot;{selectedPet?.description}&quot;
           </div>
         </div>
       </div>
@@ -71,3 +70,5 @@ const Index = ({ params }: { params: { id: string } }) => {
 };
 
 export default Index;
+
+

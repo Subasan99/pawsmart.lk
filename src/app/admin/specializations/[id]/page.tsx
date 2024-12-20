@@ -3,7 +3,7 @@
 import EditIcon from "@/components/svg/edit_icon";
 import { useSpecializationStore } from "@/store/specializationStore";
 import Image from "next/image";
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import DefaultImage from "../../../../../public/default_user.png";
 import { getSpecializationById } from "../action";
 
@@ -16,20 +16,20 @@ const Index = ({ params }: { params: { id: string } }) => {
     state.selectedSpecialization,
     state.setSelectedSpecialization,
     state.loading,
+  
   ]);
 
-  // Memoized function to fetch the selected specialization
-  const handleSelectSpecialization = useCallback(async () => {
+  async function handleSelectSpecialization() {
     const data = await getSpecializationById(params.id);
     setSelectedSpecialization(data);
-  }, [params.id, setSelectedSpecialization]);
+  }
 
   useEffect(() => {
     handleSelectSpecialization();
-  }, [handleSelectSpecialization]); // Dependency is now handleSelectSpecialization
+  }, [params.id]);
 
   if (loading) {
-    return <div>Loading...!</div>; // Fixed missing return statement
+    <div>Loading...!</div>;
   }
 
   return (
@@ -40,7 +40,7 @@ const Index = ({ params }: { params: { id: string } }) => {
           <EditIcon className="absolute top-5 right-5 z-10 cursor-pointer" />
           {selectedSpecialization?.preSignedUrl ? (
             <Image
-              src={selectedSpecialization.preSignedUrl}
+              src={selectedSpecialization?.preSignedUrl}
               alt="Specialization Image"
               width={200}
               height={200}
@@ -61,7 +61,7 @@ const Index = ({ params }: { params: { id: string } }) => {
             {selectedSpecialization?.specializationName} {" "}
           </div>
           <div className="font-semibold text-xl">
-            &quot;{selectedSpecialization?.description}&quot;
+          &quot;{selectedSpecialization?.description}&quot;
           </div>
         </div>
       </div>
@@ -70,3 +70,5 @@ const Index = ({ params }: { params: { id: string } }) => {
 };
 
 export default Index;
+
+

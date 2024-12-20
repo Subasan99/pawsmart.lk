@@ -6,8 +6,9 @@ import { axiosInstance } from "@/utils/client";
 export async function getSpecializationData(
   pageCount?: number,
   pageSize?: number,
+  name?: string,
   departmentId?: number,
-  name?: string
+
 ) {
   console.log("dfsdfdf", pageCount, pageSize);
   try {
@@ -67,3 +68,12 @@ export async function archiveSpecializationById(id: string) {
     console.log("Error archiving specializations", error);
   }
 }
+
+export const getAllSpecializationData = async () => {
+  try {
+    const response = await axiosInstance.get(`/specialization`);
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};

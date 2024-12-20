@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMedicineStore } from "@/store/medicinesStore";
 import Image from "next/image";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import DefaultImage from "../../../../../public/default_user.png";
 import { getAppointmentsByMedicineId, getMedicineById, updateMedicineTimeSlot } from "../action";
 
@@ -28,21 +28,19 @@ const Index = ({ params }: { params: { id: string } }) => {
 
   const [medicineDayTimeSlotModal, setMedicineDayTimeSlotModal] = useState<boolean>(false);
 
-  // Memoized handleSelectMedicine function
-  const handleSelectMedicine = useCallback(async () => {
+
+  async function handleSelectMedicine() {
     const data = await getMedicineById(params.id);
     const appointments = await getAppointmentsByMedicineId(params.id, 1, 10);
     setSelectedMedicine(data);
-    setMedicineAppointments(appointments); // Ensure you're also setting appointments
-  }, [params.id, setSelectedMedicine, setMedicineAppointments]); // Add dependencies
+  }
 
   useEffect(() => {
     handleSelectMedicine();
-  }, [handleSelectMedicine]); 
-  
+  }, [params.id]);
 
   if (loading) {
-    return <div>Loading...!</div>; // Make sure to return the loading state
+    <div>Loading...!</div>;
   }
 
   return (
@@ -73,8 +71,10 @@ const Index = ({ params }: { params: { id: string } }) => {
           <div className="font-bold text-2xl flex gap-2 items-center">
             {selectedMedicine?.name}
           </div>
-          <div className="font-semibold text-xl">
-            &quot;{selectedMedicine?.description}&quot;
+          <div className="font-normal text-xs">
+        {selectedMedicine?.description}
+          {/* &quot;{selectedMedicine?.description}&quot; */}
+
           </div>
         </div>
       </div>
@@ -103,3 +103,5 @@ const Index = ({ params }: { params: { id: string } }) => {
 };
 
 export default Index;
+
+
