@@ -24,7 +24,7 @@ export default function RootLayout({
   token?: string;
 }) {
   const pathname = usePathname();
-  const isAuthPage = pathname === "/auth" || pathname?.startsWith("/auth/");
+  const isAuthPage = pathname === "/admin" || pathname?.startsWith("/admin/");
 
   return (
     <html lang="en">

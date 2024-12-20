@@ -62,7 +62,7 @@ const Hospitals = () => {
   return (
     <div id="hospitals" className="pb-8 pt-20">
       <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
+        {/* <Header /> */}
       </div>
       <div id="hospital" className="pb-8 pt-20">
       <PopularDoctors

@@ -62,7 +62,7 @@ const Index = ({ params }: { params: { id: string } }) => {
   return (
     <div id="hospitals" className="pb-8 pt-20">
       <div className="sticky z-30 top-0 md:static h-fit">
-        <Header />
+        {/* <Header /> */}
       </div>
       <div>
         <section className="flex flex-col items-center py-12 z-5 w-full px-4 pb-8 max-w-6xl mx-auto">
