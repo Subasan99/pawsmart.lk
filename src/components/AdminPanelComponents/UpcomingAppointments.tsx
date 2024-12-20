@@ -123,7 +123,7 @@ const UpcomingAppointments = () => {
   return (
     <div className="flex flex-col gap-4">
       <div className="text-xl font-bold">Upcoming Appointments</div>
-      <div className="flex w-full overflow-x-auto gap-3">
+      {/* <div className="flex w-full overflow-x-auto gap-3">
         {appointments.length > 0 ? (
           appointments.map((appointment: Appointment) => (
             <AppointmentCard key={appointment.id} appointment={appointment} />
@@ -133,7 +133,7 @@ const UpcomingAppointments = () => {
             No upcoming appointments!
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

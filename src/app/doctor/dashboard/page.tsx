@@ -147,7 +147,7 @@ const Index = () => {
       </div>
       <div className="flex flex-col w-full gap-3">
         <div className="text-xl font-bold">Today&apos;s Appointments</div>
-        <div className="flex w-full snap-start overflow-x-scroll gap-3">
+        {/* <div className="flex w-full snap-start overflow-x-scroll gap-3">
           {appointments.length > 0 ? (
             appointments.map((appointment: Appointment) => (
               <AppointmentCard key={appointment.id} appointment={appointment} />
@@ -157,7 +157,7 @@ const Index = () => {
               No Appointments today!
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
