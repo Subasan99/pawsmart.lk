@@ -3,6 +3,7 @@ import ActionMenu from "@/components/AdminPanelComponents/ActionMenu";
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import DefaultImage from "../../../../public/default_user.png";
+import { archiveDoctorById } from "./action";
 
 export type Columns = {
   id: string;
@@ -12,11 +13,17 @@ export type Columns = {
   dateOfBirth: string;
   gender: string;
   specializationId: string;
+  departmentName: string;
   specializationName: string;
   description: string;
   image: string;
+  isActive: boolean;
   preSignedUrl: string | undefined;
   duration: number;
+  departmentResponse:{
+    id:number;
+    name: string;
+  },
   dayTimeSlotResponses: {
     day: string;
     timeSlots: { startTime: string; endTime: string }[];
@@ -27,7 +34,17 @@ export type Columns = {
 export const columns: ColumnDef<Columns>[] = [
   {
     accessorKey: "fullName",
-    header: () => <div className="font-bold text-center">Full Name</div>,
+    header: () => (
+      <div className="flex">
+        {/* <Image
+          alt="default image"
+          src={DefaultImage}
+          className="w-10 h-10 object-cover rounded-full border-2"
+        /> */}
+        
+        <div className="font-bold pl-14">Full Name</div>
+      </div>
+    ),
     cell: ({ row }) => (
       <div className="justify-center py-0">
         <div className="flex items-center gap-3 justify-start">
@@ -62,25 +79,54 @@ export const columns: ColumnDef<Columns>[] = [
   },
   {
     accessorKey: "phoneNo",
-    header: () => <div className="font-bold text-center">Phone Number</div>,
+    header: () => <div className="font-bold text-start">Phone Number</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.phoneNo}</div>
+      <div className="text-s">{row.original.phoneNo}</div>
     ),
   },
   {
     accessorKey: "specializationName",
-    header: () => <div className="font-bold text-center">Specialization</div>,
+    header: () => <div className="font-bold text-start">Specialization</div>,
     cell: ({ row }) => (
-      <div className="text-center">{row.original.specializationName}</div>
+      <div className="text-start">{row.original.specializationName}</div>
     ),
   },
   {
+    accessorKey: "departmentName",
+    header: () => <div className="font-bold text-start">Department Name</div>,
+    cell: ({ row }) => (
+      <div className="text-start">{row.original?.departmentResponse?.name}</div>
+    ),
+  },
+  {
+    accessorKey: "Active",
+    header: () => <div className="font-bold text-center">Active</div>,
+    cell: ({ row }) => {
+      const isActive = row.original.isActive;
+  
+      // Define badge styles based on active status
+      const badgeStyle = isActive ? "bg-green-500 text-white" : "bg-red-500 text-white";
+  
+      return (
+        <div className="text-center py-1 px-3 rounded-full">
+          <span className={`px-2 py-1 rounded-full ${badgeStyle}`}>
+            {isActive ? "Active" : "Archive"}
+          </span>
+        </div>
+      );
+    },
+  },
+  
+  {
     id: "actions",
     cell: ({ row }) => (
-      <div className="text-center flex justify-center">
+      <div className="text-start flex justify-center">
         <ActionMenu 
         pathName={`/admin/doctors/${row.original.id}`}
-        view={true} />
+        delete={() => archiveDoctorById(row.original.id)}
+        navigateTo={`/admin/doctors/doctoredit/${row.original.id}`}
+        view={true}
+        edit={true} />
       </div>
     ),
     header: () => <div className="text-center font-bold">Actions</div>,

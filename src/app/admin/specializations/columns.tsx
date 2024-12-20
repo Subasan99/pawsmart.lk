@@ -9,7 +9,7 @@ export type Columns = {
   id: string;
   specializationName: string;
   description: string;
-  departmentId: string;
+  departmentId?: string;
   departmentName: string;
   active: boolean;
   image: string;

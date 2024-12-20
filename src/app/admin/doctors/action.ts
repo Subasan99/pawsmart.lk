@@ -8,10 +8,10 @@ export async function getDoctorData(
   pageSize?: number,
   specializationId?: string,
   departmentId?: string,
-  petId?: string,
+  petId?: number,
   name?: string
 ) {
-  console.log("dfsdfdf", pageCount, pageSize);
+
   try {
     const response = await axiosInstance.get(`/doctor/filter`, {
       params: {
@@ -19,10 +19,10 @@ export async function getDoctorData(
         pageSize: pageSize,
         specializationId: specializationId ? specializationId : undefined,
         departmentId: departmentId ? departmentId : undefined,
+        petId: petId ? petId : undefined,
         name: name ? name : undefined,
       },
     });
-    console.log("dffdfscs", response);
     return response?.data;
   } catch (error) {
     console.log("Error fetching doctor data:", error);
@@ -32,7 +32,7 @@ export async function getDoctorData(
 export async function createDoctor(doctor: DoctorCreate) {
   try {
     const response = await axiosInstance.post("/doctor", doctor);
-    console.log("doctor create", response);
+    return response?.data;
   } catch (error) {
     console.log("Error creating doctor:", error);
   }
@@ -47,5 +47,16 @@ export async function allocateTimeSlot(
     console.log("time slot allocate", response);
   } catch (error) {
     console.log("Error allocating time slot:", error);
+  }
+}
+
+
+export async function archiveDoctorById(id: string) {
+  try {
+    const response = await axiosInstance.put(`/doctor/active?id=${id}`);
+    console.log("thusidika.....", response);
+    return response?.data;
+  } catch (error) {
+    console.log("Error archiving users", error);
   }
 }

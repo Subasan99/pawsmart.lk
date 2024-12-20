@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createDoctor } from "@/app/admin/doctors/action";
+// import { createDoctor } from "@/app/admin/doctors/action";
 import { MultiSelect } from "@/components/shared/multi-select";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -35,6 +35,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
+import { createDoctor } from "@/app/admin/doctors/action";
 
 const formSchema = z.object({
   firstName: z.string({ required_error: "First name is required!" }),
@@ -54,7 +55,7 @@ const formSchema = z.object({
   }),
   description: z.string({ required_error: "Description is required!" }),
   duration: z.number({ required_error: "Duration is required!" }),
-  petIds: z.array(z.string()),
+  petIds: z.array(z.number()),
   qualification: z.string({ required_error: "Qualification is required" }),
 });
 
@@ -70,7 +71,7 @@ const DoctorCreateForm = (props: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: undefined,
+      firstName: 'undefined',
       lastName: undefined,
       email: undefined,
       phoneNo: undefined,
