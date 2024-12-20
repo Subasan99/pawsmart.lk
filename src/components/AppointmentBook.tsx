@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Eye, EyeOff, } from 'lucide-react';
+import { Calendar as CalendarIcon, Eye, EyeOff } from 'lucide-react';
 import moment from 'moment';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -107,15 +107,12 @@ const signInFormSchema = z.object({
 });
 
 const Appointment: React.FC<AppointmentProps> = () => {
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [login, setLogin] = useAuthStore((state) => [
     state.login,
     state.setLogin,
   ]);
 
-
- 
   const searchParams = useSearchParams();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -182,43 +179,37 @@ const Appointment: React.FC<AppointmentProps> = () => {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  // Memoize fetchData using useCallback
+  const fetchData = useCallback(async () => {
+    try {
+      const [doctorData, medicineData, petsData] = await Promise.all([
+        getDoctorData(),
+        getMedicineData(),
+        getAllPets(),
+      ]);
 
+      if (searchParams.get('doctorId')) {
+        setSelecteddDoctor(searchParams.get('doctorId')!);
+      } else if (searchParams.get('medicineId')) {
+        setSelectedMedicine(searchParams.get('medicineId')!);
+      }
 
-// Memoize fetchData using useCallback
-const fetchData = useCallback(async () => {
-  try {
-    const [doctorData, medicineData, petsData] = await Promise.all([
-      getDoctorData(),
-      getMedicineData(),
-      getAllPets(),
-    ]);
-
-    if (searchParams.get('doctorId')) {
-      setSelecteddDoctor(searchParams.get('doctorId')!);
-    } else if (searchParams.get('medicineId')) {
-      setSelectedMedicine(searchParams.get('medicineId')!);
+      setAllDoctors(doctorData);
+      setAllMedicines(medicineData);
+      setAllPet(petsData);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
+  }, [setAllDoctors, setAllMedicines, setAllPet, searchParams]);
 
-    setAllDoctors(doctorData);
-    setAllMedicines(medicineData);
-    setAllPet(petsData);
-    setIsLoading(false);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-}, [setAllDoctors, setAllMedicines, setAllPet, searchParams]);
-
-useEffect(() => {
-  fetchData();
-}, [fetchData]);
-
-
-
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -247,7 +238,6 @@ useEffect(() => {
   }
 
   const handleSignIn = async (values: z.infer<typeof signInFormSchema>) => {
-
     setLoading(true);
     const response = await loginUser({
       email: values.email,
@@ -266,15 +256,12 @@ useEffect(() => {
   };
 
   const onSubmitForm = (values: z.infer<typeof formSchema>) => {
-
     setIsSubmitting(true);
     createAppointment({
       ...values,
       bookingDate: moment(values?.bookingDate).format('YYYY-MM-DD'),
       // userId: values?.userId ===undefined ?login?.userId : values.userId.toString()
-      userId: login?.userId
-
-
+      userId: login?.userId,
     }).then((res: any) => {
       if (res.success) {
         setFormSucess(res.message);
@@ -288,7 +275,7 @@ useEffect(() => {
   };
 
   const handleClick = async () => {
-    console.log("Modal OK button clicked!");
+    console.log('Modal OK button clicked!');
     setshowBook(false);
     router.push('/');
   };
@@ -329,7 +316,7 @@ useEffect(() => {
         <div className={`${!login ? 'blur' : 'remove-blur'}`}>
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit( onSubmitForm)}
+              onSubmit={form.handleSubmit(onSubmitForm)}
               className="space-y-3 flex flex-col px-2 w-full"
             >
               <div className="flex flex-col md:flex-row gap-2 w-full">
@@ -366,7 +353,9 @@ useEffect(() => {
                           placeholder="Select.."
                           className="w-full"
                           {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -527,9 +516,9 @@ useEffect(() => {
                   />
                 )}
               </div>
-          
+
               <div className="flex flex-col w-full md:w-full md:flex-row gap-2 ">
-                {searchParams.get('doctorId') && login  && (
+                {searchParams.get('doctorId') && login && (
                   <FormField
                     control={form.control}
                     name="bookingDate"
@@ -771,7 +760,6 @@ useEffect(() => {
                 )}
               </div>
 
-
               <div className="flex flex-col md:flex-row gap-2 w-full">
                 <FormField
                   control={form.control}
@@ -794,119 +782,117 @@ useEffect(() => {
               </div>
               {/* </div> */}
 
-              {login &&(
+              {login && (
                 <button
                   className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
                   type="submit"
-                  disabled={isSubmitting} 
+                  disabled={isSubmitting}
                   // onClick={() => form.getValues ? onSubmitForm({ ...form.getValues(), userId: login?.userId }) : ''}
-
                 >
                   Submit
                 </button>
-              ) 
-
-              
-              }
+              )}
             </form>
           </Form>
         </div>
         {!login ? (
-        <div className="space-y-3 flex flex-col px-2 w-full">
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <button
-                className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
-                type="submit"
-              >
-                Login to continue
-              </button>
-              {/* </a> */}
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Login</DialogTitle>
-                <DialogDescription>
-                  Enter your credentials to log in.
-                </DialogDescription>
-              </DialogHeader>
-              <Form {...signInForm}>
-                <form onSubmit={signInForm.handleSubmit(handleSignIn)}>
-                  <FormField
-                    control={signInForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email Address</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Email Address" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={signInForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input
-                              type={showPassword ? 'text' : 'password'}
-                              placeholder="Password"
-                              {...field}
-                            />
-                            <button
-                              type="button"
-                              onClick={togglePasswordVisibility}
-                              className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
-                            >
-                              {showPassword ? (
-                                <Eye className="h-6 w-6 opacity-50" />
-                              ) : (
-                                <EyeOff className="h-6 w-6 opacity-50" />
-                              )}
-                            </button>
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="flex justify-end mb-4">
-                    <a
-                      href="/forgotpassword"
-                      className="text-sm underline text-black font-bold"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
-                  <DialogFooter>
-                    <button
-                      disabled={loadingSub}
-                      type="submit"
-                      className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800"
-                    >
-                      {loadingSub ? 'Signing in...' : 'Sign In'}
-                    </button>
-                  </DialogFooter>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </div>):(null)}
-  
+          <div className="space-y-3 flex flex-col px-2 w-full">
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <button
+                  className="w-full bg-black text-white py-2  px-4 rounded-lg hover:bg-gray-800"
+                  type="submit"
+                >
+                  Login to continue
+                </button>
+                {/* </a> */}
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Login</DialogTitle>
+                  <DialogDescription>
+                    Enter your credentials to log in.
+                  </DialogDescription>
+                </DialogHeader>
+                <Form {...signInForm}>
+                  <form onSubmit={signInForm.handleSubmit(handleSignIn)}>
+                    <FormField
+                      control={signInForm.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email Address</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Email Address" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={signInForm.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Password"
+                                {...field}
+                              />
+                              <button
+                                type="button"
+                                onClick={togglePasswordVisibility}
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm"
+                              >
+                                {showPassword ? (
+                                  <Eye className="h-6 w-6 opacity-50" />
+                                ) : (
+                                  <EyeOff className="h-6 w-6 opacity-50" />
+                                )}
+                              </button>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex justify-end mb-4">
+                      <a
+                        href="/forgotpassword"
+                        className="text-sm underline text-black font-bold"
+                      >
+                        Forgot password?
+                      </a>
+                    </div>
+                    <DialogFooter>
+                      <button
+                        disabled={loadingSub}
+                        type="submit"
+                        className="w-full bg-black text-white py-2 px-4 rounded-lg hover:bg-gray-800"
+                      >
+                        {loadingSub ? 'Signing in...' : 'Sign In'}
+                      </button>
+                    </DialogFooter>
+                  </form>
+                </Form>
+              </DialogContent>
+            </Dialog>
+          </div>
+        ) : null}
 
         <div className="bg-red-600 ">
           {showBook && (
-        
-            <SuccessModal loading={''} successMessage={formSucess} handleClick={() => {
-              setshowBook(false);
-              router.push('/');
-            }}
-          />
+            <SuccessModal
+              loading={''}
+              successMessage={formSucess}
+              handleClick={() => {
+                setshowBook(false);
+                router.push('/');
+              }}
+            />
           )}
         </div>
 

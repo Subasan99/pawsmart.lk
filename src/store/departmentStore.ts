@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 type Store = {
   loading: boolean;
   departments: Department[];
+  filterdepartments: Department[];
   department: Department[];
   selectedDepartment: Department | null | undefined;
   setSelectedDepartment: (department: Department | null | undefined) => void;
@@ -16,6 +17,7 @@ export const useDepartmentStore = create<Store>()(
     (set) => ({
       loading: true,
       departments: [],
+      filterdepartments:[],
       selectedDepartment: null,
       setAllDepartments: (departments: any[]) => {
         set({ departments: departments, loading: false });
@@ -23,6 +25,10 @@ export const useDepartmentStore = create<Store>()(
       department: [],
       setAllDepartment: (department: any[]) => {
         set({ department: department, loading: false });
+      },
+
+      setAllfilterDepartments: (filterdepartments: any[]) => {
+        set({ filterdepartments: filterdepartments, loading: false });
       },
       setSelectedDepartment: (department: Department | null | undefined) => {
         set({ selectedDepartment: department, loading: false });

@@ -64,7 +64,23 @@ export const getDeparmentFilterData = async (params: {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log('error', error);
+  }
+};
+
+export const gethospitalFilterAllData = async (params: {
+  pageCount: number;
+  pageSize: number;
+}) => {
+  try {
+    const response = await axiosInstance.get(`/hospital/filter`, {
+      params: {
+        pageSize: params.pageSize,
+        pageCount: params.pageCount,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -72,28 +88,127 @@ export const getDeparmentFilterData = async (params: {
 };
 
 export const getDoctorFilterData = async (params: {
-  pageCount: number;
   pageSize: number;
+  pageCount: number;
+  name?: string;
   departmentId?: number;
-  specializationId?: number;
   petId?: number;
+  specializationId?: number;
+  date?: string;
 }) => {
+
   try {
-    const response = await axiosInstance.get(`/doctor/filter`, {
-      params: {
-        pageSize: params.pageSize,
-        pageCount: params.pageCount,
-        departmentId: params.departmentId,
-        specializationId: params.specializationId,
-        petId: params.petId,
-      },
-    });
-    console.log(response.data);
+    console.log("paramsparamsparams",params)
+    const response = await axiosInstance.get(
+      `/doctor/filter`,
+      {
+        params: {
+          pageSize: params.pageSize?params.pageSize :undefined,
+          pageCount: params.pageCount?params.pageCount:undefined,
+          departmentId:params?.departmentId? params?.departmentId:undefined,
+          petId:params?.petId? params?.petId:undefined,
+          specializationId:  params?.specializationId?params?.specializationId:undefined,
+          date:params?.date? params?.date:undefined,
+
+
+          
+        },
+      }
+    );
+
     return response.data;
   } catch (error) {
     console.log('error', error);
   }
 };
+
+// export async function getDoctorFilterData(
+//   pageCount: number,
+//   pageSize: number,
+//   name?: string,
+//   // departmentId?: number;
+//   petId?: number,
+//   specializationId?:number,
+//   date?: string,
+// ) {
+//   try {
+//     const response = await axiosInstance.get(`/doctor/filter`, {
+//       params: {
+
+//         pageSize: pageSize?pageSize: undefined,
+//         pageCount: pageCount? pageCount: undefined,
+//         name: name?name: undefined,
+//         // departmentId: params?.departmentId ,
+//         petId:petId? petId : undefined,
+//         specializationId:specializationId? specializationId: undefined,
+//         date: date?date: undefined,
+
+//       },
+//     });
+//     return response?.data;
+//   } catch (error) {
+//     console.log("Error fetching Appointments by Doctor Id: ", error);
+//   }
+// }
+
+// export const getDoctorFilterData = async (params: {
+//   pageCount: number;
+//   pageSize: number;
+//   name?: string;
+//   departmentId?: number;
+//   petId?: number;
+//   specializationId?:number;
+//   date?: string;
+// }) => {
+//   try {
+//     console.log("paramsparamsparams",params)
+
+//     const response = await axiosInstance.get(`doctor/filter?`, {
+//       params: {
+//         pageSize: params.pageSize ?params.pageSize  :undefined,
+//         pageCount: params.pageCount ?params.pageCount  :undefined,
+//         name: params?.name ? params?.name :undefined,
+//         departmentId: params?.departmentId ?  params?.departmentId :undefined,
+//         petId:params?.petId ?params?.petId  :undefined,
+//         specializationId: params?.specializationId ? params?.specializationId :undefined,
+//         date: params?.date ? params?.date :undefined,
+
+//       },
+//     });
+
+//     return response.data;
+//   } catch (error) {
+//     console.log('error', error);
+//   }
+// };
+
+// export async function getDoctorFilterData(
+//   pageCount?: number,
+//   pageSize?: number,
+//   specializationId?: string,
+//   departmentId?: string,
+//   petId?: string,
+//   name?: string,
+//   date?: string
+// ) {
+
+//   try {
+//     const response = await axiosInstance.get(`/doctor/filter`, {
+//       params: {
+//         pageCount: pageCount,
+//         pageSize: pageSize,
+//         specializationId: specializationId ? specializationId : undefined,
+//         departmentId: departmentId ? departmentId : undefined,
+//         petId: petId ? petId : undefined,
+//         name: name ? name : undefined,
+//         date:date?date : undefined,
+//       },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.log('error', error);
+//   }
+// };
 
 export const getPetFilterData = async (params: {
   pageCount: number;
@@ -106,7 +221,6 @@ export const getPetFilterData = async (params: {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -116,15 +230,18 @@ export const getPetFilterData = async (params: {
 export const getMedicineFilterData = async (params: {
   pageCount: number;
   pageSize: number;
+  name?: string;
+  date?: string;
 }) => {
   try {
     const response = await axiosInstance.get(`/medicine/filter`, {
       params: {
         pageSize: params.pageSize,
         pageCount: params.pageCount,
+        name: params.name,
+        date: params.date,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -183,7 +300,6 @@ export const get = async (params: { pageCount: number; pageSize: number }) => {
         pageCount: params.pageCount,
       },
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log('error', error);
@@ -207,14 +323,24 @@ export const getHospitalFilterData = async (params: {
   pageSize: number;
   searchTerm?: string;
   cityId?: string;
+  hospitalId?: string;
+  specializationId?: string;
+  day?: string;
+  doctorId?: string;
 }) => {
   try {
     const response = await axiosInstance.get(`hospital/filter?`, {
       params: {
-        pageSize: params.pageSize,
-        pageCount: params.pageCount,
-        searchTerm: params?.searchTerm,
-        cityId: params?.cityId,
+        pageSize: params.pageSize ? params.pageSize : undefined,
+        pageCount: params.pageCount ? params.pageCount : undefined,
+        searchTerm: params?.searchTerm ? params?.searchTerm : undefined,
+        cityId: params?.cityId ? params?.cityId : undefined,
+        hospitalId: params?.hospitalId ? params?.hospitalId : undefined,
+        specializationId: params?.specializationId
+          ? params?.specializationId
+          : undefined,
+        day: params?.day ? params?.day : undefined,
+        doctorId: params?.doctorId ? params?.doctorId : undefined,
       },
     });
 
@@ -254,14 +380,14 @@ export const getHospitals = async () => {
 export const getAppointmentBookingFilterData = async (params: {
   pageCount: number;
   pageSize: number;
-  userId?: string;
+  userId: string;
 }) => {
   try {
     const response = await axiosInstance.get(`booking/filter?`, {
       params: {
         pageSize: params.pageSize,
         pageCount: params.pageCount,
-        userId: params?.userId,
+        userId: params.userId,
       },
     });
 
